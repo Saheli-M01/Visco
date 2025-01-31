@@ -1,0 +1,44 @@
+@import "nav";
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Quicksand:wght@300..700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:active,
+:hover,
+:focus {
+  outline: 0 !important;
+  outline-offset: 0;
+}
+//variables
+:root {
+  --primary-background: #0d0d0d;
+  --secondary-background: #1a1a1a;
+  --primary-text: #eaeaea;
+  --secondary-text: #b3b3b3;
+  --primary-base-color: #f2613f;
+  --secondary-base-color: #fc512a;
+}
+
+html {
+  scroll-behavior: smooth;
+  body {
+    font-size: 100%;
+    font-family: "Josefin Sans", sans-serif;
+    background-color: var(--primary-background);
+  }
+}
+// Custom Scrollbar
+::-webkit-scrollbar {
+  width: 0.625rem;
+
+  &-track {
+    background: var(--white-color);
+  }
+
+  &-thumb {
+    background: var(--primary-color);
+  }
+}

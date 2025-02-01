@@ -1,0 +1,6 @@
+#home{
+    height:1000px;
+    button{
+        @extend %transparent-button;
+    }
+}

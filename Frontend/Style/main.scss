@@ -27,9 +27,25 @@ html {
   body {
     font-size: 100%;
     font-family: "Josefin Sans", sans-serif;
-    background-color: var(--primary-background);
+    background: linear-gradient(135deg, #000000, #2c2c2c, #312c2c);
+    #networkCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 1920px;  /* Fixed Width */
+    height: 1080px; /* Fixed Height */
+      z-index: -1;  /* Make sure it's behind all content */
+      pointer-events: none;  /* Prevent interaction with canvas */
+      display: block;
+      margin-top: 60px;  /* Adjust to make space for navbar */
+    }
   }
+
 }
+
+
+
+
 // Custom Scrollbar
 ::-webkit-scrollbar {
   width: 0.625rem;

@@ -9,6 +9,7 @@
   left: 0;
   -webkit-transition: all 0.3s ease-out;
   transition: all 0.3s ease-out;
+  z-index: 1000;
 
   button i {
     color: var(--secondary-base-color);
@@ -69,6 +70,9 @@
       i {
         color: var(--secondary-background);
       }
-    
     }
-  }}
+  }
+}
+.demo {
+  height:1000px;
+}

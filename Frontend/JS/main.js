@@ -16,4 +16,12 @@ navBar.forEach(function(a){
         navCollapse.classList.remove("show");
     })
 })
- 
+//navabr color changes when toggle buttone eppands
+document.addEventListener("DOMContentLoaded", function () {
+    const navbarToggler = document.querySelector(".navbar-toggler");
+    const navbar = document.querySelector(".navigation-wrap");
+
+    navbarToggler.addEventListener("click", function () {
+        navbar.classList.toggle("menu-open");
+    });
+});

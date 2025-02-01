@@ -5,14 +5,19 @@
   width: 100%;
   left: 0;
   transition: all 0.3s ease-out;
+  /* Change the entire navbar background when the menu is expanded */
 }
-.navigation-wrap span.navbar-toggler-icon {
-  color: white;
+.navigation-wrap button i {
+  color: var(--secondary-base-color);
 }
 .navigation-wrap .navbar-toggler:focus {
   outline: unset;
   border: unset;
   box-shadow: none;
+}
+.navigation-wrap .navbar.show {
+  background-color: var(--primary-text);
+  transition: background-color 0.3s ease-in-out;
 }
 .navigation-wrap .nav-item {
   padding: 0 0.625rem;
@@ -33,18 +38,27 @@
 .navigation-wrap .nav-item:hover i {
   color: var(--primary-base-color);
 }
-.navigation-wrap .navigation-wrap.scroll-on {
+
+.navigation-wrap.scroll-on {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  background-color: var(--primary-color);
-  box-shadow: 0 0.125rem 1.75rem 0 rgba(255, 0, 0, 0.09);
+  box-shadow: 0 0.125rem 1.75rem 0 rgba(242, 97, 63, 0.5);
   transition: all 0.15s ease-in-out 0s;
 }
 
-.demo {
-  height: 1000px;
+.navigation-wrap.menu-open {
+  background-color: var(--primary-text);
+  transition: background-color 0.3s ease-in-out;
+}
+.navigation-wrap.menu-open .nav-item a,
+.navigation-wrap.menu-open .nav-item i {
+  color: var(--primary-base-color);
+}
+.navigation-wrap.menu-open .nav-item:hover a,
+.navigation-wrap.menu-open .nav-item:hover i {
+  color: var(--secondary-background);
 }
 
 * {

@@ -1,32 +1,71 @@
-
-
-// Navbar Styling
+// Sticky Navbar SCSS
 
 .navigation-wrap {
   position: fixed;
-  width: 100%;
+  top: 0;
   left: 0;
-  -webkit-transition: all 0.3s ease-out;
-  transition: all 0.3s ease-out;
-  border-bottom: 1px solid var(--secondary-text);
-  button i {
-    color: var(--secondary-base-color);
+  width: 100%;
+  background-color: transparent;
+  transition: all 0.3s ease-in-out;
+  z-index: 999;
+
+  &.scroll-on {
+    background-color: var(--primary-background);
+    box-shadow: 0 4px 6px rgba(141, 190, 255, 0.773);
+    padding: 0.5rem 0;
   }
-  .navbar-toggler:focus {
-    outline: unset;
-    border: unset;
-    box-shadow: none;
-  }
-  /* Change the entire navbar background when the menu is expanded */
-  .navbar.show {
-    background-color: var(--primary-text);
+
+  &.menu-open {
+    background: linear-gradient(135deg, #ffffff, #f0f0f0);
     transition: background-color 0.3s ease-in-out;
+
+    .nav-item {
+      a,
+      i {
+        color: var(--secondary-base-color);
+      }
+
+      &:hover {
+        a,
+        i {
+          color: var(--secondary-backbround);
+        }
+      }
+    }
+  }
+
+  .navbar-brand img {
+    transition: all 0.3s ease-in-out;
+
+    // Adjust logo size on scroll
+    .scroll-on & {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  .navbar-toggler {
+    border: none;
+    background: transparent;
+    font-size: 1.5rem;
+    color: #333;
+    transition: all 0.3s ease;
+
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+    i {
+      color: var(--secondary-base-color);
+    }
   }
 
   .nav-item {
     padding: 0 0.625rem;
     transition: all 200ms linear;
     border-bottom: 2px solid transparent;
+
     a,
     i {
       font-size: 0.9375rem;
@@ -34,6 +73,7 @@
       color: var(--primary-text);
       letter-spacing: 1px;
     }
+
     &:hover {
       a,
       i {
@@ -42,33 +82,31 @@
       border-bottom: 2px solid var(--secondary-base-color);
     }
   }
-}
-//scroll on changes
-.navigation-wrap.scroll-on {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  box-shadow: 0 0.125rem 1.75rem 0 rgba(242, 97, 63, 0.5);
-  transition: all 0.15s ease-in-out 0s;
-  border-bottom: none;
-}
 
-// Change container and nav-links color when the toggle button is showing
-.navigation-wrap.menu-open {
-  background: linear-gradient(135deg, #ffffff, #f0f0f0);
-  transition: background-color 0.3s ease-in-out;
+  .nav-link {
+    color: #333;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: color 0.3s ease;
 
-  .nav-item {
-    a,
-    i {
-      color: var(--primary-base-color);
-    }
     &:hover {
-      a,
-      i {
-        color: var(--secondary-background);
-      }
+      color: #007bff;
+    }
+
+    &.active {
+      color: #007bff;
     }
   }
-}
+
+  // Responsive adjustments
+  @media (max-width: 991px) {
+    .navbar-collapse {
+      background-color: #ffffff;
+      padding: 1rem;
+    }
+
+    .nav-link {
+      margin: 0.5rem 0;
+    }
+  }
+} 

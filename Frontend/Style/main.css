@@ -1,24 +1,50 @@
-@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Quicksand:wght@300..700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Protest+Revolution&family=Quicksand:wght@300..700&display=swap");
 .navigation-wrap {
   position: fixed;
-  width: 100%;
+  top: 0;
   left: 0;
-  transition: all 0.3s ease-out;
-  border-bottom: 1px solid var(--secondary-text);
-  /* Change the entire navbar background when the menu is expanded */
+  width: 100%;
+  background-color: transparent;
+  transition: all 0.3s ease-in-out;
+  z-index: 999;
 }
-.navigation-wrap button i {
+.navigation-wrap.scroll-on {
+  background-color: var(--primary-background);
+  box-shadow: 0 4px 6px rgba(141, 190, 255, 0.773);
+  padding: 0.5rem 0;
+}
+.navigation-wrap.menu-open {
+  background: linear-gradient(135deg, #ffffff, #f0f0f0);
+  transition: background-color 0.3s ease-in-out;
+}
+.navigation-wrap.menu-open .nav-item a,
+.navigation-wrap.menu-open .nav-item i {
   color: var(--secondary-base-color);
 }
+.navigation-wrap.menu-open .nav-item:hover a,
+.navigation-wrap.menu-open .nav-item:hover i {
+  color: var(--secondary-backbround);
+}
+.navigation-wrap .navbar-brand img {
+  transition: all 0.3s ease-in-out;
+}
+.scroll-on .navigation-wrap .navbar-brand img {
+  width: 40px;
+  height: 40px;
+}
+.navigation-wrap .navbar-toggler {
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  color: #333;
+  transition: all 0.3s ease;
+}
 .navigation-wrap .navbar-toggler:focus {
-  outline: unset;
-  border: unset;
+  outline: none;
   box-shadow: none;
 }
-.navigation-wrap .navbar.show {
-  background-color: var(--primary-text);
-  transition: background-color 0.3s ease-in-out;
+.navigation-wrap .navbar-toggler i {
+  color: var(--secondary-base-color);
 }
 .navigation-wrap .nav-item {
   padding: 0 0.625rem;
@@ -39,33 +65,55 @@
 .navigation-wrap .nav-item:hover i {
   color: var(--primary-base-color);
 }
-
-.navigation-wrap.scroll-on {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  box-shadow: 0 0.125rem 1.75rem 0 rgba(242, 97, 63, 0.5);
-  transition: all 0.15s ease-in-out 0s;
-  border-bottom: none;
+.navigation-wrap .nav-link {
+  color: #333;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  transition: color 0.3s ease;
 }
-
-.navigation-wrap.menu-open {
-  background: linear-gradient(135deg, #ffffff, #f0f0f0);
-  transition: background-color 0.3s ease-in-out;
+.navigation-wrap .nav-link:hover {
+  color: #007bff;
 }
-.navigation-wrap.menu-open .nav-item a,
-.navigation-wrap.menu-open .nav-item i {
-  color: var(--primary-base-color);
+.navigation-wrap .nav-link.active {
+  color: #007bff;
 }
-.navigation-wrap.menu-open .nav-item:hover a,
-.navigation-wrap.menu-open .nav-item:hover i {
-  color: var(--secondary-background);
+@media (max-width: 991px) {
+  .navigation-wrap .navbar-collapse {
+    background-color: #ffffff;
+    padding: 1rem;
+  }
+  .navigation-wrap .nav-link {
+    margin: 0.5rem 0;
+  }
 }
 
 #home {
-  height: 1000px;
+  margin-top: 5rem;
+  background-color: none;
 }
+#home .container {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  padding: 3rem 5rem;
+}
+#home .container h1 span {
+  color: var(--primary-text);
+  font-size: 3.5rem;
+}
+#home .container h4 span {
+  color: var(--primary-base-color);
+  font-size: 2.5rem;
+  font-family: var(--tertiary-font);
+}
+#home .container button i {
+  color: var(--secondary-text);
+}
+#home .container button:hover i {
+  color: var(--tertiary-text);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -84,10 +132,22 @@
   --secondary-background: #1a1a1a;
   --primary-text: #eaeaea;
   --secondary-text: #b3b3b3;
-  --primary-base-color: #f2613f;
-  --secondary-base-color: #fc512a;
+  --tertiary-text: #001772;
+  --secondary-base-color: #34a5f5;
+  --primary-base-color: #00e5ff;
   --primary-font: "Josefin Sans", sans-serif;
   --secondary-font: "Montserrat Alternates", serif;
+  --tertiary-font: "Protest Revolution", sans-serif;
+}
+
+#networkCanvas {
+  position: fixed;
+  width: 1920px; /* Fixed Width */
+  height: 1080px; /* Fixed Height */
+  z-index: -1; /* Make sure it's behind all content */
+  pointer-events: none; /* Prevent interaction with canvas */
+  display: block;
+  margin-top: 100px;
 }
 
 html {
@@ -95,22 +155,14 @@ html {
 }
 html body {
   font-size: 100%;
-  background: linear-gradient(135deg, #000000, #2c2c2c, #312c2c);
+  background: linear-gradient(135deg, #000000, #0e0d1c, #2d2c31);
   font-family: var(--primary-font);
-}
-html body #networkCanvas {
-  position: fixed;
-  width: 1920px; /* Fixed Width */
-  height: 1080px; /* Fixed Height */
-  z-index: -1; /* Make sure it's behind all content */
-  pointer-events: none; /* Prevent interaction with canvas */
-  display: block;
-  margin-top: 70px; /* Adjust to make space for navbar */
 }
 html body h1 {
   font-size: 3rem;
   font-weight: 900;
-  color: var(--primary-text);
+  color: var(--secondary-base-color);
+  line-height: 4rem;
 }
 html body h2 {
   font-weight: 700;
@@ -139,26 +191,57 @@ html body p {
 }
 
 /* Button properties */
-#home button {
+#home .container button {
   font-family: var(--secondry-font);
   font-weight: 800;
   font-size: 1.025rem;
   letter-spacing: 0.05rem;
   padding: 0.7rem 1.3rem;
+  text-transform: uppercase;
+  color: cyan;
+  background: transparent;
+  border: none;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.4s ease-out;
+  /* Top-left and Bottom-right Borders */
+  /* Top-left corner */
+  /* Bottom-right corner */
+}
+#home .container button::before, #home .container button::after {
+  content: "";
+  position: absolute;
+  width: 85px; /* Adjust length */
+  height: 35px;
+  border: 3px solid var(--primary-base-color); /* Border color */
+  -o-border-image: linear-gradient(45deg, var(--primary-base-color), var(--tertiary-text)) 1;
+     border-image: linear-gradient(45deg, var(--primary-base-color), var(--tertiary-text)) 1;
+}
+#home .container button::before {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+#home .container button::after {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+#home .container button:hover {
+  color: black;
+  background: var(--primary-base-color);
   border-radius: 0;
-  box-shadow: 0px 2px 10px -1px rgba(255, 255, 255, 0.308);
-  transition: all 0.4s ease-out 0s;
+  box-shadow: inset 0 0 10px 3px rgba(0, 229, 255, 0.6), inset 0 0 15px 6px rgba(122, 0, 255, 0.5);
+  transition: all 0.5s ease-in-out;
 }
-
-#home button {
-  background: none;
-  color: var(--secondary-base-color);
-  border: 2px solid var(--secondary-base-color);
-}
-#home button:hover {
-  color: var(--primary-text);
-  background: none;
-  background-color: var(--secondary-base-color);
+#home .container button:hover::before, #home .container button:hover::after {
+  border: none;
 }
 
 ::-webkit-scrollbar {

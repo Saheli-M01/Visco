@@ -86,28 +86,37 @@
 
     <!-- Home section starts -->
     <section id="home">
-      <div class="container">
+      <div class="container align-items-center">
         <div class="row">
           <!-- for text part left side -->
           <div class="col-lg-6">
             <h1>
-              Where <span>O(n<sup>100</sup>)</span> Complexity Turns into <span>O(1)</span> Understanding
+              Where <span>O(n<sup>100</sup>)</span> Complexity Turns into
+              <span>O(1)</span> Understanding
             </h1>
-            <h4 class="mt-3 mb-5">
-              Where coding meets clarity. At <span>Visco</span>, explore inbuilt algorithms through simple, intuitive visuals. We turn complexity into clarity, making code effortless to understand.
+            <h4 class="mt-3 mb-5 pe-2">
+              Where coding meets clarity. At <span>Visco</span>, explore inbuilt
+              algorithms through simple, intuitive visuals. We turn complexity
+              into clarity, making code effortless to understand.
             </h4>
-            <button type="button" class="btn btn-outline py-3" onclick="showtopic()">
+            <button
+              type="button"
+              class="btn btn-outline py-3"
+              onclick="showtopic()"
+            >
               Get Started <i class="ms-2 fa-solid fa-terminal"></i>
             </button>
           </div>
           <!-- for animation part right side -->
           <div class="col-lg-6">
-
+            <div class="code-container" id="code-output"></div>
+            <div class="cursor" id="cursor"></div>
           </div>
         </div>
       </div>
     </section>
     <!-- Home section ends -->
+
 
     <!-- footer starts -->
     <footer></footer>
@@ -116,6 +125,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Own Js -->
     <script type="module" src="JS/main.js"></script>
-    
   </body>
 </html>

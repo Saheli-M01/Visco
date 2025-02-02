@@ -21,8 +21,46 @@
       i {
         color: var(--secondary-text);
       }
-      &:hover i{
+      &:hover i {
         color: var(--tertiary-text);
+      }
+    }
+    /* Code Container */
+    .code-container {
+      background: rgba(0, 0, 0, 0.503);
+      padding: 1rem;
+      border-radius: 8px;
+      color: var(--primary-text);
+      font-family: "Courier New", monospace;
+      font-weight: 800;
+      font-size: 1.1rem;
+      width: 100%;
+      margin-top: 2rem; /* Ensure spacing from top */
+      white-space: pre-wrap; /* Ensures multi-line text is shown */
+      word-wrap: break-word; /* Prevents text from overflowing */
+      overflow: hidden;
+      max-height: 450px; /* Max height for the container */
+      overflow-y: auto; /* Makes content scrollable if it exceeds the max height */
+      position: relative; /* Ensures cursor positioning works */
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 20px;
+      background-color: var(--primary-text);
+      animation: blink 0.7s step-end infinite;
+    }
+
+    @keyframes blink {
+      0% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
       }
     }
   }

@@ -5,7 +5,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize navbar functionality
     setupNavbar();
 });
+//home.js
+import { showtopic } from './home.js';
 
+document.addEventListener('DOMContentLoaded', function () {
+    // Initialize button click event for showtopic
+    const button = document.querySelector('.btn');
+    button.addEventListener('click', showtopic);
+});
 //canvas network animation code remains the same
 document.addEventListener("DOMContentLoaded", function () {
     const canvas = document.getElementById("networkCanvas");

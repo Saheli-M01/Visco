@@ -7,6 +7,7 @@
   background-color: transparent;
   transition: all 0.3s ease-in-out;
   z-index: 999;
+  padding: 0.75rem 1rem;
 }
 .navigation-wrap.scroll-on {
   background-color: var(--primary-background);
@@ -14,29 +15,22 @@
   padding: 0.5rem 0;
 }
 .navigation-wrap.menu-open {
-  background: linear-gradient(135deg, #ffffff, #f0f0f0);
+  background: var(--secondary-background);
+  border-radius: 5px;
   transition: background-color 0.3s ease-in-out;
 }
-.navigation-wrap.menu-open .nav-item a,
-.navigation-wrap.menu-open .nav-item i {
-  color: var(--secondary-base-color);
+.navigation-wrap.menu-open .nav-link,
+.navigation-wrap.menu-open .nav-link i {
+  color: var(--primary-text) !important;
 }
-.navigation-wrap.menu-open .nav-item:hover a,
-.navigation-wrap.menu-open .nav-item:hover i {
-  color: var(--secondary-backbround);
-}
-.navigation-wrap .navbar-brand img {
-  transition: all 0.3s ease-in-out;
-}
-.scroll-on .navigation-wrap .navbar-brand img {
-  width: 40px;
-  height: 40px;
+.navigation-wrap.menu-open .nav-link:hover,
+.navigation-wrap.menu-open .nav-link:hover i {
+  color: var(--primary-base-color);
 }
 .navigation-wrap .navbar-toggler {
   border: none;
   background: transparent;
   font-size: 1.5rem;
-  color: #333;
   transition: all 0.3s ease;
 }
 .navigation-wrap .navbar-toggler:focus {
@@ -51,39 +45,38 @@
   transition: all 200ms linear;
   border-bottom: 2px solid transparent;
 }
-.navigation-wrap .nav-item a,
-.navigation-wrap .nav-item i {
+.navigation-wrap .nav-item .nav-link,
+.navigation-wrap .nav-item .nav-link i {
   font-size: 0.9375rem;
   font-weight: 700;
-  color: var(--primary-text);
+  color: var(--secondary-text);
   letter-spacing: 1px;
+  transition: color 0.3s ease;
 }
 .navigation-wrap .nav-item:hover {
   border-bottom: 2px solid var(--secondary-base-color);
 }
-.navigation-wrap .nav-item:hover a,
-.navigation-wrap .nav-item:hover i {
+.navigation-wrap .nav-item:hover .nav-link,
+.navigation-wrap .nav-item:hover .nav-link i {
   color: var(--primary-base-color);
 }
 .navigation-wrap .nav-link {
-  color: #333;
   font-weight: 500;
   padding: 0.5rem 1rem;
-  transition: color 0.3s ease;
-}
-.navigation-wrap .nav-link:hover {
-  color: #007bff;
 }
 .navigation-wrap .nav-link.active {
-  color: #007bff;
+  color: var(--secondary-base-color);
 }
 @media (max-width: 991px) {
   .navigation-wrap .navbar-collapse {
-    background-color: #ffffff;
+    background-color: var(--secondary-background);
     padding: 1rem;
+    border-radius: 5px;
+    transition: all 0.2s ease-in-out;
   }
   .navigation-wrap .nav-link {
     margin: 0.5rem 0;
+    color: var(--primary-text);
   }
 }
 

@@ -1,13 +1,12 @@
-// main.js
+//nav.js
+import { setupNavbar } from './nav.js';
 
-import { activateNavbar, hideNavbarOnClick, toggleNavbarColor } from './nav.js';
+document.addEventListener('DOMContentLoaded', function () {
+    // Initialize navbar functionality
+    setupNavbar();
+});
 
-// Call the functions from nav.js
-activateNavbar();
-hideNavbarOnClick();
-toggleNavbarColor();
-
-// Your existing canvas network animation code remains the same
+//canvas network animation code remains the same
 document.addEventListener("DOMContentLoaded", function () {
     const canvas = document.getElementById("networkCanvas");
     const ctx = canvas.getContext("2d");

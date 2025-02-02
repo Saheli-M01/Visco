@@ -1,5 +1,10 @@
 @import "nav";
 @import "home";
+@import "about";
+@import "feature";
+@import "topic";
+@import "contact";
+@import "footer";
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Protest+Revolution&family=Quicksand:wght@300..700&display=swap");
 
 * {
@@ -18,10 +23,12 @@
   --primary-background: #0d0d0d;
   --secondary-background: #1a1a1a;
   --primary-text: #eaeaea;
-  --secondary-text: #b3b3b3;
+  --secondary-text: #c2c2c2;
   --tertiary-text: #001772;
   --secondary-base-color: #34a5f5;
   --primary-base-color: #00e5ff;
+  --primary-contrast: #ffeebb;
+  --secondary-contrast: #fcbd00;
   --primary-font: "Josefin Sans", sans-serif;
   --secondary-font: "Montserrat Alternates", serif;
   --tertiary-font: "Protest Revolution", sans-serif;
@@ -40,25 +47,27 @@ html {
   body {
     font-size: 100%;
     background: linear-gradient(135deg, #000000, #0e0d1c, #2d2c31);
-    font-family: var(--primary-font);
+    
 
     h1 {
       font-size: 3rem;
       font-weight: 900;
-      color: var(--secondary-base-color);
       line-height: 4rem;
+      font-family: var(--primary-font);
     }
 
     h2 {
       font-weight: 700;
-      font-size: 2.25rem;
+      font-size: 2rem;
+      font-family: var(--primary-font);
+      line-height: 3.5rem;
     }
 
     h4 {
       font-size: 1.5rem;
       font-weight: 400;
-      line-height: 3rem;
-      color: var(--secondary-text);
+     
+      font-family: var(--primary-font);
       text-align: justify;
     }
 
@@ -66,15 +75,14 @@ html {
       font-size: 1.2rem;
       font-weight: 700;
     }
-    h6 {
-      font-size: 0.9rem;
-      font-weight: 700;
-    }
+    
     p {
       font-weight: 400;
-      line-height: 2rem;
+      font-size: 1rem;
+      line-height: 2.5rem;
       letter-spacing: 1px;
       text-align: justify;
+      font-family: var(--secondry-font);
     }
   }
 }
@@ -86,8 +94,6 @@ html {
   font-size: 1.025rem;
   letter-spacing: 0.05rem;
   padding: 0.7rem 1.3rem;
-  text-transform: uppercase;
-  color: cyan;
   background: transparent;
   border: none;
   position: relative;
@@ -97,16 +103,20 @@ html {
   gap: 8px;
   cursor: pointer;
   transition: all 0.4s ease-out;
+  color: var(--secondary-contrast);
+  i{
+    color: var(--primary-text);
+  }
   
   /* Top-left and Bottom-right Borders */
   &::before,
   &::after {
     content: "";
     position: absolute;
-    width: 85px; /* Adjust length */
+    width: 95px; /* Adjust length */
     height: 35px;
-    border: 3px solid var(--primary-base-color); /* Border color */
-    border-image: linear-gradient(45deg, var(--primary-base-color), var(--tertiary-text)) 1;
+    border: 3px solid var(--primary-contrast); /* Border color */
+    border-image: linear-gradient(45deg, var(--primary-contrast), var(--secondary-contrast)) 1;
   }
 
   /* Top-left corner */
@@ -127,12 +137,14 @@ html {
 
   &:hover {
     color: black;
-    background: var(--primary-base-color);
+    background: linear-gradient(135deg, var(--primary-contrast), var(--secondary-contrast));
     border-radius:0;
-    box-shadow: inset 0 0 10px 3px rgba(0, 229, 255, 0.6), inset 0 0 15px 6px rgba(122, 0, 255, 0.5);
-    transition: all 0.5s ease-in-out; 
-  }
 
+    transition: all 0.3s ease-in-out; 
+    transform: scale(1.05);
+    font-weight: 700;
+  }
+  
   &:hover::before,
   &:hover::after {
     border: none; 

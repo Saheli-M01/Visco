@@ -7,14 +7,21 @@
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     padding: 3rem 5rem;
-    h1 span {
-      color: var(--primary-text);
-      font-size: 3.5rem;
+    h1 {
+      color: var(--secondary-base-color);
+      span {
+        color: var(--primary-text);
+        font-size: 3.5rem;
+      }
     }
-    h4 span {
-      color: var(--primary-base-color);
-      font-size: 2.5rem;
-      font-family: var(--tertiary-font);
+    h4 {
+      color: var(--secondary-text);
+      line-height: 3rem;
+      span {
+        color: var(--primary-base-color);
+        font-size: 2.5rem;
+        font-family: var(--tertiary-font);
+      }
     }
     button {
       @extend %button;
@@ -65,4 +72,3 @@
     }
   }
 }
-

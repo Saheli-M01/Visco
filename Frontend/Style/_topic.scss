@@ -1,0 +1,151 @@
+#topics {
+    padding: 40px 0;
+  
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+    }
+  
+    h2 {
+      color: var(--primary-text);
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 30px;
+      border-bottom: 3px solid var(--primary-base-color);
+      padding-bottom: 10px;
+    }
+  
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px; /* Space between columns */
+      justify-content: space-between;
+    }
+  
+    .topic-card {
+      .card-content {
+        position: relative;
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+        height: 220px;
+        border: 1px solid #ddd;
+        overflow: hidden; /* Prevent content from overflowing */
+  
+        &:hover {
+          transform: translateY(-10px);
+          box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+          background-color: #fafafa;
+        }
+  
+        /* Adding sparkle effect on hover */
+        &:hover::before {
+          content: "";
+          position: absolute;
+          top: 10px;
+          left: 10px;
+          width: 100%;
+          height: 100%;
+          border-radius: 10px;
+          background: linear-gradient(45deg, #ffcc00, #ff66ff, #00ccff, #ff66ff);
+          background-size: 400% 400%;
+          animation: sparkle 1.5s ease-in-out infinite;
+          z-index: -1;
+        }
+  
+        /* Icon Container */
+        .icon-container {
+          position: relative;
+          width: 100%;
+          height: 60px;
+          margin-bottom: 10px;
+  
+          img {
+            width: 60px; /* Fixed icon size */
+            height: 60px; /* Fixed icon size */
+            object-fit: contain;
+            transition: transform 0.3s ease;
+          }
+        }
+  
+        .card-name {
+          font-size: 1.2rem;
+          font-weight: 600;
+          color: var(--primary-text);
+          margin-bottom: 10px;
+        }
+  
+        p {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--primary-text);
+          font-size: 1rem;
+          transition: color 0.3s ease;
+        }
+  
+        button {
+          padding: 8px 16px;
+          font-size: 0.9rem;
+          background-color: var(--primary-base-color);
+          color: white;
+          border: none;
+          border-radius: 5px;
+          transition: background-color 0.3s ease, color 0.3s ease;
+          cursor: pointer;
+  
+          i {
+            margin-left: 5px;
+          }
+  
+          &:hover {
+            background-color: var(--primary-text);
+            color: #fff;
+          }
+        }
+  
+        &:hover {
+          .icon-container img {
+            transform: translateY(-10px); /* Moves the icon up on hover */
+          }
+  
+          .card-name {
+            color: var(--primary-base-color);
+          }
+  
+          p {
+            color: var(--primary-base-color);
+          }
+        }
+      }
+    }
+  
+    /* Ensure 4 cards in a row */
+    .col-lg-3 {
+      flex: 0 0 23%; /* Ensure 4 cards in a row */
+      margin-bottom: 30px; /* Add space below each card */
+      @media (max-width: 991px) {
+        flex: 0 0 48%; /* 2 cards in a row on medium screens */
+      }
+      @media (max-width: 575px) {
+        flex: 0 0 100%; /* 1 card in a row on small screens */
+      }
+    }
+  }
+  
+  /* Keyframe for sparkle animation */
+  @keyframes sparkle {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  

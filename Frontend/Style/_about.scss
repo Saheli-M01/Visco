@@ -1,0 +1,25 @@
+#about {
+  background-color: rgba(32, 32, 32, 0.8);
+  margin-top: 3rem;
+    padding:2rem 0;
+  h1 {
+    color: var(--primary-text);    
+  }
+ 
+    h2 {
+      color: var(--secondary-contrast);
+      letter-spacing: 3px;
+      text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
+      span {
+        color: var(--primary-base-color);
+      }
+    }
+  
+
+ 
+    h4 {
+      color: var(--secondary-text);
+      line-height: 2.5rem;
+    }
+  
+}

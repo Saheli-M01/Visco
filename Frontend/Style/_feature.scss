@@ -1,0 +1,57 @@
+#feature {
+    padding: 40px 0;
+  
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+    }
+  
+    h1 {
+      color: var(--primary-text); /* Use your primary text color */
+      margin-bottom: 30px; /* Spacing below the title */
+      border-bottom: 3px solid var(--primary-base-color); /* Border under the title */
+      padding-bottom: 10px;
+    }
+  
+    .row {
+      justify-content: space-between; /* Space between columns */
+    }
+  
+    .col-lg-4 {
+      flex: 0 1 calc(33.33% - 20px); /* Make sure the columns stay in one row */
+      background-color: rgb(234, 148, 119);
+      padding: 20px;
+  
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-align: center;
+  
+      &:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 6px 15px rgba(201, 201, 201, 0.545);
+        background-color: rgb(252, 106, 71);
+  
+        /* On hover, change the color of the icon and text */
+        i {
+          color: red; 
+        }
+  
+        p {
+          color: var(--primary-text); 
+        }
+      }
+  
+      i {
+        font-size: 3rem; /* Icon size */
+        color: var(--primary-base-color);
+        margin-bottom: 15px;
+        transition: color 0.3s ease;
+      }
+  
+      p {
+        color: var(--tertiary-text);
+        transition: color 0.3s ease;
+      }
+    }
+  }
+  

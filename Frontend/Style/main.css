@@ -350,10 +350,16 @@
   padding: 20px;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: center; /* Centers the content horizontally */
+  justify-content: space-between; /* Distributes space vertically */
 }
 #contact .team-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 15px rgba(255, 255, 255, 0.3);
 }
 #contact .team-card .team-photo {
   border-radius: 50%;
@@ -378,12 +384,14 @@
 }
 #contact .team-card .social-icons {
   margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 #contact .team-card .social-icons a {
   color: #fff;
   margin: 0 10px;
   font-size: 1.25rem;
   transition: color 0.3s ease;
+  display: inline-block;
 }
 #contact .team-card .social-icons a:hover {
   color: #0dcaf0;
@@ -432,8 +440,6 @@
 
 #networkCanvas {
   position: fixed;
-  width: 1920px; /* Fixed Width */
-  height: 1080px; /* Fixed Height */
   z-index: -1; /* Make sure it's behind all content */
   pointer-events: none; /* Prevent interaction with canvas */
   display: block;

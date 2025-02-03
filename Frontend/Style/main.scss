@@ -35,8 +35,6 @@
 }
 #networkCanvas {
   position: fixed;
-  width: 1920px; /* Fixed Width */
-  height: 1080px; /* Fixed Height */
   z-index: -1; /* Make sure it's behind all content */
   pointer-events: none; /* Prevent interaction with canvas */
   display: block;

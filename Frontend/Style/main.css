@@ -218,35 +218,32 @@
   transition: color 0.3s ease;
 }
 
-#topics {
+#topic {
   padding: 40px 0;
-  /* Ensure 4 cards in a row */
 }
-#topics .container {
+#topic .container {
   max-width: 1140px;
   margin: 0 auto;
 }
-#topics h2 {
+#topic h2 {
   color: var(--primary-text);
   font-size: 2.5rem;
   font-weight: 600;
-  margin-bottom: 30px;
   border-bottom: 3px solid var(--primary-base-color);
   padding-bottom: 10px;
 }
-#topics .row {
+#topic .row {
   display: flex;
   flex-wrap: wrap;
-  gap: 30px; /* Space between columns */
   justify-content: space-between;
 }
-#topics .topic-card .card-content {
-  position: relative;
+#topic .topic-card .card-content {
   background-color: #f8f9fa;
   padding: 20px;
+  margin-top: 1rem;
   border-radius: 10px;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.281);
   transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
   height: 220px;
   border: 1px solid #ddd;
@@ -254,12 +251,12 @@
   /* Adding sparkle effect on hover */
   /* Icon Container */
 }
-#topics .topic-card .card-content:hover {
+#topic .topic-card .card-content:hover {
   transform: translateY(-10px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
   background-color: #fafafa;
 }
-#topics .topic-card .card-content:hover::before {
+#topic .topic-card .card-content:hover::before {
   content: "";
   position: absolute;
   top: 10px;
@@ -272,26 +269,26 @@
   animation: sparkle 1.5s ease-in-out infinite;
   z-index: -1;
 }
-#topics .topic-card .card-content .icon-container {
+#topic .topic-card .card-content .icon-container {
   position: relative;
   width: 100%;
   height: 60px;
   margin-bottom: 10px;
 }
-#topics .topic-card .card-content .icon-container img {
+#topic .topic-card .card-content .icon-container img {
   width: 60px; /* Fixed icon size */
   height: 60px; /* Fixed icon size */
   -o-object-fit: contain;
      object-fit: contain;
   transition: transform 0.3s ease;
 }
-#topics .topic-card .card-content .card-name {
+#topic .topic-card .card-content .card-name {
   font-size: 1.2rem;
   font-weight: 600;
   color: var(--primary-text);
   margin-bottom: 10px;
 }
-#topics .topic-card .card-content p {
+#topic .topic-card .card-content p {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -299,7 +296,7 @@
   font-size: 1rem;
   transition: color 0.3s ease;
 }
-#topics .topic-card .card-content button {
+#topic .topic-card .card-content button {
   padding: 8px 16px;
   font-size: 0.9rem;
   background-color: var(--primary-base-color);
@@ -309,35 +306,21 @@
   transition: background-color 0.3s ease, color 0.3s ease;
   cursor: pointer;
 }
-#topics .topic-card .card-content button i {
+#topic .topic-card .card-content button i {
   margin-left: 5px;
 }
-#topics .topic-card .card-content button:hover {
+#topic .topic-card .card-content button:hover {
   background-color: var(--primary-text);
   color: #fff;
 }
-#topics .topic-card .card-content:hover .icon-container img {
+#topic .topic-card .card-content:hover .icon-container img {
   transform: translateY(-10px); /* Moves the icon up on hover */
 }
-#topics .topic-card .card-content:hover .card-name {
+#topic .topic-card .card-content:hover .card-name {
   color: var(--primary-base-color);
 }
-#topics .topic-card .card-content:hover p {
+#topic .topic-card .card-content:hover p {
   color: var(--primary-base-color);
-}
-#topics .col-lg-3 {
-  flex: 0 0 23%; /* Ensure 4 cards in a row */
-  margin-bottom: 30px; /* Add space below each card */
-}
-@media (max-width: 991px) {
-  #topics .col-lg-3 {
-    flex: 0 0 48%; /* 2 cards in a row on medium screens */
-  }
-}
-@media (max-width: 575px) {
-  #topics .col-lg-3 {
-    flex: 0 0 100%; /* 1 card in a row on small screens */
-  }
 }
 
 /* Keyframe for sparkle animation */

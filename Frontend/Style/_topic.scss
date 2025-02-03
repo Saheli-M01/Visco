@@ -1,4 +1,4 @@
-#topics {
+#topic {
     padding: 40px 0;
   
     .container {
@@ -10,7 +10,7 @@
       color: var(--primary-text);
       font-size: 2.5rem;
       font-weight: 600;
-      margin-bottom: 30px;
+
       border-bottom: 3px solid var(--primary-base-color);
       padding-bottom: 10px;
     }
@@ -18,18 +18,18 @@
     .row {
       display: flex;
       flex-wrap: wrap;
-      gap: 30px; /* Space between columns */
+
       justify-content: space-between;
     }
   
     .topic-card {
       .card-content {
-        position: relative;
         background-color: #f8f9fa;
         padding: 20px;
+        margin-top: 1rem;
         border-radius: 10px;
         text-align: center;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 10px rgba(255, 255, 255, 0.281);
         transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
         height: 220px;
         border: 1px solid #ddd;
@@ -123,17 +123,7 @@
       }
     }
   
-    /* Ensure 4 cards in a row */
-    .col-lg-3 {
-      flex: 0 0 23%; /* Ensure 4 cards in a row */
-      margin-bottom: 30px; /* Add space below each card */
-      @media (max-width: 991px) {
-        flex: 0 0 48%; /* 2 cards in a row on medium screens */
-      }
-      @media (max-width: 575px) {
-        flex: 0 0 100%; /* 1 card in a row on small screens */
-      }
-    }
+    
   }
   
   /* Keyframe for sparkle animation */

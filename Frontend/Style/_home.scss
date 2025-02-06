@@ -35,69 +35,71 @@
         color: var(--tertiary-text);
       }
     }
-    /* Code Container */
-    .code-container {
-      background: rgba(0, 0, 0, 0.7);
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      border-left: 2.5rem solid #353535;
-      padding: 1rem;
-      border-radius: 8px;
-      color: var(--primary-text);
-      font-family: "Courier New", monospace;
-      font-weight: 800;
-      font-size: var(
-        --font-code
-      ); /* Adjust font size based on viewport width */
-      width: 100%;
-      margin-top: 2rem;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      overflow: hidden;
-      max-height: 520px;
-      overflow-y: auto;
-      position: relative;
-      display: flex; /* Ensures line-numbers and code stay side by side */
-    }
 
-    .cursor {
-      display: inline-block;
-      width: 8px;
-      height: 20px;
-      background-color: var(--primary-text);
-      animation: blink 0.7s step-end infinite;
-    }
+    .right {
+      
+      /* Code Container */
+      .code-container {
+        background: rgba(0, 0, 0, 0.7);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        border-left: 2.5rem solid #353535;
+        padding: 1rem;
+        border-radius: 8px;
+        color: var(--primary-text);
+        font-family: "Courier New", monospace;
+        font-weight: 800;
+        font-size: var(--font-code);
+        width: 100%;
+        margin-top: 2rem;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        overflow: hidden;
+        max-height: 520px;
+        overflow-y: auto;
+        position: relative;
+        display: flex; /* Ensures line-numbers and code stay side by side */
+      }
 
-    //play-pause button toggler
-    #toggleAnimation {
-      width: 30px; /* Adjust the size */
-      height: 30px; /* Same as width for perfect circle */
-      background-color: var(--secondary-contrast);
-      color: var(--secondary-background) !important;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: var(--primary-text);
-      font-family: var(--secondary-font);
-      transition: all 0.3s ease-in-out;
-      position: absolute;
-      right: 3rem;
-    }
+      .cursor {
+        display: inline-block;
+        width: 8px;
+        height: 20px;
+        background-color: var(--primary-text);
+        animation: blink 0.7s step-end infinite;
+      }
 
-    #toggleAnimation:hover {
-      background: none;
-      border: 1px solid var(--primary-contrast);
-      color: var(--primary-contrast) !important;
-      transform: scale(1.1);
-    }
+      //play-pause button toggler
+      #toggleAnimation {
+        width: 30px; /* Adjust the size */
+        height: 30px; /* Same as width for perfect circle */
+        background-color: var(--secondary-contrast);
+        color: var(--secondary-background) !important;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: var(--primary-text);
+        font-family: var(--secondary-font);
+        transition: all 0.3s ease-in-out;
+        position: absolute;
+        right: 3rem;
+      
 
-    #toggleAnimation:focus {
-      outline: none;
-    }
+      &:hover {
+        background: none;
+        border: 1px solid var(--primary-contrast);
+        color: var(--primary-contrast) !important;
+        transform: scale(1.1);
+      }
 
-    #toggleIcon {
-      font-size: 13px;
+      &:focus {
+        outline: none;
+      }
+    }
+      #toggleIcon {
+        font-size: 13px;
+      }
     }
 
     @keyframes blink {

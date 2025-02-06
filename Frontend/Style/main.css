@@ -97,7 +97,6 @@
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   padding: 3rem 5rem;
-  /* Code Container */
 }
 #home .container h1 {
   color: var(--secondary-base-color);
@@ -123,7 +122,10 @@
 #home .container .left button:hover i {
   color: var(--tertiary-text);
 }
-#home .container .code-container {
+#home .container .right {
+  /* Code Container */
+}
+#home .container .right .code-container {
   background: rgba(0, 0, 0, 0.7);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   border-left: 2.5rem solid #353535;
@@ -132,7 +134,7 @@
   color: var(--primary-text);
   font-family: "Courier New", monospace;
   font-weight: 800;
-  font-size: var(--font-code); /* Adjust font size based on viewport width */
+  font-size: var(--font-code);
   width: 100%;
   margin-top: 2rem;
   white-space: pre-wrap;
@@ -143,14 +145,14 @@
   position: relative;
   display: flex; /* Ensures line-numbers and code stay side by side */
 }
-#home .container .cursor {
+#home .container .right .cursor {
   display: inline-block;
   width: 8px;
   height: 20px;
   background-color: var(--primary-text);
   animation: blink 0.7s step-end infinite;
 }
-#home .container #toggleAnimation {
+#home .container .right #toggleAnimation {
   width: 30px; /* Adjust the size */
   height: 30px; /* Same as width for perfect circle */
   background-color: var(--secondary-contrast);
@@ -166,16 +168,16 @@
   position: absolute;
   right: 3rem;
 }
-#home .container #toggleAnimation:hover {
+#home .container .right #toggleAnimation:hover {
   background: none;
   border: 1px solid var(--primary-contrast);
   color: var(--primary-contrast) !important;
   transform: scale(1.1);
 }
-#home .container #toggleAnimation:focus {
+#home .container .right #toggleAnimation:focus {
   outline: none;
 }
-#home .container #toggleIcon {
+#home .container .right #toggleIcon {
   font-size: 13px;
 }
 @keyframes blink {

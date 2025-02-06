@@ -11,4 +11,6 @@ Visco is a web-based tool that visually demonstrates how different algorithms wo
 
 🛠️ Tech Stack
 Frontend: JavaScript, Bootstrap, SCSS, React on the way
+
+
 Core Logic: Algorithm implementations in JavaScript

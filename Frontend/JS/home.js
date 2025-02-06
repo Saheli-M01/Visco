@@ -1,4 +1,4 @@
-//when the button is clicked it will go to the topic section
+// When the button is clicked it will go to the topic section
 export function showtopic() {
   const homeSection = document.getElementById("topic");
   if (homeSection.style.display === "none") {
@@ -8,7 +8,7 @@ export function showtopic() {
   }
 }
 
-//code snippet animation
+// Code snippet animation
 const codeSnippets = [
   // Merge Sort in Python
   {
@@ -44,7 +44,7 @@ const codeSnippets = [
       "",
       "    return arr",
     ],
-    color: "#adff2f ", // Green for Python
+    color: "#adff2f", // Green for Python
   },
   // Linked List in C
   {
@@ -119,7 +119,7 @@ const codeSnippets = [
       "    return 0;",
       "}",
     ],
-    color: "#ffc40c", //yellow
+    color: "#ffc40c", // Yellow for C++
   },
 
   // Stack in JavaScript
@@ -197,6 +197,7 @@ const codeOutput = document.getElementById("code-output");
 const cursor = document.getElementById("cursor");
 let snippetIndex = 0;
 let lineIndex = 0;
+let isAnimating = true;  // Track if the animation is playing or paused
 
 // Function to automatically scroll the container to the bottom
 function autoScroll() {
@@ -204,7 +205,7 @@ function autoScroll() {
 }
 
 function typeLineByLine() {
-  if (lineIndex < codeSnippets[snippetIndex].code.length) {
+  if (lineIndex < codeSnippets[snippetIndex].code.length && isAnimating) {
     const line = codeSnippets[snippetIndex].code[lineIndex];
     const color = codeSnippets[snippetIndex].color;
     codeOutput.style.color = color; // Change color for each snippet
@@ -214,6 +215,9 @@ function typeLineByLine() {
     autoScroll(); // Automatically scroll after adding a new line
 
     setTimeout(typeLineByLine, 500); // Adjust typing speed here (500ms per line)
+  } else if (!isAnimating) {
+    // When animation is paused, reset and stop typing
+    return;
   } else {
     setTimeout(resetAndNextSnippet, 1000); // Wait a bit before moving to the next snippet
   }
@@ -227,5 +231,26 @@ function resetAndNextSnippet() {
   typeLineByLine();
 }
 
-// Start the typing animation
-typeLineByLine();
+
+function toggleAnimation() {
+  isAnimating = !isAnimating; // Toggle animation status
+
+  // Toggle button icon
+  const toggleIcon = document.getElementById("toggleIcon");
+  if (isAnimating) {
+    toggleIcon.classList.remove("fa-play");
+    toggleIcon.classList.add("fa-pause");
+    typeLineByLine(); // Resume animation
+  } else {
+    toggleIcon.classList.remove("fa-pause");
+    toggleIcon.classList.add("fa-play");
+  }
+}
+
+// Start the typing animation automatically when the page loads
+window.onload = function() {
+  typeLineByLine();  // Start the animation when page loads
+};
+
+// Handle play/pause button click
+document.getElementById("toggleAnimation").addEventListener("click", toggleAnimation);

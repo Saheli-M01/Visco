@@ -83,6 +83,13 @@
 #home {
   margin-top: 5rem;
   background-color: none;
+  /* For very large screens (4K+) */
+  /* For large screens (Desktop) */
+  /* For medium-sized screens */
+  /* For tablets (Landscape) */
+  /* For tablets (Portrait) */
+  /* For mobile screens */
+  /* For very small mobile screens */
 }
 #home .container {
   background: rgba(255, 255, 255, 0.1);
@@ -94,49 +101,82 @@
 }
 #home .container h1 {
   color: var(--secondary-base-color);
+  font-size: var(--font-h1);
 }
 #home .container h1 span {
   color: var(--primary-text);
-  font-size: 3.5rem;
+  font-size: var(--font-span-h1);
 }
 #home .container h4 {
   color: var(--secondary-text);
+  font-size: var(--font-h4);
   line-height: 3rem;
 }
 #home .container h4 span {
   color: var(--primary-base-color);
-  font-size: 2.5rem;
+  font-size: var(--font-span-h4);
   font-family: var(--tertiary-font);
 }
-#home .container button i {
+#home .container .left button i {
   color: var(--secondary-text);
 }
-#home .container button:hover i {
+#home .container .left button:hover i {
   color: var(--tertiary-text);
 }
 #home .container .code-container {
-  background: rgba(0, 0, 0, 0.503);
+  background: rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  border-left: 2.5rem solid #353535;
   padding: 1rem;
   border-radius: 8px;
   color: var(--primary-text);
   font-family: "Courier New", monospace;
   font-weight: 800;
-  font-size: 1.1rem;
+  font-size: var(--font-code); /* Adjust font size based on viewport width */
   width: 100%;
-  margin-top: 2rem; /* Ensure spacing from top */
-  white-space: pre-wrap; /* Ensures multi-line text is shown */
-  word-wrap: break-word; /* Prevents text from overflowing */
+  margin-top: 2rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
   overflow: hidden;
-  max-height: 450px; /* Max height for the container */
-  overflow-y: auto; /* Makes content scrollable if it exceeds the max height */
-  position: relative; /* Ensures cursor positioning works */
+  max-height: 520px;
+  overflow-y: auto;
+  position: relative;
+  display: flex; /* Ensures line-numbers and code stay side by side */
 }
 #home .container .cursor {
   display: inline-block;
-  width: 10px;
+  width: 8px;
   height: 20px;
   background-color: var(--primary-text);
   animation: blink 0.7s step-end infinite;
+}
+#home .container #toggleAnimation {
+  width: 30px; /* Adjust the size */
+  height: 30px; /* Same as width for perfect circle */
+  background-color: var(--secondary-contrast);
+  color: var(--secondary-background) !important;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--primary-text);
+  font-family: var(--secondary-font);
+  transition: all 0.3s ease-in-out;
+  position: absolute;
+  right: 3rem;
+}
+#home .container #toggleAnimation:hover {
+  background: none;
+  border: 1px solid var(--primary-contrast);
+  color: var(--primary-contrast) !important;
+  transform: scale(1.1);
+}
+#home .container #toggleAnimation:focus {
+  outline: none;
+}
+#home .container #toggleIcon {
+  font-size: 13px;
 }
 @keyframes blink {
   0% {
@@ -147,6 +187,74 @@
   }
   100% {
     opacity: 1;
+  }
+}
+@media (min-width: 2560px) {
+  #home :root {
+    --font-h1: 3vw;
+    --font-span-h1: 3.2vw;
+    --font-h4: 1.5vw;
+    --font-span-h4: 2.5vw;
+    --font-code: 1vw;
+  }
+}
+@media (max-width: 1920px) {
+  #home :root {
+    --font-h1: 3.2vw;
+    --font-span-h1: 3.4vw;
+    --font-h4: 1.6vw;
+    --font-span-h4: 2.7vw;
+    --font-code: 1.1vw;
+  }
+}
+@media (max-width: 1150px) {
+  #home :root {
+    --font-h1: 4vw;
+    --font-span-h1: 4.2vw;
+    --font-h4: 2vw;
+    --font-span-h4: 3vw;
+    --font-code: 1.2vw;
+  }
+}
+@media (max-width: 1024px) {
+  #home :root {
+    --font-h1: 5vw;
+    --font-span-h1: 5.5vw;
+    --font-h4: 2.2vw;
+    --font-span-h4: 3.3vw;
+    --font-code: 1.3vw;
+  }
+}
+@media (max-width: 768px) {
+  #home :root {
+    --font-h1: 5.5vw;
+    --font-span-h1: 6vw;
+    --font-h4: 2.5vw;
+    --font-span-h4: 3.5vw;
+    --font-code: 1.5vw;
+  }
+}
+@media (max-width: 600px) {
+  #home :root {
+    --font-h1: 6vw;
+    --font-span-h1: 6.5vw;
+    --font-h4: 3vw;
+    --font-span-h4: 4vw;
+    --font-code: 1.6vw;
+  }
+}
+@media (max-width: 450px) {
+  #home :root {
+    --font-h1: 7vw;
+    --font-span-h1: 7.5vw;
+    --font-h4: 3.2vw;
+    --font-span-h4: 4.2vw;
+    --font-code: 1.8vw;
+  }
+}
+@media (max-width: 986px) {
+  #home .code-container {
+    height: 200px;
   }
 }
 
@@ -380,7 +488,6 @@
 }
 #contact .team-card p:last-child {
   font-style: italic;
-  color: #aaa;
 }
 #contact .team-card .social-icons {
   margin-top: 1rem;
@@ -436,6 +543,11 @@
   --primary-font: "Josefin Sans", sans-serif;
   --secondary-font: "Montserrat Alternates", serif;
   --tertiary-font: "Protest Revolution", sans-serif;
+  --font-h1: 2.8vw;
+  --font-span-h1: 3.2vw;
+  --font-h4: 1.5vw;
+  --font-span-h4: 2.5vw;
+  --font-code: 0.9vw;
 }
 
 #networkCanvas {
@@ -456,7 +568,7 @@ html body {
 html body h1 {
   font-size: 3rem;
   font-weight: 900;
-  line-height: 4rem;
+  line-height: 4.3rem;
   font-family: var(--primary-font);
 }
 html body h2 {
@@ -485,7 +597,7 @@ html body p {
 }
 
 /* Button properties */
-#home .container button {
+#home .container .left button {
   font-family: var(--secondry-font);
   font-weight: 800;
   font-size: 1.025rem;
@@ -505,10 +617,10 @@ html body p {
   /* Top-left corner */
   /* Bottom-right corner */
 }
-#home .container button i {
+#home .container .left button i {
   color: var(--primary-text);
 }
-#home .container button::before, #home .container button::after {
+#home .container .left button::before, #home .container .left button::after {
   content: "";
   position: absolute;
   width: 95px; /* Adjust length */
@@ -517,19 +629,19 @@ html body p {
   -o-border-image: linear-gradient(45deg, var(--primary-contrast), var(--secondary-contrast)) 1;
      border-image: linear-gradient(45deg, var(--primary-contrast), var(--secondary-contrast)) 1;
 }
-#home .container button::before {
+#home .container .left button::before {
   top: 0;
   left: 0;
   border-right: none;
   border-bottom: none;
 }
-#home .container button::after {
+#home .container .left button::after {
   bottom: 0;
   right: 0;
   border-left: none;
   border-top: none;
 }
-#home .container button:hover {
+#home .container .left button:hover {
   color: black;
   background: linear-gradient(135deg, var(--primary-contrast), var(--secondary-contrast));
   border-radius: 0;
@@ -537,7 +649,7 @@ html body p {
   transform: scale(1.05);
   font-weight: 700;
 }
-#home .container button:hover::before, #home .container button:hover::after {
+#home .container .left button:hover::before, #home .container .left button:hover::after {
   border: none;
 }
 

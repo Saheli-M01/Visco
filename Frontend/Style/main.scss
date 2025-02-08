@@ -5,6 +5,7 @@
 @import "topic";
 @import "contact";
 @import "footer";
+@import "testimonial";
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Protest+Revolution&family=Quicksand:wght@300..700&display=swap");
 
 * {
@@ -32,6 +33,11 @@
   --primary-font: "Josefin Sans", sans-serif;
   --secondary-font: "Montserrat Alternates", serif;
   --tertiary-font: "Protest Revolution", sans-serif;
+  --font-h1: 2.8vw;
+  --font-span-h1: 3.2vw;
+  --font-h4: 1.5vw;
+  --font-span-h4: 2.5vw;
+  --font-code: 0.9vw;
 }
 #networkCanvas {
   position: fixed;
@@ -45,12 +51,11 @@ html {
   body {
     font-size: 100%;
     background: linear-gradient(135deg, #000000, #0e0d1c, #2d2c31);
-    
 
     h1 {
       font-size: 3rem;
       font-weight: 900;
-      line-height: 4rem;
+      line-height: 4.3rem;
       font-family: var(--primary-font);
     }
 
@@ -64,7 +69,7 @@ html {
     h4 {
       font-size: 1.5rem;
       font-weight: 400;
-     
+
       font-family: var(--primary-font);
       text-align: justify;
     }
@@ -73,7 +78,7 @@ html {
       font-size: 1.2rem;
       font-weight: 700;
     }
-    
+
     p {
       font-weight: 400;
       font-size: 1rem;
@@ -102,10 +107,10 @@ html {
   cursor: pointer;
   transition: all 0.7s ease-out;
   color: var(--secondary-contrast);
-  i{
+  i {
     color: var(--primary-text);
   }
-  
+
   /* Top-left and Bottom-right Borders */
   &::before,
   &::after {
@@ -114,7 +119,12 @@ html {
     width: 95px; /* Adjust length */
     height: 35px;
     border: 3px solid var(--primary-contrast); /* Border color */
-    border-image: linear-gradient(45deg, var(--primary-contrast), var(--secondary-contrast)) 1;
+    border-image: linear-gradient(
+        45deg,
+        var(--primary-contrast),
+        var(--secondary-contrast)
+      )
+      1;
   }
 
   /* Top-left corner */
@@ -142,14 +152,12 @@ html {
     transform: scale(1.05);
     font-weight: 700;
   }
-  
+
   &:hover::before,
   &:hover::after {
-    border: none; 
-    
+    border: none;
   }
 }
-
 
 // Custom Scrollbar
 ::-webkit-scrollbar {

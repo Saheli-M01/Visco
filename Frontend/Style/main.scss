@@ -105,7 +105,7 @@ html {
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  transition: all 0.4s ease-out;
+  transition: all 0.7s ease-out;
   color: var(--secondary-contrast);
   i {
     color: var(--primary-text);
@@ -145,14 +145,10 @@ html {
 
   &:hover {
     color: black;
-    background: linear-gradient(
-      135deg,
-      var(--primary-contrast),
-      var(--secondary-contrast)
-    );
-    border-radius: 0;
+    background: linear-gradient(135deg, var(--primary-contrast), var(--secondary-contrast));
+    border-radius: 7px;
 
-    transition: all 0.3s ease-in-out;
+    transition: all 0.7s ease-in-out; 
     transform: scale(1.05);
     font-weight: 700;
   }

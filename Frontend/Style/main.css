@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Protest+Revolution&family=Quicksand:wght@300..700&display=swap");
 .navigation-wrap {
   position: fixed;
@@ -11,7 +12,6 @@
 }
 .navigation-wrap.scroll-on {
   background-color: var(--primary-background);
-  box-shadow: 0 4px 6px rgba(141, 190, 255, 0.773);
   padding: 0.5rem 0;
 }
 .navigation-wrap.menu-open {
@@ -122,9 +122,7 @@
 #home .container .left button:hover i {
   color: var(--tertiary-text);
 }
-#home .container .right {
-  /* Code Container */
-}
+
 #home .container .right .code-container {
   background: rgba(0, 0, 0, 0.7);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -140,10 +138,10 @@
   white-space: pre-wrap;
   word-wrap: break-word;
   overflow: hidden;
-  max-height: 520px;
-  overflow-y: auto;
-  position: relative;
-  display: flex; /* Ensures line-numbers and code stay side by side */
+  max-height: 450px; /* Max height for the container */
+  overflow-y: auto; /* Makes content scrollable if it exceeds the max height */
+  position: relative; /* Ensures cursor positioning works */
+  z-index: 0;
 }
 #home .container .right .cursor {
   display: inline-block;
@@ -297,39 +295,71 @@
 #feature .row {
   justify-content: space-between; /* Space between columns */
 }
-#feature .col-lg-4 {
-  flex: 0 1 calc(33.33% - 20px); /* Make sure the columns stay in one row */
-  background-color: rgb(234, 148, 119);
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+#feature .text-center {
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
-#feature .col-lg-4:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 6px 15px rgba(201, 201, 201, 0.545);
-  background-color: rgb(252, 106, 71);
-  /* On hover, change the color of the icon and text */
+#feature .col-lg-4 {
+  flex-basis: calc(33.33333% - 30px);
+  margin: 0 15px 30px;
+  border-radius: 28px;
+  display: block;
+  padding: 30px 20px;
+  background-color: var(--secondary-background); /* Use your secondary base color */
+  overflow: hidden;
+  position: relative;
 }
+#feature .col-lg-4 .circle {
+  height: 128px;
+  width: 128px;
+  background-color: #f9b234;
+  z-index: 0;
+  position: absolute;
+  top: -75px;
+  right: -75px;
+  border-radius: 50%;
+  transition: all 0.5s ease;
+}
+#feature .col-lg-4:nth-child(1) .circle {
+  background-color: #952aff;
+}
+#feature .col-lg-4:nth-child(2) .circle {
+  background-color: #cd3e94;
+}
+#feature .col-lg-4:nth-child(3) .circle {
+  background-color: #4c49ea;
+}
+
 #feature .col-lg-4:hover i {
-  color: red;
+  color: rgb(12, 5, 5);
+}
+#feature .col-lg-4:hover .circle {
+  transform: scale(10);
 }
 #feature .col-lg-4:hover p {
-  color: var(--primary-text);
+  color: black;
 }
 #feature .col-lg-4 i {
+  position: relative;
   font-size: 3rem; /* Icon size */
-  color: var(--primary-base-color);
+  color: var(--primary-text); /* Icon color */
   margin-bottom: 15px;
   transition: color 0.3s ease;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
 }
 #feature .col-lg-4 p {
-  color: var(--tertiary-text);
+  font-family: "Poppins";
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--primary-text); /* Text color */
   transition: color 0.3s ease;
 }
 
 #topic {
-  padding: 40px 0;
+  padding: 40px 0px;
 }
 #topic .container {
   max-width: 1140px;
@@ -348,42 +378,29 @@
   justify-content: space-between;
 }
 #topic .topic-card .card-content {
-  background-color: #f8f9fa;
+  height: 250px;
   padding: 20px;
-  margin-top: 1rem;
-  border-radius: 10px;
-  text-align: center;
-  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.281);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-  height: 220px;
-  border: 1px solid #ddd;
-  overflow: hidden; /* Prevent content from overflowing */
-  /* Adding sparkle effect on hover */
+  color: white;
+  background: linear-gradient(#111010, #212121) padding-box, linear-gradient(145deg, transparent 35%, #e81cff, #40c9ff) border-box;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transform-origin: right bottom;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
   /* Icon Container */
 }
 #topic .topic-card .card-content:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-  background-color: #fafafa;
-}
-#topic .topic-card .card-content:hover::before {
-  content: "";
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  background: linear-gradient(45deg, #ffcc00, #ff66ff, #00ccff, #ff66ff);
-  background-size: 400% 400%;
-  animation: sparkle 1.5s ease-in-out infinite;
-  z-index: -1;
+  rotate: 6deg;
 }
 #topic .topic-card .card-content .icon-container {
   position: relative;
   width: 100%;
   height: 60px;
   margin-bottom: 10px;
+  display: grid;
+  justify-items: center;
 }
 #topic .topic-card .card-content .icon-container img {
   width: 60px; /* Fixed icon size */
@@ -393,7 +410,7 @@
   transition: transform 0.3s ease;
 }
 #topic .topic-card .card-content .card-name {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: var(--primary-text);
   margin-bottom: 10px;
@@ -407,21 +424,23 @@
   transition: color 0.3s ease;
 }
 #topic .topic-card .card-content button {
-  padding: 8px 16px;
-  font-size: 0.9rem;
-  background-color: var(--primary-base-color);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  cursor: pointer;
+  background-color: #e81cff;
+  padding: 4px 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 15px;
+  border-radius: 50em;
+  color: whitesmoke;
+  position: relative;
+  top: 40px;
 }
 #topic .topic-card .card-content button i {
   margin-left: 5px;
 }
 #topic .topic-card .card-content button:hover {
-  background-color: var(--primary-text);
-  color: #fff;
+  background-color: #40c9ff;
+  color: #000000;
+  box-shadow: 0px 0px 20px rgb(64, 201, 255);
 }
 #topic .topic-card .card-content:hover .icon-container img {
   transform: translateY(-10px); /* Moves the icon up on hover */
@@ -432,19 +451,49 @@
 #topic .topic-card .card-content:hover p {
   color: var(--primary-base-color);
 }
-
-/* Keyframe for sparkle animation */
-@keyframes sparkle {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
+@media (max-width: 1820px) {
+  #topic .col-lg-3 {
+    flex: 0 0 auto;
+    width: 25%;
+    padding: 10px;
   }
 }
+@media (max-width: 992px) {
+  #topic .col-lg-3 {
+    flex: 0 0 auto;
+    width: 25%;
+    padding: 10px;
+  }
+}
+@media (max-width: 768px) {
+  #topic .col-md-6 {
+    flex: 0 0 auto;
+    width: 50%;
+    padding: 10px;
+  }
+}
+@media (max-width: 576px) {
+  #topic .col-sm-12 {
+    flex: 0 0 auto;
+    width: 50%;
+    padding: 10px;
+  }
+}
+@media (max-width: 575px) {
+  #topic .col-sm-12 {
+    flex: 0 0 auto;
+    width: 50%;
+    padding: 10px;
+  }
+}
+@media (max-width: 576px) {
+  #topic .col-sm-12 {
+    flex: 0 0 auto;
+    width: 50%;
+    padding: 10px;
+  }
+}
+
 #contact .container {
   padding: 2rem 0;
 }
@@ -469,7 +518,7 @@
 }
 #contact .team-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 10px 15px rgba(255, 255, 255, 0.3);
+  box-shadow: 3px 5px rgba(94, 180, 237, 0.75);
 }
 #contact .team-card .team-photo {
   border-radius: 50%;
@@ -709,7 +758,7 @@ html body p {
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  transition: all 0.4s ease-out;
+  transition: all 0.7s ease-out;
   color: var(--secondary-contrast);
   /* Top-left and Bottom-right Borders */
   /* Top-left corner */
@@ -742,8 +791,8 @@ html body p {
 #home .container .left button:hover {
   color: black;
   background: linear-gradient(135deg, var(--primary-contrast), var(--secondary-contrast));
-  border-radius: 0;
-  transition: all 0.3s ease-in-out;
+  border-radius: 7px;
+  transition: all 0.7s ease-in-out;
   transform: scale(1.05);
   font-weight: 700;
 }

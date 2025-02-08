@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 #feature {
     padding: 40px 0;
   
@@ -16,40 +18,83 @@
     .row {
       justify-content: space-between; /* Space between columns */
     }
+
+    .text-center {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
   
     .col-lg-4 {
-      flex: 0 1 calc(33.33% - 20px); /* Make sure the columns stay in one row */
-      background-color: rgb(234, 148, 119);
-      padding: 20px;
-  
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      text-align: center;
+      flex-basis: calc(33.33333% - 30px);
+      margin: 0 15px 30px;
+      border-radius: 28px;
+      display: block;
+      padding: 30px 20px;
+      background-color: var(--secondary-background); /* Use your secondary base color */
+      overflow: hidden;
+      position: relative;
+
+    .circle {
+      height: 128px;
+      width: 128px;
+      background-color: #f9b234;
+      z-index: 0;
+      position: absolute;
+      top: -75px;
+      right: -75px;
+    
+      border-radius: 50%;
+    
+      -webkit-transition: all .5s ease;
+      -o-transition: all .5s ease;
+      transition: all .5s ease;
+    }
+
+    &:nth-child(1) .circle {
+      background-color: #952aff; 
+    }
+    &:nth-child(2) .circle {
+      background-color: #cd3e94;
+    }
+    &:nth-child(3) .circle {
+      background-color: #4c49ea; // Orange
+    }
+    
   
       &:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 6px 15px rgba(201, 201, 201, 0.545);
-        background-color: rgb(252, 106, 71);
-  
         /* On hover, change the color of the icon and text */
         i {
-          color: red; 
+          color: rgb(12, 5, 5); 
+        }
+
+        .circle{
+          -webkit-transform: scale(10);
+          -ms-transform: scale(10);
+          transform: scale(10);
         }
   
         p {
-          color: var(--primary-text); 
+          color: black;
         }
       }
   
       i {
+        position: relative;
         font-size: 3rem; /* Icon size */
-        color: var(--primary-base-color);
+        color: var(--primary-text); /* Icon color */
         margin-bottom: 15px;
         transition: color 0.3s ease;
+        z-index: 1;
+        display: grid;
+        justify-items: center;
       }
   
       p {
-        color: var(--tertiary-text);
+        font-family: 'Poppins';
+        font-weight: 500;
+        font-size: 20px;
+        color: var(--primary-text); /* Text color */
         transition: color 0.3s ease;
       }
     }

@@ -49,6 +49,7 @@
       max-height: 450px; /* Max height for the container */
       overflow-y: auto; /* Makes content scrollable if it exceeds the max height */
       position: relative; /* Ensures cursor positioning works */
+      z-index: 0;
     }
 
     .cursor {

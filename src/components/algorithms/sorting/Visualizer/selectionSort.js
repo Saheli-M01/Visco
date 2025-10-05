@@ -136,7 +136,7 @@ export const selectionSort = {
             comparing: [i, minIndex],
             swapped: [i, minIndex],
             description: `Swapping: ${v1} ↔ ${v2}`,
-            codeLine: 4,
+            codeLine: 8,
             phase: "swap",
           });
         }
@@ -191,6 +191,8 @@ export const selectionSort = {
         "        for j in range(i + 1, len(arr)):",
         "            if arr[j] < arr[minIndex]:",
         "                minIndex = j",
+        "",
+        "",
         "        arr[i], arr[minIndex] = arr[minIndex], arr[i]",
         "    return arr",
       ],

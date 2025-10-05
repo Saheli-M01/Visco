@@ -566,9 +566,40 @@ const FullScreenModal = ({ isOpen, onClose, algorithm, topic }) => {
 
   // Called by CodePreview when user attempts to change language while a visualization exists
   const requestLanguageChange = (newLang) => {
-    // Only prompt when a visualization is active AND we've progressed beyond the first step
-    if (!isVisualizationActive || sortingSteps.length === 0 || currentStepIndex <= 0) {
+    // If no visualization is active or no steps exist yet, just switch language
+    if (!isVisualizationActive || sortingSteps.length === 0) {
       setSelectedLanguage(newLang);
+      return;
+    }
+
+    // If we're at the initial step (just after pressing Go), regenerate steps immediately
+    // so the step history and array display reflect the new language.
+    if (currentStepIndex === 0) {
+      setSelectedLanguage(newLang);
+      if (originalArray && originalArray.length > 0) {
+        const algorithm = getAlgorithm(selectedAlgorithm?.name);
+        const steps = algorithm.generateSteps([...originalArray], newLang);
+        setSortingSteps(steps);
+        setTotalSteps(steps.length);
+        setStepHistory(
+          steps.map((step, index) => ({
+            step: index,
+            description: step.description,
+            array: step.array,
+            phase: step.phase,
+          }))
+        );
+        setCurrentStepIndex(0);
+        setCurrentStep(0);
+        if (steps.length > 0) {
+          const firstStep = steps[0];
+          setCurrentArray([...firstStep.array]);
+          setComparingIndices(firstStep.comparing || []);
+          setCurrentCodeLine(
+            firstStep.codeLine !== undefined ? firstStep.codeLine : -1
+          );
+        }
+      }
       return;
     }
 

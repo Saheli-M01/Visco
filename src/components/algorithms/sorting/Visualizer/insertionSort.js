@@ -27,36 +27,46 @@ export const insertionSort = {
       return steps;
     }
 
+    // initial step: indicate the outer loop is starting (consistent with other sorts)
+   
+
     for (let i = 1; i < n; i++) {
       const key = a[i];
       let j = i - 1;
 
+       steps.push({
+      array: [...a],
+      comparing: [],
+      swapped: [],
+      description: `Pass ${i }: Starting outer loop: i = ${i}`,
+      codeLine: 1,
+      phase: "outer_loop",
+    });
       // start insertion of key
       steps.push({
         array: [...a],
-        comparing: [i],
+        comparing: [],
         swapped: [],
-        description: `Insert element at index ${i} (value ${key})`,
+        description: `key =  ${key}`,
         // explicit key object so the UI can render the 'key' variable like temp/min
         key: { value: key, index: i },
-        codeLine: 1,
-        phase: "start_insert",
+        codeLine: 2,
+        phase: "key_value",
       });
 
-      // For languages with explicit temp, show temp assignment
-      if (language === "c" || language === "java" || language === "cpp") {
-        steps.push({
-          array: [...a],
-          comparing: [i],
-          swapped: [],
-          description: `temp = ${key}`,
-          temp: { value: key, index: i },
-          // keep key as well so languages that use temp still show the key variable
-          key: { value: key, index: i },
-          codeLine: 2,
-          phase: "temp",
-        });
-      }
+      // expose j initialization (j = i - 1) as its own step so the UI can highlight that line
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `j = (i - 1) -> j = ${j}`,
+        j: { value: j, index: j },
+        key: { value: key, index: i },
+        codeLine: 3,
+        phase: "",
+      });
+
+      // No separate temp variable used; insertion sort uses 'key' consistently.
 
       while (j >= 0 && a[j] > key) {
         // shift a[j] to a[j+1]
@@ -66,10 +76,6 @@ export const insertionSort = {
           comparing: [j, j + 1],
           swapped: [j + 1],
           description: `Shift arr[${j}] (${a[j]}) to position ${j + 1}`,
-          temp:
-            language === "c" || language === "java" || language === "cpp"
-              ? { value: key, index: i }
-              : undefined,
           // keep key visible during shifts so the UI can persist it
           key: { value: key, index: i },
           codeLine: 3,
@@ -85,37 +91,26 @@ export const insertionSort = {
         comparing: [],
         swapped: [j + 1],
         description: `Place key ${key} at position ${j + 1}`,
-        temp:
-          language === "c" || language === "java" || language === "cpp"
-            ? { value: key, index: i }
-            : undefined,
         key: { value: key, index: i },
         codeLine: 4,
         phase: "insert",
       });
     }
 
-    // propagate temp for C/Java/C++
-    const languageUsesTemp =
-      language === "c" || language === "java" || language === "cpp";
-    if (languageUsesTemp) {
-      let lastTemp = null;
-      for (let k = 0; k < steps.length; k++) {
-        if (steps[k].hasOwnProperty("temp")) {
-          if (steps[k].temp) lastTemp = steps[k].temp;
-        } else {
-          if (lastTemp) steps[k].temp = lastTemp;
-        }
-      }
-    }
-
-    // propagate key to later steps so UI can persist it like temp/min
+    // propagate key and j to later steps so UI can persist them like temp/min
     let lastKey = null;
+    let lastJ = null;
     for (let k = 0; k < steps.length; k++) {
       if (steps[k] && steps[k].hasOwnProperty("key")) {
         if (steps[k].key) lastKey = steps[k].key;
       } else {
         if (lastKey) steps[k].key = lastKey;
+      }
+
+      if (steps[k] && steps[k].hasOwnProperty("j")) {
+        if (steps[k].j) lastJ = steps[k].j;
+      } else {
+        if (lastJ) steps[k].j = lastJ;
       }
     }
 

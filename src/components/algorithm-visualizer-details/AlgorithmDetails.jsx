@@ -80,7 +80,7 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
 
   return (
     <div className="mx-auto w-[95vw]">
-      <div className="grid md:grid-cols-5 gap-6">
+      <div className="grid md:grid-cols-6 gap-6">
         {/* Left: Overview + How it works (span 2) */}
         <div className="md:col-span-3 space-y-6 ">
           {/* Algorithm Overview */}
@@ -147,7 +147,7 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
 
 
         {/* Right: Code (top) and Complexity (below) */}
-        <div className="md:col-span-2 space-y-4">
+        <div className="md:col-span-3 space-y-4">
           {codeLoaders[algorithm.name] && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}

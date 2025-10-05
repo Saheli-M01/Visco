@@ -25,6 +25,8 @@ const ArrayDisplay = ({
   let tempObj = currentStep && currentStep.temp ? currentStep.temp : null; // { value, index }
   // Use structured key field (insertion sort) when available
   let keyObj = currentStep && currentStep.key ? currentStep.key : null; // { value, index }
+  // Use structured j field (insertion sort scanning pointer)
+  let jObj = currentStep && currentStep.j ? currentStep.j : null; // { value, index }
 
   // If the current step lacks a temp, try to find the most recent temp from
   // earlier steps so the UI persists the temp once it's created (defensive).
@@ -105,6 +107,11 @@ const ArrayDisplay = ({
   const tempValue = showTempUI ? tempObj.value : null;
   const tempIndex = showTempUI ? tempObj.index : -1;
 
+  const keyIndex = showKeyUI && keyObj ? keyObj.index : -1;
+  const keyValue = showKeyUI && keyObj ? keyObj.value : null;
+  const jIndex = jObj ? jObj.index : -1;
+  const jValue = jObj ? jObj.value : null;
+
   // Show mid UI when mid calculation is relevant (merge sort algorithm)
   const showMidUI = !!midObj;
   const midValue = showMidUI ? midObj.value : null;
@@ -124,7 +131,7 @@ const ArrayDisplay = ({
       <div className="bg-code-bg rounded-lg p-8 min-h-[290px] flex items-center justify-center">
         <div className="flex flex-col items-center w-full">
           {/* Variables section - show temp and mid when appropriate */}
-          {(showTempUI || showMidUI || showMinUI) && (
+          {(showTempUI || showMidUI || showMinUI || showKeyUI || jObj) && (
             <div className="mb-4 flex items-center justify-center w-full gap-4">
               {/* Temp slot - only rendered for languages that use a temp (C/Java) and when appropriate */}
               {showTempUI && (
@@ -157,12 +164,26 @@ const ArrayDisplay = ({
               {/* Key slot - insertion sort key indicator */}
               {showKeyUI && (
                 <div
-                  className={`h-12 w-32 rounded-lg flex items-center justify-center font-medium bg-amber-200 text-gray-900 shadow-md`}
+                  className={`h-12 w-32 rounded-lg flex items-center justify-center font-medium bg-amber-300 text-gray-900 shadow-md`}
                 >
                   <div className="text-center">
                     <div className="text-xs text-gray-700">key</div>
                     <div className="text-lg font-bold">
-                      {keyObj && keyObj.index != null ? keyObj.index : "-"}
+                      {keyObj && keyObj.value!= null ? keyObj.value: "-"}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* j slot - insertion sort scanning pointer */}
+              {jObj && (
+                <div
+                  className={`h-12 w-28 rounded-lg flex items-center justify-center font-medium bg-amber-300 text-gray-900 shadow-md`}
+                >
+                  <div className="text-center">
+                    <div className="text-xs text-gray-700">j</div>
+                    <div className="text-lg font-bold">
+                      {jIndex != null ? jIndex : "-"}
                     </div>
                   </div>
                 </div>
@@ -220,6 +241,8 @@ const ArrayDisplay = ({
               const highlightForTemp = showTempUI && index === tempIndex;
               // highlight if this index matches the mid position
               const highlightForMid = showMidUI && index === midValue;
+              // highlight if this index matches the key position (insertion sort)
+              const highlightForKey = showKeyUI && index === keyIndex;
 
               const baseClass = isComparing
                 ? "bg-indigo-400 text-white border-indigo-600 scale-110 animate-pulse"
@@ -245,6 +268,9 @@ const ArrayDisplay = ({
               const midHighlightClass = highlightForMid
                 ? "ring-4 ring-purple-300"
                 : "";
+              const keyHighlightClass = highlightForKey
+                ? "ring-4 ring-amber-300"
+                : "";
 
               return (
                 <div
@@ -267,6 +293,7 @@ const ArrayDisplay = ({
                       </div>
                     </div>
                   )}
+                 
                   {highlightForMid && (
                     <div className="mb-2">
                       <div className="bg-purple-400 text-white text-xs px-3 py-1 rounded-full font-semibold">
@@ -278,6 +305,7 @@ const ArrayDisplay = ({
                   <div
                     className={`flex items-center justify-center h-16 px-4 rounded-lg font-bold text-lg transition-all duration-500 ease-in-out transform shadow-lg border-2 min-w-[60px] ${baseClass}  ${midHighlightClass}`}
                   >
+                    {/* add key highlight class as well */}
                     <span className="drop-shadow-lg">{value}</span>
                   </div>
 

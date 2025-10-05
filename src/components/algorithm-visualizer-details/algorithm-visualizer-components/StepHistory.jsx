@@ -126,6 +126,17 @@ const StepHistory = ({
                     </span>
                   ) : null;
                 })()}
+                {/* Show small j badge if any j exists up to this step (insertion sort) */}
+                {(() => {
+                  const hasJUpToStep = sortingSteps
+                    .slice(0, step.step + 1)
+                    .some((s) => s && s.j !== undefined && s.j !== null);
+                  return hasJUpToStep ? (
+                    <span className="text-xs px-2 py-1 rounded-full bg-amber-100 text-amber-800 ml-2">
+                      j
+                    </span>
+                  ) : null;
+                })()}
                 {/* Show small Mid badge if mid calculation exists in this step */}
                 {(() => {
                   const hasMidInStep =

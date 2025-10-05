@@ -115,6 +115,17 @@ const StepHistory = ({
                     </span>
                   ) : null;
                 })()}
+                {/* Show small Key badge if any key exists up to this step (insertion sort) */}
+                {(() => {
+                  const hasKeyUpToStep = sortingSteps
+                    .slice(0, step.step + 1)
+                    .some((s) => s && s.key);
+                  return hasKeyUpToStep ? (
+                    <span className="text-xs px-2 py-1 rounded-full bg-amber-100 text-amber-800 ml-2">
+                      key
+                    </span>
+                  ) : null;
+                })()}
                 {/* Show small Mid badge if mid calculation exists in this step */}
                 {(() => {
                   const hasMidInStep =

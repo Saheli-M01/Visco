@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
-import { 
-  ArrowUpDown, 
-  List, 
-  Network, 
-  GitBranch, 
+import {
+  ArrowUpDown,
+  List,
+  Network,
+  GitBranch,
   Link,
   ChevronRight,
   BarChart3
@@ -17,13 +17,13 @@ const topicConfigs = [
     id: "sorting",
     title: "Sorting Algorithms",
     icon: ArrowUpDown,
-    color: "from-blue-500 to-blue-600",
+    color: "from-indigo-500 to-indigo-600",
     description: "Visualize how data gets organized",
     path: "/sorting"
   },
   {
     id: "array",
-    title: "Array Algorithms", 
+    title: "Array Algorithms",
     icon: List,
     color: "from-green-500 to-green-600",
     description: "Master array manipulation techniques",
@@ -33,7 +33,7 @@ const topicConfigs = [
     id: "graph",
     title: "Graph Algorithms",
     icon: Network,
-    color: "from-purple-500 to-purple-600", 
+    color: "from-purple-500 to-purple-600",
     description: "Navigate complex network structures",
     path: "/graph"
   },
@@ -42,7 +42,7 @@ const topicConfigs = [
     title: "Tree Algorithms",
     icon: GitBranch,
     color: "from-orange-500 to-orange-600",
-    description: "Explore hierarchical data structures", 
+    description: "Explore hierarchical data structures",
     path: "/tree"
   },
   {
@@ -59,14 +59,13 @@ export const Topics = () => {
   const navigate = useNavigate();
   const algorithmCounts = useAlgorithmCounts();
 
-  // Generate topics with dynamic algorithm counts
-  const topics = topicConfigs.map(config => ({
+  const topics = topicConfigs.map((config) => ({
     ...config,
     algorithmCount: algorithmCounts[config.id] || 0
   }));
 
   const handleTopicClick = (topic) => {
-    navigate(topic.path);
+    if (topic.id === "sorting") navigate(topic.path);
   };
 
   return (
@@ -76,8 +75,9 @@ export const Topics = () => {
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.24) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.32) 1px, transparent 1px)`,
-            backgroundSize: "3vw 3vw",
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.24) 1px, transparent 1px),
+                             linear-gradient(90deg, rgba(0, 0, 0, 0.32) 1px, transparent 1px)`,
+            backgroundSize: "3vw 3vw"
           }}
         />
       </div>
@@ -91,69 +91,95 @@ export const Topics = () => {
           viewport={{ once: true }}
           className="text-center mb-10"
         >
-          <div className="backdrop-blur-md  border border-white/20 rounded-3xl px-12  mb-12">
+          <div className="backdrop-blur-md border border-white/20 rounded-3xl px-12 mb-12">
             <h2 className="text-3xl md:text-5xl font-bold mb-6 text-gray-900">
-              Choose Your{" "}
-              <span className="text-gray-700">Learning Path</span>
+              Choose Your <span className="text-gray-700">Learning Path</span>
             </h2>
             <p className="text-lg text-gray-700 max-w-3xl mx-auto font-medium leading-relaxed">
-              Explore our comprehensive collection of algorithm categories. 
-              Each topic contains multiple algorithms with interactive visualizations and detailed explanations.
+              Explore our comprehensive collection of algorithm categories.
+              Each topic contains multiple algorithms with interactive
+              visualizations and detailed explanations.
             </p>
           </div>
         </motion.div>
 
         {/* Topics Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {topics.map((topic, index) => (
-            <motion.div
-              key={topic.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              onClick={() => handleTopicClick(topic)}
-              className="group cursor-pointer"
-            >
-              <div className="backdrop-blur-md bg-white/70 border border-gray-200/60 rounded-2xl px-6 py-8 shadow-xl h-full hover:bg-white hover:border-white/30 transition-all duration-300">
-                <div className="flex items-start justify-between mb-4">
-                  <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.3 }}
-                    className={`p-3 rounded-xl bg-gradient-to-br ${topic.color} shadow-lg`}
-                  >
-                    <topic.icon className="h-6 w-6 text-white" />
-                  </motion.div>
-                  
-                  <motion.div
-                    whileHover={{ x: 5 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <ChevronRight className="h-5 w-5 text-gray-600 group-hover:text-gray-900 transition-colors" />
-                  </motion.div>
-                </div>
-                
-                <h3 className="text-xl font-semibold mb-2 text-gray-900 group-hover:text-gray-700 transition-colors">
-                  {topic.title}
-                </h3>
-                
-                <p className="text-gray-700 mb-4 font-medium text-sm leading-relaxed">
-                  {topic.description}
-                </p>
-                
-                <div className="flex items-center text-sm text-gray-600">
-                  <BarChart3 className="h-4 w-4 mr-1" />
-                  {topic.algorithmCount} algorithms
-                </div>
+          {topics.map((topic, index) => {
+            const isActive = topic.id === "sorting";
 
-                <div className="mt-4 pt-4 border-t border-white/20">
-                  <div className="text-xs text-gray-600 font-medium">
-                    Click to explore →
+            return (
+              <motion.div
+                key={topic.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                onClick={() => handleTopicClick(topic)}
+                className={`group ${
+                  isActive ? "cursor-pointer" : "cursor-none"
+                }`}
+              >
+                <div
+                  className={`backdrop-blur-md bg-white/70 border border-gray-200/60 rounded-2xl px-6 py-8 shadow-xl h-full 
+                  ${
+                    isActive
+                      ? "hover:bg-white hover:border-white/30 transition-all duration-300"
+                      : "opacity-70"
+                  }`}
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <motion.div
+                      whileHover={isActive ? { scale: 1.1 } : {}}
+                      transition={{ duration: 0.3 }}
+                      className={`p-3 rounded-xl bg-gradient-to-br ${topic.color} shadow-lg`}
+                    >
+                      <topic.icon className="h-6 w-6 text-white" />
+                    </motion.div>
+
+                    {isActive ? (
+                      <motion.div whileHover={{ x: 5 }} transition={{ duration: 0.3 }}>
+                        <ChevronRight className="h-5 w-5 text-gray-600 group-hover:text-gray-900 transition-colors" />
+                      </motion.div>
+                    ) : (
+                      <span className="text-xs font-medium text-red-400">
+                        Coming Soon
+                      </span>
+                    )}
+                  </div>
+
+                  <h3
+                    className={`text-xl font-semibold mb-2 ${
+                      isActive
+                        ? "text-gray-900 group-hover:text-gray-700"
+                        : "text-gray-600"
+                    } transition-colors`}
+                  >
+                    {topic.title}
+                  </h3>
+
+                  <p className="text-gray-700 mb-4 font-medium text-sm leading-relaxed">
+                    {topic.description}
+                  </p>
+
+                  <div className="flex items-center text-sm text-gray-600">
+                    <BarChart3 className="h-4 w-4 mr-1" />
+                    {topic.algorithmCount} algorithms
+                  </div>
+
+                  <div className="mt-4 pt-4 border-t border-white/20">
+                    <div
+                      className={`text-xs font-medium ${
+                        isActive ? "text-gray-600" : "text-gray-500"
+                      }`}
+                    >
+                      {isActive ? "Click to explore →" : "Stay tuned 🚧"}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

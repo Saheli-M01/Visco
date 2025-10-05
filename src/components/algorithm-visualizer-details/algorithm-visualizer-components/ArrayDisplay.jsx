@@ -23,6 +23,8 @@ const ArrayDisplay = ({
 
   // Use structured temp field when available (preferred)
   let tempObj = currentStep && currentStep.temp ? currentStep.temp : null; // { value, index }
+  // Use structured key field (insertion sort) when available
+  let keyObj = currentStep && currentStep.key ? currentStep.key : null; // { value, index }
 
   // If the current step lacks a temp, try to find the most recent temp from
   // earlier steps so the UI persists the temp once it's created (defensive).
@@ -98,6 +100,8 @@ const ArrayDisplay = ({
   const languageUsesTemp =
     selectedLanguage === "c" || selectedLanguage === "java";
   const showTempUI = languageUsesTemp && !!tempObj;
+  // show key UI when a key object exists (insertion sort)
+  const showKeyUI = !!keyObj;
   const tempValue = showTempUI ? tempObj.value : null;
   const tempIndex = showTempUI ? tempObj.index : -1;
 
@@ -145,6 +149,20 @@ const ArrayDisplay = ({
                     <div className="text-xs text-gray-700">minIndex</div>
                     <div className="text-lg font-bold">
                       {minIndex != null ? minIndex : "-"}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Key slot - insertion sort key indicator */}
+              {showKeyUI && (
+                <div
+                  className={`h-12 w-32 rounded-lg flex items-center justify-center font-medium bg-amber-200 text-gray-900 shadow-md`}
+                >
+                  <div className="text-center">
+                    <div className="text-xs text-gray-700">key</div>
+                    <div className="text-lg font-bold">
+                      {keyObj && keyObj.index != null ? keyObj.index : "-"}
                     </div>
                   </div>
                 </div>

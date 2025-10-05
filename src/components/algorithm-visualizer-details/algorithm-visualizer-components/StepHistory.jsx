@@ -138,7 +138,7 @@ const StepHistory = ({
                     </span>
                   ) : hasMinUpToStep ? (
                     <span className="text-xs px-2 py-1 rounded-full bg-amber-50 text-amber-700 ml-2">
-                      Min
+                      minIndex
                     </span>
                   ) : null;
                 })()}

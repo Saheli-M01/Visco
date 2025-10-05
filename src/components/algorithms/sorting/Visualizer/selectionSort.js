@@ -47,7 +47,7 @@ export const selectionSort = {
         array: [...a],
         comparing: [minIndex],
         swapped: [],
-        description: `Initial min at index ${minIndex} (value ${a[minIndex]})`,
+        description: `Initial miIindex ${minIndex} (value ${a[minIndex]})`,
         codeLine: 2,
         phase: "min_update",
       });
@@ -65,7 +65,7 @@ export const selectionSort = {
           array: [...a],
           comparing: [minIndex, j],
           swapped: [],
-          description: `Comparing arr[${minIndex}] (${a[minIndex]}) with arr[${j}] (${a[j]})`,
+          description: `Comparing arr[${minIndex}] = (${a[minIndex]}) with arr[${j}] = (${a[j]})`,
           codeLine: 4,
           phase: "comparison",
         });
@@ -75,7 +75,7 @@ export const selectionSort = {
             array: [...a],
             comparing: [minIndex],
             swapped: [],
-            description: `New min found at index ${minIndex} (value ${a[minIndex]})`,
+            description: `New minIndex found at ${minIndex}`,
             codeLine: 5,
             phase: "min_update",
           });
@@ -103,7 +103,7 @@ export const selectionSort = {
             swapped: [],
             description: `temp = ${v1}`,
             temp: { value: v1, index: i },
-            codeLine: 4,
+            codeLine: 8,
             phase: "swap_step",
           });
           // a[i] = a[minIndex]
@@ -114,7 +114,7 @@ export const selectionSort = {
             swapped: [i, minIndex],
             description: `arr[${i}] = ${v2}`,
             temp: { value: v1, index: i },
-            codeLine: 5,
+            codeLine: 9,
             phase: "swap_step",
           });
           // a[minIndex] = temp
@@ -125,7 +125,7 @@ export const selectionSort = {
             swapped: [i, minIndex],
             description: `arr[${minIndex}] = ${v1}`,
             temp: { value: v1, index: i },
-            codeLine: 6,
+            codeLine: 10,
             phase: "swap",
           });
         } else {

@@ -112,6 +112,9 @@ const ArrayDisplay = ({
   const minValue = showMinUI ? minObj.value : null;
   const minIndex = showMinUI ? minObj.index : -1;
 
+              // When the current step is a swap or swap_step phase, we prefer to
+              // show Temp/Swapped visuals and hide the generic Comparing badge
+              const isSwapPhase = currentStep && (currentStep.phase === "swap" || currentStep.phase === "swap_step");
   return (
     <div className="space-y-4 bg-gray-900 rounded-lg">
       <div className="bg-code-bg rounded-lg p-8 min-h-[290px] flex items-center justify-center">
@@ -168,7 +171,10 @@ const ArrayDisplay = ({
           <div className="flex justify-center gap-4 flex-wrap">
             {currentArray.map((value, index) => {
               const isMin = showMinUI && index === minIndex;
-              const isComparing = comparingIndices.includes(index) && !isMin; // prefer Min badge over Comparing
+      // Do not show generic 'Comparing' during swap phases or when the
+      // current step is a selection-sort min update (min_update).
+      const isMinPhase = currentStep && currentStep.phase === "min_update";
+      const isComparing = comparingIndices.includes(index) && !isSwapPhase && !isMinPhase;
               const isSwapped =
                 sortingSteps[currentStepIndex]?.swapped?.includes(index);
               const inMergeRange =
@@ -234,6 +240,7 @@ const ArrayDisplay = ({
                       </div>
                     </div>
                   )}
+                 
                 
                   {isPivot && (
                     <div className="mb-2">
@@ -266,13 +273,7 @@ const ArrayDisplay = ({
             })}
           </div>
 
-          {sortingSteps[currentStepIndex]?.swapped?.length > 0 && (
-            <div className="mt-6">
-              <div className="bg-green-500 text-white text-sm px-4 py-2 rounded-full font-semibold">
-                Elements Swapped!
-              </div>
-            </div>
-          )}
+          
           {/* Legend for ranges, mid, and pivot */}
           {(currentMergeRange ||
             currentLeftRange ||

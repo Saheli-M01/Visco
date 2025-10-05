@@ -2,15 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AlgorithmDetails from "./AlgorithmDetails";
+import AlgorithmVisualization from "./AlgorithmVisualization";
 import { categories } from "../../data/categories";
 import { getAlgorithm, parseArray } from "../algorithms/algorithmFactory";
 import VisualizerHeader from "./algorithm-visualizer-components/VisualizerHeader";
-import CodePreview from "./algorithm-visualizer-components/CodePreview";
-import StepHistory from "./algorithm-visualizer-components/StepHistory";
-import ArrayDisplay from "./algorithm-visualizer-components/ArrayDisplay";
-import ControlsPanel from "./algorithm-visualizer-components/ControlsPanel";
-import ArrayInputCard from "./algorithm-visualizer-components/ArrayInputCard";
-import ConfirmModal from "./ConfirmModal";
+import ConfirmModal from "./Modal";
 
 // Custom MUI theme for glassmorphic design
 const theme = createTheme({
@@ -118,7 +114,7 @@ const FullScreenModal = ({ isOpen, onClose, algorithm, topic }) => {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(algorithm);
 
   // Visualization state
-  const [selectedLanguage, setSelectedLanguage] = useState("javascript");
+  const [selectedLanguage, setSelectedLanguage] = useState("c");
   const [showLanguageChangeConfirm, setShowLanguageChangeConfirm] =
     useState(false);
   const [pendingLanguage, setPendingLanguage] = useState(null);
@@ -282,8 +278,6 @@ const FullScreenModal = ({ isOpen, onClose, algorithm, topic }) => {
     setTotalSteps(0);
   };
 
-  // Array input is managed and validated inside ArrayInputCard; we use a key to reset it when needed
-
   // Handle escape key and cleanup
   useEffect(() => {
     const handleEscape = (e) => {
@@ -429,10 +423,40 @@ const FullScreenModal = ({ isOpen, onClose, algorithm, topic }) => {
     const algorithmName = event?.target ? event.target.value : event;
     // If no visualization is active, switch immediately
     if (!isVisualizationActive) {
-      const newAlgorithm = sortingAlgorithms.find(
-        (algo) => algo.name === algorithmName
-      );
+      const newAlgorithm = sortingAlgorithms.find((algo) => algo.name === algorithmName);
       setSelectedAlgorithm(newAlgorithm);
+      return;
+    }
+
+    // If the user is currently viewing the Details tab, allow immediate change without prompting
+    if (activeTab === 1) {
+      const newAlgorithm = sortingAlgorithms.find((algo) => algo.name === algorithmName);
+      setSelectedAlgorithm(newAlgorithm);
+
+      // regenerate steps for the new algorithm using the original array (if present)
+      if (originalArray && originalArray.length > 0) {
+        const algorithm = getAlgorithm(newAlgorithm?.name);
+        const steps = algorithm.generateSteps([...originalArray], selectedLanguage);
+        setSortingSteps(steps);
+        setTotalSteps(steps.length);
+        setStepHistory(
+          steps.map((step, index) => ({
+            step: index,
+            description: step.description,
+            array: step.array,
+            phase: step.phase,
+          }))
+        );
+        setCurrentStepIndex(0);
+        setCurrentStep(0);
+        if (steps.length > 0) {
+          const firstStep = steps[0];
+          setCurrentArray([...firstStep.array]);
+          setComparingIndices(firstStep.comparing || []);
+          setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
+        }
+      }
+
       return;
     }
 
@@ -543,12 +567,36 @@ const FullScreenModal = ({ isOpen, onClose, algorithm, topic }) => {
   // Called by CodePreview when user attempts to change language while a visualization exists
   const requestLanguageChange = (newLang) => {
     // Only prompt when a visualization is active AND we've progressed beyond the first step
-    if (
-      !isVisualizationActive ||
-      sortingSteps.length === 0 ||
-      currentStepIndex <= 0
-    ) {
+    if (!isVisualizationActive || sortingSteps.length === 0 || currentStepIndex <= 0) {
       setSelectedLanguage(newLang);
+      return;
+    }
+
+    // If user is on the Details tab, allow language change without prompting
+    if (activeTab === 1) {
+      setSelectedLanguage(newLang);
+      if (originalArray && originalArray.length > 0) {
+        const algorithm = getAlgorithm(selectedAlgorithm?.name);
+        const steps = algorithm.generateSteps([...originalArray], newLang);
+        setSortingSteps(steps);
+        setTotalSteps(steps.length);
+        setStepHistory(
+          steps.map((step, index) => ({
+            step: index,
+            description: step.description,
+            array: step.array,
+            phase: step.phase,
+          }))
+        );
+        setCurrentStepIndex(0);
+        setCurrentStep(0);
+        if (steps.length > 0) {
+          const firstStep = steps[0];
+          setCurrentArray([...firstStep.array]);
+          setComparingIndices(firstStep.comparing || []);
+          setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
+        }
+      }
       return;
     }
 
@@ -605,6 +653,45 @@ const FullScreenModal = ({ isOpen, onClose, algorithm, topic }) => {
 
   if (!isOpen) return null;
 
+  const visualizationProps = {
+    selectedLanguage,
+    requestLanguageChange,
+    getCodeLines,
+    selectedAlgorithm,
+    currentCodeLine,
+    stepHistory,
+    currentStepIndex,
+    isVisualizationActive,
+    sortingSteps,
+    setCurrentStepIndex,
+    setCurrentStep,
+    setCurrentArray,
+    setComparingIndices,
+    setCurrentCodeLine,
+    currentStepRef,
+    stepHistoryRef,
+    currentArray,
+    comparingIndices,
+    arrayInputKey,
+    handleGo,
+    pivotStrategy,
+    setPivotStrategy,
+    isAutomatic,
+    setIsAutomatic,
+    isPlaying,
+    handlePlay,
+    handlePause,
+    handleReset,
+    speed,
+    setSpeed,
+    handleFirstStep,
+    handleLastStep,
+    handleStepBackward,
+    handleStepForward,
+    isExecuting,
+    progress,
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <AnimatePresence>
@@ -640,136 +727,7 @@ const FullScreenModal = ({ isOpen, onClose, algorithm, topic }) => {
             <div className="flex-1 overflow-hidden">
               {/* Visualization Tab */}
               {activeTab === 0 && (
-                <div className="h-full bg-gradient-to-br from-white/20 to-white/40 backdrop-blur-sm custom-scrollbar overflow-y-auto">
-                  <div className="p-4 space-y-3">
-                    {/* New Layout - Main Grid */}
-                    <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-                      {/* Left Column - 4/5 width */}
-                      <div className="lg:col-span-4 space-y-3">
-                        {/* First Row - Code Preview and Step History */}
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-                          <CodePreview
-                            selectedLanguage={selectedLanguage}
-                            requestLanguageChange={requestLanguageChange}
-                            getCodeLines={getCodeLines}
-                            selectedAlgorithm={selectedAlgorithm}
-                            currentCodeLine={currentCodeLine}
-                          />
-
-                          <StepHistory
-                            stepHistory={stepHistory}
-                            currentStepIndex={currentStepIndex}
-                            isVisualizationActive={isVisualizationActive}
-                            sortingSteps={sortingSteps}
-                            setCurrentStepIndex={setCurrentStepIndex}
-                            setCurrentStep={setCurrentStep}
-                            setCurrentArray={setCurrentArray}
-                            setComparingIndices={setComparingIndices}
-                            setCurrentCodeLine={setCurrentCodeLine}
-                            currentStepRef={currentStepRef}
-                            stepHistoryRef={stepHistoryRef}
-                          />
-                        </div>
-
-                        {/* Second Row - Output (Full Width) */}
-                        <div className="backdrop-blur-md bg-white border border-gray-300 rounded-xl p-4">
-                          {!isVisualizationActive ? (
-                            <div className="bg-gray-900 text-white p-4 rounded-lg text-sm font-mono min-h-[290px] overflow-y-auto custom-scrollbar shadow-inner border border-gray-700">
-                              <div className="text-green-400">
-                                Ready to run {selectedAlgorithm?.name}...
-                              </div>
-                              <div className="text-gray-300 mt-2">
-                                Enter array values and click{" "}
-                                <span className="text-blue-400">Go</span> to
-                                begin the visualization.
-                              </div>
-                              <div className="text-blue-400 mt-1">
-                                Use the Manual or Automatic controls to manage
-                                the process.
-                              </div>
-                              <div className="text-gray-300 mt-2">
-                                Review each step in the step history panel.
-                              </div>
-                              <div className="text-blue-400 mt-2">
-                                Follow the progress bar to track sorting
-                                progress.
-                              </div>
-                            </div>
-                          ) : (
-                            <ArrayDisplay
-                              currentArray={currentArray}
-                              comparingIndices={comparingIndices}
-                              sortingSteps={sortingSteps}
-                              currentStepIndex={currentStepIndex}
-                              currentCodeLine={currentCodeLine}
-                              selectedLanguage={selectedLanguage}
-                              tempLineIndex={getCodeLines(
-                                selectedLanguage,
-                                selectedAlgorithm?.name
-                              ).findIndex((line) => /temp/.test(line))}
-                              languageHasTemp={getCodeLines(
-                                selectedLanguage,
-                                selectedAlgorithm?.name
-                              ).some((line) => /temp/.test(line))}
-                            />
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Right Column - 1/5 width */}
-                      <div className="lg:col-span-1 space-y-3 min-h-[80vh] overflow-y-auto custom-scrollbar pr-2 pb-4 ">
-                        <ArrayInputCard
-                          key={arrayInputKey}
-                          handleGo={handleGo}
-                          selectedAlgorithm={selectedAlgorithm}
-                          pivotStrategy={pivotStrategy}
-                          setPivotStrategy={setPivotStrategy}
-                        />
-
-                        <ControlsPanel
-                          isAutomatic={isAutomatic}
-                          setIsAutomatic={setIsAutomatic}
-                          isPlaying={isPlaying}
-                          handlePlay={handlePlay}
-                          handlePause={handlePause}
-                          handleReset={handleReset}
-                          speed={speed}
-                          setSpeed={setSpeed}
-                          isVisualizationActive={isVisualizationActive}
-                          currentStepIndex={currentStepIndex}
-                          sortingSteps={sortingSteps}
-                          handleFirstStep={handleFirstStep}
-                          handleLastStep={handleLastStep}
-                          handleStepBackward={handleStepBackward}
-                          handleStepForward={handleStepForward}
-                          isExecuting={isExecuting}
-                        />
-
-                        {/* Progress Bar - 3rd Row */}
-                        <div className=" bg-white border border-gray-300 rounded-xl p-4">
-                          <div className="flex items-center justify-between mb-3">
-                            <span className="text-sm font-medium text-gray-700">
-                              Progress
-                            </span>
-                            <span className="text-sm font-medium text-gray-700">
-                              {sortingSteps.length > 0
-                                ? `${currentStepIndex + 1} / ${
-                                    sortingSteps.length
-                                  }`
-                                : `0 / 0`}
-                            </span>
-                          </div>
-                          <div className="w-full bg-gray-300 rounded-full h-2 shadow-inner mb-2">
-                            <div
-                              className="bg-gradient-to-r from-gray-600 to-gray-800 h-2 rounded-full transition-all duration-300 shadow-sm"
-                              style={{ width: `${progress}%` }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <AlgorithmVisualization {...visualizationProps} />
               )}
 
               {/* Details Tab */}

@@ -1,24 +1,42 @@
 import React, { useEffect } from "react";
 
-const StepHistory = ({ stepHistory, currentStepIndex, isVisualizationActive, sortingSteps, setCurrentStepIndex, setCurrentStep, setCurrentArray, setComparingIndices, setCurrentCodeLine, currentStepRef, stepHistoryRef }) => {
-  
+const StepHistory = ({
+  stepHistory,
+  currentStepIndex,
+  isVisualizationActive,
+  sortingSteps,
+  setCurrentStepIndex,
+  setCurrentStep,
+  setCurrentArray,
+  setComparingIndices,
+  setCurrentCodeLine,
+  currentStepRef,
+  stepHistoryRef,
+}) => {
   // Auto-scroll to current step when currentStepIndex changes
   useEffect(() => {
     if (currentStepRef.current) {
       currentStepRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest'
+        behavior: "smooth",
+        block: "nearest",
       });
     }
   }, [currentStepIndex]);
   return (
     <div className="border border-gray-300 bg-white  rounded-xl py-2 px-4">
-      <h3 className="text-lg font-semibold text-foreground mb-1">Step History</h3>
-      <div ref={stepHistoryRef} className="space-y-2 h-48 overflow-y-auto custom-scrollbar">
+      <h3 className="text-lg font-semibold text-foreground mb-1">
+        Step History
+      </h3>
+      <div
+        ref={stepHistoryRef}
+        className="space-y-2 h-48 overflow-y-auto custom-scrollbar"
+      >
         {stepHistory.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <p className="text-foreground/70 text-sm text-center">
-              No steps yet.<br />Enter array elements to start.
+              No steps yet.
+              <br />
+              Enter array elements to start.
             </p>
           </div>
         ) : (
@@ -38,21 +56,35 @@ const StepHistory = ({ stepHistory, currentStepIndex, isVisualizationActive, sor
                   const targetStep = sortingSteps[step.step];
                   setCurrentArray([...targetStep.array]);
                   setComparingIndices(targetStep.comparing || []);
-                  setCurrentCodeLine(targetStep.codeLine !== undefined ? targetStep.codeLine : -1);
+                  setCurrentCodeLine(
+                    targetStep.codeLine !== undefined ? targetStep.codeLine : -1
+                  );
                 }
               }}
             >
               <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-3">
-                  <span className={`text-sm font-semibold ${currentStepIndex === step.step ? 'text-gray-900' : ''}`}>Step {step.step + 1}</span>
+                <div className="flex items-center gap-3">
+                  <span
+                    className={`text-sm font-semibold ${
+                      currentStepIndex === step.step ? "text-gray-900" : ""
+                    }`}
+                  >
+                    Step {step.step + 1}
+                  </span>
                   {step.leftRange && (
-                    <span className="text-xs px-2 py-1 rounded-full bg-indigo-100 text-indigo-800">L:{step.leftRange[0]}-{step.leftRange[1]}</span>
+                    <span className="text-xs px-2 py-1 rounded-full bg-indigo-100 text-indigo-800">
+                      L:{step.leftRange[0]}-{step.leftRange[1]}
+                    </span>
                   )}
                   {step.rightRange && (
-                    <span className="text-xs px-2 py-1 rounded-full bg-pink-100 text-pink-800">R:{step.rightRange[0]}-{step.rightRange[1]}</span>
+                    <span className="text-xs px-2 py-1 rounded-full bg-pink-100 text-pink-800">
+                      R:{step.rightRange[0]}-{step.rightRange[1]}
+                    </span>
                   )}
                   {step.mergeRange && (
-                    <span className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-800">Range:{step.mergeRange[0]}-{step.mergeRange[1]}</span>
+                    <span className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-800">
+                      Range:{step.mergeRange[0]}-{step.mergeRange[1]}
+                    </span>
                   )}
                 </div>
                 {step.phase && (
@@ -74,16 +106,40 @@ const StepHistory = ({ stepHistory, currentStepIndex, isVisualizationActive, sor
                 )}
                 {/* Show small Temp badge if any temp exists up to this step */}
                 {(() => {
-                  const hasTempUpToStep = sortingSteps.slice(0, step.step + 1).some(s => s && s.temp);
+                  const hasTempUpToStep = sortingSteps
+                    .slice(0, step.step + 1)
+                    .some((s) => s && s.temp);
                   return hasTempUpToStep ? (
-                    <span className="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 ml-2">Temp</span>
+                    <span className="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 ml-2">
+                      Temp
+                    </span>
                   ) : null;
                 })()}
                 {/* Show small Mid badge if mid calculation exists in this step */}
                 {(() => {
-                  const hasMidInStep = sortingSteps[step.step] && sortingSteps[step.step].mid;
+                  const hasMidInStep =
+                    sortingSteps[step.step] && sortingSteps[step.step].mid;
                   return hasMidInStep ? (
-                    <span className="text-xs px-2 py-1 rounded-full bg-purple-100 text-purple-800 ml-2">Mid</span>
+                    <span className="text-xs px-2 py-1 rounded-full bg-purple-100 text-purple-800 ml-2">
+                      Mid
+                    </span>
+                  ) : null;
+                })()}
+                {/* Show Min badge if this step or any earlier step defines a min (selection sort) */}
+                {(() => {
+                  const st = sortingSteps[step.step];
+                  const hasMinHere = st && (st.phase === "min_update" || st.min);
+                  const hasMinUpToStep = sortingSteps
+                    .slice(0, step.step + 1)
+                    .some((s) => s && (s.phase === "min_update" || s.min));
+                  return hasMinHere ? (
+                    <span className="text-xs px-2 py-1 rounded-full bg-amber-100 text-amber-800 ml-2">
+                      Min
+                    </span>
+                  ) : hasMinUpToStep ? (
+                    <span className="text-xs px-2 py-1 rounded-full bg-amber-50 text-amber-700 ml-2">
+                      Min
+                    </span>
                   ) : null;
                 })()}
               </div>
@@ -101,7 +157,15 @@ const StepHistory = ({ stepHistory, currentStepIndex, isVisualizationActive, sor
                   </span>
                 ))}
               </div>
-              <p className={`text-[0.8rem] ${currentStepIndex === step.step ? "text-foreground" : "text-foreground/90"}`}>{step.description}</p>
+              <p
+                className={`text-[0.8rem] ${
+                  currentStepIndex === step.step
+                    ? "text-foreground"
+                    : "text-foreground/90"
+                }`}
+              >
+                {step.description}
+              </p>
             </div>
           ))
         )}

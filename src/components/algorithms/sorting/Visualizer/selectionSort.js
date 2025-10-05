@@ -26,6 +26,10 @@ export const selectionSort = {
       steps.push({ array: [...a], comparing: [], swapped: [], description: `Pass ${i + 1}: select min for position ${i}`, codeLine: 1, phase: 'outer_loop' });
 
       let minIndex = i;
+  // Emit an initial min_update step so the UI can show the minIndex variable
+  // immediately (minIndex initialized to i). This ensures the second step
+  // highlights Min in the array display and step history.
+  steps.push({ array: [...a], comparing: [minIndex], swapped: [], description: `Initial min at index ${minIndex} (value ${a[minIndex]})`, codeLine: 3, phase: 'min_update' });
       for (let j = i + 1; j < n; j++) {
         // compare
         steps.push({ array: [...a], comparing: [minIndex, j], swapped: [], description: `Comparing arr[${minIndex}] (${a[minIndex]}) with arr[${j}] (${a[j]})`, codeLine: 2, phase: 'comparison' });
@@ -95,11 +99,11 @@ export const selectionSort = {
       python: [
         "def selection_sort(arr):",
         "    for i in range(len(arr) - 1):",
-        "        min_index = i",
+        "        minIndex = i",
         "        for j in range(i + 1, len(arr)):",
-        "            if arr[j] < arr[min_index]:",
-        "                min_index = j",
-        "        arr[i], arr[min_index] = arr[min_index], arr[i]",
+        "            if arr[j] < arr[minIndex]:",
+        "                minIndex = j",
+        "        arr[i], arr[minIndex] = arr[minIndex], arr[i]",
         "    return arr"
       ],
       java: [
@@ -166,11 +170,11 @@ export const selectionSort = {
       python: `def selection_sort(arr):
     n = len(arr)
     for i in range(n - 1):
-        min_index = i
+        minIndex = i
         for j in range(i + 1, n):
-            if arr[j] < arr[min_index]:
-                min_index = j
-        arr[i], arr[min_index] = arr[min_index], arr[i]
+            if arr[j] < arr[minIndex]:
+                minIndex = j
+        arr[i], arr[minIndex] = arr[minIndex], arr[i]
     return arr`,
       java: `public static void selectionSort(int[] arr) {
     int n = arr.length;

@@ -38,6 +38,39 @@ const ArrayDisplay = ({
   // Get mid variable information
   let midObj = currentStep && currentStep.mid ? currentStep.mid : null; // { value, leftIndex, rightIndex }
 
+  // Get minIndex information (selection sort). Generators emit a 'min_update' phase
+  // and place the min index inside comparing: [minIndex]. We prefer an explicit
+  // minObj when available, otherwise derive it from the current step or earlier steps
+  // so the UI can persist the min variable like Temp.
+  let minObj = currentStep && currentStep.min ? currentStep.min : null; // { value, index }
+  if (!minObj && currentStep && currentStep.phase === "min_update" && currentStep.comparing && currentStep.comparing.length > 0) {
+    const mi = currentStep.comparing[0];
+    if (mi >= 0 && mi < currentArray.length) {
+      minObj = { value: currentArray[mi], index: mi };
+    }
+  }
+  // If the current step lacks an explicit min, try to find the most recent min_update
+  // from earlier steps so the UI persists the min once it's created.
+  if (!minObj && sortingSteps && sortingSteps.length > 0) {
+    for (let s = currentStepIndex - 1; s >= 0; s--) {
+      const st = sortingSteps[s];
+      if (st && st.phase === "min_update" && st.comparing && st.comparing.length > 0) {
+        const mi = st.comparing[0];
+        if (mi >= 0 && mi < (st.array || []).length) {
+          minObj = { value: st.array[mi], index: mi };
+          break;
+        }
+      }
+      if (st && st.min) {
+        const mi = st.min.index;
+        if (mi >= 0 && mi < (st.array || []).length) {
+          minObj = { value: st.min.value, index: mi };
+          break;
+        }
+      }
+    }
+  }
+
   // If the current step lacks a mid, try to find the most recent mid from
   // earlier steps so the UI persists the mid once it's calculated.
   if (!midObj && sortingSteps && sortingSteps.length > 0) {
@@ -63,12 +96,17 @@ const ArrayDisplay = ({
   const midLeftIndex = showMidUI ? midObj.leftIndex : -1;
   const midRightIndex = showMidUI ? midObj.rightIndex : -1;
 
+  // Show min UI when selection-sort has a min index
+  const showMinUI = !!minObj;
+  const minValue = showMinUI ? minObj.value : null;
+  const minIndex = showMinUI ? minObj.index : -1;
+
   return (
     <div className="space-y-4 bg-gray-900 rounded-lg">
       <div className="bg-code-bg rounded-lg p-8 min-h-[290px] flex items-center justify-center">
         <div className="flex flex-col items-center w-full">
           {/* Variables section - show temp and mid when appropriate */}
-          {(showTempUI || showMidUI) && (
+          {(showTempUI || showMidUI || showMinUI) && (
             <div className="mb-4 flex items-center justify-center w-full gap-4">
               {/* Temp slot - only rendered for languages that use a temp (C/Java) and when appropriate */}
               {showTempUI && (
@@ -79,6 +117,20 @@ const ArrayDisplay = ({
                     <div className="text-xs text-gray-700">Temp</div>
                     <div className="text-lg font-bold">
                       {tempValue != null ? tempValue : "-"}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Min slot - selection sort minIndex indicator */}
+              {showMinUI && (
+                <div
+                  className={`h-12 w-28 rounded-lg flex items-center justify-center font-medium bg-amber-300 text-gray-900 shadow-md`}
+                >
+                  <div className="text-center">
+                    <div className="text-xs text-gray-700">Min</div>
+                    <div className="text-lg font-bold">
+                      {minValue != null ? minValue : "-"}
                     </div>
                   </div>
                 </div>
@@ -104,7 +156,8 @@ const ArrayDisplay = ({
 
           <div className="flex justify-center gap-4 flex-wrap">
             {currentArray.map((value, index) => {
-              const isComparing = comparingIndices.includes(index);
+              const isMin = showMinUI && index === minIndex;
+              const isComparing = comparingIndices.includes(index) && !isMin; // prefer Min badge over Comparing
               const isSwapped =
                 sortingSteps[currentStepIndex]?.swapped?.includes(index);
               const inMergeRange =
@@ -167,6 +220,13 @@ const ArrayDisplay = ({
                     <div className="mb-2">
                       <div className="bg-indigo-400 text-white text-xs px-3 py-1 rounded-full font-semibold">
                         Comparing
+                      </div>
+                    </div>
+                  )}
+                  {isMin && (
+                    <div className="mb-2">
+                      <div className="bg-amber-400 text-gray-900 text-xs px-3 py-1 rounded-full font-semibold">
+                        Min
                       </div>
                     </div>
                   )}

@@ -68,8 +68,8 @@ const ArrayInputCard = ({ handleGo, selectedAlgorithm, pivotStrategy, setPivotSt
               // hide popup as soon as user modifies the input
               if (showValidationPopup) setShowValidationPopup(false);
             }}
-            placeholder="Enter comma-separated numbers, e.g. 5, 3, 8"
-            className="w-full h-20 p-3 rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 resize-none focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-sm hover:border-white/60 transition-all duration-200"
+            placeholder="Enter comma-separated numbers, e.g. 5, 3, 8.5"
+            className="w-full h-15 p-3 rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 resize-none focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-sm hover:border-white/60 transition-all duration-200"
           />
           <div className="mt-2 text-xs text-red-400">Maximum 10 numbers (comma-separated)</div>
           {showValidationPopup && (

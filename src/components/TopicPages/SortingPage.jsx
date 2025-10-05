@@ -1,5 +1,5 @@
 import React from "react";
-import { CategoryLayout } from "@/components/layout";
+import CategoryLayout from "@/components/TopicPages/layout/CategoryLayout";
 import { categories } from "@/data/categories";
 
 const SortingPage = () => {

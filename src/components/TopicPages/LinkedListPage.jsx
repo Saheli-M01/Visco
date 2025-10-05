@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { CategoryLayout } from "@/components/layout";
+import CategoryLayout from "@/components/TopicPages/layout/CategoryLayout";
 import { categories } from "@/data/categories";
 
 const LinkedListPage = () => {

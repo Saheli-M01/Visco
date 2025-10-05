@@ -43,7 +43,13 @@ const ArrayDisplay = ({
   // minObj when available, otherwise derive it from the current step or earlier steps
   // so the UI can persist the min variable like Temp.
   let minObj = currentStep && currentStep.min ? currentStep.min : null; // { value, index }
-  if (!minObj && currentStep && currentStep.phase === "min_update" && currentStep.comparing && currentStep.comparing.length > 0) {
+  if (
+    !minObj &&
+    currentStep &&
+    currentStep.phase === "min_update" &&
+    currentStep.comparing &&
+    currentStep.comparing.length > 0
+  ) {
     const mi = currentStep.comparing[0];
     if (mi >= 0 && mi < currentArray.length) {
       minObj = { value: currentArray[mi], index: mi };
@@ -54,7 +60,12 @@ const ArrayDisplay = ({
   if (!minObj && sortingSteps && sortingSteps.length > 0) {
     for (let s = currentStepIndex - 1; s >= 0; s--) {
       const st = sortingSteps[s];
-      if (st && st.phase === "min_update" && st.comparing && st.comparing.length > 0) {
+      if (
+        st &&
+        st.phase === "min_update" &&
+        st.comparing &&
+        st.comparing.length > 0
+      ) {
         const mi = st.comparing[0];
         if (mi >= 0 && mi < (st.array || []).length) {
           minObj = { value: st.array[mi], index: mi };
@@ -114,7 +125,7 @@ const ArrayDisplay = ({
                   className={`h-12 w-28 rounded-lg flex items-center justify-center font-medium bg-yellow-300 text-gray-900 shadow-md`}
                 >
                   <div className="text-center">
-                    <div className="text-xs text-gray-700">Temp</div>
+                    <div className="text-xs text-gray-700">temp</div>
                     <div className="text-lg font-bold">
                       {tempValue != null ? tempValue : "-"}
                     </div>
@@ -128,9 +139,9 @@ const ArrayDisplay = ({
                   className={`h-12 w-28 rounded-lg flex items-center justify-center font-medium bg-amber-300 text-gray-900 shadow-md`}
                 >
                   <div className="text-center">
-                    <div className="text-xs text-gray-700">Min</div>
+                    <div className="text-xs text-gray-700">minIndex</div>
                     <div className="text-lg font-bold">
-                      {minValue != null ? minValue : "-"}
+                      {minIndex != null ? minIndex : "-"}
                     </div>
                   </div>
                 </div>
@@ -223,13 +234,7 @@ const ArrayDisplay = ({
                       </div>
                     </div>
                   )}
-                  {isMin && (
-                    <div className="mb-2">
-                      <div className="bg-amber-400 text-gray-900 text-xs px-3 py-1 rounded-full font-semibold">
-                        Min
-                      </div>
-                    </div>
-                  )}
+                
                   {isPivot && (
                     <div className="mb-2">
                       <div className="bg-red-400 text-white text-xs px-3 py-1 rounded-full font-semibold">

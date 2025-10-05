@@ -2,7 +2,7 @@
 export const selectionSort = {
   name: "Selection Sort",
 
-  generateSteps: (arr, language = 'javascript') => {
+  generateSteps: (arr, language = "javascript") => {
     const steps = [];
     const a = [...arr];
     const n = a.length;
@@ -17,27 +17,77 @@ export const selectionSort = {
     }
 
     if (isSorted) {
-      steps.push({ array: [...a], comparing: [], swapped: [], description: "Array is already sorted!", codeLine: -1, phase: "completed" });
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: "Array is already sorted!",
+        codeLine: -1,
+        phase: "completed",
+      });
       return steps;
     }
 
     for (let i = 0; i < n - 1; i++) {
       // Start pass
-      steps.push({ array: [...a], comparing: [], swapped: [], description: `Pass ${i + 1}: select min for position ${i}`, codeLine: 1, phase: 'outer_loop' });
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `Pass ${i + 1}: Starting outer loop: i = ${i}`,
+        codeLine: 1,
+        phase: "outer_loop",
+      });
 
       let minIndex = i;
-  // Emit an initial min_update step so the UI can show the minIndex variable
-  // immediately (minIndex initialized to i). This ensures the second step
-  // highlights Min in the array display and step history.
-  steps.push({ array: [...a], comparing: [minIndex], swapped: [], description: `Initial min at index ${minIndex} (value ${a[minIndex]})`, codeLine: 3, phase: 'min_update' });
+      // Emit an initial min_update step so the UI can show the minIndex variable
+      // immediately (minIndex initialized to i). This ensures the second step
+      // highlights Min in the array display and step history.
+      steps.push({
+        array: [...a],
+        comparing: [minIndex],
+        swapped: [],
+        description: `Initial min at index ${minIndex} (value ${a[minIndex]})`,
+        codeLine: 2,
+        phase: "min_update",
+      });
       for (let j = i + 1; j < n; j++) {
+        steps.push({
+          array: [...a],
+          comparing: [],
+          swapped: [],
+          description: `Inner loop: j = ${j}`,
+          codeLine: 3,
+          phase: "inner_loop"
+        });
         // compare
-        steps.push({ array: [...a], comparing: [minIndex, j], swapped: [], description: `Comparing arr[${minIndex}] (${a[minIndex]}) with arr[${j}] (${a[j]})`, codeLine: 2, phase: 'comparison' });
+        steps.push({
+          array: [...a],
+          comparing: [minIndex, j],
+          swapped: [],
+          description: `Comparing arr[${minIndex}] (${a[minIndex]}) with arr[${j}] (${a[j]})`,
+          codeLine: 4,
+          phase: "comparison",
+        });
         if (a[j] < a[minIndex]) {
           minIndex = j;
-          steps.push({ array: [...a], comparing: [minIndex], swapped: [], description: `New min found at index ${minIndex} (value ${a[minIndex]})`, codeLine: 3, phase: 'min_update' });
+          steps.push({
+            array: [...a],
+            comparing: [minIndex],
+            swapped: [],
+            description: `New min found at index ${minIndex} (value ${a[minIndex]})`,
+            codeLine: 5,
+            phase: "min_update",
+          });
         } else {
-          steps.push({ array: [...a], comparing: [], swapped: [], description: `No change`, codeLine: 3, phase: 'no_change' });
+          steps.push({
+            array: [...a],
+            comparing: [],
+            swapped: [],
+            description: `No change`,
+            codeLine: 3,
+            phase: "no_change",
+          });
         }
       }
 
@@ -45,31 +95,69 @@ export const selectionSort = {
         // Swap using language-appropriate steps
         const v1 = a[i];
         const v2 = a[minIndex];
-        if (language === 'c' || language === 'java') {
+        if (language === "c" || language === "java") {
           // temp = a[i]
-          steps.push({ array: [...a], comparing: [i, minIndex], swapped: [], description: `temp = ${v1}`, temp: { value: v1, index: i }, codeLine: 4, phase: 'swap_step' });
+          steps.push({
+            array: [...a],
+            comparing: [i, minIndex],
+            swapped: [],
+            description: `temp = ${v1}`,
+            temp: { value: v1, index: i },
+            codeLine: 4,
+            phase: "swap_step",
+          });
           // a[i] = a[minIndex]
           a[i] = v2;
-          steps.push({ array: [...a], comparing: [i, minIndex], swapped: [i, minIndex], description: `arr[${i}] = ${v2}`, temp: { value: v1, index: i }, codeLine: 5, phase: 'swap_step' });
+          steps.push({
+            array: [...a],
+            comparing: [i, minIndex],
+            swapped: [i, minIndex],
+            description: `arr[${i}] = ${v2}`,
+            temp: { value: v1, index: i },
+            codeLine: 5,
+            phase: "swap_step",
+          });
           // a[minIndex] = temp
           a[minIndex] = v1;
-          steps.push({ array: [...a], comparing: [i, minIndex], swapped: [i, minIndex], description: `arr[${minIndex}] = ${v1}`, temp: { value: v1, index: i }, codeLine: 6, phase: 'swap' });
+          steps.push({
+            array: [...a],
+            comparing: [i, minIndex],
+            swapped: [i, minIndex],
+            description: `arr[${minIndex}] = ${v1}`,
+            temp: { value: v1, index: i },
+            codeLine: 6,
+            phase: "swap",
+          });
         } else {
           // JS-like single swap
           [a[i], a[minIndex]] = [a[minIndex], a[i]];
-          steps.push({ array: [...a], comparing: [i, minIndex], swapped: [i, minIndex], description: `Swapping: ${v1} ↔ ${v2}`, codeLine: 4, phase: 'swap' });
+          steps.push({
+            array: [...a],
+            comparing: [i, minIndex],
+            swapped: [i, minIndex],
+            description: `Swapping: ${v1} ↔ ${v2}`,
+            codeLine: 4,
+            phase: "swap",
+          });
         }
       } else {
-        steps.push({ array: [...a], comparing: [], swapped: [], description: `No swap needed for position ${i}`, codeLine: -1, phase: 'no_swap' });
+        steps.push({
+          array: [...a],
+          comparing: [],
+          swapped: [],
+          description: `No swap needed for position ${i}`,
+          codeLine: -1,
+          phase: "no_swap",
+        });
       }
     }
 
     // propagate temp for C/Java
-    const languageUsesTemp = language === 'c' || language === 'java';
+    const languageUsesTemp = language === "c" || language === "java";
     if (languageUsesTemp) {
       let lastTemp = null;
       for (let k = 0; k < steps.length; k++) {
-        if (steps[k].hasOwnProperty('temp')) {
+        if (steps[k].hasOwnProperty("temp")) {
           if (steps[k].temp) lastTemp = steps[k].temp;
         } else {
           if (lastTemp) steps[k].temp = lastTemp;
@@ -94,7 +182,7 @@ export const selectionSort = {
         "    [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];", //8
         "  }", //9
         "  return arr;", //10
-        "}" //11
+        "}", //11
       ],
       python: [
         "def selection_sort(arr):",
@@ -104,7 +192,7 @@ export const selectionSort = {
         "            if arr[j] < arr[minIndex]:",
         "                minIndex = j",
         "        arr[i], arr[minIndex] = arr[minIndex], arr[i]",
-        "    return arr"
+        "    return arr",
       ],
       java: [
         "public static void selectionSort(int[] arr) {",
@@ -119,7 +207,7 @@ export const selectionSort = {
         "        arr[i] = arr[minIndex];",
         "        arr[minIndex] = temp;",
         "    }",
-        "}"
+        "}",
       ],
       c: [
         "void selectionSort(int arr[], int n) {",
@@ -134,7 +222,7 @@ export const selectionSort = {
         "        arr[i] = arr[minIndex];",
         "        arr[minIndex] = temp;",
         "    }",
-        "}"
+        "}",
       ],
       cpp: [
         "void selectionSort(vector<int>& arr) {",
@@ -147,8 +235,8 @@ export const selectionSort = {
         "        }",
         "        swap(arr[i], arr[minIndex]);",
         "    }",
-        "}"
-      ]
+        "}",
+      ],
     };
 
     return codeLines[language] || [];
@@ -198,9 +286,9 @@ export const selectionSort = {
         arr[i] = arr[minIndex];
         arr[minIndex] = temp;
     }
-}`
+}`,
     };
 
     return codes[language] || `// ${language} implementation not available yet`;
-  }
+  },
 };

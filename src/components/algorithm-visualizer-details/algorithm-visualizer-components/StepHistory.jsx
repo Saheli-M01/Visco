@@ -111,7 +111,7 @@ const StepHistory = ({
                     .some((s) => s && s.temp);
                   return hasTempUpToStep ? (
                     <span className="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 ml-2">
-                      Temp
+                      temp
                     </span>
                   ) : null;
                 })()}
@@ -134,7 +134,7 @@ const StepHistory = ({
                     .some((s) => s && (s.phase === "min_update" || s.min));
                   return hasMinHere ? (
                     <span className="text-xs px-2 py-1 rounded-full bg-amber-100 text-amber-800 ml-2">
-                      Min
+                      minIndex
                     </span>
                   ) : hasMinUpToStep ? (
                     <span className="text-xs px-2 py-1 rounded-full bg-amber-50 text-amber-700 ml-2">

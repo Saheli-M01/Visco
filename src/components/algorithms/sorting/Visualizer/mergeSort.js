@@ -15,8 +15,8 @@ export const mergeSort = {
     const COND_LINE = HEADER_LINE + 1; // if (low >= high)
     const RETURN_LINE = HEADER_LINE + 2; // return;
     const MID_LINE = HEADER_LINE + 3; // mid calculation
-    const LEFT_CALL_LINE = HEADER_LINE + 2; // mergeSort(arr, low, mid)
-    const RIGHT_CALL_LINE = HEADER_LINE + 2; // mergeSort(arr, mid + 1, high)
+    const LEFT_CALL_LINE = HEADER_LINE + 4; // mergeSort(arr, low, mid)
+    const RIGHT_CALL_LINE = HEADER_LINE + 5; // mergeSort(arr, mid + 1, high)
     const MERGE_CALL_LINE = HEADER_LINE + 6; // merge(arr, low, mid, high)
 
     // Find merge function lines
@@ -181,7 +181,7 @@ export const mergeSort = {
         array: [...a],
         comparing: [],
         swapped: [],
-        description: `Calculate mid: ${m} = (${l} + ${r}) / 2`,
+        description: `Calculate mid: ${l} + (${r} - ${l}) / 2 = ${m}`,
         codeLine: MID_LINE,
         phase: "calculate-mid",
         low: l,
@@ -189,51 +189,56 @@ export const mergeSort = {
         mid: { value: m, leftIndex: l, rightIndex: r },
       });
 
+
       // Left recursive call
+      const leftCallLow = l;
+      const leftCallHigh = m;
       steps.push({
         array: [...a],
         comparing: [],
         swapped: [],
-        description: `Call mergeSort(arr, low=${l}, high=${m})`,
+        description: `Call mergeSort(arr, low=${leftCallLow}, mid=${leftCallHigh})`,
         codeLine: LEFT_CALL_LINE,
         phase: "call-left",
-        low: l,
-        high: m,
+        low: leftCallLow,
+        high: leftCallHigh,
         mid: { value: m, leftIndex: l, rightIndex: r },
       });
 
-      mergeSortRec(l, m);
+      mergeSortRec(leftCallLow, leftCallHigh);
 
       steps.push({
         array: [...a],
         comparing: [],
         swapped: [],
         description: `Left complete: [${l}-${m}]`,
-        codeLine: LEFT_CALL_LINE,
+        codeLine: LEFT_CALL_LINE - 2,
         phase: "left-complete",
       });
 
       // Right recursive call
+      const rightCallLow = m + 1;
+      const rightCallHigh = r;
       steps.push({
         array: [...a],
         comparing: [],
         swapped: [],
-        description: `Call mergeSort(arr, low=${m + 1}, high=${r})`,
+        description: `Call mergeSort(arr, mid + 1 =${rightCallLow}, high=${rightCallHigh})`,
         codeLine: RIGHT_CALL_LINE,
         phase: "call-right",
-        low: m + 1,
-        high: r,
+        low: rightCallLow,
+        high: rightCallHigh,
         mid: { value: m, leftIndex: l, rightIndex: r },
       });
 
-      mergeSortRec(m + 1, r);
+      mergeSortRec(rightCallLow, rightCallHigh);
 
       steps.push({
         array: [...a],
         comparing: [],
         swapped: [],
         description: `Right complete: [${m + 1}-${r}]`,
-        codeLine: RIGHT_CALL_LINE,
+        codeLine: RIGHT_CALL_LINE - 3,
         phase: "right-complete",
       });
 
@@ -290,30 +295,30 @@ export const mergeSort = {
     const lines = {
       javascript: [
         "function merge(arr, low, mid, high) {", //1
-        "        const temp = [];", //2
+        "        const tempArrayArray = [];", //2
         "        let left = low;", //3
         "        let right = mid + 1;", //4
         "", //5
         "        while (left <= mid && right <= high) {", //6
         "            if (arr[left] <= arr[right]) {", //7
-        "                temp.push(arr[left]);", //8
+        "                tempArrayArray.push(arr[left]);", //8
         "                left++;", //9
         "            }", //10
         "            else {", //11
-        "                temp.push(arr[right]);", //12
+        "                tempArrayArray.push(arr[right]);", //12
         "                right++;", //13
         "            }", //14
         "        }", //15
         "        while (left <= mid) {", //16
-        "            temp.push(arr[left]);", //17
+        "            tempArrayArray.push(arr[left]);", //17
         "            left++;", //18
         "        }", //19
         "        while (right <= high) {", //20
-        "            temp.push(arr[right]);", //21
+        "            tempArrayArray.push(arr[right]);", //21
         "            right++;", //22
         "        }", //23
         "        for (let i = low; i <= high; i++) {", //24
-        "            arr[i] = temp[i - low];", //25
+        "            arr[i] = tempArrayArray[i - low];", //25
         "        }", //26
         "    }", //27
         "", //28
@@ -328,30 +333,30 @@ export const mergeSort = {
       ],
       python: [
         "def merge(arr, low, mid, high):", //1
-        "        temp = []", //2
+        "        tempArrayArray = []", //2
         "        left = low", //3
         "        right = mid + 1", //4
         "", //5
         "        while left <= mid and right <= high:", //6
         "            if arr[left] <= arr[right]:", //7
-        "                temp.append(arr[left])", //8
+        "                tempArrayArray.append(arr[left])", //8
         "                left += 1", //9
         "", //10
         "            else:", //11
-        "                temp.append(arr[right])", //12
+        "                tempArrayArray.append(arr[right])", //12
         "                right += 1", //13
         "        ", //14
         "", //15
         "        while left <= mid:", //16
-        "            temp.append(arr[left])", //17
+        "            tempArrayArray.append(arr[left])", //17
         "            left += 1", //18
         "        ", //19
         "        while right <= high:", //20
-        "            temp.append(arr[right])", //21
+        "            tempArrayArray.append(arr[right])", //21
         "            right += 1", //22
         "        ", //23
         "        for i in range(low, high+1):", //24
-        "            arr[i] = temp[i - low]", //25
+        "            arr[i] = tempArrayArray[i - low]", //25
         "", //26
         "", //27
         "", //28
@@ -366,30 +371,30 @@ export const mergeSort = {
       ],
       cpp: [
         "void merge(vector<int> &arr, int low, int mid, int high) {", //1
-        "        vector<int> temp;", //2
+        "        vector<int> tempArrayArray;", //2
         "        int left = low;", //3
         "        int right = mid + 1;", //4
         "", //5
         "        while (left <= mid && right <= high){", //6
         "            if (arr[left] <= arr[right]) {", //7
-        "                temp.push_back(arr[left]);", //8
+        "                tempArrayArray.push_back(arr[left]);", //8
         "                left++;", //9
         "            }", //10
         "            else {", //11
-        "                temp.push_back(arr[right]);", //12
+        "                tempArrayArray.push_back(arr[right]);", //12
         "                right++;", //13
         "            }", //14
         "        }", //15
         "        while (left <= mid) {", //16
-        "            temp.push_back(arr[left]);", //17
+        "            tempArrayArray.push_back(arr[left]);", //17
         "            left++;", //18
         "        }", //19
         "        while (right <= high) {", //20
-        "            temp.push_back(arr[right]);", //21
+        "            tempArrayArray.push_back(arr[right]);", //21
         "            right++;", //22
         "        }", //23
         "        for (int i = low; i <= high; i++) {", //24
-        "            arr[i] = temp[i - low];", //25
+        "            arr[i] = tempArrayArray[i - low];", //25
         "        }", //26
         "    }", //27
         "", //28
@@ -404,30 +409,30 @@ export const mergeSort = {
       ],
       csharp: [
         "void merge(int[] arr, int low, int mid, int high) {", //1
-        "        List<int> temp = new List<int>();", //2
+        "        List<int> tempArrayArray = new List<int>();", //2
         "        int left = low;", //3
         "        int right = mid + 1;", //4
         "", //5
         "        while (left <= mid && right <= high) {", //6
         "            if (arr[left] <= arr[right]) {", //7
-        "               temp.Add(arr[left]);", //8
+        "               tempArrayArray.Add(arr[left]);", //8
         "                left++;", //9
         "            }", //10
         "            else {", //11
-        "                temp.Add(arr[right]);", //12
+        "                tempArrayArray.Add(arr[right]);", //12
         "                right++;", //13
         "            }", //14
         "        }", //15
         "        while (left <= mid) {", //16
-        "            temp.Add(arr[left]);", //17
+        "            tempArrayArray.Add(arr[left]);", //17
         "            left++;", //18
         "        }", //19
         "        while (right <= high) {", //20
-        "            temp.Add(arr[right]);", //21
+        "            tempArrayArray.Add(arr[right]);", //21
         "            right++;", //22
         "        }", //23
         "        for (int i = low; i <= high; i++) {", //24
-        "            arr[i] = temp[i - low];", //25
+        "            arr[i] = tempArrayArray[i - low];", //25
         "        }", //26
         "    }", //27
         "", //28
@@ -442,30 +447,30 @@ export const mergeSort = {
       ],
       java: [
         "void merge(int[] arr, int low, int mid, int high) {", //1
-        "        int[] temp = new int[high - low + 1];", //2
+        "        int[] tempArrayArray = new int[high - low + 1];", //2
         "        int left = low;", //3
         "        int right = mid + 1;", //4
         "", //5
         "        while (left <= mid && right <= high) {", //6
         "            if (arr[left] <= arr[right]) {", //7
-        "               temp.add(arr[left]);", //8
+        "               tempArrayArray.add(arr[left]);", //8
         "                left++;", //9
         "            }", //10
         "            else {", //11
-        "                temp.add(arr[right]);", //12
+        "                tempArrayArray.add(arr[right]);", //12
         "                right++;", //13
         "            }", //14
         "        }", //15
         "        while (left <= mid) {", //16
-        "            temp.add(arr[left]);", //17
+        "            tempArrayArray.add(arr[left]);", //17
         "            left++;", //18
         "        }", //19
         "        while (right <= high) {", //20
-        "            temp.add(arr[right]);", //21
+        "            tempArrayArray.add(arr[right]);", //21
         "            right++;", //22
         "        }", //23
         "        for (int i = low; i <= high; i++) {", //24
-        "            arr[i] = temp[i - low];", //25
+        "            arr[i] = tempArrayArray[i - low];", //25
         "        }", //26
         "    }", //27
         "", //28

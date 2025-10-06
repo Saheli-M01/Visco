@@ -123,9 +123,11 @@ const ArrayDisplay = ({
   const minValue = showMinUI ? minObj.value : null;
   const minIndex = showMinUI ? minObj.index : -1;
 
-              // When the current step is a swap or swap_step phase, we prefer to
-              // show Temp/Swapped visuals and hide the generic Comparing badge
-              const isSwapPhase = currentStep && (currentStep.phase === "swap" || currentStep.phase === "swap_step");
+  // When the current step is a swap or swap_step phase, we prefer to
+  // show Temp/Swapped visuals and hide the generic Comparing badge
+  const isSwapPhase =
+    currentStep &&
+    (currentStep.phase === "swap" || currentStep.phase === "swap_step");
   return (
     <div className="space-y-4 bg-gray-900 rounded-lg">
       <div className="bg-code-bg rounded-lg p-8 min-h-[290px] flex items-center justify-center">
@@ -169,7 +171,7 @@ const ArrayDisplay = ({
                   <div className="text-center">
                     <div className="text-xs text-gray-700">key</div>
                     <div className="text-lg font-bold">
-                      {keyObj && keyObj.value!= null ? keyObj.value: "-"}
+                      {keyObj && keyObj.value != null ? keyObj.value : "-"}
                     </div>
                   </div>
                 </div>
@@ -196,7 +198,8 @@ const ArrayDisplay = ({
                 >
                   <div className="text-center">
                     <div className="text-xs text-gray-700">
-                      Mid = {midLeftIndex} + ({midRightIndex} - {midLeftIndex}) / 2
+                      Mid = {midLeftIndex} + ({midRightIndex} - {midLeftIndex})
+                      / 2
                     </div>
                     <div className="text-lg font-semibold">
                       = {midValue != null ? midValue : "-"}
@@ -209,25 +212,12 @@ const ArrayDisplay = ({
 
           <div className="flex justify-center gap-4 flex-wrap">
             {currentArray.map((value, index) => {
-              const isMin = showMinUI && index === minIndex;
-      // Do not show generic 'Comparing' during swap phases or when the
-      // current step is a selection-sort min update (min_update).
-      const isMinPhase = currentStep && currentStep.phase === "min_update";
-      const isComparing = comparingIndices.includes(index) && !isSwapPhase && !isMinPhase;
+              const isMinPhase =
+                currentStep && currentStep.phase === "min_update";
+              const isComparing =
+                comparingIndices.includes(index) && !isSwapPhase && !isMinPhase;
               const isSwapped =
                 sortingSteps[currentStepIndex]?.swapped?.includes(index);
-              const inMergeRange =
-                currentMergeRange &&
-                index >= currentMergeRange[0] &&
-                index <= currentMergeRange[1];
-              const inLeftRange =
-                currentLeftRange &&
-                index >= currentLeftRange[0] &&
-                index <= currentLeftRange[1];
-              const inRightRange =
-                currentRightRange &&
-                index >= currentRightRange[0] &&
-                index <= currentRightRange[1];
 
               // Quick Sort specific highlighting
               const inPartitionRange =
@@ -237,40 +227,15 @@ const ArrayDisplay = ({
               const isPivot =
                 currentPivotIndex !== null && index === currentPivotIndex;
 
-              // highlight if this index matches the temp index and the temp UI is being shown
-              const highlightForTemp = showTempUI && index === tempIndex;
-              // highlight if this index matches the mid position
-              const highlightForMid = showMidUI && index === midValue;
-              // highlight if this index matches the key position (insertion sort)
-              const highlightForKey = showKeyUI && index === keyIndex;
-
               const baseClass = isComparing
                 ? "bg-indigo-400 text-white border-indigo-600 scale-110 animate-pulse"
                 : isSwapped
                 ? "bg-green-500 text-white border-green-400 scale-105"
                 : isPivot
-                ? "bg-red-500 text-white border-red-400 scale-110 animate-bounce"
-                : highlightForMid
-                ? "bg-purple-500 text-white border-purple-400 scale-105"
-                : inLeftRange
-                ? "bg-indigo-600 text-white border-indigo-400"
-                : inRightRange
-                ? "bg-pink-600 text-white border-pink-400"
-                : inMergeRange
                 ? "bg-gray-600 text-white border-gray-400"
                 : inPartitionRange
                 ? "bg-orange-500 text-white border-orange-400"
                 : "bg-gray-700 text-white border-gray-600";
-
-              const tempHighlightClass = highlightForTemp
-                ? "ring-4 ring-yellow-300"
-                : "";
-              const midHighlightClass = highlightForMid
-                ? "ring-4 ring-purple-300"
-                : "";
-              const keyHighlightClass = highlightForKey
-                ? "ring-4 ring-amber-300"
-                : "";
 
               return (
                 <div
@@ -284,8 +249,7 @@ const ArrayDisplay = ({
                       </div>
                     </div>
                   )}
-                 
-                
+
                   {isPivot && (
                     <div className="mb-2">
                       <div className="bg-red-400 text-white text-xs px-3 py-1 rounded-full font-semibold">
@@ -293,11 +257,9 @@ const ArrayDisplay = ({
                       </div>
                     </div>
                   )}
-                 
-                 
 
                   <div
-                    className={`flex items-center justify-center h-16 px-4 rounded-lg font-bold text-lg transition-all duration-500 ease-in-out transform shadow-lg border-2 min-w-[60px] ${baseClass}  ${midHighlightClass}`}
+                    className={`flex items-center justify-center h-16 px-4 rounded-lg font-bold text-lg transition-all duration-500 ease-in-out transform shadow-lg border-2 min-w-[60px] ${baseClass} `}
                   >
                     {/* add key highlight class as well */}
                     <span className="drop-shadow-lg">{value}</span>
@@ -313,7 +275,6 @@ const ArrayDisplay = ({
             })}
           </div>
 
-          
           {/* Legend for ranges, mid, and pivot */}
           {(currentMergeRange ||
             currentLeftRange ||
@@ -349,7 +310,7 @@ const ArrayDisplay = ({
                     })`}
                 </div>
               )}
-           
+
               {currentMergeRange && (
                 <div className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-800">
                   Merging: {currentMergeRange[0]}-{currentMergeRange[1]}

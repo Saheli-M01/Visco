@@ -17,7 +17,7 @@ export const heapSort = {
       if (r < n && a[r] > a[largest]) largest = r;
       if (largest !== i) {
         const t1 = a[i], t2 = a[largest];
-          if (language === 'c' || language === 'java') {
+          if (language === 'c' || language === 'java' || language === 'csharp') {
           steps.push({ array: [...a], comparing: [i, largest], swapped: [], description: `temp = ${t1}`, temp: { value: t1, index: i }, codeLine: 3, phase: 'swap_step' });
           a[i] = t2;
           steps.push({ array: [...a], comparing: [i, largest], swapped: [i, largest], description: `arr[${i}] = ${t2}`, temp: { value: t1, index: i }, codeLine: 4, phase: 'swap_step' });
@@ -34,7 +34,7 @@ export const heapSort = {
     for (let i = Math.floor(n / 2) - 1; i >= 0; i--) heapify(n, i);
     for (let i = n - 1; i > 0; i--) {
   const t = a[0];
-      if (language === 'c' || language === 'java') {
+  if (language === 'c' || language === 'java' || language === 'csharp') {
         steps.push({ array: [...a], comparing: [0, i], swapped: [], description: `temp = ${t}`, temp: { value: t, index: 0 }, codeLine: 7, phase: 'swap_step' });
         a[0] = a[i];
         steps.push({ array: [...a], comparing: [0, i], swapped: [0, i], description: `arr[0] = ${a[0]}`, temp: { value: t, index: 0 }, codeLine: 8, phase: 'swap_step' });

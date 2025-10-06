@@ -13,7 +13,7 @@ export const About = () => {
       icon: Code,
       title: "Multi-Language Support",
       description:
-        "Study implementations in C++, Java, and Python with syntax highlighting and detailed explanations.",
+        "Study implementations in C++, C#, Java, Javascript and Python with syntax highlighting and detailed explanations.",
     },
     {
       icon: BookOpen,

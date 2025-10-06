@@ -92,7 +92,7 @@ export const quickSort = {
           i++;
           const t1 = a[i], t2 = a[j];
           
-          if (language === 'c' || language === 'java') {
+          if (language === 'c' || language === 'java' || language === 'csharp') {
             steps.push({ 
               array: [...a], 
               comparing: [i, j], 
@@ -158,7 +158,7 @@ export const quickSort = {
       const t = a[i + 1];
       const pivotPos = i + 1;
       
-      if (language === 'c' || language === 'java') {
+  if (language === 'c' || language === 'java' || language === 'csharp') {
         steps.push({ 
           array: [...a], 
           comparing: [], 
@@ -413,7 +413,7 @@ export const quickSort = {
   },
 
   getCode: (language) => {
-    const codes = {
+  const codes = {
       javascript: `function quickSort(arr, low = 0, high = arr.length - 1) {
   if (low < high) {
     const pi = partition(arr, low, high);
@@ -488,31 +488,31 @@ public static int partition(int[] arr, int low, int high) {
     return i + 1;
 }`,
 
-      c: `void quickSort(int arr[], int low, int high) {
-    if (low < high) {
-        int pi = partition(arr, low, high);
-        quickSort(arr, low, pi - 1);
-        quickSort(arr, pi + 1, high);
-    }
+    csharp: `void QuickSort(int[] arr, int low, int high) {
+  if (low < high) {
+    int pi = Partition(arr, low, high);
+    QuickSort(arr, low, pi - 1);
+    QuickSort(arr, pi + 1, high);
+  }
 }
 
-int partition(int arr[], int low, int high) {
-    int i = low - 1;
-    int pivot = arr[high];
+int Partition(int[] arr, int low, int high) {
+  int i = low - 1;
+  int pivot = arr[high];
     
-    for (int j = low; j < high; j++) {
-        if (arr[j] < pivot) {
-            i++;
-            int temp = arr[i];
-            arr[i] = arr[j];
-            arr[j] = temp;
-        }
+  for (int j = low; j < high; j++) {
+    if (arr[j] < pivot) {
+      i++;
+      int temp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = temp;
     }
+  }
     
-    int temp = arr[i + 1];
-    arr[i + 1] = arr[high];
-    arr[high] = temp;
-    return i + 1;
+  int temp = arr[i + 1];
+  arr[i + 1] = arr[high];
+  arr[high] = temp;
+  return i + 1;
 }`,
     };
     

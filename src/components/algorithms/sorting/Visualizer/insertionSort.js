@@ -221,7 +221,7 @@ export const insertionSort = {
         "    }",
         "}",
       ],
-      c: [
+      csharp: [
         "void insertionSort(int arr[], int n) {",
         "    for (int i = 1; i < n; i++) {",
         "        int key = arr[i];",
@@ -253,14 +253,16 @@ export const insertionSort = {
   },
 
   getCode: (language) => {
-    const codes = {
-      javascript: `function insertionSort(arr) {\n  for (let i = 1; i < arr.length; i++) {\n    const key = arr[i];\n    let j = i - 1;\n    while (j >= 0 && arr[j] > key) {\n      arr[j + 1] = arr[j];\n      j = j - 1;\n    }\n    arr[j + 1] = key;\n  }\n  return arr;\n}`,
-      python: `def insertion_sort(arr):\n    for i in range(1, len(arr)):\n        key = arr[i]\n        j = i - 1\n        while j >= 0 and arr[j] > key:\n            arr[j + 1] = arr[j]\n            j -= 1\n        arr[j + 1] = key\n    return arr`,
-      java: `public static void insertionSort(int[] arr) {\n    for (int i = 1; i < arr.length; i++) {\n        int key = arr[i];\n        int j = i - 1;\n        while (j >= 0 && arr[j] > key) {\n            arr[j + 1] = arr[j];\n            j = j - 1;\n        }\n        arr[j + 1] = key;\n    }\n}`,
-      c: `void insertionSort(int arr[], int n) {\n    for (int i = 1; i < n; i++) {\n        int key = arr[i];\n        int j = i - 1;\n        while (j >= 0 && arr[j] > key) {\n            arr[j + 1] = arr[j];\n            j = j - 1;\n        }\n        arr[j + 1] = key;\n    }\n}`,
-      cpp: `#include <vector>\nusing namespace std;\n\nvoid insertionSort(vector<int>& arr) {\n    for (int i = 1; i < (int)arr.size(); i++) {\n        int key = arr[i];\n        int j = i - 1;\n        while (j >= 0 && arr[j] > key) {\n            arr[j + 1] = arr[j];\n            j = j - 1;\n        }\n        arr[j + 1] = key;\n    }\n}`,
-    };
+    // Use this.getCodeLines so the function works as a method on the object
+    const lines = (this && typeof this.getCodeLines === 'function')
+      ? this.getCodeLines(language)
+      : null;
 
-    return codes[language] || `// ${language} implementation not available yet`;
+    const fallback = (this && typeof this.getCodeLines === 'function')
+      ? this.getCodeLines('javascript')
+      : [];
+
+    const chosen = (lines && lines.length) ? lines : fallback;
+    return chosen.join('\n');
   },
 };

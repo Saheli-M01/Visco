@@ -242,77 +242,194 @@ export const mergeSort = {
   getCodeLines: (language) => {
     const lines = {
       javascript: [
-        "function mergeSort(arr) {",
-        "  const mid = Math.floor(arr.length / 2);",
-        "  const left = arr.slice(0, mid);",
-        "  const right = arr.slice(mid);",
-        "  return merge(mergeSort(left), mergeSort(right));",
-        "}",
-        "",
-        "function merge(left, right) {",
-        "  const res = [];",
-        "  let i = 0, j = 0;",
-        "  while (i < left.length && j < right.length) {",
-        "    if (left[i] <= right[j]) res.push(left[i++]); else res.push(right[j++]);",
-        "  }",
-        "  while (i < left.length) res.push(left[i++]);",
-        "  while (j < right.length) res.push(right[j++]);",
-        "  return res;",
-        "}",
+        "function merge(arr, low, mid, high) {", //1
+        "        const temp = [];", //2
+        "        let left = low;", //3
+        "        let right = mid + 1;", //4
+        "", //5
+        "        while (left <= mid && right <= high) {", //6
+        "            if (arr[left] <= arr[right]) {", //7
+        "                temp.push(arr[left]);", //8
+        "                left++;", //9
+        "            }", //10
+        "            else {", //11
+        "                temp.push(arr[right]);", //12
+        "                right++;", //13
+        "            }", //14
+        "        }", //15
+        "        while (left <= mid) {", //16
+        "            temp.push(arr[left]);", //17
+        "            left++;", //18
+        "        }", //19
+        "        while (right <= high) {", //20
+        "            temp.push(arr[right]);", //21
+        "            right++;", //22
+        "        }", //23
+        "        for (let i = low; i <= high; i++) {", //24
+        "            arr[i] = temp[i - low];", //25
+        "        }", //26
+        "    }", //27
+        "", //28
+        "    function mergeSortHelper(arr, low, high){", //29
+        "        if (low >= high)", //30
+        "            return;", //31
+        "        let mid = low+ Math.floor((high - low) / 2);", //32
+        "        mergeSortHelper(arr, low, mid);", //33
+        "        mergeSortHelper(arr, mid + 1, high);", //34
+        "        merge(arr, low, mid, high);", //35
+        "    }", //36
       ],
       python: [
-        "def merge_sort(arr):",
-        "        return arr",
-        "    mid = len(arr) // 2",
-        "    left = merge_sort(arr[:mid])",
-        "    right = merge_sort(arr[mid:])",
-        "    return merge(left, right)",
-        "",
-        "def merge(left, right):",
-        "    res = []",
-        "    i = j = 0",
-        "    while i < len(left) and j < len(right):",
-        "        if left[i] <= right[j]:",
-        "            res.append(left[i]); i += 1",
-        "        else:",
-        "            res.append(right[j]); j += 1",
-        "    res.extend(left[i:])",
-        "    res.extend(right[j:])",
-        "    return res",
+        "def merge(arr, low, mid, high):", //1
+        "        temp = []", //2
+        "        left = low", //3
+        "        right = mid + 1", //4
+        "", //5
+        "        while left <= mid and right <= high:", //6
+        "            if arr[left] <= arr[right]:", //7
+        "                temp.append(arr[left])", //8
+        "                left += 1", //9
+        "", //10
+        "            else:", //11
+        "                temp.append(arr[right])", //12
+        "                right += 1", //13
+        "        ", //14
+        "", //15
+        "        while left <= mid:", //16
+        "            temp.append(arr[left])", //17
+        "            left += 1", //18
+        "        ", //19
+        "        while right <= high:", //20
+        "            temp.append(arr[right])", //21
+        "            right += 1", //22
+        "        ", //23
+        "        for i in range(low, high+1):", //24
+        "            arr[i] = temp[i - low]", //25
+        "", //26
+        "", //27
+        "", //28
+        "def mergeSortHelper(arr, low, high):", //29
+        "    if low >= high:", //30
+        "        return", //31
+        "    mid = low + (high - low) // 2", //32
+        "    mergeSortHelper(arr, low, mid)", //33
+        "    mergeSortHelper(arr, mid + 1, high)", //34
+        "    merge(arr, low, mid, high)", //35
+        "", //36
+      ],
+      cpp: [
+        "void merge(vector<int> &arr, int low, int mid, int high) {", //1
+        "        vector<int> temp;", //2
+        "        int left = low;", //3
+        "        int right = mid + 1;", //4
+        "", //5
+        "        while (left <= mid && right <= high){", //6
+        "            if (arr[left] <= arr[right]) {", //7
+        "                temp.push_back(arr[left]);", //8
+        "                left++;", //9
+        "            }", //10
+        "            else {", //11
+        "                temp.push_back(arr[right]);", //12
+        "                right++;", //13
+        "            }", //14
+        "        }", //15
+        "        while (left <= mid) {", //16
+        "            temp.push_back(arr[left]);", //17
+        "            left++;", //18
+        "        }", //19
+        "        while (right <= high) {", //20
+        "            temp.push_back(arr[right]);", //21
+        "            right++;", //22
+        "        }", //23
+        "        for (int i = low; i <= high; i++) {", //24
+        "            arr[i] = temp[i - low];", //25
+        "        }", //26
+        "    }", //27
+        "", //28
+        "    void mergeSortHelper(vector<int> &arr, int low, int high){", //29
+        "        if (low >= high)", //30
+        "            return;", //31
+        "        int mid = low + (high - low) / 2;", //32
+        "        mergeSortHelper(arr, low, mid);", //33
+        "        mergeSortHelper(arr, mid + 1, high);", //34
+        "        merge(arr, low, mid, high);", //35
+        "    }", //36
+      ],
+      csharp: [
+        "void merge(int[] arr, int low, int mid, int high) {", //1
+        "        List<int> temp = new List<int>();", //2
+        "        int left = low;", //3
+        "        int right = mid + 1;", //4
+        "", //5
+        "        while (left <= mid && right <= high) {", //6
+        "            if (arr[left] <= arr[right]) {", //7
+        "               temp.Add(arr[left]);", //8
+        "                left++;", //9
+        "            }", //10
+        "            else {", //11
+        "                temp.Add(arr[right]);", //12
+        "                right++;", //13
+        "            }", //14
+        "        }", //15
+        "        while (left <= mid) {", //16
+        "            temp.Add(arr[left]);", //17
+        "            left++;", //18
+        "        }", //19
+        "        while (right <= high) {", //20
+        "            temp.Add(arr[right]);", //21
+        "            right++;", //22
+        "        }", //23
+        "        for (int i = low; i <= high; i++) {", //24
+        "            arr[i] = temp[i - low];", //25
+        "        }", //26
+        "    }", //27
+        "", //28
+        "    void mergeSortHelper(int[] arr, int low, int high){", //29
+        "        if (low >= high)", //30
+        "            return;", //31
+        "        int mid = low + (high - low) / 2;", //32
+        "        this.mergeSortHelper(arr, low, mid);", //33
+        "        this.mergeSortHelper(arr, mid + 1, high)", //34
+        "         this.merge(arr, low, mid, high);", //35
+        "    }", //36
       ],
       java: [
-        "public static int[] mergeSort(int[] arr) {",
-        "    int mid = arr.length / 2;",
-        "    int[] left = Arrays.copyOfRange(arr, 0, mid);",
-        "    int[] right = Arrays.copyOfRange(arr, mid, arr.length);",
-        "    return merge(mergeSort(left), mergeSort(right));",
-        "}",
-        "",
-        "public static int[] merge(int[] left, int[] right) {",
-        "    int[] res = new int[left.length + right.length];",
-        "    int i=0, j=0, k=0;",
-        "    while (i < left.length && j < right.length) {",
-        "        if (left[i] <= right[j]) res[k++] = left[i++]; else res[k++] = right[j++];",
-        "    }",
-        "    while (i < left.length) res[k++] = left[i++];",
-        "    while (j < right.length) res[k++] = right[j++];",
-        "    return res;",
-        "}",
-      ],
-      c: [
-        "void mergeSort(int arr[], int l, int r) {",
-        "    if (l >= r) return;",
-        "    int m = (l + r) / 2;",
-        "    mergeSort(arr, l, m);",
-        "    mergeSort(arr, m+1, r);",
-        "    merge(arr, l, m, r);",
-        "}",
-        "",
-        "void merge(int arr[], int l, int m, int r) {",
-        "    int n1 = m - l + 1;",
-        "    int n2 = r - m;",
-        "    int L[n1], R[n2];",
-        "}",
+        "void merge(int[] arr, int low, int mid, int high) {", //1
+        "        int[] temp = new int[high - low + 1];", //2
+        "        int left = low;", //3
+        "        int right = mid + 1;", //4
+        "", //5
+        "        while (left <= mid && right <= high) {", //6
+        "            if (arr[left] <= arr[right]) {", //7
+        "               temp.add(arr[left]);", //8
+        "                left++;", //9
+        "            }", //10
+        "            else {", //11
+        "                temp.add(arr[right]);", //12
+        "                right++;", //13
+        "            }", //14
+        "        }", //15
+        "        while (left <= mid) {", //16
+        "            temp.add(arr[left]);", //17
+        "            left++;", //18
+        "        }", //19
+        "        while (right <= high) {", //20
+        "            temp.add(arr[right]);", //21
+        "            right++;", //22
+        "        }", //23
+        "        for (int i = low; i <= high; i++) {", //24
+        "            arr[i] = temp[i - low];", //25
+        "        }", //26
+        "    }", //27
+        "", //28
+        "    void mergeSortHelper(int[] arr, int low, int high){", //29
+        "        if (low >= high)", //30
+        "            return;", //31
+        "        int mid = low+ (high - low) / 2;", //32
+        "        mergeSortHelper(arr, low, mid);", //33
+        "        mergeSortHelper(arr, mid + 1, high);", //34
+        "        merge(arr, low, mid, high);", //35
+        "    }", //36
       ],
     };
 
@@ -320,86 +437,18 @@ export const mergeSort = {
   },
 
   getCode: (language) => {
-    const codes = {
-      javascript: `function mergeSort(arr) {
-  if (arr.length <= 1) return arr;
-  const mid = Math.floor(arr.length / 2);
-  const left = arr.slice(0, mid);
-  const right = arr.slice(mid);
-  return merge(mergeSort(left), mergeSort(right));
+    // Build the preview code by joining the code lines defined in getCodeLines
+    // This ensures the preview text exactly matches the per-line highlighting
+    // and avoids duplication between getCodeLines and getCode.
+    const lines = (typeof mergeSort !== 'undefined' && mergeSort.getCodeLines)
+      ? mergeSort.getCodeLines(language)
+      : null;
 
-  function merge(left, right) {
-    const res = [];
-    let i = 0, j = 0;
-    while (i < left.length && j < right.length) {
-      if (left[i] <= right[j]) res.push(left[i++]); else res.push(right[j++]);
-    }
-    while (i < left.length) res.push(left[i++]);
-    while (j < right.length) res.push(right[j++]);
-    return res;
-  }
-}`,
-      python: `def merge_sort(arr):
-    if len(arr) <= 1:
-        return arr
-    mid = len(arr) // 2
-    left = merge_sort(arr[:mid])
-    right = merge_sort(arr[mid:])
-    return merge(left, right)
+    const fallback = (typeof mergeSort !== 'undefined' && mergeSort.getCodeLines)
+      ? mergeSort.getCodeLines('javascript')
+      : [];
 
-def merge(left, right):
-  res = []
-  i = j = 0
-  while i < len(left) and j < len(right):
-    if left[i] <= right[j]:
-      res.append(left[i]); i += 1
-    else:
-      res.append(right[j]); j += 1
-  res.extend(left[i:])
-  res.extend(right[j:])
-  return res`,
-      java: `public static int[] mergeSort(int[] arr) {
-    if (arr.length <= 1) return arr;
-    int mid = arr.length / 2;
-    int[] left = Arrays.copyOfRange(arr, 0, mid);
-    int[] right = Arrays.copyOfRange(arr, mid, arr.length);
-    return merge(mergeSort(left), mergeSort(right));
-
-  }
-
-  public static int[] merge(int[] left, int[] right) {
-    int[] res = new int[left.length + right.length];
-    int i=0, j=0, k=0;
-    while (i < left.length && j < right.length) {
-      if (left[i] <= right[j]) res[k++] = left[i++]; else res[k++] = right[j++];
-    }
-    while (i < left.length) res[k++] = left[i++];
-    while (j < right.length) res[k++] = right[j++];
-    return res;
-  }`,
-      c: `void mergeSort(int arr[], int l, int r) {
-  if (l >= r) return;
-  int m = (l + r) / 2;
-  mergeSort(arr, l, m);
-  mergeSort(arr, m + 1, r);
-  merge(arr, l, m, r);
-}
-
-void merge(int arr[], int l, int m, int r) {
-  int n1 = m - l + 1;
-  int n2 = r - m;
-  int L[n1], R[n2];
-  for (int i = 0; i < n1; i++) L[i] = arr[l + i];
-  for (int j = 0; j < n2; j++) R[j] = arr[m + 1 + j];
-  int i = 0, j = 0, k = l;
-  while (i < n1 && j < n2) {
-    if (L[i] <= R[j]) arr[k++] = L[i++]; else arr[k++] = R[j++];
-  }
-  while (i < n1) arr[k++] = L[i++];
-  while (j < n2) arr[k++] = R[j++];
-}`,
-    };
-
-    return codes[language] || codes.javascript;
+    const chosen = (lines && lines.length) ? lines : fallback;
+    return chosen.join('\n');
   },
 };

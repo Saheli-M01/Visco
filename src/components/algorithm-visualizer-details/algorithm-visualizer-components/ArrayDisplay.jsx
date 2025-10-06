@@ -6,7 +6,7 @@ const ArrayDisplay = ({
   sortingSteps = [],
   currentStepIndex = 0,
   currentCodeLine = -1,
-  selectedLanguage = "javascript" || "c",
+  selectedLanguage = "javascript" || "csharp",
   tempLineIndex = -1,
   languageHasTemp = false,
 }) => {
@@ -100,7 +100,7 @@ const ArrayDisplay = ({
   // Only show temp UI when the language actually uses a temp variable (C/Java)
   // and a temp object exists (either on this step or persisted from prior steps).
   const languageUsesTemp =
-    selectedLanguage === "c" || selectedLanguage === "java";
+    selectedLanguage === "csharp" || selectedLanguage === "java";
   const showTempUI = languageUsesTemp && !!tempObj;
   // show key UI when a key object exists (insertion sort)
   const showKeyUI = !!keyObj;

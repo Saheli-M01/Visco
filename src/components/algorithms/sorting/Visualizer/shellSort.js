@@ -12,7 +12,7 @@ export const shellSort = {
         const temp = a[i];
         let j = i;
         // Start of insertion for this gap - record temp for C/Java
-        if (language === 'c' || language === 'java') {
+  if (language === 'c' || language === 'java' || language === 'csharp') {
           steps.push({ array: [...a], comparing: [i], swapped: [], description: `temp = ${temp}`, temp: { value: temp, index: i }, codeLine: 4, phase: 'start' });
         } else {
           steps.push({ array: [...a], comparing: [i], swapped: [], description: `Start gap-insertion at index ${i} gap ${gap}`, codeLine: 4, phase: 'start' });
@@ -31,7 +31,7 @@ export const shellSort = {
     steps.push({ array: [...a], comparing: [], swapped: [], description: 'Array sorted', codeLine: -1, phase: 'completed' });
 
     // Propagate temp for C/Java so UI can persist the temp value across steps
-    const languageUsesTemp = language === 'c' || language === 'java';
+  const languageUsesTemp = language === 'c' || language === 'java' || language === 'csharp';
     if (languageUsesTemp) {
       let lastTemp = null;
       for (let k = 0; k < steps.length; k++) {

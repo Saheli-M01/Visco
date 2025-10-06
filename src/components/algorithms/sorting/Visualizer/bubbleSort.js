@@ -71,7 +71,7 @@ export const bubbleSort = {
           const temp2 = sortedArray[j + 1];
           swappedInThisPass = true;
 
-          if (language === 'c' || language === 'java') {
+          if (language === 'c' || language === 'java' || language === 'csharp') {
             // C/Java: three-line swap using a temp variable
             // 1) temp = arr[j]; (no array change)
             steps.push({
@@ -149,7 +149,7 @@ export const bubbleSort = {
   // For languages that use a temp variable (C/Java), ensure the temp value
     // persists across subsequent steps once it's created. This mirrors the
     // behavior where the temp variable remains in scope until overwritten.
-    const languageUsesTemp = language === 'c' || language === 'java';
+  const languageUsesTemp = language === 'c' || language === 'java' || language === 'csharp';
     if (languageUsesTemp) {
       let lastTemp = null;
       for (let k = 0; k < steps.length; k++) {
@@ -244,9 +244,9 @@ export const bubbleSort = {
         "}"                                              // 9
       ],
       
-      c: [
-        "void bubbleSort(int arr[], int n) {",           // 0
-        "    // n is provided as a parameter",          // 1 (placeholder to align indices)
+      csharp: [
+        "void BubbleSort(int[] arr) {",                 // 0
+        "    int n = arr.Length;",                      // 1 (align indices)
         "    for (int i = 0; i < n - 1; i++) {",        // 2
         "        for (int j = 0; j < n - i - 1; j++) {", // 3
         "            if (arr[j] > arr[j + 1]) {",         // 4
@@ -256,7 +256,7 @@ export const bubbleSort = {
         "            }",                                  // 8
         "        }",                                      // 9
         "    }",                                         // 10
-        "}"                                              // 11
+        "}",                                             // 11
       ]
     };
 
@@ -264,65 +264,17 @@ export const bubbleSort = {
   },
 
   // Code templates for different languages (function only)
-  getCode: (language) => {
-    const codes = {
-      javascript: `function bubbleSort(arr) {
-  const n = arr.length;
-  for (let i = 0; i < n - 1; i++) {
-    for (let j = 0; j < n - i - 1; j++) {
-      if (arr[j] > arr[j + 1]) {
-        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-      }
-    }
-  }
-  return arr;
-}`,
+  getCode(language) {
+    // Use the object's getCodeLines so we don't rely on the outer binding
+    const lines = (this && typeof this.getCodeLines === 'function')
+      ? this.getCodeLines(language)
+      : null;
 
-      python: `def bubble_sort(arr):
-    n = len(arr)
-    for i in range(n - 1):
-        for j in range(n - i - 1):
-            if arr[j] > arr[j + 1]:
-                arr[j], arr[j + 1] = arr[j + 1], arr[j]
-    return arr`,
+    const fallback = (this && typeof this.getCodeLines === 'function')
+      ? this.getCodeLines('javascript')
+      : [];
 
-      java: `public static void bubbleSort(int[] arr) {
-    int n = arr.length;
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = 0; j < n - i - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
-        }
-    }
-}`,
-
-      cpp: `void bubbleSort(int arr[], int n) {
-    int n = arr.size();
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = 0; j < n - i - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
-                swap(arr[j], arr[j + 1]);
-            }
-        }
-    }
-}`,
-
-      c: `void bubbleSort(int arr[], int n) {
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = 0; j < n - i - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
-        }
-    }
-}`
-    };
-
-    return codes[language] || `// ${language} implementation not available yet`;
+    const chosen = (lines && lines.length) ? lines : fallback;
+    return chosen.join('\n');
   }
 };

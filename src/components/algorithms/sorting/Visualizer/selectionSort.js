@@ -95,7 +95,7 @@ export const selectionSort = {
         // Swap using language-appropriate steps
         const v1 = a[i];
         const v2 = a[minIndex];
-        if (language === "c" || language === "java") {
+  if (language === "java" || language === "csharp") {
           // temp = a[i]
           steps.push({
             array: [...a],
@@ -153,7 +153,7 @@ export const selectionSort = {
     }
 
     // propagate temp for C/Java
-    const languageUsesTemp = language === "c" || language === "java";
+  const languageUsesTemp = language === "c" || language === "java" || language === "csharp";
     if (languageUsesTemp) {
       let lastTemp = null;
       for (let k = 0; k < steps.length; k++) {
@@ -211,8 +211,9 @@ export const selectionSort = {
         "    }",
         "}",
       ],
-      c: [
-        "void selectionSort(int arr[], int n) {",
+      csharp: [
+        "void SelectionSort(int[] arr) {",
+        "    int n = arr.Length;",
         "    for (int i = 0; i < n - 1; i++) {",
         "        int minIndex = i;",
         "        for (int j = i + 1; j < n; j++) {",
@@ -245,52 +246,16 @@ export const selectionSort = {
   },
 
   getCode: (language) => {
-    const codes = {
-      javascript: `function selectionSort(arr) {
-  const n = arr.length;
-  for (let i = 0; i < n - 1; i++) {
-    let minIndex = i;
-    for (let j = i + 1; j < n; j++) {
-      if (arr[j] < arr[minIndex]) minIndex = j;
-    }
-    [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
-  }
-  return arr;
-}`,
-      python: `def selection_sort(arr):
-    n = len(arr)
-    for i in range(n - 1):
-        minIndex = i
-        for j in range(i + 1, n):
-            if arr[j] < arr[minIndex]:
-                minIndex = j
-        arr[i], arr[minIndex] = arr[minIndex], arr[i]
-    return arr`,
-      java: `public static void selectionSort(int[] arr) {
-    int n = arr.length;
-    for (int i = 0; i < n - 1; i++) {
-        int minIndex = i;
-        for (int j = i + 1; j < n; j++) {
-            if (arr[j] < arr[minIndex]) minIndex = j;
-        }
-        int temp = arr[i];
-        arr[i] = arr[minIndex];
-        arr[minIndex] = temp;
-    }
-}`,
-      c: `void selectionSort(int arr[], int n) {
-    for (int i = 0; i < n - 1; i++) {
-        int minIndex = i;
-        for (int j = i + 1; j < n; j++) {
-            if (arr[j] < arr[minIndex]) minIndex = j;
-        }
-        int temp = arr[i];
-        arr[i] = arr[minIndex];
-        arr[minIndex] = temp;
-    }
-}`,
-    };
+    // Use the object's getCodeLines so the method can be called as selectionSort.getCode(...)
+    const lines = (this && typeof this.getCodeLines === 'function')
+      ? this.getCodeLines(language)
+      : null;
 
-    return codes[language] || `// ${language} implementation not available yet`;
+    const fallback = (this && typeof this.getCodeLines === 'function')
+      ? this.getCodeLines('javascript')
+      : [];
+
+    const chosen = (lines && lines.length) ? lines : fallback;
+    return chosen.join('\n');
   },
 };

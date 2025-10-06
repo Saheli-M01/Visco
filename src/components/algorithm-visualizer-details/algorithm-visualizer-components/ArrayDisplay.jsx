@@ -192,14 +192,14 @@ const ArrayDisplay = ({
               {/* Mid slot - shown during merge sort operations */}
               {showMidUI && (
                 <div
-                  className={`h-12 w-32 rounded-lg flex items-center justify-center font-medium bg-purple-300 text-gray-900 shadow-md`}
+                  className={`h-12 w-auto px-3 rounded-lg flex items-center justify-center font-medium bg-purple-300 text-gray-900 shadow-md`}
                 >
                   <div className="text-center">
                     <div className="text-xs text-gray-700">
-                      Mid = ({midLeftIndex} + {midRightIndex}) / 2
+                      Mid = {midLeftIndex} + ({midRightIndex} - {midLeftIndex}) / 2
                     </div>
-                    <div className="text-lg font-bold">
-                      {midValue != null ? midValue : "-"}
+                    <div className="text-lg font-semibold">
+                      = {midValue != null ? midValue : "-"}
                     </div>
                   </div>
                 </div>
@@ -294,13 +294,7 @@ const ArrayDisplay = ({
                     </div>
                   )}
                  
-                  {highlightForMid && (
-                    <div className="mb-2">
-                      <div className="bg-purple-400 text-white text-xs px-3 py-1 rounded-full font-semibold">
-                        Mid
-                      </div>
-                    </div>
-                  )}
+                 
 
                   <div
                     className={`flex items-center justify-center h-16 px-4 rounded-lg font-bold text-lg transition-all duration-500 ease-in-out transform shadow-lg border-2 min-w-[60px] ${baseClass}  ${midHighlightClass}`}
@@ -355,11 +349,7 @@ const ArrayDisplay = ({
                     })`}
                 </div>
               )}
-              {showMidUI && (
-                <div className="text-xs px-2 py-1 rounded-full bg-purple-100 text-purple-800">
-                  Mid: {midValue}
-                </div>
-              )}
+           
               {currentMergeRange && (
                 <div className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-800">
                   Merging: {currentMergeRange[0]}-{currentMergeRange[1]}

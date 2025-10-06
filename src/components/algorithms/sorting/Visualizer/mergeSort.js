@@ -5,6 +5,25 @@ export const mergeSort = {
   generateSteps: (arr, language = "javascript") => {
     const steps = [];
     const a = [...arr];
+    
+    // Get code lines for proper line number mapping
+    const codePreviewLines = mergeSort.getCodeLines(language);
+    
+    // Find the mergeSort function header line (1-indexed for display)
+    const headerIdx0 = codePreviewLines.findIndex((ln) => /mergeSort\s*\(/.test(ln));
+    const HEADER_LINE = 28;
+    const COND_LINE = HEADER_LINE + 1; // if (low >= high)
+    const RETURN_LINE = HEADER_LINE + 2; // return;
+    const MID_LINE = HEADER_LINE + 3; // mid calculation
+    const LEFT_CALL_LINE = HEADER_LINE + 2; // mergeSort(arr, low, mid)
+    const RIGHT_CALL_LINE = HEADER_LINE + 2; // mergeSort(arr, mid + 1, high)
+    const MERGE_CALL_LINE = HEADER_LINE + 6; // merge(arr, low, mid, high)
+
+    // Find merge function lines
+    const mergeHeaderIdx0 = codePreviewLines.findIndex((ln) => /merge\s*\(/.test(ln));
+    const MERGE_HEADER_LINE = mergeHeaderIdx0 >= 0 ? mergeHeaderIdx0 + 1 : 1;
+    const MERGE_COMPARE_LINE = MERGE_HEADER_LINE + 6; // comparison line
+    const MERGE_WRITE_LINE = MERGE_HEADER_LINE + 7; // write operations
 
     // Merge helper that records step-by-step actions for visualization
     function merge(left, mid, right) {
@@ -12,23 +31,19 @@ export const mergeSort = {
       const n2 = right - mid;
       const L = new Array(n1);
       const R = new Array(n2);
+      
       for (let i = 0; i < n1; i++) L[i] = a[left + i];
       for (let j = 0; j < n2; j++) R[j] = a[mid + 1 + j];
 
-      // pointers into L, R and the main array
-      let i = 0,
-        j = 0,
-        k = left;
+      let i = 0, j = 0, k = left;
 
-      // Visualize the ranges being merged with mid information
+      // Visualize the ranges being merged
       steps.push({
         array: [...a],
         comparing: [],
         swapped: [],
-        description: `Merging ranges [${left}-${mid}] and [${
-          mid + 1
-        }-${right}]`,
-        codeLine: 7,
+        description: `Merging ranges [${left}-${mid}] and [${mid + 1}-${right}]`,
+        codeLine: MERGE_HEADER_LINE,
         phase: "merge-start",
         mergeRange: [left, right],
         leftRange: [left, mid],
@@ -36,28 +51,26 @@ export const mergeSort = {
         mid: { value: mid, leftIndex: left, rightIndex: right },
       });
 
-      // merge while both have elements
+      // Merge while both have elements
       while (i < n1 && j < n2) {
-        // show comparison between the two candidates
         steps.push({
           array: [...a],
           comparing: [left + i, mid + 1 + j],
           swapped: [],
           description: `Compare ${L[i]} and ${R[j]}`,
-          codeLine: 10,
+          codeLine: MERGE_COMPARE_LINE,
           phase: "comparison",
           mid: { value: mid, leftIndex: left, rightIndex: right },
         });
 
         if (L[i] <= R[j]) {
           a[k] = L[i];
-          // highlight the index written to and the source
           steps.push({
             array: [...a],
             comparing: [],
             swapped: [k],
             description: `Write ${L[i]} to index ${k}`,
-            codeLine: 11,
+            codeLine: MERGE_WRITE_LINE,
             phase: "write",
             mid: { value: mid, leftIndex: left, rightIndex: right },
           });
@@ -69,7 +82,7 @@ export const mergeSort = {
             comparing: [],
             swapped: [k],
             description: `Write ${R[j]} to index ${k}`,
-            codeLine: 11,
+            codeLine: MERGE_WRITE_LINE,
             phase: "write",
             mid: { value: mid, leftIndex: left, rightIndex: right },
           });
@@ -78,39 +91,39 @@ export const mergeSort = {
         k++;
       }
 
-      // remaining elements from left
+      // Remaining elements from left
       while (i < n1) {
+        a[k] = L[i];
         steps.push({
           array: [...a],
           comparing: [],
           swapped: [k],
           description: `Write remainder ${L[i]} from left to index ${k}`,
-          codeLine: 13,
+          codeLine: MERGE_WRITE_LINE + 9,
           phase: "write",
           mid: { value: mid, leftIndex: left, rightIndex: right },
         });
-        a[k] = L[i];
         i++;
         k++;
       }
 
-      // remaining elements from right
+      // Remaining elements from right
       while (j < n2) {
+        a[k] = R[j];
         steps.push({
           array: [...a],
           comparing: [],
           swapped: [k],
           description: `Write remainder ${R[j]} from right to index ${k}`,
-          codeLine: 14,
+          codeLine: MERGE_WRITE_LINE + 12,
           phase: "write",
           mid: { value: mid, leftIndex: left, rightIndex: right },
         });
-        a[k] = R[j];
         j++;
         k++;
       }
 
-      // mark the merged range as completed (for coloration)
+      // Mark the merged range as completed
       const mergedIndices = [];
       for (let idx = left; idx <= right; idx++) mergedIndices.push(idx);
       steps.push({
@@ -118,7 +131,7 @@ export const mergeSort = {
         comparing: [],
         swapped: mergedIndices,
         description: `Merged [${left}-${right}]`,
-        codeLine: 15,
+        codeLine: MERGE_CALL_LINE,
         phase: "merge-complete",
         mergeRange: [left, right],
         mid: { value: mid, leftIndex: left, rightIndex: right },
@@ -126,114 +139,135 @@ export const mergeSort = {
     }
 
     function mergeSortRec(l, r) {
+      // Entry to recursion - highlight function header
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `Enter mergeSort(arr, low=${l}, high=${r})`,
+        codeLine: HEADER_LINE,
+        phase: "function-entry",
+        low: l,
+        high: r,
+      });
+
+      // Base-case check
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `Check base case: is low (${l}) >= high (${r})?`,
+        codeLine: COND_LINE,
+        phase: "condition-check",
+        low: l,
+        high: r,
+      });
+
       if (l >= r) {
-        // single element - base case (visualize as a completed single-item range)
         steps.push({
           array: [...a],
           comparing: [],
           swapped: [l],
           description: `Base case: single element at ${l}`,
-          codeLine: 0,
+          codeLine: RETURN_LINE,
           phase: "base",
         });
         return;
       }
 
+      // Calculate mid
       const m = Math.floor((l + r) / 2);
-
-      // Show the mid calculation step
       steps.push({
         array: [...a],
         comparing: [],
         swapped: [],
-        description: `Calculate mid: (${l} + ${r}) / 2 = ${m}`,
-        codeLine: 1,
-        phase: "mid-calculation",
+        description: `Calculate mid: ${m} = (${l} + ${r}) / 2`,
+        codeLine: MID_LINE,
+        phase: "calculate-mid",
+        low: l,
+        high: r,
         mid: { value: m, leftIndex: l, rightIndex: r },
       });
 
-      // Show the divide operation
+      // Left recursive call
       steps.push({
         array: [...a],
         comparing: [],
         swapped: [],
-        description: `Divide [${l}-${r}] -> [${l}-${m}] & [${m + 1}-${r}]`,
-        codeLine: 1,
-        phase: "divide",
+        description: `Call mergeSort(arr, low=${l}, high=${m})`,
+        codeLine: LEFT_CALL_LINE,
+        phase: "call-left",
+        low: l,
+        high: m,
         mid: { value: m, leftIndex: l, rightIndex: r },
       });
 
-      // Enter left recursion
-      steps.push({
-        array: [...a],
-        comparing: [],
-        swapped: [],
-        description: `Enter left: [${l}-${m}]`,
-        codeLine: 2,
-        phase: "divide-enter",
-        mid: { value: m, leftIndex: l, rightIndex: r },
-      });
       mergeSortRec(l, m);
+
       steps.push({
         array: [...a],
         comparing: [],
         swapped: [],
         description: `Left complete: [${l}-${m}]`,
-        codeLine: 2,
-        phase: "divide-done",
+        codeLine: LEFT_CALL_LINE,
+        phase: "left-complete",
       });
 
-      // Enter right recursion
+      // Right recursive call
       steps.push({
         array: [...a],
         comparing: [],
         swapped: [],
-        description: `Enter right: [${m + 1}-${r}]`,
-        codeLine: 2,
-        phase: "divide-enter",
+        description: `Call mergeSort(arr, low=${m + 1}, high=${r})`,
+        codeLine: RIGHT_CALL_LINE,
+        phase: "call-right",
+        low: m + 1,
+        high: r,
         mid: { value: m, leftIndex: l, rightIndex: r },
       });
+
       mergeSortRec(m + 1, r);
+
       steps.push({
         array: [...a],
         comparing: [],
         swapped: [],
         description: `Right complete: [${m + 1}-${r}]`,
-        codeLine: 2,
-        phase: "divide-done",
+        codeLine: RIGHT_CALL_LINE,
+        phase: "right-complete",
       });
 
-      // Conquer: about to merge the two halves
+      // Merge call
       steps.push({
         array: [...a],
         comparing: [],
         swapped: [],
         description: `Conquer: merge [${l}-${m}] & [${m + 1}-${r}]`,
-        codeLine: 1,
+        codeLine: MERGE_CALL_LINE,
         phase: "conquer",
         mid: { value: m, leftIndex: l, rightIndex: r },
       });
+
       merge(l, m, r);
 
-      // Subarray sorted
       steps.push({
         array: [...a],
         comparing: [],
         swapped: [],
         description: `Subarray sorted: [${l}-${r}]`,
-        codeLine: 6,
+        codeLine: MERGE_CALL_LINE,
         phase: "subarray-sorted",
       });
     }
 
-    // Top-level call to mergeSort: show the initial call with low=0 and high=n-1 (line 29)
+    // Initial call
     steps.push({
       array: [...a],
       comparing: [],
       swapped: [],
-      description: `Call mergeSort(arr, low=${0}, high=${a.length - 1})`,
-      codeLine: 28,
-      phase: "call",
+      description: `Initial call: mergeSort(arr, 0, ${a.length - 1})`,
+      codeLine: HEADER_LINE,
+      phase: "start",
       low: 0,
       high: a.length - 1,
     });
@@ -248,6 +282,7 @@ export const mergeSort = {
       codeLine: -1,
       phase: "completed",
     });
+
     return steps;
   },
 

@@ -226,6 +226,18 @@ export const mergeSort = {
       });
     }
 
+    // Top-level call to mergeSort: show the initial call with low=0 and high=n-1 (line 29)
+    steps.push({
+      array: [...a],
+      comparing: [],
+      swapped: [],
+      description: `Call mergeSort(arr, low=${0}, high=${a.length - 1})`,
+      codeLine: 28,
+      phase: "call",
+      low: 0,
+      high: a.length - 1,
+    });
+
     mergeSortRec(0, a.length - 1);
 
     steps.push({
@@ -270,12 +282,12 @@ export const mergeSort = {
         "        }", //26
         "    }", //27
         "", //28
-        "    function mergeSortHelper(arr, low, high){", //29
+        "    function mergeSort(arr, low, high){", //29
         "        if (low >= high)", //30
         "            return;", //31
         "        let mid = low+ Math.floor((high - low) / 2);", //32
-        "        mergeSortHelper(arr, low, mid);", //33
-        "        mergeSortHelper(arr, mid + 1, high);", //34
+        "        mergeSort(arr, low, mid);", //33
+        "        mergeSort(arr, mid + 1, high);", //34
         "        merge(arr, low, mid, high);", //35
         "    }", //36
       ],
@@ -308,12 +320,12 @@ export const mergeSort = {
         "", //26
         "", //27
         "", //28
-        "def mergeSortHelper(arr, low, high):", //29
+        "def mergeSort(arr, low, high):", //29
         "    if low >= high:", //30
         "        return", //31
         "    mid = low + (high - low) // 2", //32
-        "    mergeSortHelper(arr, low, mid)", //33
-        "    mergeSortHelper(arr, mid + 1, high)", //34
+        "    mergeSort(arr, low, mid)", //33
+        "    mergeSort(arr, mid + 1, high)", //34
         "    merge(arr, low, mid, high)", //35
         "", //36
       ],
@@ -346,12 +358,12 @@ export const mergeSort = {
         "        }", //26
         "    }", //27
         "", //28
-        "    void mergeSortHelper(vector<int> &arr, int low, int high){", //29
+        "    void mergeSort(vector<int> &arr, int low, int high){", //29
         "        if (low >= high)", //30
         "            return;", //31
         "        int mid = low + (high - low) / 2;", //32
-        "        mergeSortHelper(arr, low, mid);", //33
-        "        mergeSortHelper(arr, mid + 1, high);", //34
+        "        mergeSort(arr, low, mid);", //33
+        "        mergeSort(arr, mid + 1, high);", //34
         "        merge(arr, low, mid, high);", //35
         "    }", //36
       ],
@@ -384,13 +396,13 @@ export const mergeSort = {
         "        }", //26
         "    }", //27
         "", //28
-        "    void mergeSortHelper(int[] arr, int low, int high){", //29
+        "    void mergeSort(int[] arr, int low, int high){", //29
         "        if (low >= high)", //30
         "            return;", //31
         "        int mid = low + (high - low) / 2;", //32
-        "        this.mergeSortHelper(arr, low, mid);", //33
-        "        this.mergeSortHelper(arr, mid + 1, high)", //34
-        "         this.merge(arr, low, mid, high);", //35
+        "        this.mergeSort(arr, low, mid);", //33
+        "        this.mergeSort(arr, mid + 1, high)", //34
+        "        this.merge(arr, low, mid, high);", //35
         "    }", //36
       ],
       java: [
@@ -422,12 +434,12 @@ export const mergeSort = {
         "        }", //26
         "    }", //27
         "", //28
-        "    void mergeSortHelper(int[] arr, int low, int high){", //29
+        "    void mergeSort(int[] arr, int low, int high){", //29
         "        if (low >= high)", //30
         "            return;", //31
         "        int mid = low+ (high - low) / 2;", //32
-        "        mergeSortHelper(arr, low, mid);", //33
-        "        mergeSortHelper(arr, mid + 1, high);", //34
+        "        mergeSort(arr, low, mid);", //33
+        "        mergeSort(arr, mid + 1, high);", //34
         "        merge(arr, low, mid, high);", //35
         "    }", //36
       ],

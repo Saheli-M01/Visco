@@ -114,7 +114,8 @@ const FullScreenModal = ({ isOpen, onClose, algorithm, topic }) => {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(algorithm);
 
   // Visualization state
-  const [selectedLanguage, setSelectedLanguage] = useState("c");
+  // default to 'csharp' (matches CodePreview language list) instead of legacy 'c'
+  const [selectedLanguage, setSelectedLanguage] = useState("csharp");
   const [showLanguageChangeConfirm, setShowLanguageChangeConfirm] =
     useState(false);
   const [pendingLanguage, setPendingLanguage] = useState(null);

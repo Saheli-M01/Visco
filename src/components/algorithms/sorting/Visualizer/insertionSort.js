@@ -69,20 +69,60 @@ export const insertionSort = {
       // No separate temp variable used; insertion sort uses 'key' consistently.
 
       while (j >= 0 && a[j] > key) {
+        // highlight the while-condition evaluation before shifting
+        steps.push({
+          array: [...a],
+          comparing: [],
+          swapped: [],
+          description: `Checking if (j is >= 0) and (arr[j] = ${a[j]} > ${key})`,
+          // keep key visible so the UI can render it during comparison
+          key: { value: key, index: i },
+          j: { value: j, index: j },
+          codeLine: 4,
+          phase: "checking",
+        });
+
         // shift a[j] to a[j+1]
         a[j + 1] = a[j];
         steps.push({
           array: [...a],
-          comparing: [j, j + 1],
+          comparing: [],
           swapped: [j + 1],
           description: `Shift arr[${j}] (${a[j]}) to position ${j + 1}`,
           // keep key visible during shifts so the UI can persist it
           key: { value: key, index: i },
-          codeLine: 3,
+          codeLine: 5,
           phase: "shift",
         });
         j = j - 1;
+
+        // expose the j decrement as its own step so the UI can highlight that line
+        steps.push({
+          array: [...a],
+          comparing: [],
+          swapped: [],
+          description: `j decremented -> j = ${j}`,
+          key: { value: key, index: i },
+          j: { value: j, index: j },
+          codeLine: 6,
+          phase: "decrement",
+        });
+
       }
+
+      // when the while loop exits (condition false), add an explicit step
+      // so the UI can show that the loop failed before inserting the key
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `While condition failed -> j = ${j}`,
+        key: { value: key, index: i },
+        j: { value: j, index: j },
+        // highlight the while condition line
+        codeLine: 4,
+        phase: "while_exit",
+      });
 
       // place key
       a[j + 1] = key;
@@ -92,7 +132,7 @@ export const insertionSort = {
         swapped: [j + 1],
         description: `Place key ${key} at position ${j + 1}`,
         key: { value: key, index: i },
-        codeLine: 4,
+        codeLine: 8,
         phase: "insert",
       });
     }
@@ -111,6 +151,28 @@ export const insertionSort = {
         if (steps[k].j) lastJ = steps[k].j;
       } else {
         if (lastJ) steps[k].j = lastJ;
+      }
+    }
+
+    // Ensure the steps end with a clear 'completed' state so the UI doesn't
+    // display lingering comparing indices after the algorithm finishes.
+    if (steps.length > 0) {
+      const last = steps[steps.length - 1];
+      if (last.phase !== 'completed') {
+        const completedStep = {
+          array: [...a],
+          comparing: [],
+          swapped: [],
+          description: 'Array is now fully sorted',
+          codeLine: -1,
+          phase: 'completed',
+        };
+
+        // preserve previous variables so the UI can continue to display them
+        if (lastKey) completedStep.key = lastKey;
+        if (lastJ) completedStep.j = lastJ;
+
+        steps.push(completedStep);
       }
     }
 
@@ -141,7 +203,9 @@ export const insertionSort = {
         "        while j >= 0 and arr[j] > key:",
         "            arr[j + 1] = arr[j]",
         "            j -= 1",
+        "",
         "        arr[j + 1] = key",
+        "",
         "    return arr",
       ],
       java: [

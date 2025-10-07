@@ -6,86 +6,232 @@ export const mergeSort = {
     const steps = [];
     const a = [...arr];
     
-    // Get code lines for proper line number mapping
-    const codePreviewLines = mergeSort.getCodeLines(language);
-    
-    // Find the mergeSort function header line (1-indexed for display)
-    const headerIdx0 = codePreviewLines.findIndex((ln) => /mergeSort\s*\(/.test(ln));
+    // Direct line number constants (no calculation needed)
     const HEADER_LINE = 28;
-    const COND_LINE = HEADER_LINE + 1; // if (low >= high)
-    const RETURN_LINE = HEADER_LINE + 2; // return;
-    const MID_LINE = HEADER_LINE + 3; // mid calculation
-    const LEFT_CALL_LINE = HEADER_LINE + 4; // mergeSort(arr, low, mid)
-    const RIGHT_CALL_LINE = HEADER_LINE + 5; // mergeSort(arr, mid + 1, high)
-    const MERGE_CALL_LINE = HEADER_LINE + 6; // merge(arr, low, mid, high)
+    const COND_LINE = 29;
+    const RETURN_LINE = 30;
+    const MID_LINE = 31;
+    const LEFT_CALL_LINE = 32;
+    const RIGHT_CALL_LINE = 33;
+    const MERGE_CALL_LINE = 26;
+    const WHILE_END_LINE = 14;
 
-    // Find merge function lines
-    const mergeHeaderIdx0 = codePreviewLines.findIndex((ln) => /merge\s*\(/.test(ln));
-    const MERGE_HEADER_LINE = mergeHeaderIdx0 >= 0 ? mergeHeaderIdx0 + 1 : 1;
-    const MERGE_COMPARE_LINE = MERGE_HEADER_LINE + 6; // comparison line
-    const MERGE_WRITE_LINE = MERGE_HEADER_LINE + 7; // write operations
+    // Merge function lines (fixed)
+    const MERGE_HEADER_LINE = 1;
+    const MERGE_COMPARE_LINE = 5;
+    const MERGE_WRITE_LINE = 7;
+    const MERGE_WHILE_END_LINE = 14;
 
     // Merge helper that records step-by-step actions for visualization
-    function merge(left, mid, right) {
-      const n1 = mid - left + 1;
-      const n2 = right - mid;
+    function merge(low, mid, high) {
+      const n1 = mid - low + 1;
+      const n2 = high - mid;
       const L = new Array(n1);
       const R = new Array(n2);
-      
-      for (let i = 0; i < n1; i++) L[i] = a[left + i];
-      for (let j = 0; j < n2; j++) R[j] = a[mid + 1 + j];
 
-      let i = 0, j = 0, k = left;
+      for (let ii = 0; ii < n1; ii++) L[ii] = a[low + ii];
+      for (let jj = 0; jj < n2; jj++) R[jj] = a[mid + 1 + jj];
+
+      let i = 0, j = 0, k = low;
+      const tempArray = [];
 
       // Visualize the ranges being merged
       steps.push({
         array: [...a],
         comparing: [],
         swapped: [],
-        description: `Merging ranges [${left}-${mid}] and [${mid + 1}-${right}]`,
+        description: `Forming Temp array or list`,
         codeLine: MERGE_HEADER_LINE,
-        phase: "merge-start",
-        mergeRange: [left, right],
-        leftRange: [left, mid],
-        rightRange: [mid + 1, right],
-        mid: { value: mid, leftIndex: left, rightIndex: right },
+        phase: "form-temp",
+        mergeRange: [low, high],
+        leftRange: [low, mid],
+        rightRange: [mid + 1, high],
+        mid: { value: mid, leftIndex: low, rightIndex: high },
+      });
+
+      // Expose the left variable right after temp is formed
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `int left = ${low}`,
+        codeLine: MERGE_HEADER_LINE + 1,
+        phase: "set-left",
+        leftVar: { value: low },
+        mergeRange: [low, high],
+        mid: { value: mid, leftIndex: low, rightIndex: high },
+      });
+
+      // Expose the right pointer start after left initialization
+      const rightPtrStart = mid + 1;
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `int right = ${rightPtrStart}`,
+        codeLine: MERGE_HEADER_LINE + 2,
+        phase: "set-right",
+        rightVar: { value: rightPtrStart },
+        mergeRange: [low, high],
+        mid: { value: mid, leftIndex: low, rightIndex: high },
       });
 
       // Merge while both have elements
-      while (i < n1 && j < n2) {
+      for (;;) {
+        const leftPtr = low + i;
+        const rightPtr = mid + 1 + j;
+
+        // Check while condition
         steps.push({
           array: [...a],
-          comparing: [left + i, mid + 1 + j],
+          comparing: [],
           swapped: [],
-          description: `Compare ${L[i]} and ${R[j]}`,
+          description: `while (${leftPtr} <= ${mid} && ${rightPtr} <= ${high})`,
           codeLine: MERGE_COMPARE_LINE,
-          phase: "comparison",
-          mid: { value: mid, leftIndex: left, rightIndex: right },
+          phase: "while-check",
+          mid: { value: mid, leftIndex: low, rightIndex: high },
+          leftPtr,
+          rightPtr,
+          leftVar: { value: leftPtr },
+          rightVar: { value: rightPtr },
+          tempArray: [...tempArray],
+        });
+
+        // If the while condition is false, exit
+        if (!(i < n1 && j < n2)) {
+          steps.push({
+            array: [...a],
+            comparing: [],
+            swapped: [],
+            description: `While condition false - exit loop`,
+            codeLine: WHILE_END_LINE,
+            phase: "while-exit",
+            mid: { value: mid, leftIndex: low, rightIndex: high },
+            leftPtr: low + i,
+            rightPtr: mid + 1 + j,
+            leftVar: { value: low + i },
+            rightVar: { value: mid + 1 + j },
+            tempArray: [...tempArray],
+          });
+
+          // Check remaining left elements
+          steps.push({
+            array: [...a],
+            comparing: [],
+            swapped: [],
+            description: `check while (${low + i} <= ${mid})`,
+            codeLine: 15,
+            phase: "while-left-check",
+            mid: { value: mid, leftIndex: low, rightIndex: high },
+            leftPtr: low + i,
+            rightPtr: mid + 1 + j,
+            leftVar: { value: low + i },
+            rightVar: { value: mid + 1 + j },
+            tempArray: [...tempArray],
+          });
+
+          // If no remaining left, check right remainder
+          if (!(i < n1)) {
+            steps.push({
+              array: [...a],
+              comparing: [],
+              swapped: [],
+              description: `while (right <= high) — right=${mid + 1 + j}, high=${high}`,
+              codeLine: 20,
+              phase: "while-right-check",
+              mid: { value: mid, leftIndex: low, rightIndex: high },
+              leftPtr: low + i,
+              rightPtr: mid + 1 + j,
+              leftVar: { value: low + i },
+              rightVar: { value: mid + 1 + j },
+              tempArray: [...tempArray],
+            });
+          }
+
+          break;
+        }
+
+        // Check if-statement
+        steps.push({
+          array: [...a],
+          comparing: [],
+          swapped: [],
+          description: `Check if ${L[i]} <= ${R[j]}`,
+          codeLine: 6,
+          phase: "if-check",
+          mid: { value: mid, leftIndex: low, rightIndex: high },
+          leftPtr: low + i,
+          rightPtr: mid + 1 + j,
+          leftVar: { value: low + i },
+          rightVar: { value: mid + 1 + j },
+          tempArray: [...tempArray],
         });
 
         if (L[i] <= R[j]) {
-          a[k] = L[i];
+          tempArray.push(L[i]);
           steps.push({
             array: [...a],
             comparing: [],
-            swapped: [k],
-            description: `Write ${L[i]} to index ${k}`,
-            codeLine: MERGE_WRITE_LINE,
-            phase: "write",
-            mid: { value: mid, leftIndex: left, rightIndex: right },
+            swapped: [],
+            description: `tempArray.push(${L[i]})`,
+            codeLine: 8,
+            phase: "push-temp",
+            mid: { value: mid, leftIndex: low, rightIndex: high },
+            leftPtr: low + i,
+            rightPtr: mid + 1 + j,
+            leftVar: { value: low + i },
+            rightVar: { value: mid + 1 + j },
+            tempArray: [...tempArray],
           });
+
+          steps.push({
+            array: [...a],
+            comparing: [],
+            swapped: [],
+            description: `left++ (move left pointer)`,
+            codeLine: 9,
+            phase: "increment-left",
+            mid: { value: mid, leftIndex: low, rightIndex: high },
+            leftPtr: low + i + 1,
+            leftVar: { value: low + i + 1 },
+            rightPtr: mid + 1 + j,
+            rightVar: { value: mid + 1 + j },
+            tempArray: [...tempArray],
+          });
+
           i++;
         } else {
-          a[k] = R[j];
+          tempArray.push(R[j]);
           steps.push({
             array: [...a],
             comparing: [],
-            swapped: [k],
-            description: `Write ${R[j]} to index ${k}`,
-            codeLine: MERGE_WRITE_LINE,
-            phase: "write",
-            mid: { value: mid, leftIndex: left, rightIndex: right },
+            swapped: [],
+            description: `tempArray.push(${R[j]})`,
+            codeLine: 11,
+            phase: "push-temp",
+            mid: { value: mid, leftIndex: low, rightIndex: high },
+            leftPtr: low + i,
+            rightPtr: mid + 1 + j,
+            leftVar: { value: low + i },
+            rightVar: { value: mid + 1 + j },
+            tempArray: [...tempArray],
           });
+
+          steps.push({
+            array: [...a],
+            comparing: [],
+            swapped: [],
+            description: `right++ (move right pointer)`,
+            codeLine: 12,
+            phase: "increment-right",
+            mid: { value: mid, leftIndex: low, rightIndex: high },
+            leftPtr: low + i,
+            leftVar: { value: low + i },
+            rightPtr: mid + 1 + j + 1,
+            rightVar: { value: mid + 1 + j + 1 },
+            tempArray: [...tempArray],
+          });
+
           j++;
         }
         k++;
@@ -93,70 +239,184 @@ export const mergeSort = {
 
       // Remaining elements from left
       while (i < n1) {
-        a[k] = L[i];
+        tempArray.push(L[i]);
         steps.push({
           array: [...a],
           comparing: [],
-          swapped: [k],
-          description: `Write remainder ${L[i]} from left to index ${k}`,
-          codeLine: MERGE_WRITE_LINE + 9,
-          phase: "write",
-          mid: { value: mid, leftIndex: left, rightIndex: right },
+          swapped: [],
+          description: `tempArray.push(${L[i]}) (remainder from left)`,
+          codeLine: 16,
+          phase: "push-temp",
+          mid: { value: mid, leftIndex: low, rightIndex: high },
+          leftPtr: low + i,
+          rightPtr: mid + 1 + j,
+          leftVar: { value: low + i },
+          rightVar: { value: mid + 1 + j },
+          tempArray: [...tempArray],
+        });
+        // highlight the left++ line (pointer move) as a separate step
+        steps.push({
+          array: [...a],
+          comparing: [],
+          swapped: [],
+          description: `left++ (move left pointer)`,
+          codeLine: 17,
+          phase: "increment-left",
+          mid: { value: mid, leftIndex: low, rightIndex: high },
+          leftPtr: low + i + 1,
+          leftVar: { value: low + i + 1 },
+          rightPtr: mid + 1 + j,
+          rightVar: { value: mid + 1 + j },
+          tempArray: [...tempArray],
         });
         i++;
         k++;
       }
+      // When left remainder loop completes, emit an explicit exit step so the
+      // UI highlights the post-while line (failure) — align to the left++ line
+      // index so users see the correct highlighted line when the loop ends.
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `Left remainder finished`,
+        codeLine: 18,
+        phase: "while-left-exit",
+        mid: { value: mid, leftIndex: low, rightIndex: high },
+        leftPtr: low + i,
+        rightPtr: mid + 1 + j,
+        leftVar: { value: low + i },
+        rightVar: { value: mid + 1 + j },
+        tempArray: [...tempArray],
+      });
+
+      // Next while loop: Remaining elements from right — emit an explicit
+      // check before entering the loop so it mirrors the left remainder
+      // behavior (check -> push-temp -> increment -> repeat -> exit).
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `check while (${mid + 1 + j} <= ${high})`,
+        codeLine: 19,
+        phase: "while-right-check",
+        mid: { value: mid, leftIndex: low, rightIndex: high },
+        leftPtr: low + i,
+        rightPtr: mid + 1 + j,
+        leftVar: { value: low + i },
+        rightVar: { value: mid + 1 + j },
+        tempArray: [...tempArray],
+      });
 
       // Remaining elements from right
       while (j < n2) {
-        a[k] = R[j];
+        tempArray.push(R[j]);
         steps.push({
           array: [...a],
           comparing: [],
-          swapped: [k],
-          description: `Write remainder ${R[j]} from right to index ${k}`,
-          codeLine: MERGE_WRITE_LINE + 12,
-          phase: "write",
-          mid: { value: mid, leftIndex: left, rightIndex: right },
+          swapped: [],
+          description: `tempArray.push(${R[j]}) (remainder from right)`,
+          codeLine: 21,
+          phase: "push-temp",
+          mid: { value: mid, leftIndex: low, rightIndex: high },
+          leftPtr: low + i,
+          rightPtr: mid + 1 + j,
+          leftVar: { value: low + i },
+          rightVar: { value: mid + 1 + j },
+          tempArray: [...tempArray],
+        });
+        // highlight the right++ line (pointer move) as a separate step
+        steps.push({
+          array: [...a],
+          comparing: [],
+          swapped: [],
+          description: `right++ (move right pointer)`,
+          codeLine: 22,
+          phase: "increment-right",
+          mid: { value: mid, leftIndex: low, rightIndex: high },
+          leftPtr: low + i,
+          leftVar: { value: low + i },
+          rightPtr: mid + 1 + j + 1,
+          rightVar: { value: mid + 1 + j + 1 },
+          tempArray: [...tempArray],
         });
         j++;
         k++;
       }
+      // Emit an explicit exit step for the right remainder loop as well so the
+      // UI highlights the post-while failure line (align with right++ line).
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `Right remainder finished`,
+        codeLine: 22,
+        phase: "while-right-exit",
+        mid: { value: mid, leftIndex: low, rightIndex: high },
+        leftPtr: low + i,
+        rightPtr: mid + 1 + j,
+        leftVar: { value: low + i },
+        rightVar: { value: mid + 1 + j },
+        tempArray: [...tempArray],
+      });
+
+      // Copy tempArray back into the original array
+      for (let t = low; t <= high; t++) {
+        // Emit a for-iteration step first (highlight the for-loop header)
+        // so the UI shows i before the write happens.
+        steps.push({
+          array: [...a],
+          comparing: [],
+          swapped: [],
+          description: `for (i = ${t}; i <= ${high}; i++)`,
+          codeLine: 23,
+          phase: "for-iteration",
+          mid: { value: mid, leftIndex: low, rightIndex: high },
+          iVar: { value: t },
+          tempArray: [...tempArray],
+        });
+
+        // Now perform the write and emit the write step which shows the
+        // array element changing while the write line (codeLine 25) is highlighted.
+        a[t] = tempArray[t - low];
+        steps.push({
+          array: [...a],
+          comparing: [],
+          swapped: [t],
+          description: `Write ${tempArray[t - low]} to index ${t}`,
+          codeLine: 24,
+          phase: "write",
+          mid: { value: mid, leftIndex: low, rightIndex: high },
+          iVar: { value: t },
+          tempArray: [...tempArray],
+        });
+      }
 
       // Mark the merged range as completed
       const mergedIndices = [];
-      for (let idx = left; idx <= right; idx++) mergedIndices.push(idx);
+      for (let idx = low; idx <= high; idx++) mergedIndices.push(idx);
       steps.push({
         array: [...a],
         comparing: [],
         swapped: mergedIndices,
-        description: `Merged [${left}-${right}]`,
+        description: `Merged [${low}-${high}]`,
         codeLine: MERGE_CALL_LINE,
         phase: "merge-complete",
-        mergeRange: [left, right],
-        mid: { value: mid, leftIndex: left, rightIndex: right },
+        mergeRange: [low, high],
+        mid: { value: mid, leftIndex: low, rightIndex: high },
+        leftVar: { value: low },
+        rightVar: { value: high },
+        tempArray: [...tempArray],
       });
     }
 
     function mergeSortRec(l, r) {
-      // Entry to recursion - highlight function header
-      // steps.push({
-      //   array: [...a],
-      //   comparing: [],
-      //   swapped: [],
-      //   description: `Enter mergeSort(arr, low=${l}, high=${r})`,
-      //   codeLine: HEADER_LINE,
-      //   phase: "function-entry",
-      //   low: l,
-      //   high: r,
-      // });
-
       // Base-case check
       steps.push({
         array: [...a],
         comparing: [],
         swapped: [],
-        description: `Check base case: is low (${l}) >= high (${r})?`,
+        description: `Check base case: is (low = ${l} >= high = ${r})?`,
         codeLine: COND_LINE,
         phase: "condition-check",
         low: l,
@@ -189,65 +449,46 @@ export const mergeSort = {
         mid: { value: m, leftIndex: l, rightIndex: r },
       });
 
-
       // Left recursive call
-      const leftCallLow = l;
-      const leftCallHigh = m;
       steps.push({
         array: [...a],
         comparing: [],
         swapped: [],
-        description: `Call mergeSort(arr, low=${leftCallLow}, mid=${leftCallHigh})`,
+        description: `Call mergeSort(arr, low=${l}, mid=${m})`,
         codeLine: LEFT_CALL_LINE,
         phase: "call-left",
-        low: leftCallLow,
-        high: leftCallHigh,
+        low: l,
+        high: m,
       });
 
-      mergeSortRec(leftCallLow, leftCallHigh);
+      mergeSortRec(l, m);
 
-      steps.push({
-        array: [...a],
-        comparing: [],
-        swapped: [],
-        description: `Left complete: [${l}-${m}]`,
-        codeLine: LEFT_CALL_LINE - 2,
-        phase: "left-complete",
-      });
 
       // Right recursive call
-      const rightCallLow = m + 1;
-      const rightCallHigh = r;
       steps.push({
         array: [...a],
         comparing: [],
         swapped: [],
-        description: `Call mergeSort(arr, mid + 1 =${rightCallLow}, high=${rightCallHigh})`,
+        description: `Call mergeSort(arr, mid + 1 =${m + 1}, high=${r})`,
         codeLine: RIGHT_CALL_LINE,
         phase: "call-right",
-        low: rightCallLow,
-        high: rightCallHigh,
+        low: m + 1,
+        high: r,
       });
 
-      mergeSortRec(rightCallLow, rightCallHigh);
+      mergeSortRec(m + 1, r);
 
+     
+
+      // Announce the merge call
       steps.push({
         array: [...a],
         comparing: [],
         swapped: [],
-        description: `Right complete: [${m + 1}-${r}]`,
-        codeLine: RIGHT_CALL_LINE - 3,
-        phase: "right-complete",
-      });
-
-      // Merge call
-      steps.push({
-        array: [...a],
-        comparing: [],
-        swapped: [],
-        description: `Conquer: merge [${l}-${m}] & [${m + 1}-${r}]`,
+        description: `Call merge: (arr, ${l}, ${m}, ${r})`,
         codeLine: MERGE_CALL_LINE,
         phase: "conquer",
+        mergeRange: [l, r],
         mid: { value: m, leftIndex: l, rightIndex: r },
       });
 
@@ -293,30 +534,30 @@ export const mergeSort = {
     const lines = {
       javascript: [
         "function merge(arr, low, mid, high) {", //1
-        "        const tempArrayArray = [];", //2
+        "        const tempArray = [];", //2
         "        let left = low;", //3
         "        let right = mid + 1;", //4
         "", //5
         "        while (left <= mid && right <= high) {", //6
         "            if (arr[left] <= arr[right]) {", //7
-        "                tempArrayArray.push(arr[left]);", //8
+        "                tempArray.push(arr[left]);", //8
         "                left++;", //9
         "            }", //10
         "            else {", //11
-        "                tempArrayArray.push(arr[right]);", //12
+        "                tempArray.push(arr[right]);", //12
         "                right++;", //13
         "            }", //14
         "        }", //15
         "        while (left <= mid) {", //16
-        "            tempArrayArray.push(arr[left]);", //17
+        "            tempArray.push(arr[left]);", //17
         "            left++;", //18
         "        }", //19
         "        while (right <= high) {", //20
-        "            tempArrayArray.push(arr[right]);", //21
+        "            tempArray.push(arr[right]);", //21
         "            right++;", //22
         "        }", //23
         "        for (let i = low; i <= high; i++) {", //24
-        "            arr[i] = tempArrayArray[i - low];", //25
+        "            arr[i] = tempArray[i - low];", //25
         "        }", //26
         "    }", //27
         "", //28
@@ -331,30 +572,30 @@ export const mergeSort = {
       ],
       python: [
         "def merge(arr, low, mid, high):", //1
-        "        tempArrayArray = []", //2
+        "        tempArray = []", //2
         "        left = low", //3
         "        right = mid + 1", //4
         "", //5
         "        while left <= mid and right <= high:", //6
         "            if arr[left] <= arr[right]:", //7
-        "                tempArrayArray.append(arr[left])", //8
+        "                tempArray.append(arr[left])", //8
         "                left += 1", //9
         "", //10
         "            else:", //11
-        "                tempArrayArray.append(arr[right])", //12
+        "                tempArray.append(arr[right])", //12
         "                right += 1", //13
         "        ", //14
         "", //15
         "        while left <= mid:", //16
-        "            tempArrayArray.append(arr[left])", //17
+        "            tempArray.append(arr[left])", //17
         "            left += 1", //18
         "        ", //19
         "        while right <= high:", //20
-        "            tempArrayArray.append(arr[right])", //21
+        "            tempArray.append(arr[right])", //21
         "            right += 1", //22
         "        ", //23
         "        for i in range(low, high+1):", //24
-        "            arr[i] = tempArrayArray[i - low]", //25
+        "            arr[i] = tempArray[i - low]", //25
         "", //26
         "", //27
         "", //28
@@ -369,30 +610,30 @@ export const mergeSort = {
       ],
       cpp: [
         "void merge(vector<int> &arr, int low, int mid, int high) {", //1
-        "        vector<int> tempArrayArray;", //2
+        "        vector<int> tempArray;", //2
         "        int left = low;", //3
         "        int right = mid + 1;", //4
         "", //5
         "        while (left <= mid && right <= high){", //6
         "            if (arr[left] <= arr[right]) {", //7
-        "                tempArrayArray.push_back(arr[left]);", //8
+        "                tempArray.push_back(arr[left]);", //8
         "                left++;", //9
         "            }", //10
         "            else {", //11
-        "                tempArrayArray.push_back(arr[right]);", //12
+        "                tempArray.push_back(arr[right]);", //12
         "                right++;", //13
         "            }", //14
         "        }", //15
         "        while (left <= mid) {", //16
-        "            tempArrayArray.push_back(arr[left]);", //17
+        "            tempArray.push_back(arr[left]);", //17
         "            left++;", //18
         "        }", //19
         "        while (right <= high) {", //20
-        "            tempArrayArray.push_back(arr[right]);", //21
+        "            tempArray.push_back(arr[right]);", //21
         "            right++;", //22
         "        }", //23
         "        for (int i = low; i <= high; i++) {", //24
-        "            arr[i] = tempArrayArray[i - low];", //25
+        "            arr[i] = tempArray[i - low];", //25
         "        }", //26
         "    }", //27
         "", //28
@@ -407,30 +648,30 @@ export const mergeSort = {
       ],
       csharp: [
         "void merge(int[] arr, int low, int mid, int high) {", //1
-        "        List<int> tempArrayArray = new List<int>();", //2
+        "        List<int> tempArray = new List<int>();", //2
         "        int left = low;", //3
         "        int right = mid + 1;", //4
         "", //5
         "        while (left <= mid && right <= high) {", //6
         "            if (arr[left] <= arr[right]) {", //7
-        "               tempArrayArray.Add(arr[left]);", //8
+        "               tempArray.Add(arr[left]);", //8
         "                left++;", //9
         "            }", //10
         "            else {", //11
-        "                tempArrayArray.Add(arr[right]);", //12
+        "                tempArray.Add(arr[right]);", //12
         "                right++;", //13
         "            }", //14
         "        }", //15
         "        while (left <= mid) {", //16
-        "            tempArrayArray.Add(arr[left]);", //17
+        "            tempArray.Add(arr[left]);", //17
         "            left++;", //18
         "        }", //19
         "        while (right <= high) {", //20
-        "            tempArrayArray.Add(arr[right]);", //21
+        "            tempArray.Add(arr[right]);", //21
         "            right++;", //22
         "        }", //23
         "        for (int i = low; i <= high; i++) {", //24
-        "            arr[i] = tempArrayArray[i - low];", //25
+        "            arr[i] = tempArray[i - low];", //25
         "        }", //26
         "    }", //27
         "", //28
@@ -445,30 +686,30 @@ export const mergeSort = {
       ],
       java: [
         "void merge(int[] arr, int low, int mid, int high) {", //1
-        "        int[] tempArrayArray = new int[high - low + 1];", //2
+        "        int[] tempArray = new int[high - low + 1];", //2
         "        int left = low;", //3
         "        int right = mid + 1;", //4
         "", //5
         "        while (left <= mid && right <= high) {", //6
         "            if (arr[left] <= arr[right]) {", //7
-        "               tempArrayArray.add(arr[left]);", //8
+        "               tempArray.add(arr[left]);", //8
         "                left++;", //9
         "            }", //10
         "            else {", //11
-        "                tempArrayArray.add(arr[right]);", //12
+        "                tempArray.add(arr[right]);", //12
         "                right++;", //13
         "            }", //14
         "        }", //15
         "        while (left <= mid) {", //16
-        "            tempArrayArray.add(arr[left]);", //17
+        "            tempArray.add(arr[left]);", //17
         "            left++;", //18
         "        }", //19
         "        while (right <= high) {", //20
-        "            tempArrayArray.add(arr[right]);", //21
+        "            tempArray.add(arr[right]);", //21
         "            right++;", //22
         "        }", //23
         "        for (int i = low; i <= high; i++) {", //24
-        "            arr[i] = tempArrayArray[i - low];", //25
+        "            arr[i] = tempArray[i - low];", //25
         "        }", //26
         "    }", //27
         "", //28
@@ -487,18 +728,7 @@ export const mergeSort = {
   },
 
   getCode: (language) => {
-    // Build the preview code by joining the code lines defined in getCodeLines
-    // This ensures the preview text exactly matches the per-line highlighting
-    // and avoids duplication between getCodeLines and getCode.
-    const lines = (typeof mergeSort !== 'undefined' && mergeSort.getCodeLines)
-      ? mergeSort.getCodeLines(language)
-      : null;
-
-    const fallback = (typeof mergeSort !== 'undefined' && mergeSort.getCodeLines)
-      ? mergeSort.getCodeLines('javascript')
-      : [];
-
-    const chosen = (lines && lines.length) ? lines : fallback;
-    return chosen.join('\n');
+    const lines = mergeSort.getCodeLines(language);
+    return lines.join('\n');
   },
 };

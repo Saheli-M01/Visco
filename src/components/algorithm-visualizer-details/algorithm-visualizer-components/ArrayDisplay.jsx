@@ -49,6 +49,80 @@ const ArrayDisplay = ({
   // Get mid variable information
   let midObj = currentStep && currentStep.mid ? currentStep.mid : null; // { value, leftIndex, rightIndex }
 
+  // left/right variables used during merge helper
+  let leftVarObj =
+    currentStep && currentStep.leftVar ? currentStep.leftVar : null; // { value }
+  let rightVarObj =
+    currentStep && currentStep.rightVar
+      ? currentStep.rightVar
+      : currentStep && typeof currentStep.rightPtr === "number"
+      ? { value: currentStep.rightPtr }
+      : null; // { value }
+  // i variable used during copy-back / for-loops in merge helper
+  let iVarObj =
+    currentStep && currentStep.iVar
+      ? currentStep.iVar
+      : currentStep && typeof currentStep.i === "number"
+      ? { value: currentStep.i }
+      : currentStep && typeof currentStep.t === "number"
+      ? { value: currentStep.t }
+      : currentStep && currentStep.phase === "write" && currentStep.leftVar
+      ? { value: currentStep.leftVar.value }
+      : null;
+  // persist left/right across the merge steps (search earlier steps)
+  if (!leftVarObj && sortingSteps && sortingSteps.length > 0) {
+    for (let s = currentStepIndex - 1; s >= 0; s--) {
+      const st = sortingSteps[s];
+      if (st && st.leftVar) {
+        leftVarObj = st.leftVar;
+        break;
+      }
+    }
+  }
+  if (!rightVarObj && sortingSteps && sortingSteps.length > 0) {
+    for (let s = currentStepIndex - 1; s >= 0; s--) {
+      const st = sortingSteps[s];
+      if (!st) continue;
+      if (st.rightVar) {
+        rightVarObj = st.rightVar;
+        break;
+      }
+      if (typeof st.rightPtr === "number") {
+        rightVarObj = { value: st.rightPtr };
+        break;
+      }
+    }
+  }
+
+  // persist i variable (for the write / for-loop) across prior steps
+  if (!iVarObj && sortingSteps && sortingSteps.length > 0) {
+    for (let s = currentStepIndex - 1; s >= 0; s--) {
+      const st = sortingSteps[s];
+      if (!st) continue;
+      if (st.iVar) {
+        iVarObj = st.iVar;
+        break;
+      }
+      if (typeof st.i === "number") {
+        iVarObj = { value: st.i };
+        break;
+      }
+      if (typeof st.t === "number") {
+        iVarObj = { value: st.t };
+        break;
+      }
+      // if prior write steps used leftVar to indicate the write index, use that
+      if (
+        st.phase === "write" &&
+        st.leftVar &&
+        typeof st.leftVar.value === "number"
+      ) {
+        iVarObj = { value: st.leftVar.value };
+        break;
+      }
+    }
+  }
+
   // Compute a pass number for recursion entries so we can show 'Pass N'
   // Pass number is the count of previous 'function-entry' steps (including this one)
   let passNumber = null;
@@ -77,6 +151,11 @@ const ArrayDisplay = ({
   // left-complete/right-complete markers.
   const activeCallFrames = [];
   if (sortingSteps && sortingSteps.length > 0) {
+    // callCounter gives each call frame a monotonically increasing ordinal
+    // as we scan the steps. This ensures "Call N" increases across the trace
+    // (instead of being calculated from the current stack depth) and provides
+    // a stable React key for each frame.
+    let callCounter = 0;
     for (
       let i = 0;
       i <= Math.min(currentStepIndex, sortingSteps.length - 1);
@@ -92,11 +171,13 @@ const ArrayDisplay = ({
         st.phase === "call-right"
       ) {
         // snapshot low/mid/high for the call chip
+        callCounter += 1;
         activeCallFrames.push({
           kind: st.phase,
           low: st.low,
           mid: st.mid || null,
           high: st.high,
+          ord: callCounter,
         });
       } else if (
         st.phase === "calculate-mid" &&
@@ -125,6 +206,15 @@ const ArrayDisplay = ({
             activeCallFrames.splice(p, 1);
             break;
           }
+        }
+      } else if (st.phase === "base" || st.phase === "subarray-sorted") {
+        // Some generators omit explicit "left-complete"/"right-complete"
+        // markers and instead emit a "base" or "subarray-sorted" phase for
+        // completed calls. In that case, remove the most-recent call frame
+        // (the leaf) so the Call chips reflect the returned call. This
+        // preserves history when left/right-complete are not present.
+        if (activeCallFrames.length > 0) {
+          activeCallFrames.pop();
         }
       }
     }
@@ -206,6 +296,29 @@ const ArrayDisplay = ({
     selectedLanguage === "csharp" || selectedLanguage === "java";
   const isDone = currentStep && currentStep.phase === "completed";
   const showTempUI = !isDone && languageUsesTemp && !!tempObj;
+  // Merge-specific temp (visualized under the array) — persist until merge-complete
+  // Find the most recent step (<= currentStepIndex) that exposes a mergeRange
+  let mergeSnapshotStep = null;
+  if (sortingSteps && sortingSteps.length > 0) {
+    for (let s = currentStepIndex; s >= 0; s--) {
+      const st = sortingSteps[s];
+      // Only use a merge snapshot that actually belongs to the merge helper
+      // (exclude the pre-merge 'conquer' announcement step). This ensures the
+      // temp is shown starting at the in-merge 'form-temp' (or similar) step
+      // rather than at the earlier 'conquer' step.
+      if (st && st.mergeRange && st.phase && st.phase !== "conquer") {
+        mergeSnapshotStep = st;
+        break;
+      }
+    }
+  }
+  // show merge temp when we have a mergeSnapshotStep and it hasn't completed yet
+  const showMergeTemp = !!(
+    mergeSnapshotStep && mergeSnapshotStep.phase !== "merge-complete"
+  );
+  // Show left/right variables when present
+  const showLeftVar = !!leftVarObj && !isDone;
+  const showRightVar = !!rightVarObj && !isDone;
   // show key UI when a key object exists (insertion sort)
   const showKeyUI = !!keyObj;
   const tempValue = showTempUI ? tempObj.value : null;
@@ -217,6 +330,27 @@ const ArrayDisplay = ({
   const showMinUI = !isDone && !!minObj;
   const minIndex = showMinUI ? minObj.index : -1;
 
+  // Collect indices that have been fully merged (from merge-complete steps)
+  const mergedDoneIndices = new Set();
+  if (sortingSteps && sortingSteps.length > 0) {
+    for (let s = 0; s <= currentStepIndex; s++) {
+      const st = sortingSteps[s];
+      if (!st) continue;
+      if (st.phase === "merge-complete") {
+        if (
+          st.mergeRange &&
+          Array.isArray(st.mergeRange) &&
+          st.mergeRange.length === 2
+        ) {
+          const [ml, mh] = st.mergeRange;
+          for (let idx = ml; idx <= mh; idx++) mergedDoneIndices.add(idx);
+        } else if (Array.isArray(st.swapped) && st.swapped.length > 0) {
+          st.swapped.forEach((idx) => mergedDoneIndices.add(idx));
+        }
+      }
+    }
+  }
+
   // When the current step is a swap or swap_step phase, we prefer to
   // show Temp/Swapped visuals and hide the generic Comparing badge
   const isSwapPhase =
@@ -224,7 +358,7 @@ const ArrayDisplay = ({
     (currentStep.phase === "swap" || currentStep.phase === "swap_step");
   return (
     <div className="space-y-4 bg-gray-900 rounded-lg">
-      <div className="bg-code-bg rounded-lg p-8 min-h-[290px] flex items-center justify-center">
+      <div className="bg-code-bg rounded-lg p-3 min-h-[290px] flex items-center justify-center">
         <div className="flex flex-col items-center w-full">
           {/* Variables section - show temp, mid, or active call frames when appropriate */}
           {(showTempUI ||
@@ -232,7 +366,9 @@ const ArrayDisplay = ({
             showMinUI ||
             showKeyUI ||
             jObj ||
-            showCallUI) && (
+            showCallUI ||
+            showLeftVar ||
+            showRightVar) && (
             <div className="mb-4 flex items-center justify-center w-full gap-4">
               {/* Temp slot - only rendered for languages that use a temp (C/Java) and when appropriate */}
               {showTempUI && (
@@ -279,7 +415,7 @@ const ArrayDisplay = ({
               {/* j slot - insertion sort scanning pointer */}
               {jObj && (
                 <div
-                  className={`h-12 w-28 rounded-lg flex items-center justify-center font-medium bg-amber-300 text-gray-900 shadow-md`}
+                  className={`h-12 w-28 rounded-lg flex items-center justify-center font-medium bg-fuchsia-400 text-gray-900 shadow-md`}
                 >
                   <div className="text-center">
                     <div className="text-xs text-gray-700">j</div>
@@ -294,7 +430,7 @@ const ArrayDisplay = ({
               {showCallUI && (
                 <div className="flex items-end gap-3">
                   {activeCallFrames.map((frame, idx) => {
-                    const ord = idx + 1;
+                    const ord = frame.ord != null ? frame.ord : idx + 1;
                     // Prefer the frame's stored mid, otherwise if the current
                     // step is a mid calculation for the same low/high, use that
                     // so the mid appears under the correct Call chip while the
@@ -312,7 +448,7 @@ const ArrayDisplay = ({
                     const midR = frameMid ? frameMid.rightIndex : "-";
                     return (
                       <div
-                        key={`call-frame-${idx}`}
+                        key={`call-frame-${ord}`}
                         className="flex flex-col items-center"
                       >
                         <div className="h-12 min-w-[180px] px-3 rounded-lg flex flex-col items-center justify-center font-medium bg-emerald-300 text-gray-900 shadow-md">
@@ -359,14 +495,17 @@ const ArrayDisplay = ({
               const isPivot =
                 currentPivotIndex !== null && index === currentPivotIndex;
 
+              const isMergedDone = mergedDoneIndices.has(index);
               const baseClass = isComparing
                 ? "bg-indigo-400 text-white border-indigo-600 scale-110 animate-pulse"
                 : isSwapped
-                ? "bg-green-500 text-white border-green-400 scale-105"
+                ? "bg-teal-400 text-white border-teal-600 scale-105"
                 : isPivot
                 ? "bg-gray-600 text-white border-gray-400"
                 : inPartitionRange
                 ? "bg-orange-500 text-white border-orange-400"
+                : isMergedDone
+                ? "bg-yellow-200 text-gray-900 border-yellow-300"
                 : "bg-gray-700 text-white border-gray-600";
 
               return (
@@ -406,6 +545,110 @@ const ArrayDisplay = ({
               );
             })}
           </div>
+
+          {/* Merge temp array visualization (tempArray with left/right beside it) */}
+          {showMergeTemp &&
+            mergeSnapshotStep &&
+            (() => {
+              const [l, r] = mergeSnapshotStep.mergeRange;
+              const len = Math.max(0, r - l + 1);
+              if (len === 0) return null;
+
+              // Prefer a structured temp array field (tempArray) if present.
+              // Fallback to older keys used previously: tempSnapshot or temp.array.
+              let snapshot = null;
+              if (mergeSnapshotStep) {
+                if (Array.isArray(mergeSnapshotStep.tempArray)) {
+                  snapshot = mergeSnapshotStep.tempArray;
+                } else if (
+                  mergeSnapshotStep.tempSnapshot &&
+                  Array.isArray(mergeSnapshotStep.tempSnapshot)
+                ) {
+                  snapshot = mergeSnapshotStep.tempSnapshot;
+                } else if (
+                  mergeSnapshotStep.temp &&
+                  Array.isArray(mergeSnapshotStep.temp.array)
+                ) {
+                  snapshot = mergeSnapshotStep.temp.array;
+                }
+              }
+              // If no mergeSnapshotStep snapshot was found, also allow the
+              // current step to directly expose a tempArray for immediate display.
+              if (
+                !snapshot &&
+                currentStep &&
+                Array.isArray(currentStep.tempArray)
+              ) {
+                snapshot = currentStep.tempArray;
+              }
+
+              return (
+                <div className="mt-6 flex items-center justify-around gap-20 ">
+                  <div className="flex justify-around gap-4 ">
+                    {" "}
+                    {/* Left variable block */}
+                    {leftVarObj && (
+                      <div className="h-12 w-28 rounded-lg flex items-center justify-center font-medium bg-orange-300 text-gray-900 shadow-md">
+                        <div className="text-center">
+                          <div className="text-xs text-gray-700">left</div>
+                          <div className="text-lg font-bold">
+                            {leftVarObj.value != null ? leftVarObj.value : "-"}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {/* Temp Array */}
+                    <div className="flex flex-col items-center max-w-full min-h-14 h-auto px-3 py-1 bg-cyan-400 rounded-lg shadow-md">
+                      <div className="text-xs font-semibold text-gray-700">
+                        tempArray
+                      </div>
+                      {snapshot && (
+                        <div className="flex gap-2 mt-1 items-end">
+                          {snapshot.map((v, i) => (
+                            <div key={i} className="flex flex-col items-center">
+                              <div
+                                className="h-8 w-8 flex items-center justify-center bg-lime-200 text-gray-800 text-sm font-semibold rounded"
+                                title={`temp[${i}] = ${v}`}
+                              >
+                                {v}
+                              </div>
+                              <div className="text-xs text-gray-700 mt-1">
+                                {i}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    {/* Right variable block */}
+                    {rightVarObj && (
+                      <div className="h-12 w-28 rounded-lg flex items-center justify-center font-medium bg-orange-300 text-gray-900 shadow-md">
+                        <div className="text-center">
+                          <div className="text-xs text-gray-700">right</div>
+                          <div className="text-lg font-bold">
+                            {rightVarObj.value != null
+                              ? rightVarObj.value
+                              : "-"}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* i variable block (used during copy-back / for loops) */}
+                  {iVarObj && (
+                    <div className="h-12 w-28 rounded-lg flex items-center justify-center font-medium bg-rose-300 text-gray-900 shadow-md">
+                      <div className="text-center">
+                        <div className="text-xs text-gray-700">i</div>
+                        <div className="text-lg font-bold">
+                          {iVarObj.value != null ? iVarObj.value : "-"}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
 
           {/* Legend for ranges, mid, and pivot */}
           {(currentMergeRange ||

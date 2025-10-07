@@ -13,7 +13,7 @@ export const mergeSort = {
     const MID_LINE = 31;
     const LEFT_CALL_LINE = 32;
     const RIGHT_CALL_LINE = 33;
-    const MERGE_CALL_LINE = 26;
+    const MERGE_CALL_LINE = 34;
     const WHILE_END_LINE = 14;
 
     // Merge function lines (fixed)
@@ -130,23 +130,9 @@ export const mergeSort = {
             tempArray: [...tempArray],
           });
 
-          // If no remaining left, check right remainder
-          if (!(i < n1)) {
-            steps.push({
-              array: [...a],
-              comparing: [],
-              swapped: [],
-              description: `while (right <= high) — right=${mid + 1 + j}, high=${high}`,
-              codeLine: 20,
-              phase: "while-right-check",
-              mid: { value: mid, leftIndex: low, rightIndex: high },
-              leftPtr: low + i,
-              rightPtr: mid + 1 + j,
-              leftVar: { value: low + i },
-              rightVar: { value: mid + 1 + j },
-              tempArray: [...tempArray],
-            });
-          }
+          // If no remaining left, we will handle the right remainder after
+          // the left remainder loop completes — do not emit the right-check
+          // here to avoid creating a duplicate check step.
 
           break;
         }
@@ -174,7 +160,7 @@ export const mergeSort = {
             comparing: [],
             swapped: [],
             description: `tempArray.push(${L[i]})`,
-            codeLine: 8,
+            codeLine: 7,
             phase: "push-temp",
             mid: { value: mid, leftIndex: low, rightIndex: high },
             leftPtr: low + i,
@@ -189,7 +175,7 @@ export const mergeSort = {
             comparing: [],
             swapped: [],
             description: `left++ (move left pointer)`,
-            codeLine: 9,
+            codeLine: 8,
             phase: "increment-left",
             mid: { value: mid, leftIndex: low, rightIndex: high },
             leftPtr: low + i + 1,
@@ -316,7 +302,7 @@ export const mergeSort = {
           comparing: [],
           swapped: [],
           description: `tempArray.push(${R[j]}) (remainder from right)`,
-          codeLine: 21,
+          codeLine: 20,
           phase: "push-temp",
           mid: { value: mid, leftIndex: low, rightIndex: high },
           leftPtr: low + i,
@@ -331,7 +317,7 @@ export const mergeSort = {
           comparing: [],
           swapped: [],
           description: `right++ (move right pointer)`,
-          codeLine: 22,
+          codeLine: 21,
           phase: "increment-right",
           mid: { value: mid, leftIndex: low, rightIndex: high },
           leftPtr: low + i,
@@ -400,7 +386,7 @@ export const mergeSort = {
         comparing: [],
         swapped: mergedIndices,
         description: `Merged [${low}-${high}]`,
-        codeLine: MERGE_CALL_LINE,
+        codeLine: MERGE_CALL_LINE - 1,
         phase: "merge-complete",
         mergeRange: [low, high],
         mid: { value: mid, leftIndex: low, rightIndex: high },

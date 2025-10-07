@@ -284,6 +284,8 @@ const FullScreenModal = ({ isOpen, onClose, algorithm, topic }) => {
     const handleEscape = (e) => {
       if (e.key === "Escape") {
         handlePause();
+        // ensure visualization state is cleared when modal is closed via Escape
+        handleRefresh();
         onClose();
       }
     };
@@ -305,6 +307,15 @@ const FullScreenModal = ({ isOpen, onClose, algorithm, topic }) => {
       }
     };
   }, [isOpen, onClose, algorithm, executionInterval]);
+
+  // Ensure we clear visualization state when this component unmounts by any path
+  // (covers cases where parent hides the modal without invoking our onClose wrapper).
+  useEffect(() => {
+    return () => {
+      handleRefresh();
+    };
+    // empty deps so this runs only on unmount
+  }, []);
 
   // Handle pivot strategy changes during active Quick Sort visualization
   useEffect(() => {
@@ -752,7 +763,11 @@ const FullScreenModal = ({ isOpen, onClose, algorithm, topic }) => {
               activeTab={activeTab}
               handleTabChange={handleTabChange}
               handleRefresh={handleRefresh}
-              onClose={onClose}
+              onClose={() => {
+                // clear visualization state before delegating close to parent
+                handleRefresh();
+                if (onClose) onClose();
+              }}
             />
 
             {/* Tab Content */}

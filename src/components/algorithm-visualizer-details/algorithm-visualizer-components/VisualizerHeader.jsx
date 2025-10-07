@@ -30,7 +30,7 @@ const VisualizerHeader = ({
               },
               "& .MuiSelect-select": {
                 padding: "2px 12px",
-                fontSize: "0.875em",
+                fontSize: "1rem",
                 fontWeight: "600",
                 color: "#1f2937",
               },

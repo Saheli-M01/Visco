@@ -780,7 +780,7 @@ const FullScreenModal = ({ isOpen, onClose, algorithm, topic }) => {
               {/* Details Tab */}
               {activeTab === 1 && (
                 <div className="h-full overflow-y-auto bg-gradient-to-br from-white/10 to-white/20 backdrop-blur-sm custom-scrollbar">
-                  <div className="p-6 text-gray-900 max-w-full mx-auto">
+                  <div className="p-2 text-gray-900 max-w-full mx-auto">
                     <AlgorithmDetails
                       algorithm={selectedAlgorithm}
                       topic={topic}

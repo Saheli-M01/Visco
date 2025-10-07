@@ -609,7 +609,7 @@ const ArrayDisplay = ({
                   )}
 
                   <div
-                    className={`flex items-center justify-center h-16 px-4 rounded-lg font-bold text-lg transition-all duration-500 ease-in-out transform shadow-lg border-2 min-w-[60px] ${baseClass} `}
+                    className={`flex items-center justify-center h-12 px-4 rounded-lg font-bold text-lg transition-all duration-500 ease-in-out transform shadow-lg border-2 min-w-[60px] ${baseClass} `}
                   >
                     <span className="drop-shadow-lg">{value}</span>
                   </div>
@@ -656,7 +656,7 @@ const ArrayDisplay = ({
               }
 
               return (
-                <div className="mt-6 flex items-center justify-around gap-20 ">
+                <div className="mt-3 flex items-center justify-around gap-20 ">
                   <div className="flex justify-around gap-4 ">
                     {" "}
                     {leftVarObj && (

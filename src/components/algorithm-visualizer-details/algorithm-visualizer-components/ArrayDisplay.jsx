@@ -23,24 +23,47 @@ const ArrayDisplay = ({
 
   // Use structured temp field when available (preferred)
   let tempObj = currentStep && currentStep.temp ? currentStep.temp : null; // { value, index }
+
+  // If the current step lacks a temp, try to find the most recent temp from
+  // earlier steps but limit persistence to the current 'outer_loop' (pass)
+  // so we don't carry a temp across passes or after sorting completes.
+  if (!tempObj && sortingSteps && sortingSteps.length > 0) {
+    let outerLoopStart = -1;
+    for (let s = currentStepIndex; s >= 0; s--) {
+      const st = sortingSteps[s];
+      if (st && st.phase === "outer_loop") {
+        outerLoopStart = s;
+        break;
+      }
+    }
+    for (let s = currentStepIndex - 1; s > outerLoopStart; s--) {
+      const st = sortingSteps[s];
+      if (st && st.hasOwnProperty("temp") && st.temp) {
+        tempObj = st.temp;
+        break;
+      }
+    }
+  }
   // Use structured key field (insertion sort) when available
   let keyObj = currentStep && currentStep.key ? currentStep.key : null; // { value, index }
   // Use structured j field (insertion sort scanning pointer)
   let jObj = currentStep && currentStep.j ? currentStep.j : null; // { value, index }
 
-  // If the current step lacks a temp, try to find the most recent temp from
-  // earlier steps so the UI persists the temp once it's created (defensive).
-  if (!tempObj && sortingSteps && sortingSteps.length > 0) {
-    for (let s = currentStepIndex - 1; s >= 0; s--) {
-      if (sortingSteps[s] && sortingSteps[s].temp) {
-        tempObj = sortingSteps[s].temp;
-        break;
-      }
-    }
-  }
-
   // Get mid variable information
   let midObj = currentStep && currentStep.mid ? currentStep.mid : null; // { value, leftIndex, rightIndex }
+
+  
+
+  // Compute a pass number for recursion entries so we can show 'Pass N'
+  // Pass number is the count of previous 'function-entry' steps (including this one)
+  let passNumber = null;
+  if (sortingSteps && sortingSteps.length > 0 && currentStep) {
+    const upto = sortingSteps.slice(0, currentStepIndex + 1);
+    const entryCount = upto.filter((s) => s && s.phase === "function-entry").length;
+    if (entryCount > 0 && (currentStep.low !== undefined || midObj || currentStep.high !== undefined)) {
+      passNumber = entryCount;
+    }
+  }
 
   // Get minIndex information (selection sort). Generators emit a 'min_update' phase
   // and place the min index inside comparing: [minIndex]. We prefer an explicit
@@ -86,8 +109,8 @@ const ArrayDisplay = ({
     }
   }
 
-  // If the current step lacks a mid, try to find the most recent mid from
-  // earlier steps so the UI persists the mid once it's calculated.
+
+   // earlier steps so the UI persists the mid once it's calculated.
   if (!midObj && sortingSteps && sortingSteps.length > 0) {
     for (let s = currentStepIndex - 1; s >= 0; s--) {
       if (sortingSteps[s] && sortingSteps[s].mid) {
@@ -101,26 +124,19 @@ const ArrayDisplay = ({
   // and a temp object exists (either on this step or persisted from prior steps).
   const languageUsesTemp =
     selectedLanguage === "csharp" || selectedLanguage === "java";
-  const showTempUI = languageUsesTemp && !!tempObj;
+  const isDone = currentStep && currentStep.phase === "completed";
+  const showTempUI = !isDone && languageUsesTemp && !!tempObj;
   // show key UI when a key object exists (insertion sort)
   const showKeyUI = !!keyObj;
   const tempValue = showTempUI ? tempObj.value : null;
-  const tempIndex = showTempUI ? tempObj.index : -1;
-
-  const keyIndex = showKeyUI && keyObj ? keyObj.index : -1;
-  const keyValue = showKeyUI && keyObj ? keyObj.value : null;
   const jIndex = jObj ? jObj.index : -1;
-  const jValue = jObj ? jObj.value : null;
-
   // Show mid UI when mid calculation is relevant (merge sort algorithm)
   const showMidUI = !!midObj;
   const midValue = showMidUI ? midObj.value : null;
   const midLeftIndex = showMidUI ? midObj.leftIndex : -1;
   const midRightIndex = showMidUI ? midObj.rightIndex : -1;
-
   // Show min UI when selection-sort has a min index
-  const showMinUI = !!minObj;
-  const minValue = showMinUI ? minObj.value : null;
+  const showMinUI = !isDone && !!minObj;
   const minIndex = showMinUI ? minObj.index : -1;
 
   // When the current step is a swap or swap_step phase, we prefer to
@@ -192,6 +208,16 @@ const ArrayDisplay = ({
               )}
 
               {/* Mid slot - shown during merge sort operations */}
+              {passNumber && (
+                <div className="flex flex-col items-center">
+                  <div className="h-12 min-w-[180px] px-3 rounded-lg flex items-center justify-center font-medium bg-sky-300 text-gray-900 shadow-md">
+                    <div className="text-sm font-mono truncate">
+                      {`Pass ${passNumber}: low=${currentStep.low ?? "-"}, mid=${midObj ? midObj.value : "-"}, high=${currentStep.high ?? "-"}`}
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {showMidUI && (
                 <div
                   className={`h-12 w-auto px-3 rounded-lg flex items-center justify-center font-medium bg-purple-300 text-gray-900 shadow-md`}

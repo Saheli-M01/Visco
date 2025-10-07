@@ -152,15 +152,38 @@ export const selectionSort = {
       }
     }
 
-    // propagate temp for C/Java
-  const languageUsesTemp = language === "c" || language === "java" || language === "csharp";
+    // propagate temp for C/Java but limit propagation to within each outer_loop pass
+    const languageUsesTemp = language === "java" || language === "csharp";
     if (languageUsesTemp) {
-      let lastTemp = null;
+      // collect indices where a new outer_loop/pass starts
+      const outerStarts = [];
       for (let k = 0; k < steps.length; k++) {
-        if (steps[k].hasOwnProperty("temp")) {
-          if (steps[k].temp) lastTemp = steps[k].temp;
-        } else {
-          if (lastTemp) steps[k].temp = lastTemp;
+        if (steps[k] && steps[k].phase === "outer_loop") outerStarts.push(k);
+      }
+
+      if (outerStarts.length === 0) {
+        // fallback: propagate as before if no outer_loop markers found
+        let lastTemp = null;
+        for (let k = 0; k < steps.length; k++) {
+          if (steps[k].hasOwnProperty("temp")) {
+            if (steps[k].temp) lastTemp = steps[k].temp;
+          } else {
+            if (lastTemp) steps[k].temp = lastTemp;
+          }
+        }
+      } else {
+        // For each pass segment, propagate temp only inside that segment
+        for (let seg = 0; seg < outerStarts.length; seg++) {
+          const start = outerStarts[seg];
+          const end = seg + 1 < outerStarts.length ? outerStarts[seg + 1] : steps.length;
+          let lastTemp = null;
+          for (let k = start; k < end; k++) {
+            if (steps[k].hasOwnProperty("temp")) {
+              if (steps[k].temp) lastTemp = steps[k].temp;
+            } else {
+              if (lastTemp) steps[k].temp = lastTemp;
+            }
+          }
         }
       }
     }

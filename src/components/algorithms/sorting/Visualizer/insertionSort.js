@@ -168,9 +168,7 @@ export const insertionSort = {
           phase: 'completed',
         };
 
-        // preserve previous variables so the UI can continue to display them
-        if (lastKey) completedStep.key = lastKey;
-        if (lastJ) completedStep.j = lastJ;
+     
 
         steps.push(completedStep);
       }

@@ -46,11 +46,11 @@ const AlgorithmVisualization = ({
 }) => {
   return (
     <div className="h-full bg-gradient-to-br from-white/20 to-white/40 backdrop-blur-sm custom-scrollbar overflow-y-auto">
-      <div className="p-4 space-y-3">
+      <div className="px-4 py-1 space-y-3">
         {/* New Layout - Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
           {/* Left Column - 4/5 width */}
-          <div className="lg:col-span-4 space-y-3">
+          <div className="lg:col-span-4 space-y-1">
             {/* First Row - Code Preview and Step History */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
               <CodePreview

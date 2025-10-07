@@ -5,10 +5,7 @@ const ArrayDisplay = ({
   comparingIndices = [],
   sortingSteps = [],
   currentStepIndex = 0,
-  currentCodeLine = -1,
   selectedLanguage = "javascript" || "csharp",
-  tempLineIndex = -1,
-  languageHasTemp = false,
 }) => {
   const currentStep = sortingSteps[currentStepIndex] || {};
   const currentMergeRange = currentStep.mergeRange || null;
@@ -52,18 +49,102 @@ const ArrayDisplay = ({
   // Get mid variable information
   let midObj = currentStep && currentStep.mid ? currentStep.mid : null; // { value, leftIndex, rightIndex }
 
-  
-
   // Compute a pass number for recursion entries so we can show 'Pass N'
   // Pass number is the count of previous 'function-entry' steps (including this one)
   let passNumber = null;
   if (sortingSteps && sortingSteps.length > 0 && currentStep) {
     const upto = sortingSteps.slice(0, currentStepIndex + 1);
-    const entryCount = upto.filter((s) => s && s.phase === "function-entry").length;
-    if (entryCount > 0 && (currentStep.low !== undefined || midObj || currentStep.high !== undefined)) {
+    const entryCount = upto.filter(
+      (s) => s && s.phase === "function-entry"
+    ).length;
+    if (
+      entryCount > 0 &&
+      (currentStep.low !== undefined ||
+        midObj ||
+        currentStep.high !== undefined)
+    ) {
       passNumber = entryCount;
     }
   }
+
+  // Build an active call stack for mergeSort calls so we can render persistent,
+  // stacked "Call N" chips that remain until their corresponding return.
+  // Algorithm: scan steps from the start up to the current step. Push a frame when
+  // we see a 'call-left' or 'call-right'. Pop the most-recent matching frame when
+  // we see a 'left-complete' or 'right-complete'. This keeps active frames in
+  // order of creation (Call 1..N). We deliberately avoid popping on internal
+  // 'base' steps because the parent signals the child's completion via the
+  // left-complete/right-complete markers.
+  const activeCallFrames = [];
+  if (sortingSteps && sortingSteps.length > 0) {
+    for (
+      let i = 0;
+      i <= Math.min(currentStepIndex, sortingSteps.length - 1);
+      i++
+    ) {
+      const st = sortingSteps[i];
+      if (!st || !st.phase) continue;
+      // Treat the initial 'start' step as the first call frame as well
+      // so the initial mergeSort(arr, 0, n-1) appears as Call 1.
+      if (
+        st.phase === "start" ||
+        st.phase === "call-left" ||
+        st.phase === "call-right"
+      ) {
+        // snapshot low/mid/high for the call chip
+        activeCallFrames.push({
+          kind: st.phase,
+          low: st.low,
+          mid: st.mid || null,
+          high: st.high,
+        });
+      } else if (
+        st.phase === "calculate-mid" &&
+        st.low !== undefined &&
+        st.high !== undefined
+      ) {
+        for (let p = activeCallFrames.length - 1; p >= 0; p--) {
+          const frame = activeCallFrames[p];
+          if (frame.low === st.low && frame.high === st.high) {
+            frame.mid = st.mid; // persist mid inside frame
+            break;
+          }
+        }
+      } else if (st.phase === "left-complete") {
+        // pop the most recent call-left frame
+        for (let p = activeCallFrames.length - 1; p >= 0; p--) {
+          if (activeCallFrames[p].kind === "call-left") {
+            activeCallFrames.splice(p, 1);
+            break;
+          }
+        }
+      } else if (st.phase === "right-complete") {
+        // pop the most recent call-right frame
+        for (let p = activeCallFrames.length - 1; p >= 0; p--) {
+          if (activeCallFrames[p].kind === "call-right") {
+            activeCallFrames.splice(p, 1);
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  // Also consider the explicit 'start' step: if the generator emitted a 'start'
+  // step and the currentStepIndex has reached it, we should show the root
+  // call chip immediately (this makes the Call 1 card appear when the
+  // Initial call step is visible in step history).
+  const startStepIndex =
+    sortingSteps && sortingSteps.length > 0
+      ? sortingSteps.findIndex((s) => s && s.phase === "start")
+      : -1;
+  const seenStart = startStepIndex !== -1 && startStepIndex <= currentStepIndex;
+
+  // Show Call UI when there is at least one active call frame or we've
+  // reached the 'start' step, but do not show on the final 'completed' phase.
+  const showCallUI =
+    (activeCallFrames.length > 0 || seenStart) &&
+    !(currentStep && currentStep.phase === "completed");
 
   // Get minIndex information (selection sort). Generators emit a 'min_update' phase
   // and place the min index inside comparing: [minIndex]. We prefer an explicit
@@ -109,8 +190,7 @@ const ArrayDisplay = ({
     }
   }
 
-
-   // earlier steps so the UI persists the mid once it's calculated.
+  // earlier steps so the UI persists the mid once it's calculated.
   if (!midObj && sortingSteps && sortingSteps.length > 0) {
     for (let s = currentStepIndex - 1; s >= 0; s--) {
       if (sortingSteps[s] && sortingSteps[s].mid) {
@@ -132,9 +212,7 @@ const ArrayDisplay = ({
   const jIndex = jObj ? jObj.index : -1;
   // Show mid UI when mid calculation is relevant (merge sort algorithm)
   const showMidUI = !!midObj;
-  const midValue = showMidUI ? midObj.value : null;
-  const midLeftIndex = showMidUI ? midObj.leftIndex : -1;
-  const midRightIndex = showMidUI ? midObj.rightIndex : -1;
+
   // Show min UI when selection-sort has a min index
   const showMinUI = !isDone && !!minObj;
   const minIndex = showMinUI ? minObj.index : -1;
@@ -148,8 +226,13 @@ const ArrayDisplay = ({
     <div className="space-y-4 bg-gray-900 rounded-lg">
       <div className="bg-code-bg rounded-lg p-8 min-h-[290px] flex items-center justify-center">
         <div className="flex flex-col items-center w-full">
-          {/* Variables section - show temp and mid when appropriate */}
-          {(showTempUI || showMidUI || showMinUI || showKeyUI || jObj) && (
+          {/* Variables section - show temp, mid, or active call frames when appropriate */}
+          {(showTempUI ||
+            showMidUI ||
+            showMinUI ||
+            showKeyUI ||
+            jObj ||
+            showCallUI) && (
             <div className="mb-4 flex items-center justify-center w-full gap-4">
               {/* Temp slot - only rendered for languages that use a temp (C/Java) and when appropriate */}
               {showTempUI && (
@@ -207,30 +290,53 @@ const ArrayDisplay = ({
                 </div>
               )}
 
-              {/* Mid slot - shown during merge sort operations */}
-              {passNumber && (
-                <div className="flex flex-col items-center">
-                  <div className="h-12 min-w-[180px] px-3 rounded-lg flex items-center justify-center font-medium bg-sky-300 text-gray-900 shadow-md">
-                    <div className="text-sm font-mono truncate">
-                      {`Pass ${passNumber}: low=${currentStep.low ?? "-"}, mid=${midObj ? midObj.value : "-"}, high=${currentStep.high ?? "-"}`}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {showMidUI && (
-                <div
-                  className={`h-12 w-auto px-3 rounded-lg flex items-center justify-center font-medium bg-purple-300 text-gray-900 shadow-md`}
-                >
-                  <div className="text-center">
-                    <div className="text-xs text-gray-700">
-                      Mid = {midLeftIndex} + ({midRightIndex} - {midLeftIndex})
-                      / 2
-                    </div>
-                    <div className="text-lg font-semibold">
-                      = {midValue != null ? midValue : "-"}
-                    </div>
-                  </div>
+              {/* Call chips - render all active frames left -> right so stacks persist until popped */}
+              {showCallUI && (
+                <div className="flex items-end gap-3">
+                  {activeCallFrames.map((frame, idx) => {
+                    const ord = idx + 1;
+                    // Prefer the frame's stored mid, otherwise if the current
+                    // step is a mid calculation for the same low/high, use that
+                    // so the mid appears under the correct Call chip while the
+                    // calculate-mid step is active.
+                    const frameMid =
+                      frame.mid ||
+                      (currentStep &&
+                      currentStep.phase === "calculate-mid" &&
+                      currentStep.low === frame.low &&
+                      currentStep.high === frame.high
+                        ? currentStep.mid
+                        : null);
+                    const midVal = frameMid ? frameMid.value : "-";
+                    const midL = frameMid ? frameMid.leftIndex : "-";
+                    const midR = frameMid ? frameMid.rightIndex : "-";
+                    return (
+                      <div
+                        key={`call-frame-${idx}`}
+                        className="flex flex-col items-center"
+                      >
+                        <div className="h-12 min-w-[180px] px-3 rounded-lg flex flex-col items-center justify-center font-medium bg-emerald-300 text-gray-900 shadow-md">
+                          <div className="text-sm font-semibold truncate">
+                            {`Call ${ord}: `}
+                          </div>
+                          <div className="text-sm font-mono truncate">{`low=${
+                            frame.low ?? "-"
+                          },  high=${frame.high ?? "-"}`}</div>
+                        </div>
+                        {frameMid && (
+                          <div className="mt-1 h-auto min-w-[120px] px-2 rounded-md flex flex-col items-start justify-center font-medium bg-purple-300 text-gray-900 shadow-sm">
+                            <div className="text-sm font-semibold w-full text-center">{`mid`}</div>
+                            <div className="text-sm font-mono">
+                              {`= ${midL} + (${midR} - ${midL}) / 2 `}
+                            </div>
+                            <div className="text-sm font-mono">
+                              {`= ${midVal}`}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -309,16 +415,6 @@ const ArrayDisplay = ({
             currentPivotIndex !== null ||
             showMidUI) && (
             <div className="mt-6 flex gap-2 items-center flex-wrap justify-center">
-              {currentLeftRange && (
-                <div className="text-xs px-2 py-1 rounded-full bg-indigo-100 text-indigo-800">
-                  Left: {currentLeftRange[0]}-{currentLeftRange[1]}
-                </div>
-              )}
-              {currentRightRange && (
-                <div className="text-xs px-2 py-1 rounded-full bg-pink-100 text-pink-800">
-                  Right: {currentRightRange[0]}-{currentRightRange[1]}
-                </div>
-              )}
               {currentPartitionRange && (
                 <div className="text-xs px-2 py-1 rounded-full bg-orange-100 text-orange-800">
                   Partition: {currentPartitionRange[0]}-
@@ -334,12 +430,6 @@ const ArrayDisplay = ({
                         ? `index ${currentPivotStrategy}`
                         : currentPivotStrategy
                     })`}
-                </div>
-              )}
-
-              {currentMergeRange && (
-                <div className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-800">
-                  Merging: {currentMergeRange[0]}-{currentMergeRange[1]}
                 </div>
               )}
             </div>

@@ -140,16 +140,16 @@ export const mergeSort = {
 
     function mergeSortRec(l, r) {
       // Entry to recursion - highlight function header
-      steps.push({
-        array: [...a],
-        comparing: [],
-        swapped: [],
-        description: `Enter mergeSort(arr, low=${l}, high=${r})`,
-        codeLine: HEADER_LINE,
-        phase: "function-entry",
-        low: l,
-        high: r,
-      });
+      // steps.push({
+      //   array: [...a],
+      //   comparing: [],
+      //   swapped: [],
+      //   description: `Enter mergeSort(arr, low=${l}, high=${r})`,
+      //   codeLine: HEADER_LINE,
+      //   phase: "function-entry",
+      //   low: l,
+      //   high: r,
+      // });
 
       // Base-case check
       steps.push({
@@ -202,7 +202,6 @@ export const mergeSort = {
         phase: "call-left",
         low: leftCallLow,
         high: leftCallHigh,
-        mid: { value: m, leftIndex: l, rightIndex: r },
       });
 
       mergeSortRec(leftCallLow, leftCallHigh);
@@ -228,7 +227,6 @@ export const mergeSort = {
         phase: "call-right",
         low: rightCallLow,
         high: rightCallHigh,
-        mid: { value: m, leftIndex: l, rightIndex: r },
       });
 
       mergeSortRec(rightCallLow, rightCallHigh);

@@ -447,7 +447,7 @@ const ArrayDisplay = ({
     (currentStep.phase === "swap" || currentStep.phase === "swap_step");
 
   return (
-    <div className="space-y-4 bg-gray-900 rounded-lg">
+    <div className="space-y-4 bg-gray-900 rounded-lg min-h-[50vh]">
       <div className="bg-code-bg rounded-lg p-1 min-h-[290px] flex items-center justify-center">
         <div className="flex flex-col items-center w-full">
           {(showTempUI ||
@@ -526,12 +526,13 @@ const ArrayDisplay = ({
                     const midVal = frameMid ? frameMid.value : "-";
                     const midL = frameMid ? frameMid.leftIndex : "-";
                     const midR = frameMid ? frameMid.rightIndex : "-";
+                    const isLatest = idx === activeCallFrames.length - 1;
                     return (
                       <div
                         key={`call-frame-${ord}`}
                         className="flex flex-col items-center"
                       >
-                        <div className="h-12 min-w-[180px] px-3 rounded-lg flex flex-col items-center justify-center font-medium bg-emerald-300 text-gray-900 shadow-md">
+                        <div className={`h-12 min-w-[180px] px-3 rounded-lg flex flex-col items-center justify-center font-medium bg-emerald-300 text-gray-900 shadow-md ${isLatest ? 'animate-pulse' : ''}`}>
                           <div className="text-sm font-semibold truncate">
                             {`Call ${ord}: `}
                           </div>
@@ -656,13 +657,13 @@ const ArrayDisplay = ({
               }
 
               return (
-                <div className="mt-3 flex items-center justify-around gap-20 ">
-                  <div className="flex justify-around gap-4 ">
-                    {" "}
+             <div className="mt-3 flex items-center justify-between w-full px-8">
+                  <div className="flex-1"></div>
+                  <div className="flex justify-center gap-4">
                     {leftVarObj && (
                       <div className="h-12 w-28 rounded-lg flex items-center justify-center font-medium bg-orange-300 text-gray-900 shadow-md">
                         <div className="text-center">
-                          <div className="text-xs text-gray-700">left</div>
+                          <div className="text-xs text-gray-700 font-semibold">left</div>
                           <div className="text-lg font-bold">
                             {leftVarObj.value != null ? leftVarObj.value : "-"}
                           </div>
@@ -694,7 +695,7 @@ const ArrayDisplay = ({
                     {rightVarObj && (
                       <div className="h-12 w-28 rounded-lg flex items-center justify-center font-medium bg-orange-300 text-gray-900 shadow-md">
                         <div className="text-center">
-                          <div className="text-xs text-gray-700">right</div>
+                          <div className="text-xs text-gray-700 font-semibold">right</div>
                           <div className="text-lg font-bold">
                             {rightVarObj.value != null
                               ? rightVarObj.value
@@ -704,17 +705,18 @@ const ArrayDisplay = ({
                       </div>
                     )}
                   </div>
-
-                  {iVarObj && (
-                    <div className="h-12 w-28 rounded-lg flex items-center justify-center font-medium bg-rose-300 text-gray-900 shadow-md">
-                      <div className="text-center">
-                        <div className="text-xs text-gray-700">i</div>
-                        <div className="text-lg font-bold">
-                          {iVarObj.value != null ? iVarObj.value : "-"}
+                  <div className="flex-1 flex justify-end">
+                    {iVarObj && (
+                      <div className="h-12 w-28 rounded-lg flex items-center justify-center font-medium bg-rose-300 text-gray-900 shadow-md">
+                        <div className="text-center">
+                          <div className="text-xs text-gray-700 font-semibold">i</div>
+                          <div className="text-lg font-bold">
+                            {iVarObj.value != null ? iVarObj.value : "-"}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               );
             })()}

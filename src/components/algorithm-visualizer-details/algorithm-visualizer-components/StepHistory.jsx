@@ -30,31 +30,34 @@ const StepHistory = ({
       : 0;
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 h-full flex flex-col">
       {/* Step History */}
-      <div className="border border-gray-300 bg-white rounded-xl py-2 px-4">
-        <h3 className="text-lg font-semibold text-foreground mb-1">
-          Step History
-        </h3>
-        {/* Progress Bar */}
-       <div className="bg-white rounded-xl px-4 flex items-center justify-between gap-3">
-  <div className="w-full bg-gray-300 rounded-full h-2 shadow-inner">
-    <div
-      className="bg-gradient-to-r from-gray-600 to-gray-800 h-2 rounded-full transition-all duration-300 shadow-sm"
-      style={{ width: `${progress}%` }}
-    />
-  </div>
-  <span className="ml-2 text-[0.8rem] font-medium text-gray-700 whitespace-nowrap">
-    {sortingSteps.length > 0
-      ? `${currentStepIndex + 1} / ${sortingSteps.length}`
-      : `0 / 0`}
-  </span>
-</div>
+      <div className="border border-gray-300 bg-white rounded-xl py-2 px-4 flex flex-col h-[38vh]">
+        <div className="flex items-center justify-between mb-1 gap-5">
+          <h3 className="text-lg font-semibold text-foreground m-0">
+            Steps
+          </h3>
+
+          {/* Progress Bar to the right of the heading */}
+          <div className="flex items-center gap-3 flex-1 ml-4">
+            <div className="w-full bg-gray-300 rounded-full h-1.5 shadow-inner">
+              <div
+                className="bg-gradient-to-r from-gray-600 to-gray-800 h-1.5 rounded-full transition-all duration-300 shadow-sm"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <span className="ml-2 text-[0.7rem] font-medium text-gray-700 whitespace-nowrap">
+              {sortingSteps.length > 0
+                ? `${currentStepIndex + 1} / ${sortingSteps.length}`
+                : `0 / 0`}
+            </span>
+          </div>
+        </div>
 
         {/* main steps */}
         <div
           ref={stepHistoryRef}
-          className="space-y-2 h-48 overflow-y-auto custom-scrollbar"
+          className="space-y-2 overflow-y-auto custom-scrollbar flex-1 min-h-0"
         >
           {stepHistory.length === 0 ? (
             <div className="flex items-center justify-center h-full">
@@ -69,10 +72,10 @@ const StepHistory = ({
               <div
                 key={index}
                 ref={currentStepIndex === step.step ? currentStepRef : null}
-                className={`p-3 rounded-lg transition-all cursor-pointer shadow-md border ${
+                className={`px-3 py-1 rounded-lg transition-all cursor-pointer  border border-gray-300 ${
                   currentStepIndex === step.step
-                    ? "bg-indigo-400/30 text-white border-border/60 shadow-lg "
-                    : "bg-card/30 border-border/40 hover:bg-card/40 text-foreground hover:shadow-lg"
+                    ? "bg-indigo-400/30 text-white border-border/60 shadow-md "
+                    : "bg-card/30 border-border/40 hover:bg-card/40 text-foreground"
                 }`}
                 onClick={() => {
                   if (isVisualizationActive && sortingSteps[step.step]) {
@@ -197,7 +200,7 @@ const StepHistory = ({
                   {step.array.map((num, i) => (
                     <span
                       key={i}
-                      className={`px-2 py-1 rounded text-xs font-medium shadow-sm ${
+                      className={`px-2 py-1 rounded text-xs font-medium  ${
                         currentStepIndex === step.step
                           ? "bg-foreground/70 text-foreground-inverse"
                           : "bg-card/30 text-foreground border border-border"

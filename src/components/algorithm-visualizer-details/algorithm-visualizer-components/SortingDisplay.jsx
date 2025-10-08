@@ -9,8 +9,7 @@ const ArrayDisplay = ({
 }) => {
   const currentStep = sortingSteps[currentStepIndex] || {};
   const currentMergeRange = currentStep.mergeRange || null;
-  const currentLeftRange = currentStep.leftRange || null;
-  const currentRightRange = currentStep.rightRange || null;
+
 
   // helper to compare merge ranges
   const rangeMatches = (a, b) => {
@@ -19,13 +18,26 @@ const ArrayDisplay = ({
     return a[0] === b[0] && a[1] === b[1];
   };
 
+  // helper to parse an index value from a description like "i = 3" or "j = 2"
+  const parseIndexFromDesc = (desc, key) => {
+    if (!desc || typeof desc !== "string") return null;
+    const re = new RegExp(`${key}\\s*=\\s*(\\d+)`);
+    const m = desc.match(re);
+    if (m && m[1]) return Number(m[1]);
+    return null;
+  };
+
   // ============================================================================
   // QUICK SORT SPECIFIC RANGES AND PIVOT
   // ============================================================================
   const currentPartitionRange = currentStep.partitionRange || null;
+  // Accept both partition-emitted "pivotIndex" and quickRec-emitted "pIndex"
   const currentPivotIndex =
-    currentStep.pivotIndex !== undefined ? currentStep.pivotIndex : null;
-  const currentPivotStrategy = currentStep.pivotStrategy || null;
+    currentStep.pIndex !== undefined
+      ? currentStep.pIndex
+      : currentStep.pivotIndex !== undefined
+      ? currentStep.pivotIndex
+      : null;
 
   // ============================================================================
   // USE STRUCTURED TEMP FIELD WHEN AVAILABLE (PREFERRED)
@@ -55,6 +67,12 @@ const ArrayDisplay = ({
     }
   }
 
+  // ---------------------------------------------------------------------------
+  // NOTE: previously a lookahead here attempted to access activeCallFrames
+  // before it was declared, causing a runtime ReferenceError (TDZ). The
+  // lookahead logic is moved below, after activeCallFrames is constructed.
+  // ---------------------------------------------------------------------------
+
   // ============================================================================
   // USE STRUCTURED KEY FIELD (INSERTION SORT) WHEN AVAILABLE
   // ============================================================================
@@ -64,6 +82,48 @@ const ArrayDisplay = ({
   // USE STRUCTURED J FIELD (INSERTION SORT SCANNING POINTER)
   // ============================================================================
   let jObj = currentStep && currentStep.j ? currentStep.j : null; // { value, index }
+
+  // ============================================================================
+  // BUBBLE-SORT: derive outer-loop `i` and inner-loop `j` when generator does
+  // not emit structured fields. We prefer structured fields but fall back to
+  // parsing the human-readable description or using comparing indices.
+  // ============================================================================
+  let bubbleIObj = null; // { value }
+  let bubbleJObj = null; // { value }
+  if (sortingSteps && sortingSteps.length > 0) {
+    // 1) Current step may itself be an outer_loop/inner_loop with description "i = X"/"j = Y"
+    if (currentStep && currentStep.phase === "outer_loop") {
+      const parsed = parseIndexFromDesc(currentStep.description, "i");
+      if (parsed !== null) bubbleIObj = { value: parsed };
+    }
+    if (currentStep && currentStep.phase === "inner_loop") {
+      const parsed = parseIndexFromDesc(currentStep.description, "j");
+      if (parsed !== null) bubbleJObj = { value: parsed };
+    }
+
+    // 2) A comparison step carries the j index in comparing[0]
+    if (!bubbleJObj && currentStep && Array.isArray(currentStep.comparing) && currentStep.comparing.length > 0) {
+      const cand = currentStep.comparing[0];
+      if (typeof cand === "number") bubbleJObj = { value: cand };
+    }
+
+    // 3) Walk backwards to find the most recent outer_loop/inner_loop step
+    if ((!bubbleIObj || !bubbleJObj) && sortingSteps && sortingSteps.length > 0) {
+      for (let s = currentStepIndex; s >= 0; s--) {
+        const st = sortingSteps[s];
+        if (!st) continue;
+        if (!bubbleIObj && st.phase === "outer_loop") {
+          const parsed = parseIndexFromDesc(st.description, "i");
+          if (parsed !== null) bubbleIObj = { value: parsed };
+        }
+        if (!bubbleJObj && st.phase === "inner_loop") {
+          const parsed = parseIndexFromDesc(st.description, "j");
+          if (parsed !== null) bubbleJObj = { value: parsed };
+        }
+        if (bubbleIObj && bubbleJObj) break;
+      }
+    }
+  }
 
   // ============================================================================
   // GET MID VARIABLE INFORMATION
@@ -115,6 +175,10 @@ const ArrayDisplay = ({
     }
   }
 
+  // Ensure activeCallFrames exists early to avoid any accidental lookahead
+  // reading it before initialization (prevents TDZ ReferenceError).
+  let activeCallFrames = [];
+
   // ============================================================================
   // PERSIST LEFT/RIGHT ACROSS MERGE STEPS (SEARCH EARLIER STEPS)
   // ============================================================================
@@ -123,7 +187,11 @@ const ArrayDisplay = ({
       const st = sortingSteps[s];
       if (!st) continue;
       // stop once we reach a step that belongs to a different merge
-      if (st.mergeRange && effectiveMergeRange && !rangeMatches(st.mergeRange, effectiveMergeRange)) {
+      if (
+        st.mergeRange &&
+        effectiveMergeRange &&
+        !rangeMatches(st.mergeRange, effectiveMergeRange)
+      ) {
         break;
       }
       if (st.leftVar) {
@@ -142,7 +210,11 @@ const ArrayDisplay = ({
       const st = sortingSteps[s];
       if (!st) continue;
       // stop once we reach a step that belongs to a different merge
-      if (st.mergeRange && effectiveMergeRange && !rangeMatches(st.mergeRange, effectiveMergeRange)) {
+      if (
+        st.mergeRange &&
+        effectiveMergeRange &&
+        !rangeMatches(st.mergeRange, effectiveMergeRange)
+      ) {
         break;
       }
       if (st.rightVar) {
@@ -164,7 +236,11 @@ const ArrayDisplay = ({
       const st = sortingSteps[s];
       if (!st) continue;
       // stop once we reach a step that belongs to a different merge
-      if (st.mergeRange && effectiveMergeRange && !rangeMatches(st.mergeRange, effectiveMergeRange)) {
+      if (
+        st.mergeRange &&
+        effectiveMergeRange &&
+        !rangeMatches(st.mergeRange, effectiveMergeRange)
+      ) {
         break;
       }
       if (st.iVar) {
@@ -218,7 +294,7 @@ const ArrayDisplay = ({
   // (Call 1..N). Avoid popping on internal 'base' steps; parent signals completion
   // via left-complete/right-complete markers.
   // ============================================================================
-  const activeCallFrames = [];
+  activeCallFrames = [];
   if (sortingSteps && sortingSteps.length > 0) {
     let callCounter = 0;
     for (
@@ -250,6 +326,18 @@ const ArrayDisplay = ({
           const frame = activeCallFrames[p];
           if (frame.low === st.low && frame.high === st.high) {
             frame.mid = st.mid;
+            break;
+          }
+        }
+      } else if (
+        st.phase === "pindex" &&
+        st.low !== undefined &&
+        st.high !== undefined
+      ) {
+        for (let p = activeCallFrames.length - 1; p >= 0; p--) {
+          const frame = activeCallFrames[p];
+          if (frame.low === st.low && frame.high === st.high) {
+            frame.pIndex = st.pIndex !== undefined ? st.pIndex : st.pivotIndex;
             break;
           }
         }
@@ -532,7 +620,11 @@ const ArrayDisplay = ({
                         key={`call-frame-${ord}`}
                         className="flex flex-col items-center"
                       >
-                        <div className={`h-12 min-w-[180px] px-3 rounded-lg flex flex-col items-center justify-center font-medium bg-emerald-300 text-gray-900 shadow-md ${isLatest ? 'animate-pulse' : ''}`}>
+                        <div
+                          className={`h-12 min-w-[180px] px-3 rounded-lg flex flex-col items-center justify-center font-medium bg-emerald-300 text-gray-900 shadow-md ${
+                            isLatest ? "animate-pulse" : ""
+                          }`}
+                        >
                           <div className="text-sm font-semibold truncate">
                             {`Call ${ord}: `}
                           </div>
@@ -551,6 +643,18 @@ const ArrayDisplay = ({
                             </div>
                           </div>
                         )}
+                        {/* render pIndex (pivot index) under the call frame when present */}
+                        {(frame.pIndex !== undefined ||
+                          (currentStep && currentStep.pIndex !== undefined &&
+                            currentStep.low === frame.low &&
+                            currentStep.high === frame.high)) && (
+                          <div className="mt-1 h-auto min-w-[120px] px-2 rounded-md flex flex-col items-start justify-center font-medium bg-rose-200 text-gray-900 shadow-sm">
+                            <div className="text-sm font-semibold w-full text-center">{`pIndex`}</div>
+                            <div className="text-sm font-mono">
+                              {`= ${frame.pIndex !== undefined ? frame.pIndex : currentStep.pIndex}`}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     );
                   })}
@@ -558,6 +662,8 @@ const ArrayDisplay = ({
               )}
             </div>
           )}
+
+          {/* debug removed */}
 
           <div className="flex justify-center gap-4 flex-wrap">
             {currentArray.map((value, index) => {
@@ -582,8 +688,6 @@ const ArrayDisplay = ({
                 ? "bg-teal-400 text-white border-teal-600 scale-105"
                 : isPivot
                 ? "bg-gray-600 text-white border-gray-400"
-                : inPartitionRange
-                ? "bg-orange-500 text-white border-orange-400"
                 : isMergedDone
                 ? "bg-yellow-200 text-gray-900 border-yellow-300"
                 : "bg-gray-700 text-white border-gray-600";
@@ -597,14 +701,6 @@ const ArrayDisplay = ({
                     <div className="mb-2">
                       <div className="bg-indigo-400 text-white text-xs px-3 py-1 rounded-full font-semibold">
                         Comparing
-                      </div>
-                    </div>
-                  )}
-
-                  {isPivot && (
-                    <div className="mb-2">
-                      <div className="bg-red-400 text-white text-xs px-3 py-1 rounded-full font-semibold">
-                        Pivot
                       </div>
                     </div>
                   )}
@@ -624,6 +720,28 @@ const ArrayDisplay = ({
               );
             })}
           </div>
+
+          {/* Bubble-sort i/j badges rendered under the original array */}
+          {(bubbleIObj || bubbleJObj) && (
+            <div className="mt-3 flex items-center justify-center gap-4 w-full">
+              {bubbleIObj && (
+                <div className="min-h-10 w-28 py-1 rounded-lg flex items-center justify-center font-medium bg-sky-300 text-gray-900 shadow-md">
+                  <div className="text-center">
+                    <div className="text-xs text-gray-700">i</div>
+                    <div className="text-lg font-bold">{bubbleIObj.value != null ? bubbleIObj.value : "-"}</div>
+                  </div>
+                </div>
+              )}
+              {bubbleJObj && (
+                <div className="min-h-10 w-28 py-1 rounded-lg flex items-center justify-center font-medium bg-fuchsia-300 text-gray-900 shadow-md">
+                  <div className="text-center">
+                    <div className="text-xs text-gray-700">j</div>
+                    <div className="text-lg font-bold">{bubbleJObj.value != null ? bubbleJObj.value : "-"}</div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           {showMergeTemp &&
             mergeSnapshotStep &&
@@ -657,13 +775,15 @@ const ArrayDisplay = ({
               }
 
               return (
-             <div className="mt-3 flex items-center justify-between w-full px-8">
+                <div className="mt-3 flex items-center justify-between w-full px-8">
                   <div className="flex-1"></div>
                   <div className="flex justify-center gap-4">
                     {leftVarObj && (
                       <div className="h-12 w-28 rounded-lg flex items-center justify-center font-medium bg-orange-300 text-gray-900 shadow-md">
                         <div className="text-center">
-                          <div className="text-xs text-gray-700 font-semibold">left</div>
+                          <div className="text-xs text-gray-700 font-semibold">
+                            left
+                          </div>
                           <div className="text-lg font-bold">
                             {leftVarObj.value != null ? leftVarObj.value : "-"}
                           </div>
@@ -695,7 +815,9 @@ const ArrayDisplay = ({
                     {rightVarObj && (
                       <div className="h-12 w-28 rounded-lg flex items-center justify-center font-medium bg-orange-300 text-gray-900 shadow-md">
                         <div className="text-center">
-                          <div className="text-xs text-gray-700 font-semibold">right</div>
+                          <div className="text-xs text-gray-700 font-semibold">
+                            right
+                          </div>
                           <div className="text-lg font-bold">
                             {rightVarObj.value != null
                               ? rightVarObj.value
@@ -709,7 +831,9 @@ const ArrayDisplay = ({
                     {iVarObj && (
                       <div className="h-12 w-28 rounded-lg flex items-center justify-center font-medium bg-rose-300 text-gray-900 shadow-md">
                         <div className="text-center">
-                          <div className="text-xs text-gray-700 font-semibold">i</div>
+                          <div className="text-xs text-gray-700 font-semibold">
+                            i
+                          </div>
                           <div className="text-lg font-bold">
                             {iVarObj.value != null ? iVarObj.value : "-"}
                           </div>
@@ -720,33 +844,6 @@ const ArrayDisplay = ({
                 </div>
               );
             })()}
-
-          {(currentMergeRange ||
-            currentLeftRange ||
-            currentRightRange ||
-            currentPartitionRange ||
-            currentPivotIndex !== null ||
-            showMidUI) && (
-            <div className="mt-6 flex gap-2 items-center flex-wrap justify-center">
-              {currentPartitionRange && (
-                <div className="text-xs px-2 py-1 rounded-full bg-orange-100 text-orange-800">
-                  Partition: {currentPartitionRange[0]}-
-                  {currentPartitionRange[1]}
-                </div>
-              )}
-              {currentPivotIndex !== null && (
-                <div className="text-xs px-2 py-1 rounded-full bg-red-100 text-red-800">
-                  Pivot: {currentPivotIndex}{" "}
-                  {currentPivotStrategy &&
-                    `(${
-                      typeof currentPivotStrategy === "number"
-                        ? `index ${currentPivotStrategy}`
-                        : currentPivotStrategy
-                    })`}
-                </div>
-              )}
-            </div>
-          )}
         </div>
       </div>
     </div>

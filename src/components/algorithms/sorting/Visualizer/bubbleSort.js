@@ -270,10 +270,7 @@ export const bubbleSort = {
       ? this.getCodeLines(language)
       : null;
 
-    const fallback = (this && typeof this.getCodeLines === 'function')
-      ? this.getCodeLines('javascript')
-      : [];
-
+   
     const chosen = (lines && lines.length) ? lines : fallback;
     return chosen.join('\n');
   }

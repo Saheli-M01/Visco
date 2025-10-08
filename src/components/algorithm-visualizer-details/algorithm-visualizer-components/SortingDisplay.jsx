@@ -18,6 +18,15 @@ const ArrayDisplay = ({
     return a[0] === b[0] && a[1] === b[1];
   };
 
+  // helper to parse an index value from a description like "i = 3" or "j = 2"
+  const parseIndexFromDesc = (desc, key) => {
+    if (!desc || typeof desc !== "string") return null;
+    const re = new RegExp(`${key}\\s*=\\s*(\\d+)`);
+    const m = desc.match(re);
+    if (m && m[1]) return Number(m[1]);
+    return null;
+  };
+
   // ============================================================================
   // QUICK SORT SPECIFIC RANGES AND PIVOT
   // ============================================================================
@@ -73,6 +82,48 @@ const ArrayDisplay = ({
   // USE STRUCTURED J FIELD (INSERTION SORT SCANNING POINTER)
   // ============================================================================
   let jObj = currentStep && currentStep.j ? currentStep.j : null; // { value, index }
+
+  // ============================================================================
+  // BUBBLE-SORT: derive outer-loop `i` and inner-loop `j` when generator does
+  // not emit structured fields. We prefer structured fields but fall back to
+  // parsing the human-readable description or using comparing indices.
+  // ============================================================================
+  let bubbleIObj = null; // { value }
+  let bubbleJObj = null; // { value }
+  if (sortingSteps && sortingSteps.length > 0) {
+    // 1) Current step may itself be an outer_loop/inner_loop with description "i = X"/"j = Y"
+    if (currentStep && currentStep.phase === "outer_loop") {
+      const parsed = parseIndexFromDesc(currentStep.description, "i");
+      if (parsed !== null) bubbleIObj = { value: parsed };
+    }
+    if (currentStep && currentStep.phase === "inner_loop") {
+      const parsed = parseIndexFromDesc(currentStep.description, "j");
+      if (parsed !== null) bubbleJObj = { value: parsed };
+    }
+
+    // 2) A comparison step carries the j index in comparing[0]
+    if (!bubbleJObj && currentStep && Array.isArray(currentStep.comparing) && currentStep.comparing.length > 0) {
+      const cand = currentStep.comparing[0];
+      if (typeof cand === "number") bubbleJObj = { value: cand };
+    }
+
+    // 3) Walk backwards to find the most recent outer_loop/inner_loop step
+    if ((!bubbleIObj || !bubbleJObj) && sortingSteps && sortingSteps.length > 0) {
+      for (let s = currentStepIndex; s >= 0; s--) {
+        const st = sortingSteps[s];
+        if (!st) continue;
+        if (!bubbleIObj && st.phase === "outer_loop") {
+          const parsed = parseIndexFromDesc(st.description, "i");
+          if (parsed !== null) bubbleIObj = { value: parsed };
+        }
+        if (!bubbleJObj && st.phase === "inner_loop") {
+          const parsed = parseIndexFromDesc(st.description, "j");
+          if (parsed !== null) bubbleJObj = { value: parsed };
+        }
+        if (bubbleIObj && bubbleJObj) break;
+      }
+    }
+  }
 
   // ============================================================================
   // GET MID VARIABLE INFORMATION
@@ -669,6 +720,28 @@ const ArrayDisplay = ({
               );
             })}
           </div>
+
+          {/* Bubble-sort i/j badges rendered under the original array */}
+          {(bubbleIObj || bubbleJObj) && (
+            <div className="mt-3 flex items-center justify-center gap-4 w-full">
+              {bubbleIObj && (
+                <div className="min-h-10 w-28 py-1 rounded-lg flex items-center justify-center font-medium bg-sky-300 text-gray-900 shadow-md">
+                  <div className="text-center">
+                    <div className="text-xs text-gray-700">i</div>
+                    <div className="text-lg font-bold">{bubbleIObj.value != null ? bubbleIObj.value : "-"}</div>
+                  </div>
+                </div>
+              )}
+              {bubbleJObj && (
+                <div className="min-h-10 w-28 py-1 rounded-lg flex items-center justify-center font-medium bg-fuchsia-300 text-gray-900 shadow-md">
+                  <div className="text-center">
+                    <div className="text-xs text-gray-700">j</div>
+                    <div className="text-lg font-bold">{bubbleJObj.value != null ? bubbleJObj.value : "-"}</div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           {showMergeTemp &&
             mergeSnapshotStep &&

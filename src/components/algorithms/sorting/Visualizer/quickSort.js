@@ -267,24 +267,9 @@ export const quickSort = {
         high,
       });
 
-
-      // Signal start of pIndex computation (highlight assignment line 22)
-      // Do not include a pIndex value yet — UI should show the line but not
-      // the resulting value until partition returns and a pindex step is emitted.
-      steps.push({
-        array: [...a],
-        comparing: [],
-        swapped: [],
-        description: `Computing pIndex = partition(arr, ${low}, ${high})...`,
-        codeLine: 22,
-        phase: "pindex-computing",
-        low,
-        high,
-      });
-
       // Compute partition index but avoid emitting partition's internal steps.
       // We'll call the partition helper, then remove any steps it added so
-      // the UI receives only the final pindex step (which includes the value).
+      // the UI receives only a single pIndex step.
       const beforeCount = steps.length;
       const pIndex = partition(low, high);
       const afterCount = steps.length;
@@ -293,7 +278,7 @@ export const quickSort = {
         steps.splice(beforeCount, afterCount - beforeCount);
       }
 
-      // Emit the final pIndex step highlighting the line where pIndex is computed
+      // Emit a single pIndex step highlighting the line where pIndex is computed
       steps.push({
         array: [...a],
         comparing: [],

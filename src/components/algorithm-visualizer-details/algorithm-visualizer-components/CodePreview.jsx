@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { FormControl, Select, MenuItem } from "@mui/material";
+import Select from "../../ui/select";
 
 const CodePreview = ({
   selectedLanguage,
@@ -45,38 +45,23 @@ const CodePreview = ({
   ];
 
   return (
-    <div className="border border-gray-300 bg-white rounded-xl py-2 px-4 shadow-lg">
+    <div className="border border-gray-300 bg-white rounded-xl py-2 px-4 shadow-lg flex flex-col h-[38vh]">
       <div className="flex items-center justify-between mb-1">
         <h3 className="text-lg font-semibold text-gray-900">Code Preview</h3>
-        <FormControl size="small" sx={{ minWidth: 120 }}>
-          <Select
-            value={selectedLanguage}
-            onChange={(e) => requestLanguageChange(e.target.value)}
-            sx={{
-              height: "30px",
-              backgroundColor: "rgba(255, 255, 255, 0.4)",
-              borderRadius: "8px",
-              border: "1px solid rgba(56, 56, 56, 0.4)",
-              "& .MuiOutlinedInput-notchedOutline": { border: "none" },
-              "& .MuiSelect-select": {
-                padding: "6px 12px",
-                fontSize: "0.75em",
-                fontWeight: "500",
-              },
-            }}
-          >
-            {languages.map((lang) => (
-              <MenuItem key={lang.value} value={lang.value}>
-                {lang.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <Select
+          value={selectedLanguage}
+          onChange={(val) => requestLanguageChange(val)}
+          options={languages.map((l) => ({ value: l.value, label: l.label }))}
+          className=""
+          ariaLabel="Select language"
+          color="#346cd3ff"
+         
+        />
       </div>
 
       <pre
         ref={codeContainerRef}
-        className="bg-gray-900 text-green-400 px-3 py-2 rounded-lg text-[0.9rem] overflow-x-auto custom-scrollbar h-[240px] shadow-inner border border-gray-700"
+        className="bg-gray-900 text-green-400 px-3 py-2 rounded-lg text-[0.9rem] overflow-auto custom-scrollbar shadow-inner border border-gray-700 flex-1 min-h-0"
       >
         <code>
           {getCodeLines(selectedLanguage, selectedAlgorithm?.name).map(

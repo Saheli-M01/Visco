@@ -447,7 +447,7 @@ const ArrayDisplay = ({
     (currentStep.phase === "swap" || currentStep.phase === "swap_step");
 
   return (
-    <div className="space-y-4 bg-gray-900 rounded-lg">
+    <div className="space-y-4 bg-gray-900 rounded-lg min-h-[50vh]">
       <div className="bg-code-bg rounded-lg p-1 min-h-[290px] flex items-center justify-center">
         <div className="flex flex-col items-center w-full">
           {(showTempUI ||
@@ -526,12 +526,13 @@ const ArrayDisplay = ({
                     const midVal = frameMid ? frameMid.value : "-";
                     const midL = frameMid ? frameMid.leftIndex : "-";
                     const midR = frameMid ? frameMid.rightIndex : "-";
+                    const isLatest = idx === activeCallFrames.length - 1;
                     return (
                       <div
                         key={`call-frame-${ord}`}
                         className="flex flex-col items-center"
                       >
-                        <div className="h-12 min-w-[180px] px-3 rounded-lg flex flex-col items-center justify-center font-medium bg-emerald-300 text-gray-900 shadow-md">
+                        <div className={`h-12 min-w-[180px] px-3 rounded-lg flex flex-col items-center justify-center font-medium bg-emerald-300 text-gray-900 shadow-md ${isLatest ? 'animate-pulse' : ''}`}>
                           <div className="text-sm font-semibold truncate">
                             {`Call ${ord}: `}
                           </div>

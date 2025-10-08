@@ -1,6 +1,6 @@
 import React from "react";
-import { FormControl, Select, MenuItem, Tabs, Tab } from "@mui/material";
 import { X, RefreshCw, Eye, Info } from "lucide-react";
+import Select from "../../ui/select";
 
 const VisualizerHeader = ({
   sortingAlgorithms,
@@ -14,91 +14,45 @@ const VisualizerHeader = ({
   return (
     <div className="visualizer-header flex items-center justify-between px-4 py-1 border-b border-white/20 backdrop-blur-md bg-white shadow-lg">
       <div className="flex items-center gap-6">
-        <FormControl variant="outlined" size="small" sx={{ minWidth: 180 }}>
+        <div className="">
           <Select
             value={selectedAlgorithm?.name || ""}
             onChange={handleAlgorithmChange}
-            displayEmpty
-            sx={{
-              backgroundColor: "rgba(255, 255, 255, 0.3)",
-              borderRadius: "12px",
-              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
-              border: "1px solid rgba(0, 0, 0, 0.2)",
-              "& .MuiOutlinedInput-notchedOutline": {
-                border: "none",
-              },
-              // ensure the icon is vertically centered inside the select
-              "& .MuiSelect-icon": {
-                top: "50%",
-                transform: "translateY(-50%)",
-              },
-              "& .MuiSelect-select": {
-                padding: "2px 12px",
-                height: "32px",
-                display: "flex",
-                alignItems: "center",
-                fontSize: "0.8em",
-                fontWeight: "600",
-                color: "#1f2937",
-              },
-              "&:hover": {
-                backgroundColor: "rgba(255, 255, 255, 0.4)",
-                boxShadow: "0 6px 16px rgba(0, 0, 0, 0.2)",
-              },
-            }}
+            options={sortingAlgorithms.map((algo) => ({
+              value: algo.name,
+              label: algo.name,
+            }))}
+            ariaLabel="Select algorithm"
+            className="w-full"
+            color="#346cd3ff"
+          />
+        </div>
+        {/* Visualization / Details toggle buttons (replaces Tabs) */}
+        <div className="flex bg-white/20 rounded-lg p-1 border border-white/30 shadow-inner">
+          <button
+            onClick={(e) => handleTabChange(e, 0)}
+            className={`flex items-center gap-2 px-3 py-1 rounded-md text-sm font-medium transition-all ${
+              activeTab === 0
+                ? "bg-gray-800 text-white shadow-md"
+                : "text-gray-700 hover:bg-white/20"
+            }`}
           >
-            {sortingAlgorithms.map((algo) => (
-              <MenuItem key={algo.name} value={algo.name}>
-                {algo.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        {/* Tabs of Visualization and Details */}
-        <Tabs
-          value={activeTab}
-          onChange={handleTabChange}
-          sx={{
-            minHeight: "36px",
-            "& .MuiTabs-flexContainer": { gap: "6px" },
-              "& .MuiTab-root": {
-              minHeight: "auto",
-              padding: "6px 12px",
-              fontSize: "0.8em",
-              fontWeight: "600",
-              color: "#6b7280",
-              backgroundColor: "rgba(255, 255, 255, 0.2)",
-              border: "1px solid rgba(0, 0, 0, 0.2)",
-              borderRadius: "8px",
+            <Eye className="h-4 w-4" />
+            <span>Visualization</span>
+          </button>
 
-              textTransform: "none",
-              transition: "all 0.2s ease",
-              "&.Mui-selected": {
-                color: "#ffffff",
-                backgroundColor: "#374151",
-                border: "1px solid #4b5563",
-              },
-              "&:hover": {
-                color: "#ffffff",
-                backgroundColor: "#222933ff",
-              },
-            },
-            "& .MuiTabs-indicator": { display: "none" },
-          }}
-        >
-          <Tab
-            icon={<Eye className="h-4 w-4" />}
-            label="Visualization"
-            iconPosition="start"
-            sx={{ gap: 1 }}
-          />
-          <Tab
-            icon={<Info className="h-4 w-4" />}
-            label="Details"
-            iconPosition="start"
-            sx={{ gap: 1 }}
-          />
-        </Tabs>
+          <button
+            onClick={(e) => handleTabChange(e, 1)}
+            className={`flex items-center gap-2 px-3 py-1 rounded-md text-sm font-medium transition-all ${
+              activeTab === 1
+                ? "bg-gray-800 text-white shadow-md"
+                : "text-gray-700 hover:bg-white/20"
+            }`}
+          >
+            <Info className="h-4 w-4" />
+            <span>Details</span>
+          </button>
+        </div>
 
         <button
           onClick={handleRefresh}

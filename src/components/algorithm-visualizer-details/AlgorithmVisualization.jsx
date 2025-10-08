@@ -44,7 +44,7 @@ const AlgorithmVisualization = ({
   isExecuting,
 }) => {
   return (
-    <div className="h-full bg-gradient-to-br from-white/20 to-white/40 backdrop-blur-sm custom-scrollbar overflow-y-auto">
+    <div className="h-full bg-gradient-to-br from-white/60 to-white/40 backdrop-blur-sm custom-scrollbar overflow-y-auto">
       <div className="px-4 py-1 space-y-3">
         {/* New Layout - Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">

@@ -28,7 +28,7 @@ const VisualizerHeader = ({
           />
         </div>
         {/* Visualization / Details toggle buttons (replaces Tabs) */}
-        <div className="flex bg-white/20 rounded-lg p-1 border border-white/30 shadow-inner">
+        <div className="flex bg-white/20 rounded-lg p-1 border border-gray-400/50 shadow-inner">
           <button
             onClick={(e) => handleTabChange(e, 0)}
             className={`flex items-center gap-2 px-3 py-1 rounded-md text-sm font-medium transition-all ${

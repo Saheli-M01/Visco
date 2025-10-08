@@ -657,13 +657,13 @@ const ArrayDisplay = ({
               }
 
               return (
-                <div className="mt-3 flex items-center justify-around gap-20 ">
-                  <div className="flex justify-around gap-4 ">
-                    {" "}
+             <div className="mt-3 flex items-center justify-between w-full px-8">
+                  <div className="flex-1"></div>
+                  <div className="flex justify-center gap-4">
                     {leftVarObj && (
                       <div className="h-12 w-28 rounded-lg flex items-center justify-center font-medium bg-orange-300 text-gray-900 shadow-md">
                         <div className="text-center">
-                          <div className="text-xs text-gray-700">left</div>
+                          <div className="text-xs text-gray-700 font-semibold">left</div>
                           <div className="text-lg font-bold">
                             {leftVarObj.value != null ? leftVarObj.value : "-"}
                           </div>
@@ -695,7 +695,7 @@ const ArrayDisplay = ({
                     {rightVarObj && (
                       <div className="h-12 w-28 rounded-lg flex items-center justify-center font-medium bg-orange-300 text-gray-900 shadow-md">
                         <div className="text-center">
-                          <div className="text-xs text-gray-700">right</div>
+                          <div className="text-xs text-gray-700 font-semibold">right</div>
                           <div className="text-lg font-bold">
                             {rightVarObj.value != null
                               ? rightVarObj.value
@@ -705,17 +705,18 @@ const ArrayDisplay = ({
                       </div>
                     )}
                   </div>
-
-                  {iVarObj && (
-                    <div className="h-12 w-28 rounded-lg flex items-center justify-center font-medium bg-rose-300 text-gray-900 shadow-md">
-                      <div className="text-center">
-                        <div className="text-xs text-gray-700">i</div>
-                        <div className="text-lg font-bold">
-                          {iVarObj.value != null ? iVarObj.value : "-"}
+                  <div className="flex-1 flex justify-end">
+                    {iVarObj && (
+                      <div className="h-12 w-28 rounded-lg flex items-center justify-center font-medium bg-rose-300 text-gray-900 shadow-md">
+                        <div className="text-center">
+                          <div className="text-xs text-gray-700 font-semibold">i</div>
+                          <div className="text-lg font-bold">
+                            {iVarObj.value != null ? iVarObj.value : "-"}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               );
             })()}

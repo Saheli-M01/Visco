@@ -30,8 +30,8 @@ const theme = createTheme({
           },
         },
         select: {
-          padding: "12px 16px",
-          fontSize: "1.125em",
+          padding: "8px 12px",
+          fontSize: "0.8em",
           fontWeight: 600,
         },
         icon: {
@@ -74,7 +74,7 @@ const theme = createTheme({
           backdropFilter: "blur(10px)",
           border: "1px solid rgba(255, 255, 255, 0.3)",
           borderRadius: "12px",
-          minHeight: "48px",
+          minHeight: "36px",
           padding: "4px",
         },
         indicator: {
@@ -89,9 +89,9 @@ const theme = createTheme({
           borderRadius: "8px",
           color: "#6b7280",
           fontWeight: 500,
-          fontSize: "0.875em",
+          fontSize: "0.8em",
           textTransform: "none",
-          minHeight: "40px",
+          minHeight: "36px",
           transition: "all 0.2s ease-in-out",
           "&.Mui-selected": {
             backgroundColor: "rgba(255, 255, 255, 0.3)",

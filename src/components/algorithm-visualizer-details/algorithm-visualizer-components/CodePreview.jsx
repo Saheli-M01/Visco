@@ -45,7 +45,7 @@ const CodePreview = ({
   ];
 
   return (
-    <div className="border border-gray-300 bg-white  rounded-xl py-2 px-4 shadow-lg">
+    <div className="border border-gray-300 bg-white rounded-xl py-2 px-4 shadow-lg">
       <div className="flex items-center justify-between mb-1">
         <h3 className="text-lg font-semibold text-gray-900">Code Preview</h3>
         <FormControl size="small" sx={{ minWidth: 120 }}>
@@ -76,7 +76,7 @@ const CodePreview = ({
 
       <pre
         ref={codeContainerRef}
-        className="bg-gray-900 text-green-400 p-3 rounded-lg text-[0.9rem] overflow-x-auto custom-scrollbar h-48 shadow-inner border border-gray-700"
+        className="bg-gray-900 text-green-400 px-3 py-2 rounded-lg text-[0.9rem] overflow-x-auto custom-scrollbar h-[240px] shadow-inner border border-gray-700"
       >
         <code>
           {getCodeLines(selectedLanguage, selectedAlgorithm?.name).map(

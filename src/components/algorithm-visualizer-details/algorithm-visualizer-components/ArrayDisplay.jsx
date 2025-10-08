@@ -448,7 +448,7 @@ const ArrayDisplay = ({
 
   return (
     <div className="space-y-4 bg-gray-900 rounded-lg">
-      <div className="bg-code-bg rounded-lg p-3 min-h-[290px] flex items-center justify-center">
+      <div className="bg-code-bg rounded-lg p-1 min-h-[290px] flex items-center justify-center">
         <div className="flex flex-col items-center w-full">
           {(showTempUI ||
             showMidUI ||

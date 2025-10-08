@@ -273,3 +273,29 @@ section {
     background: transparent;
   }
 }
+
+/* Strong overrides for the visualizer header controls so small fonts persist
+   across theme refreshes and MUI re-renders. These use !important and a
+   header-scoped class to avoid affecting other selects/tabs. */
+.visualizer-header .MuiSelect-select,
+.visualizer-header .MuiSelect-root,
+.visualizer-header .MuiSelect-standard {
+  font-size: 0.9rem !important;
+  padding: 4px 10px !important;
+}
+
+.visualizer-header .MuiTabs-root {
+  min-height: 36px !important;
+}
+
+.visualizer-header .MuiTab-root {
+  font-size: 0.9rem !important;
+  min-height: 36px !important;
+  padding: 4px 10px !important;
+}
+
+/* ensure icon size scales down slightly in header */
+.visualizer-header svg {
+  width: 16px !important;
+  height: 16px !important;
+}

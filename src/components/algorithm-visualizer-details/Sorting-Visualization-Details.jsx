@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import AlgorithmDetails from "./AlgorithmDetails";
-import AlgorithmVisualization from "./AlgorithmVisualization";
+import AlgorithmDetails from "./SortingDetails";
+import AlgorithmVisualization from "./SortingVisualization";
 import { categories } from "../../data/categories";
 import { getAlgorithm, parseArray } from "../algorithms/algorithmFactory";
 import VisualizerHeader from "./algorithm-visualizer-components/VisualizerHeader";

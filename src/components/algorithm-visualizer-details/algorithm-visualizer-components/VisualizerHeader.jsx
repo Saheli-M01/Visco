@@ -12,15 +12,14 @@ const VisualizerHeader = ({
   onClose,
 }) => {
   return (
-    <div className="flex items-center justify-between px-4 py-1 border-b border-white/20 backdrop-blur-md bg-white shadow-lg">
+    <div className="visualizer-header flex items-center justify-between px-4 py-1 border-b border-white/20 backdrop-blur-md bg-white shadow-lg">
       <div className="flex items-center gap-6">
-  <FormControl variant="outlined" size="small" sx={{ minWidth: 180 }}>
+        <FormControl variant="outlined" size="small" sx={{ minWidth: 180 }}>
           <Select
             value={selectedAlgorithm?.name || ""}
             onChange={handleAlgorithmChange}
             displayEmpty
             sx={{
-              fontSize: "1.2rem",
               backgroundColor: "rgba(255, 255, 255, 0.3)",
               borderRadius: "12px",
               boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
@@ -28,9 +27,17 @@ const VisualizerHeader = ({
               "& .MuiOutlinedInput-notchedOutline": {
                 border: "none",
               },
+              // ensure the icon is vertically centered inside the select
+              "& .MuiSelect-icon": {
+                top: "50%",
+                transform: "translateY(-50%)",
+              },
               "& .MuiSelect-select": {
                 padding: "2px 12px",
-                fontSize: "1rem",
+                height: "32px",
+                display: "flex",
+                alignItems: "center",
+                fontSize: "0.8em",
                 fontWeight: "600",
                 color: "#1f2937",
               },
@@ -54,10 +61,10 @@ const VisualizerHeader = ({
           sx={{
             minHeight: "36px",
             "& .MuiTabs-flexContainer": { gap: "6px" },
-            "& .MuiTab-root": {
+              "& .MuiTab-root": {
               minHeight: "auto",
               padding: "6px 12px",
-              fontSize: "0.85em",
+              fontSize: "0.8em",
               fontWeight: "600",
               color: "#6b7280",
               backgroundColor: "rgba(255, 255, 255, 0.2)",

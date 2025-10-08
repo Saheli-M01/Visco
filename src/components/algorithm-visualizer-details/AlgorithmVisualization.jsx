@@ -42,7 +42,6 @@ const AlgorithmVisualization = ({
   handleStepBackward,
   handleStepForward,
   isExecuting,
-  progress,
 }) => {
   return (
     <div className="h-full bg-gradient-to-br from-white/20 to-white/40 backdrop-blur-sm custom-scrollbar overflow-y-auto">
@@ -77,7 +76,7 @@ const AlgorithmVisualization = ({
             </div>
 
             {/* Second Row - Output (Full Width) */}
-            <div className="backdrop-blur-md bg-white border border-gray-300 rounded-xl p-4">
+            <div className="backdrop-blur-md bg-white border border-gray-300 rounded-xl p-2">
               {!isVisualizationActive ? (
                 <div className="bg-gray-900 text-white p-4 rounded-lg text-sm font-mono min-h-[290px] overflow-y-auto custom-scrollbar shadow-inner border border-gray-700">
                   <div className="text-green-400">Ready to run {selectedAlgorithm?.name}...</div>
@@ -137,22 +136,6 @@ const AlgorithmVisualization = ({
               handleStepForward={handleStepForward}
               isExecuting={isExecuting}
             />
-
-            {/* Progress Bar - 3rd Row */}
-            <div className=" bg-white border border-gray-300 rounded-xl p-4">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-sm font-medium text-gray-700">Progress</span>
-                <span className="text-sm font-medium text-gray-700">
-                  {sortingSteps.length > 0 ? `${currentStepIndex + 1} / ${sortingSteps.length}` : `0 / 0`}
-                </span>
-              </div>
-              <div className="w-full bg-gray-300 rounded-full h-2 shadow-inner mb-2">
-                <div
-                  className="bg-gradient-to-r from-gray-600 to-gray-800 h-2 rounded-full transition-all duration-300 shadow-sm"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-            </div>
           </div>
         </div>
       </div>

@@ -5,7 +5,7 @@ export const quickSort = {
   generateSteps: (arr, language = "javascript", pivotStrategy = "random") => {
     const steps = [];
     const a = [...arr];
-    
+
     // Debug: log incoming pivotStrategy
     try {
       console.debug(
@@ -78,12 +78,7 @@ export const quickSort = {
       if (low >= high) {
         return;
       }
-
-      // STEP 3: Call partition and emit pIndex step highlighting line 22
-      const partitionResult = partition(low, high);
-      const pIndex = partitionResult.pIndex;
-      const randomIndex = partitionResult.randomIndex;
-
+       // STEP 3: Call partition and emit pIndex step highlighting line 22
       steps.push({
         array: [...a],
         comparing: [],
@@ -93,9 +88,13 @@ export const quickSort = {
         phase: "pindex",
         low,
         high,
-        pIndex,
-        randomIndex, // Include randomIndex here so ArrayDisplay can show it
+        pIndex: null,
       });
+
+     
+      const partitionResult = partition(low, high);
+      const pIndex = partitionResult.pIndex;
+      const randomIndex = partitionResult.randomIndex;
 
       // STEP 4: Enter partition function (line 1)
       if (randomIndex !== null) {
@@ -107,7 +106,7 @@ export const quickSort = {
           codeLine: 1,
           phase: "partition-entry",
           partitionRange: [low, high],
-          randomIndex,
+          randomIndex, // Include randomIndex here so ArrayDisplay can show it
         });
       } else {
         steps.push({
@@ -169,11 +168,6 @@ export const quickSort = {
         "        this.quickSort(arr, pIndex + 1, high);", //25
         "    }", //26
         "}", //27
-        "", //28
-        "", //29
-        "", //30
-        "", //31
-        "", //32
       ],
       python: [
         "def partition(self, arr, low, high):", //1
@@ -201,13 +195,6 @@ export const quickSort = {
         "        pIndex = self.partition(arr, low, high)", //23
         "        self.quickSort(arr, low, pIndex - 1)", //24
         "        self.quickSort(arr, pIndex + 1, high)", //25
-        "", //26
-        "", //27
-        "", //28
-        "", //29
-        "", //30
-        "", //31
-        "", //32
       ],
       java: [
         "public int partition(int[] arr, int low, int high) {", //1
@@ -237,11 +224,6 @@ export const quickSort = {
         "        quickSort(arr, pIndex + 1, high);", //25
         "    }", //26
         "}", //27
-        "private void swap(int[] arr, int i, int j) {", //28
-        "    int temp = arr[i];", //29
-        "    arr[i] = arr[j];", //30
-        "    arr[j] = temp;", //31
-        "}", //32
       ],
       cpp: [
         "int partition(vector<int>& arr, int low, int high) {", //1
@@ -271,11 +253,6 @@ export const quickSort = {
         "        quickSort(arr, pIndex + 1, high);", //25
         "    }", //26
         "}", //27
-        "", //28
-        "", //29
-        "", //30
-        "", //31
-        "", //32
       ],
       csharp: [
         "private int partition(int[] arr, int low, int high){", //1
@@ -305,11 +282,6 @@ export const quickSort = {
         "        this.quickSort(arr, pIndex + 1, high);", //25
         "    }", //26
         "}", //27
-        "private void swap(int[] arr, int i, int j) {", //28
-        "    int temp = arr[i];", //29
-        "    arr[i] = arr[j];", //30
-        "    arr[j] = temp;", //31
-        "}", //32
       ],
     };
 

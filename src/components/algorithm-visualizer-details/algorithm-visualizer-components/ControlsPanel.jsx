@@ -3,7 +3,6 @@ import { Slider } from "@mui/material";
 import {
   Play,
   Pause,
-  RotateCcw,
   SkipBack,
   SkipForward,
   ChevronLeft,
@@ -34,6 +33,7 @@ const ControlsPanel = ({
         <h3 className="text-md font-semibold text-gray-900">Controls</h3>
       </div>
 
+      {/* Mode Toggle */}
       <div className="flex bg-white/20 rounded-lg p-1 mb-4 border border-white/30 shadow-inner w-full">
         <button
           onClick={() => setIsAutomatic(false)}
@@ -57,10 +57,10 @@ const ControlsPanel = ({
         </button>
       </div>
 
+      {/* Automatic Mode */}
       {isAutomatic ? (
         <div className="space-y-3">
           <div className="flex items-center justify-center gap-2">
-            
             <button
               onClick={isPlaying ? handlePause : handlePlay}
               className="p-2 rounded-lg bg-gray-800 text-white hover:bg-gray-700 transition-all shadow-lg border border-gray-600"
@@ -73,21 +73,25 @@ const ControlsPanel = ({
             </button>
           </div>
 
+          {/* Speed Control */}
           <div className="space-y-2 px-2">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-gray-700">Speed</span>
-              <span className="text-sm text-gray-600">{speed}x</span>
+              <span className="text-sm text-gray-600">{speed.toFixed(1)}x</span>
             </div>
             <Slider
               value={speed}
               onChange={(_, newValue) => setSpeed(newValue)}
-              min={0.5}
-              max={1.5}
+              min={0}
+              max={10}
               step={0.1}
               marks={[
-                { value: 0.5, label: "0.5x" },
-                { value: 1.0, label: "1x" },
-                { value: 1.5, label: "1.5x" },
+                { value: 0, label: "0x" },
+                { value: 2, label: "2x" },
+                { value: 4, label: "4x" },
+                { value: 6, label: "6x" },
+                { value: 8, label: "8x" },
+                { value: 10, label: "10x" },
               ]}
               size="small"
               sx={{
@@ -108,6 +112,7 @@ const ControlsPanel = ({
           </div>
         </div>
       ) : (
+        // Manual Mode
         <div className="space-y-2">
           <div className="grid grid-cols-2 gap-2">
             <button

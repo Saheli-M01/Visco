@@ -47,7 +47,7 @@ const ArrayDisplay = ({
   // ============================================================================
   
   const currentPivotIndex = currentStep.pIndex ?? currentStep.pivotIndex ?? null;
-  const currentPartitionRange = currentStep.partitionRange || null;
+
 
   // ============================================================================
   // FIND EFFECTIVE MERGE RANGE FOR SCOPING
@@ -73,6 +73,12 @@ const ArrayDisplay = ({
     tempObj = findPersistedValue('temp', null, searchStart);
   }
 
+  // Only display the temp variable during actual swap steps. Clear it for
+  // all other phases so the temp badge does not persist outside the swap.
+  if (!(currentStep.phase === 'swap' || currentStep.phase === 'swap_step')) {
+    tempObj = null;
+  }
+
   // Key and j variables (insertion sort)
   const keyObj = currentStep.key || null;
   const jObj = currentStep.j || null;
@@ -87,7 +93,7 @@ const ArrayDisplay = ({
   }
   if (!minObj) {
     minObj = findPersistedValue(['min'], (st) => {
-      if (st.phase === "min_update" && st.comparing?.length > 0) {
+      if (st.phase === "inner_loop" && st.comparing?.length > 0) {
         const mi = st.comparing[0];
         return mi >= 0 && mi < (st.array || []).length;
       }
@@ -159,7 +165,9 @@ const ArrayDisplay = ({
       if (bubbleIObj && bubbleJObj) break;
     }
   }
-
+  // Hide bubble j during outer_loop steps (bubble sort): do not show the
+  // inner-loop pointer when the outer-loop marker is visible.
+  if (currentStep.phase === "outer_loop") bubbleJObj = null;
   // ============================================================================
   // BUILD ACTIVE CALL STACK
   // ============================================================================
@@ -270,12 +278,11 @@ const ArrayDisplay = ({
       <div className="bg-code-bg rounded-lg p-1 min-h-[290px] flex items-center justify-center">
         <div className="flex flex-col items-center w-full">
           {/* Variable Display Row */}
-          {(showTempUI || showMidUI || showMinUI || showKeyUI || jObj || showCallUI || showLeftVar || showRightVar || showRandomIndexUI) && (
+          {(showTempUI || showMidUI || showMinUI || showKeyUI || showCallUI || showLeftVar || showRightVar || showRandomIndexUI) && (
             <div className="mb-4 flex items-center justify-center w-full gap-4">
               {showTempUI && <VariableCard label="temp" value={tempObj.value} />}
               {showMinUI && <VariableCard label="minIndex" value={minObj.index} bgColor="bg-amber-300" />}
               {showKeyUI && <VariableCard label="key" value={keyObj.value} bgColor="bg-amber-300" />}
-              {jObj && <VariableCard label="j" value={jObj.index} bgColor="bg-fuchsia-400" />}
               
               {showCallUI && (
                 <div className="flex items-end gap-3">

@@ -80,117 +80,7 @@ const ArrayDisplay = ({
   };
 
   // ============================================================================
-  // EXTRACT CURRENT STEP VALUES
-  // ============================================================================
-
-  const currentPivotIndex =
-    currentStep.pIndex ?? currentStep.pivotIndex ?? null;
-
-  // ============================================================================
-  // FIND EFFECTIVE MERGE RANGE FOR SCOPING
-  // ============================================================================
-
-  const effectiveMergeRange =
-    currentMergeRange ||
-    findPersistedValue("mergeRange", null, currentStepIndex);
-
-  const mergeScopeCheck = (st) =>
-    !st.mergeRange ||
-    !effectiveMergeRange ||
-    rangeMatches(st.mergeRange, effectiveMergeRange);
-
-  // ============================================================================
-  // GET OR PERSIST VARIABLES
-  // ============================================================================
-
-  // Temp variable (for insertion sort in C#/Java)
-  let tempObj = currentStep.temp;
-  if (!tempObj) {
-    const outerLoopStart = sortingSteps
-      .slice(0, currentStepIndex + 1)
-      .reverse()
-      .findIndex((st) => st?.phase === "outer_loop");
-    const searchStart =
-      outerLoopStart >= 0
-        ? currentStepIndex - outerLoopStart
-        : currentStepIndex - 1;
-    tempObj = findPersistedValue("temp", null, searchStart);
-  }
-
-  // Only display the temp variable during actual swap steps. Clear it for
-  // all other phases so the temp badge does not persist outside the swap.
-  if (!(currentStep.phase === "swap" || currentStep.phase === "swap_step")) {
-    tempObj = null;
-  }
-
-  // Key and j variables (insertion sort)
-  const keyObj = currentStep.key || null;
-
-
-  // Min variable (selection sort)
-  let minObj = currentStep.min;
-  if (
-    !minObj &&
-    currentStep.phase === "min_update" &&
-    currentStep.comparing?.length > 0
-  ) {
-    const mi = currentStep.comparing[0];
-    if (mi >= 0 && mi < currentArray.length) {
-      minObj = { value: currentArray[mi], index: mi };
-    }
-  }
-  if (!minObj) {
-    minObj = findPersistedValue(["min"], (st) => {
-      if (st.phase === "inner_loop" && st.comparing?.length > 0) {
-        const mi = st.comparing[0];
-        return mi >= 0 && mi < (st.array || []).length;
-      }
-      return st.min;
-    });
-  }
-if ((currentStep.phase === "outer_loop")) {
-    minObj = null;
-  }
-  // Mid variable (merge/quick sort)
-  const midObj = currentStep.mid || findPersistedValue("mid");
-
-  // Left/Right pointers (merge sort)
-  const leftVarObj =
-    currentStep.leftVar ||
-    findPersistedValue(["leftVar", "leftPtr"], mergeScopeCheck);
-
-  const rightVarObj =
-    currentStep.rightVar ||
-    (typeof currentStep.rightPtr === "number"
-      ? { value: currentStep.rightPtr }
-      : null) ||
-    findPersistedValue(["rightVar", "rightPtr"], mergeScopeCheck);
-
-  // I variable (merge sort copy-back)
-  let iVarObj =
-    currentStep.iVar ||
-    (typeof currentStep.i === "number" ? { value: currentStep.i } : null) ||
-    (typeof currentStep.t === "number" ? { value: currentStep.t } : null) ||
-    (currentStep.phase === "write" && currentStep.leftVar
-      ? { value: currentStep.leftVar.value }
-      : null);
-
-  if (!iVarObj) {
-    iVarObj = findPersistedValue(["iVar", "i", "t"], (st) => {
-      if (!mergeScopeCheck(st)) return false;
-      if (st.phase === "write" && st.leftVar) return true;
-      return st.iVar || typeof st.i === "number" || typeof st.t === "number";
-    });
-  }
-
-  // Random index (quicksort)
-  const randomIndexObj =
-    currentStep.randomIndex !== undefined
-      ? { value: currentStep.randomIndex }
-      : null;
-
-  // ============================================================================
-  // BUBBLE SORT i/J VARIABLES
+  // BUBBLE SORT VARIABLES (i, j)
   // ============================================================================
 
   let bubbleIObj = null;
@@ -227,13 +117,14 @@ if ((currentStep.phase === "outer_loop")) {
       if (bubbleIObj && bubbleJObj) break;
     }
   }
-  // Hide bubble j during outer_loop steps (bubble sort): do not show the
-  // inner-loop pointer when the outer-loop marker is visible.
-  if (currentStep.phase === "outer_loop") bubbleJObj = null;
-  // Also hide bubble j during swap phases so the inner-loop pointer doesn't persist
-  if (isSwapPhase) bubbleJObj = null;
+
+  // Hide bubble j during outer_loop steps and swap phases
+  if (currentStep.phase === "outer_loop" || isSwapPhase) {
+    bubbleJObj = null;
+  }
+
   // ============================================================================
-  // SELECTION SORT i/J VARIABLES
+  // SELECTION SORT VARIABLES (i, j, minIndex)
   // ============================================================================
 
   let selectionIObj = null;
@@ -263,14 +154,151 @@ if ((currentStep.phase === "outer_loop")) {
       if (selectionIObj && selectionJObj) break;
     }
   }
-  // Hide selection 'j' during swap phases so the inner-loop pointer doesn't persist
+
+  // Hide selection j during swap phases
   if (isSwapPhase) {
     selectionJObj = null;
   }
+
+  // Min variable (selection sort)
+  let minObj = currentStep.min;
+  if (
+    !minObj &&
+    currentStep.phase === "min_update" &&
+    currentStep.comparing?.length > 0
+  ) {
+    const mi = currentStep.comparing[0];
+    if (mi >= 0 && mi < currentArray.length) {
+      minObj = { value: currentArray[mi], index: mi };
+    }
+  }
+  if (!minObj) {
+    minObj = findPersistedValue(["min"], (st) => {
+      if (st.phase === "inner_loop" && st.comparing?.length > 0) {
+        const mi = st.comparing[0];
+        return mi >= 0 && mi < (st.array || []).length;
+      }
+      return st.min;
+    });
+  }
+  // Hide minIndex during outer_loop phase
+  if (currentStep.phase === "outer_loop") {
+    minObj = null;
+  }
+
   // ============================================================================
-  // BUILD ACTIVE CALL STACK
+  // INSERTION SORT VARIABLES (key, temp)
   // ============================================================================
 
+  // Key variable (insertion sort)
+  const keyObj = currentStep.key || null;
+
+  // Temp variable (for insertion sort in C#/Java)
+  let tempObj = currentStep.temp;
+  if (!tempObj) {
+    const outerLoopStart = sortingSteps
+      .slice(0, currentStepIndex + 1)
+      .reverse()
+      .findIndex((st) => st?.phase === "outer_loop");
+    const searchStart =
+      outerLoopStart >= 0
+        ? currentStepIndex - outerLoopStart
+        : currentStepIndex - 1;
+    tempObj = findPersistedValue("temp", null, searchStart);
+  }
+
+  // Only display the temp variable during actual swap steps
+  if (!(currentStep.phase === "swap" || currentStep.phase === "swap_step")) {
+    tempObj = null;
+  }
+
+  // ============================================================================
+  // MERGE SORT VARIABLES (left, right, i, mid, mergeRange, tempArray)
+  // ============================================================================
+
+  // Find effective merge range for scoping
+  const effectiveMergeRange =
+    currentMergeRange ||
+    findPersistedValue("mergeRange", null, currentStepIndex);
+
+  const mergeScopeCheck = (st) =>
+    !st.mergeRange ||
+    !effectiveMergeRange ||
+    rangeMatches(st.mergeRange, effectiveMergeRange);
+
+  // Mid variable (merge sort)
+  const midObj = currentStep.mid || findPersistedValue("mid");
+
+  // Left/Right pointers (merge sort)
+  const leftVarObj =
+    currentStep.leftVar ||
+    findPersistedValue(["leftVar", "leftPtr"], mergeScopeCheck);
+
+  const rightVarObj =
+    currentStep.rightVar ||
+    (typeof currentStep.rightPtr === "number"
+      ? { value: currentStep.rightPtr }
+      : null) ||
+    findPersistedValue(["rightVar", "rightPtr"], mergeScopeCheck);
+
+  // I variable (merge sort copy-back)
+  let iVarObj =
+    currentStep.iVar ||
+    (typeof currentStep.i === "number" ? { value: currentStep.i } : null) ||
+    (typeof currentStep.t === "number" ? { value: currentStep.t } : null) ||
+    (currentStep.phase === "write" && currentStep.leftVar
+      ? { value: currentStep.leftVar.value }
+      : null);
+
+  if (!iVarObj) {
+    iVarObj = findPersistedValue(["iVar", "i", "t"], (st) => {
+      if (!mergeScopeCheck(st)) return false;
+      if (st.phase === "write" && st.leftVar) return true;
+      return st.iVar || typeof st.i === "number" || typeof st.t === "number";
+    });
+  }
+
+  // Merge temp array
+  let mergeSnapshotStep = null;
+  for (let s = currentStepIndex; s >= 0; s--) {
+    const st = sortingSteps[s];
+    if (st?.mergeRange && st.phase && st.phase !== "conquer") {
+      mergeSnapshotStep = st;
+      break;
+    }
+  }
+
+  const showMergeTemp =
+    mergeSnapshotStep && mergeSnapshotStep.phase !== "merge-complete";
+
+  // Merged indices tracking
+  const mergedDoneIndices = new Set();
+  for (let s = 0; s <= currentStepIndex; s++) {
+    const st = sortingSteps[s];
+    if (st?.phase === "merge-complete") {
+      if (Array.isArray(st.mergeRange) && st.mergeRange.length === 2) {
+        const [ml, mh] = st.mergeRange;
+        for (let idx = ml; idx <= mh; idx++) mergedDoneIndices.add(idx);
+      } else if (Array.isArray(st.swapped)) {
+        st.swapped.forEach((idx) => mergedDoneIndices.add(idx));
+      }
+    }
+  }
+
+  // ============================================================================
+  // QUICKSORT VARIABLES (pivotIndex, randomIndex, call stack)
+  // ============================================================================
+
+  const currentPivotIndex =
+    currentStep.pIndex ?? currentStep.pivotIndex ?? null;
+
+  // Random index (quicksort)
+  const randomIndexObj =
+    currentStep.randomIndex !== undefined
+      ? { value: currentStep.randomIndex }
+      : null;
+
+  // Build active call stack (for merge sort and quicksort)
   const activeCallFrames = [];
   let callCounter = 0;
 
@@ -352,40 +380,6 @@ if ((currentStep.phase === "outer_loop")) {
   const showRightVar = !!rightVarObj && !isDone;
 
   // ============================================================================
-  // MERGE TEMP ARRAY
-  // ============================================================================
-
-  let mergeSnapshotStep = null;
-  for (let s = currentStepIndex; s >= 0; s--) {
-    const st = sortingSteps[s];
-    if (st?.mergeRange && st.phase && st.phase !== "conquer") {
-      mergeSnapshotStep = st;
-      break;
-    }
-  }
-
-  const showMergeTemp =
-    mergeSnapshotStep && mergeSnapshotStep.phase !== "merge-complete";
-
-  // ============================================================================
-  // MERGED INDICES TRACKING
-  // ============================================================================
-
-  const mergedDoneIndices = new Set();
-  for (let s = 0; s <= currentStepIndex; s++) {
-    const st = sortingSteps[s];
-    if (st?.phase === "merge-complete") {
-      if (Array.isArray(st.mergeRange) && st.mergeRange.length === 2) {
-        const [ml, mh] = st.mergeRange;
-        for (let idx = ml; idx <= mh; idx++) mergedDoneIndices.add(idx);
-      } else if (Array.isArray(st.swapped)) {
-        st.swapped.forEach((idx) => mergedDoneIndices.add(idx));
-      }
-    }
-  }
-
-
-  // ============================================================================
   // RENDER VARIABLE CARD
   // ============================================================================
 
@@ -414,9 +408,12 @@ if ((currentStep.phase === "outer_loop")) {
             showRightVar ||
             showRandomIndexUI) && (
             <div className="mb-4 flex items-center justify-center w-full gap-4">
+              {/* Insertion Sort: temp */}
               {showTempUI && (
                 <VariableCard label="temp" value={tempObj.value} />
               )}
+
+              {/* Selection Sort: minIndex */}
               {showMinUI && (
                 <VariableCard
                   label="minIndex"
@@ -424,14 +421,17 @@ if ((currentStep.phase === "outer_loop")) {
                   bgColor="bg-orange-300"
                 />
               )}
+
+              {/* Insertion Sort: key */}
               {showKeyUI && (
                 <VariableCard
                   label="key"
                   value={keyObj.value}
-                  bgColor="bg-amber-300"
+                  bgColor="bg-rose-300"
                 />
               )}
 
+              {/* Merge/Quick Sort: Call Stack */}
               {showCallUI && (
                 <div className="flex items-end gap-3">
                   {activeCallFrames.map((frame, idx) => {
@@ -525,7 +525,6 @@ if ((currentStep.phase === "outer_loop")) {
                   key={`${index}-${value}`}
                   className="flex flex-col items-center"
                 >
-                
                   <div
                     className={`flex items-center justify-center h-12 px-4 rounded-lg font-bold text-lg transition-all duration-500 ease-in-out transform shadow-lg border-2 min-w-[60px] ${baseClass}`}
                   >
@@ -541,9 +540,10 @@ if ((currentStep.phase === "outer_loop")) {
             })}
           </div>
 
-          {/* i/j display: prefer selection sort vars when in selection context, else bubble vars */}
+          {/* Bubble Sort / Selection Sort: i/j Display */}
           {(() => {
-            const showSelectionIJ = (selectionIObj || selectionJObj) && !!minObj;
+            const showSelectionIJ =
+              (selectionIObj || selectionJObj) && !!minObj;
             const showBubbleIJ = (bubbleIObj || bubbleJObj) && !showSelectionIJ;
             if (!showSelectionIJ && !showBubbleIJ) return null;
 
@@ -569,21 +569,8 @@ if ((currentStep.phase === "outer_loop")) {
               </div>
             );
           })()}
-          {/* QuickSort Random Index */}
-          {randomIndexObj && (
-            <div className="mt-3 flex items-center justify-center gap-4 w-full">
-              <div className="min-h-10 w-36 py-1 rounded-lg flex items-center justify-center font-medium bg-amber-300 text-gray-900 shadow-md">
-                <div className="text-center">
-                  <div className="text-xs text-gray-700">randomIndex</div>
-                  <div className="text-lg font-bold">
-                    {safeValue(randomIndexObj.value)}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
 
-          {/* Merge Temp Array Display */}
+          {/* Merge Sort: Temp Array Display */}
           {showMergeTemp &&
             mergeSnapshotStep &&
             (() => {
@@ -652,6 +639,20 @@ if ((currentStep.phase === "outer_loop")) {
                 </div>
               );
             })()}
+
+          {/* QuickSort: Random Index */}
+          {randomIndexObj && (
+            <div className="mt-3 flex items-center justify-center gap-4 w-full">
+              <div className="min-h-10 w-36 py-1 rounded-lg flex items-center justify-center font-medium bg-amber-300 text-gray-900 shadow-md">
+                <div className="text-center">
+                  <div className="text-xs text-gray-700">randomIndex</div>
+                  <div className="text-lg font-bold">
+                    {safeValue(randomIndexObj.value)}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -19,8 +19,7 @@ export const mergeSort = {
     // Merge function lines (fixed)
     const MERGE_HEADER_LINE = 1;
     const MERGE_COMPARE_LINE = 5;
-    const MERGE_WRITE_LINE = 7;
-    const MERGE_WHILE_END_LINE = 14;
+
 
     // Merge helper that records step-by-step actions for visualization
     function merge(low, mid, high) {

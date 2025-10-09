@@ -10,7 +10,6 @@ const ArrayDisplay = ({
   const currentStep = sortingSteps[currentStepIndex] || {};
   const currentMergeRange = currentStep.mergeRange || null;
 
-
   // helper to compare merge ranges
   const rangeMatches = (a, b) => {
     if (!a || !b) return false;
@@ -102,13 +101,22 @@ const ArrayDisplay = ({
     }
 
     // 2) A comparison step carries the j index in comparing[0]
-    if (!bubbleJObj && currentStep && Array.isArray(currentStep.comparing) && currentStep.comparing.length > 0) {
+    if (
+      !bubbleJObj &&
+      currentStep &&
+      Array.isArray(currentStep.comparing) &&
+      currentStep.comparing.length > 0
+    ) {
       const cand = currentStep.comparing[0];
       if (typeof cand === "number") bubbleJObj = { value: cand };
     }
 
     // 3) Walk backwards to find the most recent outer_loop/inner_loop step
-    if ((!bubbleIObj || !bubbleJObj) && sortingSteps && sortingSteps.length > 0) {
+    if (
+      (!bubbleIObj || !bubbleJObj) &&
+      sortingSteps &&
+      sortingSteps.length > 0
+    ) {
       for (let s = currentStepIndex; s >= 0; s--) {
         const st = sortingSteps[s];
         if (!st) continue;
@@ -123,6 +131,15 @@ const ArrayDisplay = ({
         if (bubbleIObj && bubbleJObj) break;
       }
     }
+  }
+
+  // ============================================================================
+  // GET RANDOMINDEX INFORMATION (QUICKSORT RANDOM PIVOT)
+  // Shown when phase is "pindex" and randomIndex exists
+  // ============================================================================
+  let randomIndexObj = null;
+  if (currentStep && currentStep.randomIndex !== undefined) {
+    randomIndexObj = { value: currentStep.randomIndex };
   }
 
   // ============================================================================
@@ -460,6 +477,14 @@ const ArrayDisplay = ({
     selectedLanguage === "csharp" || selectedLanguage === "java";
   const isDone = currentStep && currentStep.phase === "completed";
   const showTempUI = !isDone && languageUsesTemp && !!tempObj;
+  // ============================================================================
+  // SHOW RANDOMINDEX UI WHEN QUICKSORT PINDEX PHASE HAS RANDOMINDEX
+  // ============================================================================
+  const showRandomIndexUI =
+    !isDone &&
+    !!randomIndexObj &&
+    currentStep &&
+    currentStep.phase === "partition-entry";
 
   // ============================================================================
   // MERGE-SPECIFIC TEMP (VISUALIZED UNDER ARRAY)
@@ -545,7 +570,8 @@ const ArrayDisplay = ({
             jObj ||
             showCallUI ||
             showLeftVar ||
-            showRightVar) && (
+            showRightVar ||
+            showRandomIndexUI) && (
             <div className="mb-4 flex items-center justify-center w-full gap-4">
               {showTempUI && (
                 <div
@@ -598,7 +624,7 @@ const ArrayDisplay = ({
                   </div>
                 </div>
               )}
-
+          
               {showCallUI && (
                 <div className="flex items-end gap-3">
                   {activeCallFrames.map((frame, idx) => {
@@ -645,13 +671,18 @@ const ArrayDisplay = ({
                         )}
                         {/* render pIndex (pivot index) under the call frame when present */}
                         {(frame.pIndex !== undefined ||
-                          (currentStep && currentStep.pIndex !== undefined &&
+                          (currentStep &&
+                            currentStep.pIndex !== undefined &&
                             currentStep.low === frame.low &&
                             currentStep.high === frame.high)) && (
                           <div className="mt-1 h-auto min-w-[120px] px-2 rounded-md flex flex-col items-start justify-center font-medium bg-rose-200 text-gray-900 shadow-sm">
                             <div className="text-sm font-semibold w-full text-center">{`pIndex`}</div>
                             <div className="text-sm font-mono">
-                              {`= ${frame.pIndex !== undefined ? frame.pIndex : currentStep.pIndex}`}
+                              {`= ${
+                                frame.pIndex !== undefined
+                                  ? frame.pIndex
+                                  : currentStep.pIndex
+                              }`}
                             </div>
                           </div>
                         )}
@@ -663,7 +694,7 @@ const ArrayDisplay = ({
             </div>
           )}
 
-          {/* debug removed */}
+      
 
           <div className="flex justify-center gap-4 flex-wrap">
             {currentArray.map((value, index) => {
@@ -674,10 +705,7 @@ const ArrayDisplay = ({
               const isSwapped =
                 sortingSteps[currentStepIndex]?.swapped?.includes(index);
 
-              const inPartitionRange =
-                currentPartitionRange &&
-                index >= currentPartitionRange[0] &&
-                index <= currentPartitionRange[1];
+         
               const isPivot =
                 currentPivotIndex !== null && index === currentPivotIndex;
 
@@ -728,7 +756,9 @@ const ArrayDisplay = ({
                 <div className="min-h-10 w-28 py-1 rounded-lg flex items-center justify-center font-medium bg-sky-300 text-gray-900 shadow-md">
                   <div className="text-center">
                     <div className="text-xs text-gray-700">i</div>
-                    <div className="text-lg font-bold">{bubbleIObj.value != null ? bubbleIObj.value : "-"}</div>
+                    <div className="text-lg font-bold">
+                      {bubbleIObj.value != null ? bubbleIObj.value : "-"}
+                    </div>
                   </div>
                 </div>
               )}
@@ -736,10 +766,27 @@ const ArrayDisplay = ({
                 <div className="min-h-10 w-28 py-1 rounded-lg flex items-center justify-center font-medium bg-fuchsia-300 text-gray-900 shadow-md">
                   <div className="text-center">
                     <div className="text-xs text-gray-700">j</div>
-                    <div className="text-lg font-bold">{bubbleJObj.value != null ? bubbleJObj.value : "-"}</div>
+                    <div className="text-lg font-bold">
+                      {bubbleJObj.value != null ? bubbleJObj.value : "-"}
+                    </div>
                   </div>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* QuickSort randomIndex badge rendered under the original array */}
+
+          {randomIndexObj && (
+            <div className="mt-3 flex items-center justify-center gap-4 w-full">
+              <div className="min-h-10 w-36 py-1 rounded-lg flex items-center justify-center font-medium bg-amber-300 text-gray-900 shadow-md">
+                <div className="text-center">
+                  <div className="text-xs text-gray-700">randomIndex</div>
+                  <div className="text-lg font-bold">
+                    {randomIndexObj.value != null ? randomIndexObj.value : "-"}
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 

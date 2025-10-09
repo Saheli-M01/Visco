@@ -146,29 +146,24 @@ export const bubbleSort = {
       }
     }
     
-  // For languages that use a temp variable (C/Java), ensure the temp value
-    // persists across subsequent steps once it's created. This mirrors the
-    // behavior where the temp variable remains in scope until overwritten.
+  // For languages that use a temp variable (C/Java/C#), ensure `temp`
+  // appears only on the swap steps themselves. Clear any `temp`
+  // properties on steps that are not part of the swap sequence so the
+  // temporary disappears as soon as the if-block finishes (e.g. when
+  // the next inner_loop step begins).
   const languageUsesTemp = language === 'c' || language === 'java' || language === 'csharp';
-    if (languageUsesTemp) {
-      let lastTemp = null;
-      for (let k = 0; k < steps.length; k++) {
-        if (steps[k].hasOwnProperty('temp')) {
-          // If step explicitly sets temp (may be object or null), update lastTemp
-          if (steps[k].temp) {
-            lastTemp = steps[k].temp;
-          } else {
-            // If explicitly set to null, keep lastTemp (do not remove) per UX request
-            // so we won't clear lastTemp here.
-          }
-        } else {
-          // No explicit temp on this step - propagate lastTemp if available
-          if (lastTemp) {
-            steps[k].temp = lastTemp;
-          }
+  if (languageUsesTemp) {
+    for (let k = 0; k < steps.length; k++) {
+      const st = steps[k];
+      if (!st) continue;
+      // keep temp only for explicit swap phases
+      if (st.phase !== 'swap_step' && st.phase !== 'swap') {
+        if (st.hasOwnProperty('temp')) {
+          delete st.temp;
         }
       }
     }
+  }
 
   // Ensure the steps end with a clear 'completed' state so the UI doesn't
     // display lingering comparing indices after the algorithm finishes.

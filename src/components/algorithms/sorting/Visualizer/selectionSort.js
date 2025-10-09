@@ -40,16 +40,17 @@ export const selectionSort = {
       });
 
       let minIndex = i;
-      // Emit an initial min_update step so the UI can show the minIndex variable
-      // immediately (minIndex initialized to i). This ensures the second step
-      // highlights Min in the array display and step history.
+      // Emit an initial min_update step with a structured `min` so the UI
+      // shows the minIndex variable explicitly. Do NOT put this index into
+      // `comparing` — otherwise components that infer `j` from comparing[0]
+      // may display `j` prematurely.
       steps.push({
         array: [...a],
-        comparing: [minIndex],
         swapped: [],
-        description: `Initial miIindex ${minIndex} (value ${a[minIndex]})`,
+        description: `Initial minIndex ${minIndex} (value ${a[minIndex]})`,
         codeLine: 2,
         phase: "min_update",
+        min: { value: a[minIndex], index: minIndex },
       });
       for (let j = i + 1; j < n; j++) {
         steps.push({
@@ -58,7 +59,8 @@ export const selectionSort = {
           swapped: [],
           description: `Inner loop: j = ${j}`,
           codeLine: 3,
-          phase: "inner_loop"
+          phase: "inner_loop",
+          j: { value: j },
         });
         // compare
         steps.push({
@@ -68,16 +70,17 @@ export const selectionSort = {
           description: `Comparing arr[${minIndex}] = (${a[minIndex]}) with arr[${j}] = (${a[j]})`,
           codeLine: 4,
           phase: "comparison",
+          j: { value: j },
         });
         if (a[j] < a[minIndex]) {
           minIndex = j;
           steps.push({
             array: [...a],
-            comparing: [minIndex],
             swapped: [],
             description: `New minIndex found at ${minIndex}`,
             codeLine: 5,
             phase: "min_update",
+            min: { value: a[minIndex], index: minIndex },
           });
         } else {
           steps.push({
@@ -183,6 +186,50 @@ export const selectionSort = {
             } else {
               if (lastTemp) steps[k].temp = lastTemp;
             }
+          }
+        }
+      }
+    }
+
+    // Propagate `min` so it remains visible for the entire outer-loop pass
+    // and only clears when the next `outer_loop` step is reached.
+    // This ensures the UI shows the minIndex throughout inner/comparison/swap
+    // steps and hides it on the outer_loop marker.
+    const outerStartsForMin = [];
+    for (let k = 0; k < steps.length; k++) {
+      if (steps[k] && steps[k].phase === "outer_loop") outerStartsForMin.push(k);
+    }
+
+    if (outerStartsForMin.length === 0) {
+      // No explicit outer_loop markers: propagate min globally except on outer_loop
+      let lastMin = null;
+      for (let k = 0; k < steps.length; k++) {
+        const st = steps[k];
+        if (!st) continue;
+        if (st.hasOwnProperty("min") && st.min) {
+          lastMin = st.min;
+          continue;
+        }
+        if (lastMin && st.phase !== "outer_loop") {
+          st.min = lastMin;
+        }
+      }
+    } else {
+      // Propagate min within each outer-loop segment only and do not attach to the outer_loop step
+      for (let seg = 0; seg < outerStartsForMin.length; seg++) {
+        const start = outerStartsForMin[seg];
+        const end = seg + 1 < outerStartsForMin.length ? outerStartsForMin[seg + 1] : steps.length;
+        let lastMin = null;
+        // start+1 to skip the outer_loop step itself
+        for (let k = start + 1; k < end; k++) {
+          const st = steps[k];
+          if (!st) continue;
+          if (st.hasOwnProperty("min") && st.min) {
+            lastMin = st.min;
+            continue;
+          }
+          if (lastMin && st.phase !== "outer_loop") {
+            st.min = lastMin;
           }
         }
       }

@@ -1,13 +1,13 @@
-import { bubbleSort } from "./sorting/Visualizer/bubbleSort.js";
-import { selectionSort } from "./sorting/Visualizer/selectionSort.js";
-import { insertionSort } from "./sorting/Visualizer/insertionSort.js";
-import { mergeSort } from "./sorting/Visualizer/mergeSort.js";
-import { quickSort } from "./sorting/Visualizer/quickSort.js";
-import { heapSort } from "./sorting/Visualizer/heapSort.js";
-import { bucketSort } from "./sorting/Visualizer/bucketSort.js";
-import { radixSort } from "./sorting/Visualizer/radixSort.js";
-import { shellSort } from "./sorting/Visualizer/shellSort.js";
-import { countingSort } from "./sorting/Visualizer/countingSort.js";
+import { bubbleSort } from "./sorting/BubbleSort/bubbleSort.js";
+import { selectionSort } from "./sorting/SelectionSort/selectionSort.js";
+import { insertionSort } from "./sorting/InsertionSort/insertionSort.js";
+import { mergeSort } from "./sorting/MergeSort/mergeSort.js";
+import { quickSort } from "./sorting/QuickSort/quickSort.js";
+import { heapSort } from "./sorting/HeapSort/heapSort.js";
+import { bucketSort } from "./sorting/BucketSort/bucketSort.js";
+import { radixSort } from "./sorting/RadixSort/radixSort.js";
+import { shellSort } from "./sorting/ShellSort/shellSort.js";
+import { countingSort } from "./sorting/CountingSort/countingSort.js";
 
 // Algorithm factory to get the appropriate algorithm implementation
 export const getAlgorithm = (algorithmName) => {

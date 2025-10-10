@@ -6,7 +6,9 @@ export const rangeMatches = (a, b) =>
 
 export const parseIndexFromDesc = (desc, key) => {
   if (!desc || typeof desc !== "string") return null;
-  const match = desc.match(new RegExp(`${key}\s*=\s*(\\d+)`));
+  // Use escaped backslashes so the RegExp receives the proper pattern: e.g. /i\s*=\s*(\d+)/
+  const pattern = `${key}\\s*=\\s*(\\d+)`;
+  const match = desc.match(new RegExp(pattern));
   return match ? Number(match[1]) : null;
 };
 

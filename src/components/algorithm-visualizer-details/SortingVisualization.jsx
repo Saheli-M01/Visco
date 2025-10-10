@@ -95,6 +95,7 @@ const AlgorithmVisualization = ({
                   currentStepIndex={currentStepIndex}
                   currentCodeLine={currentCodeLine}
                   selectedLanguage={selectedLanguage}
+                  selectedAlgorithm={selectedAlgorithm}
                   tempLineIndex={getCodeLines(
                     selectedLanguage,
                     selectedAlgorithm?.name

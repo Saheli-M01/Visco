@@ -40,6 +40,7 @@ export const bubbleSort = {
         comparing: [],
         swapped: [],
         description: `Pass ${i + 1}: Starting outer loop: i = ${i}`,
+        i: i,
         codeLine: 2, // for (let i = 0; i < n - 1; i++)
         phase: "outer_loop"
       });
@@ -51,6 +52,7 @@ export const bubbleSort = {
           comparing: [],
           swapped: [],
           description: `Inner loop: j = ${j}`,
+          j: j,
           codeLine: 3, // for (let j = 0; j < n - i - 1; j++)
           phase: "inner_loop"
         });
@@ -61,6 +63,7 @@ export const bubbleSort = {
           comparing: [j, j + 1],
           swapped: [],
           description: `Comparing arr[${j}] = ${sortedArray[j]} with arr[${j + 1}] = ${sortedArray[j + 1]}`,
+          j: j,
           codeLine: 4, // if (arr[j] > arr[j + 1])
           phase: "comparison"
         });

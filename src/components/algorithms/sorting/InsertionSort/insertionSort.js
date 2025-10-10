@@ -63,7 +63,7 @@ export const insertionSort = {
         j: { value: j, index: j },
         key: { value: key, index: i },
         codeLine: 3,
-        phase: "",
+        phase: "inner_loop",
       });
 
       // No separate temp variable used; insertion sort uses 'key' consistently.

@@ -34,9 +34,7 @@ const StepHistory = ({
       {/* Step History */}
       <div className="border border-gray-300 bg-white rounded-xl py-2 px-4 flex flex-col h-[38vh]">
         <div className="flex items-center justify-between mb-1 gap-5">
-          <h3 className="text-lg font-semibold text-foreground m-0">
-            Steps
-          </h3>
+          <h3 className="text-lg font-semibold text-foreground m-0">Steps</h3>
 
           {/* Progress Bar to the right of the heading */}
           <div className="flex items-center gap-3 flex-1 ml-4">
@@ -134,67 +132,6 @@ const StepHistory = ({
                       {step.phase}
                     </span>
                   )}
-                  {/* Show small Temp badge if any temp exists up to this step */}
-                  {(() => {
-                    const hasTempUpToStep = sortingSteps
-                      .slice(0, step.step + 1)
-                      .some((s) => s && s.temp);
-                    return hasTempUpToStep ? (
-                      <span className="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 ml-2">
-                        temp
-                      </span>
-                    ) : null;
-                  })()}
-                  {/* Show small Key badge if any key exists up to this step (insertion sort) */}
-                  {(() => {
-                    const hasKeyUpToStep = sortingSteps
-                      .slice(0, step.step + 1)
-                      .some((s) => s && s.key);
-                    return hasKeyUpToStep ? (
-                      <span className="text-xs px-2 py-1 rounded-full bg-amber-100 text-amber-800 ml-2">
-                        key
-                      </span>
-                    ) : null;
-                  })()}
-                  {/* Show small j badge if any j exists up to this step (insertion sort) */}
-                  {(() => {
-                    const hasJUpToStep = sortingSteps
-                      .slice(0, step.step + 1)
-                      .some((s) => s && s.j !== undefined && s.j !== null);
-                    return hasJUpToStep ? (
-                      <span className="text-xs px-2 py-1 rounded-full bg-amber-100 text-amber-800 ml-2">
-                        j
-                      </span>
-                    ) : null;
-                  })()}
-                  {/* Show small Mid badge if mid calculation exists in this step */}
-                  {(() => {
-                    const hasMidInStep =
-                      sortingSteps[step.step] && sortingSteps[step.step].mid;
-                    return hasMidInStep ? (
-                      <span className="text-xs px-2 py-1 rounded-full bg-purple-100 text-purple-800 ml-2">
-                        Mid
-                      </span>
-                    ) : null;
-                  })()}
-                  {/* Show Min badge if this step or any earlier step defines a min (selection sort) */}
-                  {(() => {
-                    const st = sortingSteps[step.step];
-                    const hasMinHere =
-                      st && (st.phase === "min_update" || st.min);
-                    const hasMinUpToStep = sortingSteps
-                      .slice(0, step.step + 1)
-                      .some((s) => s && (s.phase === "min_update" || s.min));
-                    return hasMinHere ? (
-                      <span className="text-xs px-2 py-1 rounded-full bg-amber-100 text-amber-800 ml-2">
-                        minIndex
-                      </span>
-                    ) : hasMinUpToStep ? (
-                      <span className="text-xs px-2 py-1 rounded-full bg-amber-50 text-amber-700 ml-2">
-                        minIndex
-                      </span>
-                    ) : null;
-                  })()}
                 </div>
                 <div className="flex gap-1 flex-wrap mb-2">
                   {step.array.map((num, i) => (

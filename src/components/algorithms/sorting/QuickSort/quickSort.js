@@ -82,19 +82,20 @@ export const quickSort = {
       return { pIndex: pivotIdx, randomIndex: returnedRandomIndex };
     }
 
-    // Line-numbered steps for call-card and base-case check
-    // Keep these in sync with getCodeLines(language): function quickSort starts at line 21
-    const FUNC_ENTRY_LINE = 20; // call quickSort highlight
-    const COND_LINE = 21; // base-case check highlight
-    const PINDEX_LINE = 22; // pIndex = partition line
-    const RANDOM_LINE = 1;
-    const FIRST_SWAP_LINE = RANDOM_LINE + 1;
-    const WHILE_ENTRY_LINE = 6;
-    const FIRST_INNER_WHILE_LINE = 7;
-    const SECOND_INNER_WHILE_LINE = 10;
-    const COND_I_J_LINE = 13;
-    const FINAL_SWAP_LINE = 17;
-    const RETURN_J_LINE = FINAL_SWAP_LINE + 1;
+  // Line-numbered steps for call-card and base-case check
+  // Keep these in sync with getCodeLines(language): function quickSort starts at line 21
+  // These constants map to the lines in getCodeLines('javascript')
+  const FUNC_ENTRY_LINE = 20; // function quickSort(arr, low, high) {
+  const COND_LINE = 21; // if (low < high) {
+  const PINDEX_LINE = 22; // let pIndex = this.partition(arr, low, high);
+  const RANDOM_LINE = 1; // partition function start
+  const FIRST_SWAP_LINE = 2;
+  const WHILE_ENTRY_LINE = 6;
+  const FIRST_INNER_WHILE_LINE = 7;
+  const SECOND_INNER_WHILE_LINE = 10;
+  const COND_I_J_LINE = 13;
+  const FINAL_SWAP_LINE = 17;
+  const RETURN_J_LINE = 18;
 
     function quickRec(low, high) {
       // STEP 1: Emit function-entry (call) step highlighting line 20
@@ -123,6 +124,17 @@ export const quickSort = {
 
       // Base case check
       if (low >= high) {
+        // Emit a descriptive step so the UI/StepHistory can show why this call returns
+        steps.push({
+          array: [...a],
+          comparing: [],
+          swapped: [],
+          description: `Base case: low (${low}) >= high (${high}) — returning from quickSort call`,
+          codeLine: COND_LINE,
+          phase: "condition-failed",
+          low,
+          high,
+        });
         return;
       }
       // STEP 3: Call partition and emit pIndex step highlighting line 22
@@ -440,13 +452,34 @@ export const quickSort = {
         swapped: [],
         description: `partition returned pIndex = ${jPtr}`,
         codeLine: PINDEX_LINE,
-        phase: "",
+        phase: "pindex-result",
         low,
         high,
         pIndex: jPtr,
       });
 
-      // Stop here - partition completed and returned pIndex
+      // Now assign pIndex locally (this corresponds to the line after the partition call in the quickSort function)
+      const pIndex = jPtr;
+
+      // Emit a step that highlights the pIndex assignment line in the caller (helpful for the UI to show recursion)
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `Calling quickSort for (low to pIndex -> 1) = (${low} -> ${pIndex - 1})`,
+        codeLine: PINDEX_LINE + 1, // highlight the line with the assignment/recursive calls
+        phase: "call-left",
+        low,
+        high,
+        pIndex,
+      });
+
+      // Recurse on left and right partitions
+      // Left side
+      quickRec(low, pIndex - 1);
+      // Right side
+      quickRec(pIndex + 1, high);
+
       return;
     }
 

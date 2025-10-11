@@ -63,9 +63,9 @@ const ArrayDisplay = ({
                 : isSwapped
                 ? "bg-teal-400 text-white border-teal-600 scale-105"
                 : isPivot
-                ? "bg-gray-600 text-white border-gray-400"
-                : isMergedDone
-                ? "bg-yellow-200 text-gray-900 border-yellow-300"
+                ? "bg-sky-400 text-white border-sky-600"
+             
+          
                 : "bg-gray-700 text-white border-gray-600";
 
               return (

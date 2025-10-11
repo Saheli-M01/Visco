@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
+// Use the official plugin-react to enable reliable React Fast Refresh/HMR
+import react from "@vitejs/plugin-react";
 import path from "path";
 
 // https://vitejs.dev/config/

@@ -264,8 +264,8 @@ return (
         </div>
       )}
 
-      {/* Variables - BELOW array */}
-      <div className="mt-3 flex items-center justify-between w-full">
+
+      <div className="mt-1 flex items-center justify-between w-full">
         <div className="flex-1"></div>
 
         <div className="flex justify-center gap-4 items-center">

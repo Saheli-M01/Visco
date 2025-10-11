@@ -115,23 +115,35 @@ const StepHistory = ({
                       </span>
                     )}
                   </div>
-                  {step.phase && (
-                    <span
-                      className={`text-xs px-2 py-1 rounded-full ${
-                        step.phase === "comparison"
-                          ? "bg-blue-100 text-blue-800"
-                          : step.phase === "write"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : step.phase === "merge-complete"
-                          ? "bg-green-100 text-green-800"
-                          : step.phase === "divide"
-                          ? "bg-indigo-100 text-indigo-800"
-                          : "bg-gray-100 text-gray-800"
-                      }`}
-                    >
-                      {step.phase}
-                    </span>
-                  )}
+                  {step.phase && (() => {
+                    // treat a group of condition-like phases as 'comparison' for styling
+                    const comparisonPhases = new Set([
+                      "comparison",
+                      "inner-while-i-entry",
+                      "inner-while-i-cond-true",
+                      "inner-while-i-cond-false",
+                      "inner-while-j-cond-true",
+                      "j-cond-false",
+                      "while-entry",
+                      "if-i-less-j",
+                    ]);
+
+                    const cls = comparisonPhases.has(step.phase)
+                      ? "bg-blue-100 text-blue-800"
+                      : step.phase === "write"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : step.phase === "merge-complete"
+                      ? "bg-green-100 text-green-800"
+                      : step.phase === "divide"
+                      ? "bg-indigo-100 text-indigo-800"
+                      : "bg-gray-100 text-gray-800";
+
+                    return (
+                      <span className={`text-xs px-2 py-1 rounded-full ${cls}`}>
+                        {step.phase}
+                      </span>
+                    );
+                  })()}
                 </div>
                 <div className="flex gap-1 flex-wrap mb-2">
                   {step.array.map((num, i) => (

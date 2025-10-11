@@ -8,10 +8,13 @@ import MergeVisualizer, {
 import QuickVisualizer, {
   getQuickOverlay,
 } from "../../algorithms/sorting/QuickSort/QuickVisualizer";
-
+import HeapVisualizer from "../../algorithms/sorting/HeapSort/HeapVisualizer";
 
 const ArrayElement = ({ value, index, styleClass }) => (
-  <div key={`${index}-${value}`} className="flex flex-col items-center pt-2 pb-3">
+  <div
+    key={`${index}-${value}`}
+    className="flex flex-col items-center pt-2 pb-3"
+  >
     <div
       className={`flex items-center justify-center h-12 px-4 rounded-lg font-bold text-lg transition-all duration-500 ease-in-out transform shadow-lg border-2 min-w-[60px] ${styleClass}`}
     >
@@ -38,12 +41,24 @@ const ArrayDisplay = ({
   const currentMergeRange = currentStep.mergeRange || null;
   const isSwapPhase = ["swap", "swap_step"].includes(currentStep.phase);
 
-  const mergeOverlay = getMergeOverlay({ sortingSteps, currentStepIndex, currentStep, currentMergeRange, currentArray });
-  const quickOverlay = getQuickOverlay({ sortingSteps, currentStepIndex, currentStep });
+  const mergeOverlay = getMergeOverlay({
+    sortingSteps,
+    currentStepIndex,
+    currentStep,
+    currentMergeRange,
+    currentArray,
+  });
+  const quickOverlay = getQuickOverlay({
+    sortingSteps,
+    currentStepIndex,
+    currentStep,
+  });
   const currentPivotIndex = quickOverlay.currentPivotIndex;
 
   // normalize selected algorithm name to a compact key used for matching
-  const algoKey = (selectedAlgorithm?.name || "").toLowerCase().replace(/\s+/g, "");
+  const algoKey = (selectedAlgorithm?.name || "")
+    .toLowerCase()
+    .replace(/\s+/g, "");
 
   return (
     <div className="space-y-4 bg-gray-900 rounded-lg min-h-[50vh]">
@@ -53,9 +68,12 @@ const ArrayDisplay = ({
           <div className="flex justify-center gap-4 flex-wrap">
             {currentArray.map((value, index) => {
               const isMinPhase = currentStep.phase === "min_update";
-              const isComparing = comparingIndices.includes(index) && !isSwapPhase && !isMinPhase;
-              const isSwapped = sortingSteps[currentStepIndex]?.swapped?.includes(index);
-              const isPivot = currentPivotIndex !== null && index === currentPivotIndex;
+              const isComparing =
+                comparingIndices.includes(index) && !isSwapPhase && !isMinPhase;
+              const isSwapped =
+                sortingSteps[currentStepIndex]?.swapped?.includes(index);
+              const isPivot =
+                currentPivotIndex !== null && index === currentPivotIndex;
               const isMergedDone = mergeOverlay.mergedDoneIndices.has(index);
 
               const baseClass = isComparing
@@ -64,12 +82,15 @@ const ArrayDisplay = ({
                 ? "bg-teal-400 text-white border-teal-600 scale-105"
                 : isPivot
                 ? "bg-sky-400 text-white border-sky-600"
-             
-          
                 : "bg-gray-700 text-white border-gray-600";
 
               return (
-                <ArrayElement key={`${index}-${value}`} value={value} index={index} styleClass={baseClass} />
+                <ArrayElement
+                  key={`${index}-${value}`}
+                  value={value}
+                  index={index}
+                  styleClass={baseClass}
+                />
               );
             })}
           </div>
@@ -118,6 +139,13 @@ const ArrayDisplay = ({
 
           {algoKey.startsWith("quick") && (
             <QuickVisualizer
+              currentStep={currentStep}
+              sortingSteps={sortingSteps}
+              currentStepIndex={currentStepIndex}
+            />
+          )}
+          {algoKey.startsWith("heap") && (
+            <HeapVisualizer
               currentStep={currentStep}
               sortingSteps={sortingSteps}
               currentStepIndex={currentStepIndex}

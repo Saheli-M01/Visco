@@ -211,45 +211,67 @@ const CategoryLayout = ({ category, features, complexityData }) => {
                 >
                   <div className="backdrop-blur-md bg-white/40 border border-white/20 rounded-3xl px-8 py-12 shadow-xl">
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {filteredAlgorithms.map((algorithm, index) => (
-                        <motion.div
-                          key={algorithm.name}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.5, delay: 0.05 * index }}
-                          onClick={() => handleAlgorithmClick(algorithm)}
-                          className="backdrop-blur-sm bg-white/60 border border-white/30 rounded-xl px-6 py-6 shadow-md hover:bg-white/85 transition-all cursor-pointer group"
-                        >
-                          <div className="flex items-center justify-between mb-3">
-                            <h3 className="text-lg font-semibold text-gray-900 group-hover:text-gray-700 transition-colors">
-                              {algorithm.name}
-                            </h3>
-                            <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-gray-900 transition-colors" />
-                          </div>
+                      {filteredAlgorithms.map((algorithm, index) => {
+                        // allowlist of interactive sorting algorithms
+                        const interactive = [
+                          "Bubble Sort",
+                          "Selection Sort",
+                          "Insertion Sort",
+                          "Merge Sort",
+                          "Quick Sort",
+                        ];
+                        const isInteractive = interactive.includes(algorithm.name);
 
-                          <div className="flex items-center gap-3 mb-3">
-                            <div className="flex items-center text-gray-600">
-                              <Clock className="h-3 w-3 mr-1" />
-                              <code className="font-mono text-xs">
-                                {algorithm.complexity}
-                              </code>
+                        return (
+                          <motion.div
+                            key={algorithm.name}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.05 * index }}
+                            onClick={() => isInteractive && handleAlgorithmClick(algorithm)}
+                            className={`backdrop-blur-sm bg-white/60 border border-white/30 rounded-xl px-6 py-6 shadow-md transition-all group ${isInteractive ? 'hover:bg-white/85 cursor-pointer' : 'opacity-60 cursor-default'}`}
+                          >
+                            <div className="flex items-center justify-between mb-3">
+                              <h3 className={`text-lg font-semibold text-gray-900 transition-colors ${isInteractive ? 'group-hover:text-gray-700' : 'text-gray-600'}`}>
+                                {algorithm.name}
+                              </h3>
+                              {isInteractive ? (
+                                <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-gray-900 transition-colors" />
+                              ) : (
+                                <span className="text-xs font-medium text-red-400">Coming Soon</span>
+                              )}
                             </div>
 
-                            <span
-                              className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(
-                                algorithm.difficulty
-                              )}`}
-                            >
-                              {algorithm.difficulty}
-                            </span>
-                          </div>
+                            <div className="flex items-center gap-3 mb-3">
+                              <div className="flex items-center text-gray-600">
+                                <Clock className="h-3 w-3 mr-1" />
+                                <code className="font-mono text-xs">
+                                  {algorithm.complexity}
+                                </code>
+                              </div>
 
-                          <p className="text-gray-700 text-sm font-medium leading-relaxed">
-                            {algorithm.shortDescription ||
-                              `Learn about ${algorithm.name} algorithm and its implementation.`}
-                          </p>
-                        </motion.div>
-                      ))}
+                              <span
+                                className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(
+                                  algorithm.difficulty
+                                )}`}
+                              >
+                                {algorithm.difficulty}
+                              </span>
+                            </div>
+
+                            <p className="text-gray-700 text-sm font-medium leading-relaxed">
+                              {algorithm.shortDescription ||
+                                `Learn about ${algorithm.name} algorithm and its implementation.`}
+                            </p>
+
+                            {!isInteractive && (
+                              <div className="mt-4 pt-4 border-t border-white/20">
+                                <div className="text-xs font-medium text-gray-500">Stay tuned 🚧</div>
+                              </div>
+                            )}
+                          </motion.div>
+                        );
+                      })}
                     </div>
                   </div>
                 </motion.div>

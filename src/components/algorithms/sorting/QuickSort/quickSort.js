@@ -82,20 +82,20 @@ export const quickSort = {
       return { pIndex: pivotIdx, randomIndex: returnedRandomIndex };
     }
 
-  // Line-numbered steps for call-card and base-case check
-  // Keep these in sync with getCodeLines(language): function quickSort starts at line 21
-  // These constants map to the lines in getCodeLines('javascript')
-  const FUNC_ENTRY_LINE = 20; // function quickSort(arr, low, high) {
-  const COND_LINE = 21; // if (low < high) {
-  const PINDEX_LINE = 22; // let pIndex = this.partition(arr, low, high);
-  const RANDOM_LINE = 1; // partition function start
-  const FIRST_SWAP_LINE = 2;
-  const WHILE_ENTRY_LINE = 6;
-  const FIRST_INNER_WHILE_LINE = 7;
-  const SECOND_INNER_WHILE_LINE = 10;
-  const COND_I_J_LINE = 13;
-  const FINAL_SWAP_LINE = 17;
-  const RETURN_J_LINE = 18;
+    // Line-numbered steps for call-card and base-case check
+    // Keep these in sync with getCodeLines(language): function quickSort starts at line 21
+    // These constants map to the lines in getCodeLines('javascript')
+    const FUNC_ENTRY_LINE = 20; // function quickSort(arr, low, high) {
+    const COND_LINE = 21; // if (low < high) {
+    const PINDEX_LINE = 22; // let pIndex = this.partition(arr, low, high);
+    const RANDOM_LINE = 1; // partition function start
+    const FIRST_SWAP_LINE = 2;
+    const WHILE_ENTRY_LINE = 6;
+    const FIRST_INNER_WHILE_LINE = 7;
+    const SECOND_INNER_WHILE_LINE = 10;
+    const COND_I_J_LINE = 13;
+    const FINAL_SWAP_LINE = 17;
+    const RETURN_J_LINE = 18;
 
     function quickRec(low, high) {
       // STEP 1: Emit function-entry (call) step highlighting line 20
@@ -285,7 +285,9 @@ export const quickSort = {
             array: [...a],
             comparing: [],
             swapped: [],
-            description: `(${a[iPtr]} <= ${pivotVal} && ${iPtr} <= ${high - 1}  )`,
+            description: `(${a[iPtr]} <= ${pivotVal} && ${iPtr} <= ${
+              high - 1
+            }  )`,
             codeLine: FIRST_INNER_WHILE_LINE,
             phase: "inner-while-i-cond-true",
             i: iPtr,
@@ -369,7 +371,7 @@ export const quickSort = {
           comparing: [],
           swapped: [],
           description: `arr[j] > pivot failed (j=${jPtr})`,
-          codeLine: SECOND_INNER_WHILE_LINE ,
+          codeLine: SECOND_INNER_WHILE_LINE,
           phase: "j-cond-false",
           j: jPtr,
           pivotValue: pivotVal,
@@ -466,7 +468,9 @@ export const quickSort = {
         array: [...a],
         comparing: [],
         swapped: [],
-        description: `Calling quickSort for (low to pIndex -> 1) = (${low} -> ${pIndex - 1})`,
+        description: `Calling quickSort for (low to pIndex -> 1) = (${low} -> ${
+          pIndex - 1
+        })`,
         codeLine: PINDEX_LINE + 1, // highlight the line with the assignment/recursive calls
         phase: "call-left",
         low,
@@ -583,6 +587,11 @@ export const quickSort = {
         "        quickSort(arr, pIndex + 1, high);", //25
         "    }", //26
         "}", //27
+        "private void swap (int[] arr, int i, int j){",
+        "        int temp = arr[i];",
+        "        arr[i] = arr[j];",
+        "        arr[j] = temp;",
+        "}",
       ],
       cpp: [
         "int partition(vector<int>& arr, int low, int high) {", //1
@@ -641,6 +650,11 @@ export const quickSort = {
         "        this.quickSort(arr, pIndex + 1, high);", //25
         "    }", //26
         "}", //27
+        "private void swap (int[] arr, int i, int j){",
+        "        int temp = arr[i];",
+        "        arr[i] = arr[j];",
+        "        arr[j] = temp;",
+        "}",
       ],
     };
 

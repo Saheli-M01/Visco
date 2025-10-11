@@ -1,5 +1,5 @@
 import React from "react";
-import { safeValue } from "../../../algorithm-visualizer-details/algorithm-visualizer-components/shared/stepHelpers";
+import { safeValue, findPersistedValue, parseIndexFromDesc } from "../../../algorithm-visualizer-details/algorithm-visualizer-components/shared/stepHelpers";
 import VariableCard from "../../../algorithm-visualizer-details/algorithm-visualizer-components/shared/VariableCard";
 
 export default function QuickVisualizer({
@@ -7,6 +7,8 @@ export default function QuickVisualizer({
   sortingSteps = [],
   currentStepIndex = 0,
 }) {
+  // Local debug toggle - set to true during development to show quick debug info
+  const DEBUG_SHOW_STEP_INFO = false;
   const isDone = currentStep.phase === "completed";
 
   // Build active call frames (quickSort recursion)
@@ -76,10 +78,132 @@ export default function QuickVisualizer({
   const showCallUI = (activeCallFrames.length > 0 || seenStart) && !isDone;
 
   // randomIndex (shown when entering partition)
-  const randomIndexObj =
-    currentStep.randomIndex !== undefined && currentStep.phase === "partition-entry"
-      ? { value: currentStep.randomIndex }
-      : null;
+  // We'll scope randomIndex and pIndex to the current active call frame.
+  // Find the latest active frame (the top of the call stack) if any.
+  const currentFrame = activeCallFrames.length > 0 ? activeCallFrames[activeCallFrames.length - 1] : null;
+
+  // Persist pIndex: scan past steps up to currentStepIndex for any step that indicates a pivot/partition result
+  // (pindex, pindex-result, final-swap, inner-swap) and assign j/pIndex when matching low/high.
+  if (currentFrame) {
+    const finalPhases = new Set(["final-swap", "partition-return", "pindex-result"]);
+    for (let s = 0; s <= Math.min(currentStepIndex, sortingSteps.length - 1); s++) {
+      const st = sortingSteps[s];
+      if (!st) continue;
+      const matchesFrame = st.low !== undefined && st.high !== undefined && st.low === currentFrame.low && st.high === currentFrame.high;
+
+      // prefer explicit pIndex fields on the matching frame
+      if (matchesFrame && st.pIndex !== undefined && st.pIndex !== null) {
+        currentFrame.pIndex = st.pIndex;
+        continue;
+      }
+
+      // accept pivotIndex on the matching frame
+      if (matchesFrame && st.pivotIndex !== undefined && st.pivotIndex !== null) {
+        currentFrame.pIndex = st.pivotIndex;
+        continue;
+      }
+
+      // Only accept 'j' as the partition index when it's emitted during final phases
+      if ((matchesFrame || s === currentStepIndex) && finalPhases.has(st.phase) && st.j !== undefined && st.j !== null) {
+        currentFrame.pIndex = st.j;
+        continue;
+      }
+    }
+  }
+
+  // Determine scoped randomIndex for the current frame: only show during partition phases and persist until partition returns
+  let scopedRandomIndex = null;
+  if (currentFrame) {
+    for (let s = 0; s <= Math.min(currentStepIndex, sortingSteps.length - 1); s++) {
+      const st = sortingSteps[s];
+      if (!st) continue;
+      // Prefer explicit randomIndex attached to the same frame
+      if (st.randomIndex !== undefined && st.randomIndex !== null) {
+        if ((st.low !== undefined && st.high !== undefined && st.low === currentFrame.low && st.high === currentFrame.high) || s === currentStepIndex) {
+          scopedRandomIndex = st.randomIndex;
+        }
+      }
+    }
+    // Fallback: if currentStep itself carries randomIndex (partition-entry may not set low/high), use it
+    if (scopedRandomIndex == null && currentStep?.randomIndex !== undefined && currentStep?.randomIndex !== null) {
+      scopedRandomIndex = currentStep.randomIndex;
+    }
+  }
+  // Determine scoped pivotValue for the current frame: prefer explicit pivotValue on steps or currentStep
+  let scopedPivotValue = null;
+  if (currentFrame) {
+    for (let s = 0; s <= Math.min(currentStepIndex, sortingSteps.length - 1); s++) {
+      const st = sortingSteps[s];
+      if (!st) continue;
+      if (st.pivotValue !== undefined && st.pivotValue !== null) {
+        if ((st.low !== undefined && st.high !== undefined && st.low === currentFrame.low && st.high === currentFrame.high) || s === currentStepIndex) {
+          scopedPivotValue = st.pivotValue;
+        }
+      }
+    }
+    if (scopedPivotValue == null && currentStep?.pivotValue !== undefined && currentStep?.pivotValue !== null) {
+      scopedPivotValue = currentStep.pivotValue;
+    }
+  }
+  // Determine scoped i/j for the current frame: prefer explicit i/j on steps or current step
+  let scopedI = null;
+  let scopedJ = null;
+  if (currentFrame) {
+    for (let s = 0; s <= Math.min(currentStepIndex, sortingSteps.length - 1); s++) {
+      const st = sortingSteps[s];
+      if (!st) continue;
+      const matchesFrame = st.low !== undefined && st.high !== undefined && st.low === currentFrame.low && st.high === currentFrame.high;
+      const isCurrent = s === currentStepIndex;
+      if ((matchesFrame || isCurrent) && st.i !== undefined && st.i !== null) scopedI = st.i;
+      if ((matchesFrame || isCurrent) && st.j !== undefined && st.j !== null) scopedJ = st.j;
+    }
+    // Fallback: allow currentStep to carry i/j even if low/high missing
+    if (scopedI == null && currentStep?.i !== undefined && currentStep?.i !== null) scopedI = currentStep.i;
+    if (scopedJ == null && currentStep?.j !== undefined && currentStep?.j !== null) scopedJ = currentStep.j;
+  }
+  const PARTITION_PHASES = new Set([
+    "partition-entry",
+    "swap",
+    "pivot-assign",
+    "i-init",
+    "j-init",
+    "while-entry",
+    "inner-while-i-entry",
+    "inner-while-i-cond-true",
+    "i-inc",
+    "inner-while-i-cond-false",
+  "inner-while-j-entry",
+  "inner-while-j-cond-true",
+    "j-dec",
+    "j-cond-false",
+    "if-i-less-j",
+    "inner-swap",
+    "final-swap",
+    "pindex",
+    "pindex-result",
+  ]);
+
+  // Debug logging to help trace why randomIndex may appear null in the UI.
+  // This prints when we are at the partition-entry step or when a nearby step contains randomIndex.
+  try {
+    if (currentStep?.phase === "partition-entry" || scopedRandomIndex != null) {
+      console.debug("[QuickVisualizer] idx=", currentStepIndex, "phase=", currentStep?.phase, "cur.randomIndex=", currentStep?.randomIndex, "scopedRandomIndex=", scopedRandomIndex);
+      const nearby = sortingSteps.slice(Math.max(0, currentStepIndex - 3), Math.min(sortingSteps.length, currentStepIndex + 6)).map((s, i) => ({ i: i + Math.max(0, currentStepIndex - 3), phase: s?.phase, randomIndex: s?.randomIndex }));
+      console.debug("[QuickVisualizer] nearby steps:", nearby);
+    }
+  } catch (e) {
+    // swallow logging errors
+  }
+
+  const shouldShowRandomIndex = currentFrame && PARTITION_PHASES.has(currentStep?.phase) && scopedRandomIndex != null;
+  const randomIndexObj = shouldShowRandomIndex ? { value: scopedRandomIndex } : null;
+
+  const shouldShowPivotValue = currentFrame && PARTITION_PHASES.has(currentStep?.phase) && scopedPivotValue != null;
+  const pivotValueObj = shouldShowPivotValue ? { value: scopedPivotValue } : null;
+  const shouldShowI = currentFrame && PARTITION_PHASES.has(currentStep?.phase) && scopedI != null;
+  const shouldShowJ = currentFrame && PARTITION_PHASES.has(currentStep?.phase) && scopedJ != null;
+  const iObj = shouldShowI ? { value: scopedI } : null;
+  const jObj = shouldShowJ ? { value: scopedJ } : null;
 
   if (!showCallUI && !randomIndexObj) return null;
 
@@ -106,23 +230,18 @@ export default function QuickVisualizer({
                   )},  high=${safeValue(frame.high)}`}</div>
                 </div>
 
-                {frameMid && (
-                  <div className="mt-1 h-auto min-w-[120px] px-2 rounded-md flex flex-col items-start justify-center font-medium bg-purple-300 text-gray-900 shadow-sm">
-                    <div className="text-sm font-semibold w-full text-center">mid</div>
-                    <div className="text-sm font-mono">{`= ${safeValue(frameMid.leftIndex)} + (${safeValue(
-                      frameMid.rightIndex
-                    )} - ${safeValue(frameMid.leftIndex)}) / 2 `}</div>
-                    <div className="text-sm font-mono">{`= ${safeValue(frameMid.value)}`}</div>
-                  </div>
-                )}
 
                 {(frame.pIndex !== undefined ||
                   (currentStep.pIndex !== undefined &&
                     currentStep.low === frame.low &&
-                    currentStep.high === frame.high)) && (
+                    currentStep.high === frame.high) ||
+                  currentStep.phase === "pindex" ||
+                  // Always show pIndex placeholder for the active frame during partition phases
+                  (PARTITION_PHASES.has(currentStep?.phase) && currentFrame && idx === activeCallFrames.length - 1)
+                ) && (
                   <div className="mt-1 h-auto min-w-[120px] px-2 rounded-md flex flex-col items-start justify-center font-medium bg-rose-200 text-gray-900 shadow-sm">
                     <div className="text-sm font-semibold w-full text-center">pIndex</div>
-                    <div className="text-sm font-mono">{`= ${frame.pIndex ?? currentStep.pIndex}`}</div>
+                    <div className="text-sm font-mono">{`= ${safeValue(frame.pIndex ?? currentStep.pIndex)}`}</div>
                   </div>
                 )}
               </div>
@@ -130,7 +249,7 @@ export default function QuickVisualizer({
           })}
       </div>
 
-      <div className="flex-1 flex justify-end">
+      <div className="flex-1 flex justify-end ml-4">
         {randomIndexObj && (
           <div className="min-h-10 w-36 py-1 rounded-lg flex items-center justify-center font-medium bg-amber-300 text-gray-900 shadow-md">
             <div className="text-center">
@@ -139,6 +258,31 @@ export default function QuickVisualizer({
             </div>
           </div>
         )}
+        {pivotValueObj && (
+          <div className="ml-4 min-h-10 w-36 py-1 rounded-lg flex items-center justify-center font-medium bg-sky-300 text-gray-900 shadow-md">
+            <div className="text-center">
+              <div className="text-xs text-gray-700">pivot</div>
+              <div className="text-lg font-bold">{safeValue(pivotValueObj.value)}</div>
+            </div>
+          </div>
+        )}
+        {iObj && (
+          <div className="ml-4 min-h-10 w-28 py-1 rounded-lg flex items-center justify-center font-medium bg-lime-300 text-gray-900 shadow-md">
+            <div className="text-center">
+              <div className="text-xs text-gray-700">i</div>
+              <div className="text-lg font-bold">{safeValue(iObj.value)}</div>
+            </div>
+          </div>
+        )}
+        {jObj && (
+          <div className="ml-4 min-h-10 w-28 py-1 rounded-lg flex items-center justify-center font-medium bg-violet-300 text-gray-900 shadow-md">
+            <div className="text-center">
+              <div className="text-xs text-gray-700">j</div>
+              <div className="text-lg font-bold">{safeValue(jObj.value)}</div>
+            </div>
+          </div>
+        )}
+      
       </div>
     </div>
   );

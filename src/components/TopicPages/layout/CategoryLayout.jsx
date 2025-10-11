@@ -12,6 +12,7 @@ const CategoryLayout = ({ category, features, complexityData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSection, setActiveSection] = useState("algorithms");
+  const [collapsed, setCollapsed] = useState(false);
 
   // Scroll to top when component mounts
   useEffect(() => {
@@ -123,43 +124,67 @@ const CategoryLayout = ({ category, features, complexityData }) => {
       <Navigation />
 
       <div className="flex">
-        {/* Sidebar */}
-        <aside className="fixed left-0 top-0 h-screen w-64 bg-white/80 backdrop-blur-md border-r border-gray-200 z-40 pt-20 pb-8 px-6 flex flex-col">
-          {/* Back Button */}
-          <button
-            onClick={handleBack}
-            className="flex items-center gap-2 text-gray-900 font-medium mb-8 hover:text-gray-700 transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </button>
+        {/* Sidebar (collapsible) */}
+        <motion.aside
+          initial={false}
+          animate={{ width: collapsed ? 72 : 256 }}
+          transition={{ duration: 0.28 }}
+          className="fixed left-0 top-0 h-screen bg-white/80 backdrop-blur-md border-r border-gray-200 z-40 pt-20 pb-8 px-3 flex flex-col overflow-hidden"
+        >
+          {/* Top row: Back + collapse toggle */}
+          <div className="flex items-center justify-between mb-8 px-2">
+            <button
+              onClick={handleBack}
+              className="flex items-center gap-2 text-gray-900 font-medium hover:text-gray-700 transition-colors"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              {!collapsed && <span>Back</span>}
+            </button>
+
+            {/* Collapse toggle + hat icon (hat shown when collapsed) */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setCollapsed((c) => !c)}
+                aria-label={collapsed ? "Open sidebar" : "Close sidebar"}
+                className="p-1 rounded hover:bg-gray-100 transition-colors"
+              >
+                <ChevronRight
+                  className={`h-4 w-4 transform transition-transform ${collapsed ? "rotate-180" : ""}`}
+                />
+              </button>
+
+          
+            </div>
+          </div>
 
           {/* Navigation Items */}
           <nav className="flex-1 space-y-2">
             {sidebarItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeSection === item.id;
-              
               return (
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className={`w-full flex items-start gap-3 px-4 py-3 rounded-lg transition-all ${
+                  className={`w-full flex items-center ${collapsed ? "justify-center px-0 py-2" : "items-start"} gap-3 px-4 py-3 rounded-lg transition-all ${
                     isActive
                       ? "bg-gray-900 text-white"
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
                 >
                   <Icon className="h-5 w-5" />
-                  <span className="text-sm font-medium">{item.label}</span>
+                  {!collapsed && <span className="text-sm font-medium">{item.label}</span>}
                 </button>
               );
             })}
           </nav>
-        </aside>
+        </motion.aside>
 
         {/* Main Content */}
-        <main className="relative overflow-hidden ml-64 flex-1">
+        <main
+          className="relative overflow-hidden flex-1"
+          style={{ marginLeft: collapsed ? 72 : 256, transition: "margin-left 0.28s ease" }}
+        >
           {/* Animated background grid */}
           <div className="absolute inset-0 opacity-15">
             <div

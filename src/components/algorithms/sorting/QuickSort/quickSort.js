@@ -6,6 +6,31 @@ export const quickSort = {
     const steps = [];
     const a = [...arr];
 
+    // robust random int generator: prefer Node crypto.randomInt, then browser crypto.getRandomValues, then Math.random
+    const getRandomInt = (min, max) => {
+      try {
+        // Node.js environment
+
+        const crypto = require && require("crypto");
+        if (crypto && typeof crypto.randomInt === "function") {
+          return crypto.randomInt(min, max + 1);
+        }
+      } catch (e) {}
+
+      if (
+        typeof globalThis !== "undefined" &&
+        globalThis.crypto &&
+        typeof globalThis.crypto.getRandomValues === "function"
+      ) {
+        const range = max - min + 1;
+        const u = new Uint32Array(1);
+        globalThis.crypto.getRandomValues(u);
+        return min + (u[0] % range);
+      }
+
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
+
     // Debug: log incoming pivotStrategy
     try {
       console.debug(
@@ -23,7 +48,15 @@ export const quickSort = {
 
       // If caller requests a random pivot, compute randomIndex
       if (pivotStrategy === "random") {
-        randomIndex = low + Math.floor(Math.random() * (high - low + 1));
+        randomIndex = getRandomInt(low, high);
+        // guard: ensure within bounds and integer
+        if (
+          !Number.isFinite(randomIndex) ||
+          randomIndex < low ||
+          randomIndex > high
+        ) {
+          randomIndex = low;
+        }
         pivotIdx = randomIndex;
       } else if (pivotStrategy === "first") {
         pivotIdx = low;
@@ -39,8 +72,14 @@ export const quickSort = {
         }
       }
 
-      // Return both the partition index and randomIndex (if any)
-      return { pIndex: pivotIdx, randomIndex };
+      // Return both the partition index and randomIndex.
+      // If randomIndex wasn't explicitly chosen (non-random strategy), return the pivot index
+      // as randomIndex so consumers always see a numeric value.
+      const returnedRandomIndex =
+        randomIndex !== null && randomIndex !== undefined
+          ? randomIndex
+          : pivotIdx;
+      return { pIndex: pivotIdx, randomIndex: returnedRandomIndex };
     }
 
     // Line-numbered steps for call-card and base-case check
@@ -48,6 +87,14 @@ export const quickSort = {
     const FUNC_ENTRY_LINE = 20; // call quickSort highlight
     const COND_LINE = 21; // base-case check highlight
     const PINDEX_LINE = 22; // pIndex = partition line
+    const RANDOM_LINE = 1;
+    const FIRST_SWAP_LINE = RANDOM_LINE + 1;
+    const WHILE_ENTRY_LINE = 6;
+    const FIRST_INNER_WHILE_LINE = 7;
+    const SECOND_INNER_WHILE_LINE = 10;
+    const COND_I_J_LINE = 13;
+    const FINAL_SWAP_LINE = 17;
+    const RETURN_J_LINE = FINAL_SWAP_LINE + 1;
 
     function quickRec(low, high) {
       // STEP 1: Emit function-entry (call) step highlighting line 20
@@ -78,7 +125,7 @@ export const quickSort = {
       if (low >= high) {
         return;
       }
-       // STEP 3: Call partition and emit pIndex step highlighting line 22
+      // STEP 3: Call partition and emit pIndex step highlighting line 22
       steps.push({
         array: [...a],
         comparing: [],
@@ -88,39 +135,318 @@ export const quickSort = {
         phase: "pindex",
         low,
         high,
-        pIndex: null,
       });
 
-     
       const partitionResult = partition(low, high);
-      const pIndex = partitionResult.pIndex;
+
+      // Ensure randomIndex is numeric (partition now guarantees a numeric value)
       const randomIndex = partitionResult.randomIndex;
 
       // STEP 4: Enter partition function (line 1)
-      if (randomIndex !== null) {
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        // Keep the description concise: show final randomIndex only so parsers don't pick up the formula's low value
+        description:
+          randomIndex !== null
+            ? `Enter partition: randomIndex => ${randomIndex}`
+            : `Enter partition(arr, ${low}, ${high})`,
+        codeLine: RANDOM_LINE,
+        phase: "partition-entry",
+        partitionRange: [low, high],
+        randomIndex: randomIndex, // numeric; include so ArrayDisplay can show it
+      });
+
+      // Emit partition-internal steps: swap (line 2), pivot assign (line 3), i-init (line 4), j-init (line 5)
+      // If randomIndex exists and differs from low, perform the swap on the working array and emit a swap step
+      if (
+        randomIndex !== null &&
+        randomIndex !== undefined &&
+        randomIndex !== low
+      ) {
+        const tmp = a[low];
+        a[low] = a[randomIndex];
+        a[randomIndex] = tmp;
+
         steps.push({
           array: [...a],
           comparing: [],
-          swapped: [],
-          description: `Enter partition: randomIndex = ${low} + Math.floor(Math.random() * (${high} - ${low} + 1)) => ${randomIndex}`,
-          codeLine: 1,
-          phase: "partition-entry",
-          partitionRange: [low, high],
-          randomIndex, // Include randomIndex here so ArrayDisplay can show it
+          swapped: [low, randomIndex],
+          description: `swap(arr, ${low}, ${randomIndex})`,
+          codeLine: FIRST_SWAP_LINE,
+          phase: "swap",
+          low,
+          high,
+          randomIndex,
         });
       } else {
+        // Even if no swap is needed (randomIndex === low or no random pivot), emit a no-op swap step for consistency
         steps.push({
           array: [...a],
           comparing: [],
           swapped: [],
-          description: `Enter partition(arr, ${low}, ${high})`,
-          codeLine: 1,
-          phase: "partition-entry",
-          partitionRange: [low, high],
+          description: `swap(arr, ${low}, ${randomIndex})`,
+          codeLine: 2,
+          phase: "swap",
+          low,
+          high,
+          randomIndex: randomIndex ?? null,
         });
       }
 
-      // Stop here - no more steps
+      // pivot assignment (include actual pivot value)
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `let pivot = arr[${low}] = ${a[low]}`,
+        codeLine: 3,
+        phase: "pivot-assign",
+        low,
+        high,
+        pivotValue: a[low],
+      });
+
+      // i init
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `i = ${low}`,
+        codeLine: 4,
+        phase: "i-init",
+        low,
+        high,
+        i: low,
+      });
+
+      // j init
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `j = ${high}`,
+        codeLine: 5,
+        phase: "j-init",
+        low,
+        high,
+        j: high,
+      });
+
+      // Simulate the full partition loop (while i < j) by repeating scanning and swaps until i >= j
+      let iPtr = low;
+      let jPtr = high;
+      const pivotVal = a[low];
+
+      while (iPtr < jPtr) {
+        // Outer while entry
+        steps.push({
+          array: [...a],
+          comparing: [],
+          swapped: [],
+          description: `while (i < j)`,
+          codeLine: WHILE_ENTRY_LINE,
+          phase: "while-entry",
+          low,
+          high,
+          conditionResult: true,
+        });
+
+        // inner while entry
+        steps.push({
+          array: [...a],
+          comparing: [],
+          swapped: [],
+          description: `while (arr[i] <= pivot && i <= high - 1)`,
+          codeLine: FIRST_INNER_WHILE_LINE,
+          phase: "inner-while-i-entry",
+          low,
+          high,
+          pivotValue: pivotVal,
+          i: iPtr,
+        });
+
+        // advance i
+        while (iPtr <= high - 1 && a[iPtr] <= pivotVal) {
+          steps.push({
+            array: [...a],
+            comparing: [],
+            swapped: [],
+            description: `(${a[iPtr]} <= ${pivotVal} && ${iPtr} <= ${high - 1}  )`,
+            codeLine: FIRST_INNER_WHILE_LINE,
+            phase: "inner-while-i-cond-true",
+            i: iPtr,
+            pivotValue: pivotVal,
+            low,
+            high,
+          });
+
+          iPtr += 1;
+          steps.push({
+            array: [...a],
+            comparing: [],
+            swapped: [],
+            description: `i++ -> ${iPtr}`,
+            codeLine: FIRST_INNER_WHILE_LINE + 1,
+            phase: "i-inc",
+            i: iPtr,
+            low,
+            high,
+          });
+        }
+
+        steps.push({
+          array: [...a],
+          comparing: [],
+          swapped: [],
+          description: `arr[i] <= pivot failed (i=${iPtr})`,
+          codeLine: FIRST_INNER_WHILE_LINE,
+          phase: "inner-while-i-cond-false",
+          i: iPtr,
+          pivotValue: pivotVal,
+          low,
+          high,
+        });
+
+        // advance j
+        // Emit a j-loop entry step (mirror of inner-while-i-entry) so UI can show the j-loop condition
+        steps.push({
+          array: [...a],
+          comparing: [],
+          swapped: [],
+          description: `while (arr[j] > pivot && j >= low + 1)`,
+          codeLine: SECOND_INNER_WHILE_LINE,
+          phase: "inner-while-j-entry",
+          low,
+          high,
+          pivotValue: pivotVal,
+          j: jPtr,
+        });
+
+        while (jPtr >= low + 1 && a[jPtr] > pivotVal) {
+          steps.push({
+            array: [...a],
+            comparing: [],
+            swapped: [],
+            description: `(${a[jPtr]} > ${pivotVal} && ${jPtr} >= ${low + 1})`,
+            codeLine: SECOND_INNER_WHILE_LINE,
+            phase: "inner-while-j-cond-true",
+            j: jPtr,
+            pivotValue: pivotVal,
+            low,
+            high,
+          });
+
+          jPtr -= 1;
+          steps.push({
+            array: [...a],
+            comparing: [],
+            swapped: [],
+            description: `j-- -> ${jPtr}`,
+            codeLine: SECOND_INNER_WHILE_LINE + 1,
+            phase: "j-dec",
+            j: jPtr,
+            low,
+            high,
+          });
+        }
+
+        steps.push({
+          array: [...a],
+          comparing: [],
+          swapped: [],
+          description: `arr[j] > pivot failed (j=${jPtr})`,
+          codeLine: SECOND_INNER_WHILE_LINE ,
+          phase: "j-cond-false",
+          j: jPtr,
+          pivotValue: pivotVal,
+          low,
+          high,
+        });
+
+        // Check if we should swap arr[i], arr[j]
+        steps.push({
+          array: [...a],
+          comparing: [iPtr, jPtr],
+          swapped: [],
+          description: `if (i < j) -> ${iPtr < jPtr}`,
+          codeLine: COND_I_J_LINE,
+          phase: "if-i-less-j",
+          i: iPtr,
+          j: jPtr,
+          low,
+          high,
+          conditionResult: iPtr < jPtr,
+        });
+
+        if (iPtr < jPtr) {
+          const tmp2 = a[iPtr];
+          a[iPtr] = a[jPtr];
+          a[jPtr] = tmp2;
+          steps.push({
+            array: [...a],
+            comparing: [iPtr, jPtr],
+            swapped: [iPtr, jPtr],
+            description: `swap(arr, ${iPtr}, ${jPtr})`,
+            codeLine: COND_I_J_LINE + 1,
+            phase: "inner-swap",
+            i: iPtr,
+            j: jPtr,
+            low,
+            high,
+          });
+          // continue looping
+          continue;
+        }
+
+        // if not swapped, loop will end; break to do final swap
+        break;
+      }
+
+      // loop ended: perform final swap arr[low], arr[jPtr] (codeLine 17)
+      const tmp3 = a[low];
+      a[low] = a[jPtr];
+      a[jPtr] = tmp3;
+      steps.push({
+        array: [...a],
+        comparing: [low, jPtr],
+        swapped: [low, jPtr],
+        description: `swap(arr, ${low}, ${jPtr})`,
+        codeLine: FINAL_SWAP_LINE,
+        phase: "final-swap",
+        low,
+        high,
+        j: jPtr,
+      });
+
+      // Return from partition: return j (codeLine 18) and emit pIndex result
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `return ${jPtr}`,
+        codeLine: RETURN_J_LINE,
+        phase: "partition-return",
+        low,
+        high,
+        pIndex: jPtr,
+      });
+
+      // Also show a pIndex-result step to match previous UI expectations
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `partition returned pIndex = ${jPtr}`,
+        codeLine: PINDEX_LINE,
+        phase: "",
+        low,
+        high,
+        pIndex: jPtr,
+      });
+
+      // Stop here - partition completed and returned pIndex
       return;
     }
 

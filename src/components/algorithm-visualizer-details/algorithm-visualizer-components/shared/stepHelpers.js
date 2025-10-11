@@ -6,10 +6,22 @@ export const rangeMatches = (a, b) =>
 
 export const parseIndexFromDesc = (desc, key) => {
   if (!desc || typeof desc !== "string") return null;
-  // Use escaped backslashes so the RegExp receives the proper pattern: e.g. /i\s*=\s*(\d+)/
-  const pattern = `${key}\\s*=\\s*(\\d+)`;
-  const match = desc.match(new RegExp(pattern));
-  return match ? Number(match[1]) : null;
+  // Try a few patterns: 'key => number', 'key = number', or 'key:number' and return the last numeric match if any.
+  const arrowPattern = new RegExp(`${key}\\s*=>\\s*(\\d+)`);
+  const eqPattern = new RegExp(`${key}\\s*=\\s*(\\d+)`);
+  const colonPattern = new RegExp(`${key}\\s*:\\s*(\\d+)`);
+
+  let m = desc.match(arrowPattern);
+  if (m) return Number(m[1]);
+  m = desc.match(eqPattern);
+  if (m) return Number(m[1]);
+  m = desc.match(colonPattern);
+  if (m) return Number(m[1]);
+
+  // Fallback: find all numbers and return the last one (useful if description contains '... => 0  randomIndex=4' style)
+  const allNums = desc.match(/(\d+)/g);
+  if (allNums && allNums.length) return Number(allNums[allNums.length - 1]);
+  return null;
 };
 
 // Generic function to find persisted value from earlier steps

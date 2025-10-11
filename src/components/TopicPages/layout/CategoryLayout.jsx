@@ -141,7 +141,7 @@ const CategoryLayout = ({ category, features, complexityData }) => {
               {!collapsed && <span>Back</span>}
             </button>
 
-            {/* Collapse toggle + hat icon (hat shown when collapsed) */}
+            {/* Collapse toggle */}
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setCollapsed((c) => !c)}
@@ -166,7 +166,7 @@ const CategoryLayout = ({ category, features, complexityData }) => {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className={`w-full flex items-center ${collapsed ? "justify-center px-0 py-2" : "items-start"} gap-3 px-4 py-3 rounded-lg transition-all ${
+                  className={`w-full flex items-center ${collapsed ? "justify-center px-0 py-2" : "items-start"} gap-3 p-3  rounded-lg transition-all ${
                     isActive
                       ? "bg-gray-900 text-white"
                       : "text-gray-700 hover:bg-gray-100"

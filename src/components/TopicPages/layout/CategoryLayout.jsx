@@ -219,6 +219,7 @@ const CategoryLayout = ({ category, features, complexityData }) => {
                           "Insertion Sort",
                           "Merge Sort",
                           "Quick Sort",
+                          "Heap Sort",
                         ];
                         const isInteractive = interactive.includes(algorithm.name);
 

@@ -7,76 +7,194 @@ export const heapSort = {
     const a = [...arr];
     const n = a.length;
 
-    function heapify(n, i) {
+    const START_LINE = 16;
+
+    // callCounter assigns a unique id to each heapify invocation so visualizers
+    // can scope variables (largest,l,r) to a specific call and keep them until
+    // that call exits.
+    let callCounter = 0;
+
+    function heapify(n, i, callId) {
+      // if no callId provided, this invocation was directly called (shouldn't happen
+      // for our generator), but ensure there's an id
+      if (callId === undefined || callId === null) {
+        callId = ++callCounter;
+      }
       let largest = i;
       const l = 2 * i + 1;
       const r = 2 * i + 2;
-      if (l < n)
+
+      // Emit separate steps for largest, l, and r so the UI can render them individually
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `largest = ${largest}`,
+        codeLine: 1,
+        phase: "var-largest",
+        largest,
+        callId,
+      });
+
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `l = ${l}`,
+        codeLine: 2,
+        phase: "var-l",
+        l,
+        callId,
+      });
+
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `r = ${r}`,
+        codeLine: 3,
+        phase: "var-r",
+        r,
+        callId,
+      });
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `Compare (${l} < ${n}) && (${a[l]} > ${a[largest]})`,
+        codeLine: 5,
+        phase: "if-check",
+        callId,
+      });
+
+      // Update largest if left child is greater
+      if (l < n && a[l] > a[largest]) {
+        largest = l;
         steps.push({
           array: [...a],
-          comparing: [i, l],
+          comparing: [],
           swapped: [],
-          description: `Compare parent ${a[i]} with left ${a[l]}`,
-          codeLine: 3,
-          phase: "comparison",
+          description: `largest updated to left index ${largest}`,
+          codeLine: 6,
+          phase: "var-largest",
+          largest,
+          l,
+          r,
+          callId,
         });
-      if (r < n)
+      } else {
         steps.push({
           array: [...a],
-          comparing: [i, r],
+          comparing: [],
           swapped: [],
-          description: `Compare parent ${a[i]} with right ${a[r]}`,
-          codeLine: 3,
-          phase: "comparison",
+          description: `if-condition fails`,
+          codeLine: 7,
+          phase: "if-exit",
+          largest,
+          l,
+          r,
+          callId,
         });
-      if (l < n && a[l] > a[largest]) largest = l;
-      if (r < n && a[r] > a[largest]) largest = r;
+      }
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `Compare (${r} < ${n}) && (${a[r]} > ${a[largest]})`,
+        codeLine: 8,
+        phase: "if-check",
+        callId,
+      });
+      // Update largest if right child is greater
+      if (r < n && a[r] > a[largest]) {
+        largest = r;
+        steps.push({
+          array: [...a],
+          comparing: [],
+          swapped: [],
+          description: `largest updated to right index ${largest}`,
+          codeLine: 9,
+          phase: "var-largest",
+          largest,
+          l,
+          r,
+          callId,
+        });
+      } else {
+        steps.push({
+          array: [...a],
+          comparing: [],
+          swapped: [],
+          description: `if-condition fails`,
+          codeLine: 10,
+          phase: "if-exit",
+          largest,
+          l,
+          r,
+          callId,
+        });
+      }
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `Check (${largest} != ${i})`,
+        codeLine: 11,
+        phase: "if-check",
+        largest,
+        l,
+        r,
+        callId,
+      });
       if (largest !== i) {
         const t1 = a[i],
           t2 = a[largest];
-        if (language === "c" || language === "java" || language === "csharp") {
-          steps.push({
-            array: [...a],
-            comparing: [i, largest],
-            swapped: [],
-            description: `temp = ${t1}`,
-            temp: { value: t1, index: i },
-            codeLine: 3,
-            phase: "swap_step",
-          });
-          a[i] = t2;
-          steps.push({
-            array: [...a],
-            comparing: [i, largest],
-            swapped: [i, largest],
-            description: `arr[${i}] = ${t2}`,
-            temp: { value: t1, index: i },
-            codeLine: 4,
-            phase: "swap_step",
-          });
-          a[largest] = t1;
+
+        [a[i], a[largest]] = [a[largest], a[i]];
+        steps.push({
+          array: [...a],
+          comparing: [i, largest],
+          swapped: [i, largest],
+          description: `Swap ${t1} ↔ ${t2}`,
+          codeLine: 12,
+          phase: "swap",
+          callId,
+        });
+          // Create a new call id for the recursive heapify and pass it through
+          const childCallId = ++callCounter;
           steps.push({
             array: [...a],
             comparing: [],
-            swapped: [i, largest],
-            description: `arr[${largest}] = ${t1}`,
-            temp: { value: t1, index: i },
-            codeLine: 5,
-            phase: "swap",
+            swapped: [],
+            description: `Call heapify ${childCallId}: heapify(arr, ${n}, ${largest})`,
+            codeLine: 13,
+            phase: "call-heapify",
+            callId: childCallId,
+            n,
+            i: largest,
           });
-        } else {
-          [a[i], a[largest]] = [a[largest], a[i]];
-          steps.push({
-            array: [...a],
-            comparing: [i, largest],
-            swapped: [i, largest],
-            description: `Swap ${t1} ↔ ${t2}`,
-            codeLine: 4,
-            phase: "swap",
-          });
-        }
-        heapify(n, largest);
+
+          heapify(n, largest, childCallId);
+      } else {
+        steps.push({
+          array: [...a],
+          comparing: [],
+          swapped: [],
+          description: `if condition fails`,
+          codeLine: 14,
+          phase: "if-exit",
+          callId,
+        });
       }
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `heapify-exits`,
+        codeLine: 15,
+        phase: "heapify-exits",
+        callId,
+      });
     }
 
     // Emit a function-entry (call) step so the visualizer shows a call frame for heapSort
@@ -85,28 +203,95 @@ export const heapSort = {
       comparing: [],
       swapped: [],
       description: `Call heapSort(arr, n=${n})`,
-      codeLine: 17,
+      codeLine: START_LINE,
       phase: "start",
-      low: 0,
-      high: n - 1,
     });
-
 
     // For now, only emit i-init steps for the build-max-heap loop so the visualizer shows the
     // current 'i' for each iteration of: for (let i = Math.floor(n / 2) - 1; i >= 0; i--)
-    for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+      for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
       steps.push({
         array: [...a],
         comparing: [],
         swapped: [],
-        description: `Starting for loop, i = ${i}`,
-        codeLine: 18,
+        description: `For loop, i = ${i}`,
+        codeLine: START_LINE + 2,
         phase: "i-init",
         i,
       });
+      // assign a unique id for this heapify call and include it on the call step
+      const callId = ++callCounter;
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `Call heapify ${callId}: heapify(arr, ${n}, ${i})`,
+        codeLine: START_LINE + 3,
+        phase: "call-heapify",
+        callId,
+        n,
+        i,
+      });
+      // Execute heapify for the current partition (heapify expects (n, i))
+      heapify(n, i, callId);
     }
+    steps.push({
+      array: [...a],
+      comparing: [],
+      swapped: [],
+      description: `for loop exits`,
+      codeLine: START_LINE + 4,
+      phase: "for-exit",
+    });
 
-    // NOTE: other internal heapify and swap steps removed temporarily as requested.
+    for (let i = n - 1; i > 0; i--) {
+       steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `For loop, i = ${i}`,
+        codeLine: 21,
+        phase: "i-init",
+        i,
+      });
+      const t1 = a[0],
+        t2 = a[i];
+
+      [a[i], a[0]] = [a[0], a[i]];
+      steps.push({
+        array: [...a],
+        comparing: [0, i],
+        swapped: [0, i],
+        description: `Swap ${t1} ↔ ${t2}`,
+        codeLine: 22,
+        phase: "swap",
+        i,
+      });
+      // assign a unique id for this heapify call and include it on the call step
+      const callId2 = ++callCounter;
+      steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `Call heapify ${callId2}: heapify(arr, ${i}, 0)`,
+        codeLine: 23,
+        phase: "call-heapify",
+        callId: callId2,
+        n: i,
+        i: 0,
+      });
+      // Execute heapify for the current partition (heapify expects (n, i))
+      heapify(i, 0, callId2);
+       steps.push({
+        array: [...a],
+        comparing: [],
+        swapped: [],
+        description: `for loop exits`,
+        codeLine: 24,
+        phase: "for-exit",
+        i,
+      });
+    }
 
     steps.push({
       array: [...a],
@@ -206,7 +391,7 @@ export const heapSort = {
         "}", //26
       ],
       csharp: [
-        "static void Heapify(int[] arr, int n, int i) {", //1
+        "static void heapify(int[] arr, int n, int i) {", //1
         "        int largest = i;", //2
         "        int l = 2 * i + 1;", //3
         "        int r = 2 * i + 2;", //4

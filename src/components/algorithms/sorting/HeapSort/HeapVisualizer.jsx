@@ -1,4 +1,5 @@
 import React from "react";
+import { safeValue } from "../../../algorithm-visualizer-details/algorithm-visualizer-components/shared/stepHelpers";
 
 // Minimal heap visualizer: shows a call frame when heapSort starts and the current outer-loop i variable
 const HeapVisualizer = ({
@@ -65,60 +66,104 @@ const HeapVisualizer = ({
   const shouldShowI = iValue !== null && currentStep?.phase !== "completed";
 
   // Persist heapify variables: largest, l, r. Look for the most recent steps with the new phases
-  let latestLargest = null;
-  let latestL = null;
-  let latestR = null;
-  for (
-    let s = 0;
-    s <= Math.min(currentStepIndex, sortingSteps.length - 1);
-    s++
-  ) {
-    const st = sortingSteps[s];
-    if (!st) continue;
-    if (st.phase === "var-largest"  && st.largest !== undefined) {
-      latestLargest = st.largest;
-    }
-    if (st.phase === "var-l" && st.l !== undefined) {
-      latestL = st.l;
-    }
-    if (st.phase === "var-r" && st.r !== undefined) {
-      latestR = st.r;
-    }
-  }
-
-  // Prefer values from the currentStep if present
-  const largestValue = currentStep?.largest ?? latestLargest;
-  const lValue = currentStep?.l ?? latestL;
-  const rValue = currentStep?.r ?? latestR;
-
-  // Show variables from the most recent call-heapify until the heapify-exits step.
-  // Find the last call-heapify index up to currentStepIndex
-  let lastCallIdx = -1;
+  // Collect all heapify callIds that have been started up to currentStepIndex
+  // and, for each, scan the steps that share that callId up to currentStepIndex to
+  // gather var values and whether the call has exited. This lets us render stacked
+  // variable groups: parent heapify variables remain visible when a child heapify runs.
+  const callIdOrder = [];
+  const callIdToStartIdx = {};
+  const callIdToParams = {};
   for (let s = 0; s <= Math.min(currentStepIndex, sortingSteps.length - 1); s++) {
     const st = sortingSteps[s];
     if (!st) continue;
-    if (st.phase === "call-heapify") lastCallIdx = s;
-  }
-
-  // If we found a call, look for a heapify-exits after it (but <= current index)
-  let exitIdx = -1;
-  if (lastCallIdx !== -1) {
-    for (let s = lastCallIdx + 1; s <= Math.min(currentStepIndex, sortingSteps.length - 1); s++) {
-      const st = sortingSteps[s];
-      if (!st) continue;
-      if (st.phase === "heapify-exits") {
-        exitIdx = s;
-        break;
+    if (st.phase === "call-heapify" && st.callId !== undefined && st.callId !== null) {
+      const id = st.callId;
+      if (!(id in callIdToStartIdx)) {
+        callIdToStartIdx[id] = s;
+        callIdOrder.push(id);
+        // store n and i parameters if present for display in the call frame
+        callIdToParams[id] = { n: st.n, i: st.i };
       }
     }
   }
 
-  // We're inside heapify if there was a call and no exit has occurred after it yet.
-  const inHeapify = lastCallIdx !== -1 && (exitIdx === -1 || currentStepIndex < exitIdx);
+  // For each callId, scan its steps (up to current index) to collect var values and exit state
+  const activeCalls = []; // array of { callId, seenLargest, seenL, seenR, largestValue, lValue, rValue, inHeapify }
+  const heapPhases = new Set(["var-largest", "var-l", "var-r", "if-check", "if-exit", "comparison", "swap"]);
+  for (const id of callIdOrder) {
+    let seenLargest = false,
+      seenL = false,
+      seenR = false;
+    let latestLargest = null,
+      latestL = null,
+      latestR = null;
+    let latestHeapPhaseIdx = -1;
+    let exitIdx = -1;
 
-  const showLargest = inHeapify && largestValue !== null && currentStep?.phase !== "completed";
-  const showL = inHeapify && lValue !== null && currentStep?.phase !== "completed";
-  const showR = inHeapify && rValue !== null && currentStep?.phase !== "completed";
+    for (let s = callIdToStartIdx[id]; s <= Math.min(currentStepIndex, sortingSteps.length - 1); s++) {
+      const st = sortingSteps[s];
+      if (!st) continue;
+      if (st.callId !== id) continue;
+      if (st.phase === "heapify-exits") {
+        exitIdx = s;
+        break;
+      }
+      if (heapPhases.has(st.phase)) latestHeapPhaseIdx = s;
+      if (st.phase === "var-largest" && st.largest !== undefined) {
+        latestLargest = st.largest;
+        seenLargest = true;
+      }
+      if (st.phase === "var-l" && st.l !== undefined) {
+        latestL = st.l;
+        seenL = true;
+      }
+      if (st.phase === "var-r" && st.r !== undefined) {
+        latestR = st.r;
+        seenR = true;
+      }
+    }
+
+    const inHeapifyForCall = latestHeapPhaseIdx !== -1 && (exitIdx === -1 || currentStepIndex < exitIdx);
+    const largestValue = currentStep?.callId === id ? currentStep?.largest ?? latestLargest : latestLargest;
+    const lValue = currentStep?.callId === id ? currentStep?.l ?? latestL : latestL;
+    const rValue = currentStep?.callId === id ? currentStep?.r ?? latestR : latestR;
+
+    // visible only if the call is active and has seen the var-phase for that variable
+    const showLargest = inHeapifyForCall && seenLargest && largestValue !== null && currentStep?.phase !== "completed";
+    const showL = inHeapifyForCall && seenL && lValue !== null && currentStep?.phase !== "completed";
+    const showR = inHeapifyForCall && seenR && rValue !== null && currentStep?.phase !== "completed";
+
+    if (inHeapifyForCall) {
+      activeCalls.push({
+        callId: id,
+        showLargest,
+        showL,
+        showR,
+        largestValue,
+        lValue,
+        rValue,
+      });
+    }
+  }
+
+  // Build heapify call frames (stack) similar to MergeVisualizer's call frames
+  const heapCallFrames = [];
+  let callCounter = 0;
+  for (let s = 0; s <= Math.min(currentStepIndex, sortingSteps.length - 1); s++) {
+    const st = sortingSteps[s];
+    if (!st?.phase) continue;
+    if (st.phase === "call-heapify" && st.callId !== undefined && st.callId !== null) {
+      callCounter++;
+      heapCallFrames.push({ callId: st.callId, n: st.n, i: st.i, ord: callCounter });
+    } else if (st.phase === "heapify-exits" && st.callId !== undefined && st.callId !== null) {
+      // remove the matching frame (call returned)
+      const idx = heapCallFrames.findIndex((f) => f.callId === st.callId);
+      if (idx >= 0) heapCallFrames.splice(idx, 1);
+    }
+  }
+
+  const showHeapCallUI = heapCallFrames.length > 0 && currentStep?.phase !== "completed";
+  const activeCallsById = Object.fromEntries(activeCalls.map((c) => [c.callId, c]));
 
   return (
     <div className="mt-4 w-full flex flex-col items-center">
@@ -126,44 +171,66 @@ const HeapVisualizer = ({
 
       {/* i variable row */}
       {shouldShowI && (
-        <div className="min-h-10 w-28 py-1 rounded-lg flex items-center justify-center font-medium bg-violet-300 text-gray-900 shadow-md">
+        <div className="h-12 w-28 py-1 rounded-lg flex items-center justify-center font-medium bg-violet-300 text-gray-900 shadow-md">
           <div className="text-center">
             <div className="text-xs text-gray-700">i</div>
             <div className="text-lg font-bold">{iValue}</div>
           </div>
         </div>
       )}
-      {/* heapify variables row: show only the active variable card */}
-      {(showLargest || showL || showR) && (
-        <div className="mt-3 flex items-center gap-3">
-          {showLargest && (
-            <div className="min-h-10 w-28 py-1 rounded-lg flex items-center justify-center font-medium bg-amber-300 text-gray-900 shadow-md">
-              <div className="text-center">
-                <div className="text-xs text-gray-700">largest</div>
-                <div className="text-lg font-bold">{largestValue ?? "-"}</div>
-              </div>
-            </div>
-          )}
+      {/* heapify variables row(s): render one group per active heapify call (parent first) */}
+      {showHeapCallUI && (
+        <div className="flex flex-col items-center gap-2 w-full">
+          {heapCallFrames.map((frame, idx) => {
+            const c = activeCallsById[frame.callId];
+            if (!c) return null; // skip calls that aren't active
+            const ord = frame.ord ?? idx + 1;
+            const isLatest = idx === heapCallFrames.length - 1;
+            return (
+              <div key={`h-row-${frame.callId}`} className="flex items-center justify-center gap-6 w-full mt-1">
+                <div
+                  className={`h-12 min-w-[180px] px-3 rounded-lg flex flex-col items-center justify-center font-medium bg-emerald-300 text-gray-900 shadow-md ${
+                    isLatest ? "animate-pulse" : ""
+                  }`}
+                >
+                  <div className="text-sm font-semibold truncate">{`Call ${ord}: `}</div>
+                  <div className="text-sm font-mono truncate">{`n=${safeValue(frame.n)}, i=${safeValue(frame.i)}`}</div>
+                </div>
 
-          {showL && (
-            <div className="min-h-10 w-28 py-1 rounded-lg flex items-center justify-center font-medium bg-sky-300 text-gray-900 shadow-md">
-              <div className="text-center">
-                <div className="text-xs text-gray-700">l</div>
-                <div className="text-lg font-bold">{lValue ?? "-"}</div>
-              </div>
-            </div>
-          )}
+                <div className="flex items-center gap-3">
+                  {c.showLargest && (
+                    <div className="h-12 w-28 py-1 rounded-lg flex items-center justify-center font-medium bg-amber-300 text-gray-900 shadow-md">
+                      <div className="text-center">
+                        <div className="text-xs text-gray-700">largest</div>
+                        <div className="text-lg font-bold">{c.largestValue ?? "-"}</div>
+                      </div>
+                    </div>
+                  )}
 
-          {showR && (
-            <div className="min-h-10 w-28 py-1 rounded-lg flex items-center justify-center font-medium bg-rose-300 text-gray-900 shadow-md">
-              <div className="text-center">
-                <div className="text-xs text-gray-700">r</div>
-                <div className="text-lg font-bold">{rValue ?? "-"}</div>
+                  {c.showL && (
+                    <div className="h-12 w-28 py-1 rounded-lg flex items-center justify-center font-medium bg-sky-300 text-gray-900 shadow-md">
+                      <div className="text-center">
+                        <div className="text-xs text-gray-700">l</div>
+                        <div className="text-lg font-bold">{c.lValue ?? "-"}</div>
+                      </div>
+                    </div>
+                  )}
+
+                  {c.showR && (
+                    <div className="h-12 w-28 py-1 rounded-lg flex items-center justify-center font-medium bg-rose-300 text-gray-900 shadow-md">
+                      <div className="text-center">
+                        <div className="text-xs text-gray-700">r</div>
+                        <div className="text-lg font-bold">{c.rValue ?? "-"}</div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          )}
+            );
+          })}
         </div>
       )}
+   
     </div>
   );
 };

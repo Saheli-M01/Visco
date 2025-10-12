@@ -13,7 +13,7 @@ import HeapVisualizer from "../../algorithms/sorting/HeapSort/HeapVisualizer";
 const ArrayElement = ({ value, index, styleClass }) => (
   <div
     key={`${index}-${value}`}
-    className="flex flex-col items-center pt-2 pb-3"
+    className="flex flex-col items-center pt-2"
   >
     <div
       className={`flex items-center justify-center h-12 px-4 rounded-lg font-bold text-lg transition-all duration-500 ease-in-out transform shadow-lg border-2 min-w-[60px] ${styleClass}`}
@@ -62,7 +62,7 @@ const ArrayDisplay = ({
 
   return (
     <div className="space-y-4 bg-gray-900 rounded-lg min-h-[50vh]">
-      <div className="bg-code-bg rounded-lg p-1 min-h-[290px] flex items-center justify-center">
+      <div className="bg-code-bg rounded-lg p-1 min-h-[290px] flex items-center justify-center ">
         <div className="flex flex-col items-center w-full">
           {/* Array Elements */}
           <div className="flex justify-center gap-4 flex-wrap">
@@ -74,7 +74,7 @@ const ArrayDisplay = ({
                 sortingSteps[currentStepIndex]?.swapped?.includes(index);
               const isPivot =
                 currentPivotIndex !== null && index === currentPivotIndex;
-              const isMergedDone = mergeOverlay.mergedDoneIndices.has(index);
+              
 
               const baseClass = isComparing
                 ? "bg-indigo-400 text-white border-indigo-600 scale-110 animate-pulse"

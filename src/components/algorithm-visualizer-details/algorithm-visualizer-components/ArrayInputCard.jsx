@@ -96,10 +96,10 @@ const ArrayInputCard = ({ handleGo, selectedAlgorithm, pivotStrategy, setPivotSt
               // hide popup as soon as user modifies the input
               if (showValidationPopup) setShowValidationPopup(false);
             }}
-            placeholder="Enter comma-separated numbers, e.g. 5, 3, 8.5"
-            className="w-full h-15 p-3 rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 resize-none focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-sm hover:border-white/60 transition-all duration-200"
+            placeholder="Enter comma-separated numbers — Maximum 10 values"
+            className="w-full h-15 rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 resize-none focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-[0.75rem] px-2 py-1 transition-all duration-200"
           />
-          <div className="mt-2 text-xs text-red-400">Maximum 10 numbers (comma-separated)</div>
+          
           {showValidationPopup && (
             <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg shadow-lg z-50">
               <div className="flex items-start gap-2"><div className="text-red-700 text-sm">{validationError}</div></div>
@@ -109,7 +109,7 @@ const ArrayInputCard = ({ handleGo, selectedAlgorithm, pivotStrategy, setPivotSt
         {/* history chips */}
         {history && history.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-2">
-            {history.map((h, idx) => (
+            {history.slice(0, 2).map((h, idx) => (
               <button
                 key={h + idx}
                 onClick={() => setArrayInput(h)}

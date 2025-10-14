@@ -39,20 +39,6 @@ export const categories = {
           "Efficient in-place sorting using partitioning around a pivot element.",
       },
       {
-        name: "Heap Sort",
-        complexity: "O(n log n)",
-        difficulty: "Hard",
-        shortDescription:
-          "Uses binary heap data structure for efficient in-place sorting.",
-      },
-      {
-        name: "Shell Sort",
-        complexity: "O(n^1.25)",
-        difficulty: "Medium",
-        shortDescription:
-          "Generalized insertion sort that allows exchanges of far apart elements.",
-      },
-      {
         name: "Counting Sort",
         complexity: "O(n + k)",
         difficulty: "Medium",
@@ -60,18 +46,19 @@ export const categories = {
           "Non-comparison sort for integers with limited range using counting array.",
       },
       {
+        name: "Heap Sort",
+        complexity: "O(n log n)",
+        difficulty: "Hard",
+        shortDescription:
+          "Uses binary heap data structure for efficient in-place sorting.",
+      },
+
+      {
         name: "Radix Sort",
         complexity: "O(nk)",
         difficulty: "Hard",
         shortDescription:
           "Non-comparison sort that processes digits from least to most significant.",
-      },
-      {
-        name: "Bucket Sort",
-        complexity: "O(n + k)",
-        difficulty: "Medium",
-        shortDescription:
-          "Distributes elements into buckets then sorts individual buckets.",
       },
     ],
   },

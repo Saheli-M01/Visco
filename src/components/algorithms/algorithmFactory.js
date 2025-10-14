@@ -4,9 +4,9 @@ import { insertionSort } from "./sorting/InsertionSort/insertionSort.js";
 import { mergeSort } from "./sorting/MergeSort/mergeSort.js";
 import { quickSort } from "./sorting/QuickSort/quickSort.js";
 import { heapSort } from "./sorting/HeapSort/heapSort.js";
-import { bucketSort } from "./sorting/BucketSort/bucketSort.js";
+
 import { radixSort } from "./sorting/RadixSort/radixSort.js";
-import { shellSort } from "./sorting/ShellSort/shellSort.js";
+
 import { countingSort } from "./sorting/CountingSort/countingSort.js";
 
 // Algorithm factory to get the appropriate algorithm implementation
@@ -30,15 +30,11 @@ export const getAlgorithm = (algorithmName) => {
     "Heap Sort": heapSort,
     "heap sort": heapSort,
     heapsort: heapSort,
-    "Bucket Sort": bucketSort,
-    "bucket sort": bucketSort,
-    bucketsort: bucketSort,
+
     "Radix Sort": radixSort,
     "radix sort": radixSort,
     radixsort: radixSort,
-    "Shell Sort": shellSort,
-    "shell sort": shellSort,
-    shellsort: shellSort,
+
     "Counting Sort": countingSort,
     "counting sort": countingSort,
     countingsort: countingSort,

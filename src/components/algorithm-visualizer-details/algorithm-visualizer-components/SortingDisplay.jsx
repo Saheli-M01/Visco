@@ -151,6 +151,7 @@ const ArrayDisplay = ({
               currentStepIndex={currentStepIndex}
             />
           )}
+        
         </div>
       </div>
     </div>

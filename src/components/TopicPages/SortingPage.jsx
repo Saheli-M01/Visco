@@ -42,13 +42,7 @@ const SortingPage = () => {
       worst: "O(n²)",
       space: "O(1)"
     },
-    {
-      name: "Shell Sort",
-      best: "O(n log n)",
-      average: "O(n¹·²⁵)",
-      worst: "O(n²)",
-      space: "O(1)"
-    },
+    
     {
       name: "Counting Sort",
       best: "O(n + k)",
@@ -63,13 +57,7 @@ const SortingPage = () => {
       worst: "O(nk)",
       space: "O(n + k)"
     },
-    {
-      name: "Bucket Sort",
-      best: "O(n + k)",
-      average: "O(n + k)",
-      worst: "O(n²)",
-      space: "O(n + k)"
-    },
+   
     {
       name: "Merge Sort",
       best: "O(n log n)",

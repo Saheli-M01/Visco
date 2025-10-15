@@ -9,7 +9,7 @@ const codeLoaders = {
   "Insertion Sort": () => import("../algorithms/sorting/InsertionSort/insertionSortCodes"),
   "Merge Sort": () => import("../algorithms/sorting/MergeSort/mergeSortCodes"),
   "Quick Sort": () => import("../algorithms/sorting/QuickSort/quickSortCodes"),
-  "Counting Sort": () => import("../algorithms/sorting/CountingSort/countingSortCodes"),
+ 
   "Heap Sort": () => import("../algorithms/sorting/HeapSort/heapSortCodes"),
 };
 

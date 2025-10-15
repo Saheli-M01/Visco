@@ -4,7 +4,7 @@ import { insertionSort } from "./sorting/InsertionSort/insertionSort.js";
 import { mergeSort } from "./sorting/MergeSort/mergeSort.js";
 import { quickSort } from "./sorting/QuickSort/quickSort.js";
 import { heapSort } from "./sorting/HeapSort/heapSort.js";
-import { countingSort } from "./sorting/CountingSort/countingSort.js";
+
 
 // Algorithm factory to get the appropriate algorithm implementation
 export const getAlgorithm = (algorithmName) => {
@@ -27,9 +27,7 @@ export const getAlgorithm = (algorithmName) => {
     "Heap Sort": heapSort,
     "heap sort": heapSort,
     heapsort: heapSort,
-    "Counting Sort": countingSort,
-    "counting sort": countingSort,
-    countingsort: countingSort,
+
   };
 
   const normalizedName = algorithmName?.toLowerCase().replace(/\s+/g, "");

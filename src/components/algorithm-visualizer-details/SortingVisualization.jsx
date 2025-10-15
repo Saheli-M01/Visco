@@ -83,7 +83,7 @@ const AlgorithmVisualization = ({
           {/* Array Display */}
           <div className="flex-1 bg-white border border-gray-300 rounded-xl shadow-sm p-3 backdrop-blur-md ">
             {!isVisualizationActive ? (
-              <div className="bg-gray-900 text-white p-4 rounded-lg text-sm font-mono  overflow-y-auto custom-scrollbar shadow-inner border border-gray-700">
+              <div className="bg-gray-900 text-white p-4 rounded-lg text-sm font-mono  overflow-y-auto custom-scrollbar shadow-inner border border-gray-700 h-full">
                 <div className="text-green-400">
                   Ready to run {selectedAlgorithm?.name}...
                 </div>

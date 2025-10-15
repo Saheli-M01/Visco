@@ -10,6 +10,7 @@ import QuickVisualizer, {
 } from "../../algorithms/sorting/QuickSort/QuickVisualizer";
 import HeapVisualizer from "../../algorithms/sorting/HeapSort/HeapVisualizer";
 
+
 const ArrayElement = ({ value, index, styleClass }) => (
   <div
     key={`${index}-${value}`}
@@ -151,6 +152,7 @@ const ArrayDisplay = ({
               currentStepIndex={currentStepIndex}
             />
           )}
+          
         
         </div>
       </div>

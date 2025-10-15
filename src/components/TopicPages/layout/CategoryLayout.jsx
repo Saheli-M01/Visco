@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Navigation } from "@/components/landing";
-import { Clock, ChevronRight, ArrowLeft, BookOpen, Lightbulb, BarChart3 } from "lucide-react";
+import {
+  Clock,
+  ChevronRight,
+  ArrowLeft,
+  BookOpen,
+  Lightbulb,
+  BarChart3,
+} from "lucide-react";
 import {
   FullScreenModal,
   AlgorithmDetails,
@@ -13,6 +20,17 @@ const CategoryLayout = ({ category, features, complexityData }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSection, setActiveSection] = useState("algorithms");
   const [collapsed, setCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if mobile on mount and resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Scroll to top when component mounts
   useEffect(() => {
@@ -54,7 +72,10 @@ const CategoryLayout = ({ category, features, complexityData }) => {
         const element = document.getElementById(sectionId);
         if (element) {
           const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+          if (
+            scrollPosition >= offsetTop &&
+            scrollPosition < offsetTop + offsetHeight
+          ) {
             setActiveSection(sectionId);
             break;
           }
@@ -73,11 +94,11 @@ const CategoryLayout = ({ category, features, complexityData }) => {
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      const offset = 100;
+      const offset = isMobile ? 150 : 100;
       const elementPosition = element.offsetTop - offset;
       window.scrollTo({
         top: elementPosition,
-        behavior: "smooth"
+        behavior: "smooth",
       });
     }
   };
@@ -116,20 +137,49 @@ const CategoryLayout = ({ category, features, complexityData }) => {
   ];
 
   if (complexityData && complexityData.length > 0) {
-    sidebarItems.push({ id: "complexity", label: "Complexity Comparison", icon: BarChart3 });
+    sidebarItems.push({
+      id: "complexity",
+      label: "Complexity Comparison",
+      icon: BarChart3,
+    });
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200">
       <Navigation />
 
+      {/* Mobile Top Bar */}
+      <div className="lg:hidden fixed top-16 left-0 right-0 bg-white/90 backdrop-blur-md border-b border-gray-200 z-40 px-4 py-3">
+        <div className="flex items-center justify-between mb-3"></div>
+
+        <div className="grid grid-cols-3 gap-2">
+          {sidebarItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = activeSection === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className={`flex flex-col items-center justify-center gap-1 px-2 py-3 rounded-lg transition-all ${
+                  isActive
+                    ? "bg-gray-900 text-white"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                <Icon className="h-4 w-4 flex-shrink-0" />
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       <div className="flex">
-        {/* Sidebar (collapsible) */}
+        {/* Desktop Sidebar (collapsible) */}
         <motion.aside
           initial={false}
           animate={{ width: collapsed ? 72 : 256 }}
           transition={{ duration: 0.28 }}
-          className="fixed left-0 top-0 h-screen bg-white/80 backdrop-blur-md border-r border-gray-200 z-40 pt-20 pb-8 px-3 flex flex-col overflow-hidden"
+          className="hidden lg:flex fixed left-0 top-0 h-screen bg-white/80 backdrop-blur-md border-r border-gray-200 z-40 pt-20 pb-8 px-3 flex-col overflow-hidden"
         >
           {/* Top row: Back + collapse toggle */}
           <div className="flex items-center justify-between mb-8 px-2">
@@ -149,11 +199,11 @@ const CategoryLayout = ({ category, features, complexityData }) => {
                 className="p-1 rounded hover:bg-gray-100 transition-colors"
               >
                 <ChevronRight
-                  className={`h-4 w-4 transform transition-transform ${collapsed ? "rotate-180" : ""}`}
+                  className={`h-4 w-4 transform transition-transform ${
+                    collapsed ? "rotate-180" : ""
+                  }`}
                 />
               </button>
-
-          
             </div>
           </div>
 
@@ -166,14 +216,18 @@ const CategoryLayout = ({ category, features, complexityData }) => {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className={`w-full flex items-center ${collapsed ? "justify-center px-0 py-2" : "items-start"} gap-3 p-3  rounded-lg transition-all ${
+                  className={`w-full flex items-center ${
+                    collapsed ? "justify-center px-0 py-2" : "items-start"
+                  } gap-3 p-3 rounded-lg transition-all ${
                     isActive
                       ? "bg-gray-900 text-white"
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
                 >
                   <Icon className="h-5 w-5" />
-                  {!collapsed && <span className="text-sm font-medium">{item.label}</span>}
+                  {!collapsed && (
+                    <span className="text-sm font-medium">{item.label}</span>
+                  )}
                 </button>
               );
             })}
@@ -182,8 +236,11 @@ const CategoryLayout = ({ category, features, complexityData }) => {
 
         {/* Main Content */}
         <main
-          className="relative overflow-hidden flex-1"
-          style={{ marginLeft: collapsed ? 72 : 256, transition: "margin-left 0.28s ease" }}
+          className="relative overflow-hidden flex-1 "
+          style={{
+            marginLeft: isMobile ? 0 : collapsed ? 72 : 256,
+            transition: "margin-left 0.28s ease",
+          }}
         >
           {/* Animated background grid */}
           <div className="absolute inset-0 opacity-15">
@@ -196,21 +253,24 @@ const CategoryLayout = ({ category, features, complexityData }) => {
             />
           </div>
 
-          <div className="relative z-10 pt-8 pb-24 px-6">
+          <div
+            className="relative z-10 md:pb-24 px-4 sm:px-6 "
+            style={{ paddingTop: isMobile ? "140px" : "32px" }}
+          >
             <div className="max-w-6xl mx-auto">
               {/* Available Algorithms */}
-              <div id="algorithms" className="scroll-mt-24">
-                <h2 className="text-3xl font-bold text-gray-900 text-center mb-2">
+              <div id="algorithms" className="scroll-mt-5 md:scroll-mt-24">
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-2">
                   Available Algorithms
                 </h2>
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.1 }}
-                  className="mb-16"
+                  className="mb-8 md:mb-16"
                 >
-                  <div className="backdrop-blur-md bg-white/40 border border-white/20 rounded-3xl px-8 py-12 shadow-xl">
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="backdrop-blur-md bg-white/40 border border-white/20 rounded-3xl px-3 sm:px-8 py-6 sm:py-8 md:py-12 shadow-xl">
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
                       {filteredAlgorithms.map((algorithm, index) => {
                         // allowlist of interactive sorting algorithms
                         const interactive = [
@@ -220,9 +280,10 @@ const CategoryLayout = ({ category, features, complexityData }) => {
                           "Merge Sort",
                           "Quick Sort",
                           "Heap Sort",
-                          "Counting Sort",
                         ];
-                        const isInteractive = interactive.includes(algorithm.name);
+                        const isInteractive = interactive.includes(
+                          algorithm.name
+                        );
 
                         return (
                           <motion.div
@@ -230,21 +291,35 @@ const CategoryLayout = ({ category, features, complexityData }) => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.05 * index }}
-                            onClick={() => isInteractive && handleAlgorithmClick(algorithm)}
-                            className={`backdrop-blur-sm bg-white/60 border border-white/30 rounded-xl px-6 py-6 shadow-md transition-all group ${isInteractive ? 'hover:bg-white/85 cursor-pointer' : 'opacity-60 cursor-default'}`}
+                            onClick={() =>
+                              isInteractive && handleAlgorithmClick(algorithm)
+                            }
+                            className={`backdrop-blur-sm bg-white/60 border border-white/30 rounded-xl px-4 sm:px-6 py-4 sm:py-6 shadow-md transition-all group ${
+                              isInteractive
+                                ? "hover:bg-white/85 cursor-pointer"
+                                : "opacity-60 cursor-default"
+                            }`}
                           >
                             <div className="flex items-center justify-between mb-3">
-                              <h3 className={`text-lg font-semibold text-gray-900 transition-colors ${isInteractive ? 'group-hover:text-gray-700' : 'text-gray-600'}`}>
+                              <h3
+                                className={`text-base sm:text-lg font-semibold text-gray-900 transition-colors ${
+                                  isInteractive
+                                    ? "group-hover:text-gray-700"
+                                    : "text-gray-600"
+                                }`}
+                              >
                                 {algorithm.name}
                               </h3>
                               {isInteractive ? (
                                 <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-gray-900 transition-colors" />
                               ) : (
-                                <span className="text-xs font-medium text-red-400">Coming Soon</span>
+                                <span className="text-xs font-medium text-red-400">
+                                  Coming Soon
+                                </span>
                               )}
                             </div>
 
-                            <div className="flex items-center gap-3 mb-3">
+                            <div className="flex items-center gap-2 sm:gap-3 mb-3">
                               <div className="flex items-center text-gray-600">
                                 <Clock className="h-3 w-3 mr-1" />
                                 <code className="font-mono text-xs">
@@ -268,7 +343,9 @@ const CategoryLayout = ({ category, features, complexityData }) => {
 
                             {!isInteractive && (
                               <div className="mt-4 pt-4 border-t border-white/20">
-                                <div className="text-xs font-medium text-gray-500">Stay tuned 🚧</div>
+                                <div className="text-xs font-medium text-gray-500">
+                                  Stay tuned 🚧
+                                </div>
                               </div>
                             )}
                           </motion.div>
@@ -280,32 +357,32 @@ const CategoryLayout = ({ category, features, complexityData }) => {
               </div>
 
               {/* Why Learn This Category */}
-              <div id="why-learn" className="scroll-mt-24">
+              <div id="why-learn" className="scroll-mt-5 md:scroll-mt-24">
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8 }}
-                  className="mb-16"
+                  className="mb-8 md:mb-16"
                 >
-                  <div className="backdrop-blur-md bg-white/50 border border-white/20 rounded-3xl px-8 py-12 shadow-xl">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                  <div className="backdrop-blur-md bg-white/50 border border-white/20 rounded-3xl px-3 sm:px-8 py-6 sm:py-8 md:py-12 shadow-xl">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
                       Why Learn {category.name}?
                     </h2>
-                    <p className="text-lg text-gray-700 font-medium leading-relaxed mb-8">
+                    <p className="text-base sm:text-lg text-gray-700 font-medium leading-relaxed mb-8">
                       {category.longDescription}
                     </p>
 
                     {features && features.length > 0 && (
-                      <div className="grid md:grid-cols-3 gap-6">
+                      <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
                         {features.map((feature, index) => (
                           <motion.div
                             key={feature.title}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
-                            className="backdrop-blur-sm bg-white border border-gray-300/30 rounded-xl p-6 text-center"
+                            className="backdrop-blur-sm bg-white border border-gray-300/30 rounded-xl p-4 sm:p-6 text-center"
                           >
-                            <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                            <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">
                               {feature.title}
                             </h3>
                             <p className="text-gray-700 font-medium text-sm">
@@ -321,35 +398,35 @@ const CategoryLayout = ({ category, features, complexityData }) => {
 
               {/* Complexity Comparison */}
               {complexityData && complexityData.length > 0 && (
-                <div id="complexity" className="scroll-mt-24">
+                <div id="complexity" className="scroll-mt-5 md:scroll-mt-24">
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.1 }}
-                    className="mb-16"
+                    className="mb-8 md:mb-16"
                   >
-                    <div className="backdrop-blur-md bg-white/10 border border-white/60 rounded-3xl px-8 py-12 shadow-xl">
-                      <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+                    <div className="backdrop-blur-md bg-white/10 border border-white/60 rounded-3xl px-3 sm:px-8 py-6 sm:py-8 md:py-12 shadow-xl">
+                      <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 text-center">
                         Complexity Comparison
                       </h2>
 
                       <div className="overflow-x-auto">
-                        <table className="w-full text-left">
+                        <table className="w-full text-left min-w-[600px]">
                           <thead>
                             <tr className="border-b border-white/20">
-                              <th className="pb-4 text-gray-900 font-semibold">
+                              <th className="pb-4 text-gray-900 font-semibold text-sm sm:text-base">
                                 Algorithm
                               </th>
-                              <th className="pb-4 text-gray-900 font-semibold text-center">
+                              <th className="pb-4 text-gray-900 font-semibold text-center text-sm sm:text-base">
                                 Best Case
                               </th>
-                              <th className="pb-4 text-gray-900 font-semibold text-center">
+                              <th className="pb-4 text-gray-900 font-semibold text-center text-sm sm:text-base">
                                 Average Case
                               </th>
-                              <th className="pb-4 text-gray-900 font-semibold text-center">
+                              <th className="pb-4 text-gray-900 font-semibold text-center text-sm sm:text-base">
                                 Worst Case
                               </th>
-                              <th className="pb-4 text-gray-900 font-semibold text-center">
+                              <th className="pb-4 text-gray-900 font-semibold text-center text-sm sm:text-base">
                                 Space
                               </th>
                             </tr>
@@ -360,17 +437,19 @@ const CategoryLayout = ({ category, features, complexityData }) => {
                                 key={row.name}
                                 className="border-b border-white/10"
                               >
-                                <td className="py-3 font-medium">{row.name}</td>
-                                <td className="py-3 text-center font-mono">
+                                <td className="py-3 font-medium text-sm sm:text-base">
+                                  {row.name}
+                                </td>
+                                <td className="py-3 text-center font-mono text-xs sm:text-sm">
                                   {row.best}
                                 </td>
-                                <td className="py-3 text-center font-mono">
+                                <td className="py-3 text-center font-mono text-xs sm:text-sm">
                                   {row.average}
                                 </td>
-                                <td className="py-3 text-center font-mono">
+                                <td className="py-3 text-center font-mono text-xs sm:text-sm">
                                   {row.worst}
                                 </td>
-                                <td className="py-3 text-center font-mono">
+                                <td className="py-3 text-center font-mono text-xs sm:text-sm">
                                   {row.space}
                                 </td>
                               </tr>

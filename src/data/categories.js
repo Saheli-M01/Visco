@@ -38,13 +38,7 @@ export const categories = {
         shortDescription:
           "Efficient in-place sorting using partitioning around a pivot element.",
       },
-      {
-        name: "Counting Sort",
-        complexity: "O(n + k)",
-        difficulty: "Medium",
-        shortDescription:
-          "Non-comparison sort for integers with limited range using counting array.",
-      },
+    
       {
         name: "Heap Sort",
         complexity: "O(n log n)",

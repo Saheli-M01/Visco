@@ -43,13 +43,7 @@ const SortingPage = () => {
       space: "O(1)"
     },
     
-    {
-      name: "Counting Sort",
-      best: "O(n + k)",
-      average: "O(n + k)",
-      worst: "O(n + k)",
-      space: "O(n + k)"
-    },
+  
    
     {
       name: "Merge Sort",

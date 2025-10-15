@@ -5,7 +5,6 @@ import ArrayDisplay from "./algorithm-visualizer-components/SortingDisplay";
 import ControlsPanel from "./algorithm-visualizer-components/ControlsPanel";
 import ArrayInputCard from "./algorithm-visualizer-components/ArrayInputCard";
 
-// Visualization-only presentational component. Expects all state and handlers to be provided by the parent.
 const AlgorithmVisualization = ({
   selectedLanguage,
   requestLanguageChange,
@@ -44,99 +43,120 @@ const AlgorithmVisualization = ({
   isExecuting,
 }) => {
   return (
-    <div className="h-full bg-gradient-to-br from-white/60 to-white/40 backdrop-blur-sm custom-scrollbar overflow-y-auto">
-      <div className="px-4 py-1 space-y-3">
-        {/* New Layout - Main Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-          {/* Left Column - 4/5 width */}
-          <div className="lg:col-span-4 space-y-1">
-            {/* First Row - Code Preview and Step History */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-              <CodePreview
-                selectedLanguage={selectedLanguage}
-                requestLanguageChange={requestLanguageChange}
-                getCodeLines={getCodeLines}
-                selectedAlgorithm={selectedAlgorithm}
-                currentCodeLine={currentCodeLine}
-              />
+    <div className="h-screen w-screen bg-gradient-to-br from-white/60 to-white/40 backdrop-blur-sm custom-scrollbar overflow-y-auto">
 
-              <StepHistory
-                stepHistory={stepHistory}
-                currentStepIndex={currentStepIndex}
-                isVisualizationActive={isVisualizationActive}
-                sortingSteps={sortingSteps}
-                setCurrentStepIndex={setCurrentStepIndex}
-                setCurrentStep={setCurrentStep}
-                setCurrentArray={setCurrentArray}
-                setComparingIndices={setComparingIndices}
-                setCurrentCodeLine={setCurrentCodeLine}
-                currentStepRef={currentStepRef}
-                stepHistoryRef={stepHistoryRef}
-              />
-            </div>
-
-            {/* Second Row - Output (Full Width) */}
-            <div className="backdrop-blur-md bg-white border border-gray-300 rounded-xl p-2">
-              {!isVisualizationActive ? (
-                <div className="bg-gray-900 text-white p-4 rounded-lg text-sm font-mono min-h-[290px] overflow-y-auto custom-scrollbar shadow-inner border border-gray-700">
-                  <div className="text-green-400">Ready to run {selectedAlgorithm?.name}...</div>
-                  <div className="text-gray-300 mt-2">
-                    Enter array values and click <span className="text-blue-400">Go</span> to begin the visualization.
-                  </div>
-                  <div className="text-blue-400 mt-1">Use the Manual or Automatic controls to manage the process.</div>
-                  <div className="text-gray-300 mt-2">Review each step in the step history panel.</div>
-                  <div className="text-blue-400 mt-2">Follow the progress bar to track sorting progress.</div>
-                </div>
-              ) : (
-                <ArrayDisplay
-                  currentArray={currentArray}
-                  comparingIndices={comparingIndices}
-                  sortingSteps={sortingSteps}
-                  currentStepIndex={currentStepIndex}
-                  currentCodeLine={currentCodeLine}
-                  selectedLanguage={selectedLanguage}
-                  selectedAlgorithm={selectedAlgorithm}
-                  tempLineIndex={getCodeLines(
-                    selectedLanguage,
-                    selectedAlgorithm?.name
-                  ).findIndex((line) => /temp/.test(line))}
-                  languageHasTemp={getCodeLines(
-                    selectedLanguage,
-                    selectedAlgorithm?.name
-                  ).some((line) => /temp/.test(line))}
-                />
-              )}
-            </div>
+      {/* ===== Main Layout ===== */}
+      <div className="flex flex-col lg:flex-row h-[92vh] p-2 gap-4">
+        {/* ===== Left Column ===== */}
+        <div className="flex flex-col w-full lg:w-[40vw] gap-4">
+          {/* Code Preview */}
+          <div className="flex-1 bg-white border border-gray-300 rounded-xl shadow-sm px-3 pt-3 overflow-hidden">
+            <CodePreview
+              selectedLanguage={selectedLanguage}
+              requestLanguageChange={requestLanguageChange}
+              getCodeLines={getCodeLines}
+              selectedAlgorithm={selectedAlgorithm}
+              currentCodeLine={currentCodeLine}
+            />
           </div>
 
-          {/* Right Column - 1/5 width */}
-          <div className="lg:col-span-1 space-y-3 min-h-[80vh] overflow-y-auto custom-scrollbar pr-2 pb-4 ">
-            <ArrayInputCard
-              key={arrayInputKey}
-              handleGo={handleGo}
-              selectedAlgorithm={selectedAlgorithm}
-              pivotStrategy={pivotStrategy}
-              setPivotStrategy={setPivotStrategy}
-            />
-
-            <ControlsPanel
-              isAutomatic={isAutomatic}
-              setIsAutomatic={setIsAutomatic}
-              isPlaying={isPlaying}
-              handlePlay={handlePlay}
-              handlePause={handlePause}
-              handleReset={handleReset}
-              speed={speed}
-              setSpeed={setSpeed}
-              isVisualizationActive={isVisualizationActive}
+          {/* Step History */}
+          <div className="flex-1 bg-white border border-gray-300 rounded-xl shadow-sm p-3 overflow-hidden">
+            <StepHistory
+              stepHistory={stepHistory}
               currentStepIndex={currentStepIndex}
+              isVisualizationActive={isVisualizationActive}
               sortingSteps={sortingSteps}
-              handleFirstStep={handleFirstStep}
-              handleLastStep={handleLastStep}
-              handleStepBackward={handleStepBackward}
-              handleStepForward={handleStepForward}
-              isExecuting={isExecuting}
+              setCurrentStepIndex={setCurrentStepIndex}
+              setCurrentStep={setCurrentStep}
+              setCurrentArray={setCurrentArray}
+              setComparingIndices={setComparingIndices}
+              setCurrentCodeLine={setCurrentCodeLine}
+              currentStepRef={currentStepRef}
+              stepHistoryRef={stepHistoryRef}
             />
+          </div>
+        </div>
+
+        {/* ===== Right Column ===== */}
+        <div className="flex flex-col w-full lg:w-[60vw] gap-4">
+          {/* Array Display */}
+          <div className="flex-1 bg-white border border-gray-300 rounded-xl shadow-sm p-3 backdrop-blur-md ">
+            {!isVisualizationActive ? (
+              <div className="bg-gray-900 text-white p-4 rounded-lg text-sm font-mono  overflow-y-auto custom-scrollbar shadow-inner border border-gray-700">
+                <div className="text-green-400">
+                  Ready to run {selectedAlgorithm?.name}...
+                </div>
+                <div className="text-gray-300 mt-2">
+                  Enter array values and click{" "}
+                  <span className="text-blue-400">Go</span> to begin the
+                  visualization.
+                </div>
+                <div className="text-blue-400 mt-1">
+                  Use the Manual or Automatic controls to manage the process.
+                </div>
+                <div className="text-gray-300 mt-2">
+                  Review each step in the step history panel.
+                </div>
+                <div className="text-blue-400 mt-2">
+                  Follow the progress bar to track sorting progress.
+                </div>
+              </div>
+            ) : (
+              <ArrayDisplay
+                currentArray={currentArray}
+                comparingIndices={comparingIndices}
+                sortingSteps={sortingSteps}
+                currentStepIndex={currentStepIndex}
+                currentCodeLine={currentCodeLine}
+                selectedLanguage={selectedLanguage}
+                selectedAlgorithm={selectedAlgorithm}
+                tempLineIndex={getCodeLines(
+                  selectedLanguage,
+                  selectedAlgorithm?.name
+                ).findIndex((line) => /temp/.test(line))}
+                languageHasTemp={getCodeLines(
+                  selectedLanguage,
+                  selectedAlgorithm?.name
+                ).some((line) => /temp/.test(line))}
+              />
+            )}
+          </div>
+
+          {/* Array Input + Controls */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Array Input */}
+            <div className="bg-white border border-gray-300 rounded-xl shadow-sm p-3">
+              <ArrayInputCard
+                key={arrayInputKey}
+                handleGo={handleGo}
+                selectedAlgorithm={selectedAlgorithm}
+                pivotStrategy={pivotStrategy}
+                setPivotStrategy={setPivotStrategy}
+              />
+            </div>
+
+            {/* Controls */}
+            <div className="bg-white border border-gray-300 rounded-xl shadow-sm p-3">
+              <ControlsPanel
+                isAutomatic={isAutomatic}
+                setIsAutomatic={setIsAutomatic}
+                isPlaying={isPlaying}
+                handlePlay={handlePlay}
+                handlePause={handlePause}
+                handleReset={handleReset}
+                speed={speed}
+                setSpeed={setSpeed}
+                isVisualizationActive={isVisualizationActive}
+                currentStepIndex={currentStepIndex}
+                sortingSteps={sortingSteps}
+                handleFirstStep={handleFirstStep}
+                handleLastStep={handleLastStep}
+                handleStepBackward={handleStepBackward}
+                handleStepForward={handleStepForward}
+                isExecuting={isExecuting}
+              />
+            </div>
           </div>
         </div>
       </div>

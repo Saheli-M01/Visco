@@ -45,8 +45,8 @@ const CodePreview = ({
   ];
 
   return (
-    <div className="border border-gray-300 bg-white rounded-xl py-2 px-4 shadow-lg flex flex-col h-[38vh]">
-      <div className="flex items-center justify-between mb-1">
+    <div className="flex flex-col gap-2 h-full pb-3">
+      <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-gray-900">Code Preview</h3>
         <Select
           value={selectedLanguage}
@@ -55,13 +55,12 @@ const CodePreview = ({
           className=""
           ariaLabel="Select language"
           color="#346cd3ff"
-         
         />
       </div>
-
-      <pre
+      <div className="flex flex-1 bg-gray-900 rounded-lg overflow-hidden">
+        <pre
         ref={codeContainerRef}
-        className="bg-gray-900 text-green-400 px-3 py-2 rounded-lg text-[0.9rem] overflow-auto custom-scrollbar shadow-inner border border-gray-700 flex-1 min-h-0"
+        className="text-green-400 px-3 py-2 text-[0.9rem] overflow-auto custom-scrollbar flex-1 w-full"
       >
         <code>
           {getCodeLines(selectedLanguage, selectedAlgorithm?.name).map(
@@ -85,6 +84,7 @@ const CodePreview = ({
           )}
         </code>
       </pre>
+      </div>
     </div>
   );
 };

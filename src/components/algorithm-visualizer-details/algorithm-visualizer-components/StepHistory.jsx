@@ -30,9 +30,9 @@ const StepHistory = ({
       : 0;
 
   return (
-    <div className="space-y-3 h-full flex flex-col">
+    <div className="h-full flex flex-col">
       {/* Step History */}
-      <div className="border border-gray-300 bg-white rounded-xl py-2 px-4 flex flex-col h-[38vh]">
+      <div className="bg-white rounded-xl p-2 flex flex-col flex-1 overflow-hidden">
         <div className="flex items-center justify-between mb-1 gap-5">
           <h3 className="text-lg font-semibold text-foreground m-0">Steps</h3>
 

@@ -247,8 +247,8 @@ const QueueElement = ({ delay, index, value }) => {
 
 export default function Hero() {
   return (
-    <section className="relative h-[calc(100vh-4rem)] flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 px-4 py-8"
-      style={{ minHeight: 'calc(100vh - 4rem)' }}>
+    <section className="relative md:h-[calc(100vh-4rem)] flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 px-4 py-8"
+    >
       {/* Animated background grid */}
       <div className="absolute inset-0 opacity-15">
         <div
@@ -260,79 +260,80 @@ export default function Hero() {
         />
       </div>
 
-      {/* DSA Animation Elements - Optimally Positioned */}
+      {/* DSA Animation Elements - hidden on small screens */}
+      <div className="hidden md:block">
+        {/* Linked List - Top Left */}
+        {Array.from({ length: 5 }, (_, i) => (
+          <LinkedListNode key={`link-${i}`} delay={0.2 + i * 0.3} index={i} />
+        ))}
 
-      {/* Linked List - Top Left */}
-      {Array.from({ length: 5 }, (_, i) => (
-        <LinkedListNode key={`link-${i}`} delay={0.2 + i * 0.3} index={i} />
-      ))}
+        {/* Array - Top Right */}
+        {['A', 'L', 'G', 'O'].map((letter, i) => (
+          <ArrayElement
+            key={`array-${i}`}
+            delay={2 + i * 0.2}
+            index={i}
+            value={letter}
+          />
+        ))}
 
-      {/* Array - Top Right */}
-      {["A", "L", "G", "O"].map((letter, i) => (
-        <ArrayElement
-          key={`array-${i}`}
-          delay={2 + i * 0.2}
-          index={i}
-          value={letter}
+        {/* Stack - Right Side */}
+        {[1, 2, 3].map((value, i) => (
+          <StackElement
+            key={`stack-${i}`}
+            delay={3.2 + i * 0.3}
+            index={2 - i}
+            value={value}
+          />
+        ))}
+
+        {/* Graph - Left Side (Fixed positions) */}
+        <GraphEdge
+          delay={4.3}
+          from={{ x: 90, y: 340 }}
+          to={{ x: 170, y: 280 }}
+          weight="7"
         />
-      ))}
-
-      {/* Stack - Right Side */}
-      {[1, 2, 3].map((value, i) => (
-        <StackElement
-          key={`stack-${i}`}
-          delay={3.2 + i * 0.3}
-          index={2 - i}
-          value={value}
+        <GraphEdge
+          delay={4.5}
+          from={{ x: 170, y: 280 }}
+          to={{ x: 250, y: 340 }}
+          weight="3"
         />
-      ))}
-
-      {/* Graph - Left Side (Fixed positions) */}
-      <GraphEdge
-        delay={4.3}
-        from={{ x: 90, y: 340 }}
-        to={{ x: 170, y: 280 }}
-        weight="7"
-      />
-      <GraphEdge
-        delay={4.5}
-        from={{ x: 170, y: 280 }}
-        to={{ x: 250, y: 340 }}
-        weight="3"
-      />
-      <GraphEdge
-        delay={4.7}
-        from={{ x: 250, y: 340 }}
-        to={{ x: 170, y: 440 }}
-        weight="5"
-      />
-      <GraphEdge
-        delay={4.9}
-        from={{ x: 170, y: 440 }}
-        to={{ x: 90, y: 340 }}
-        weight="2"
-      />
-
-      <GraphNode delay={4.1} x={72} y={322} value="A" />
-      <GraphNode delay={4.2} x={152} y={262} value="B" />
-      <GraphNode delay={4.4} x={232} y={322} value="C" />
-      <GraphNode delay={4.6} x={152} y={422} value="D" />
-
-      {/* Queue - Bottom Center */}
-      {["Q1", "Q2", "Q3", "Q4"].map((value, i) => (
-        <QueueElement
-          key={`queue-${i}`}
-          delay={7 + i * 0.2}
-          index={i}
-          value={value}
+        <GraphEdge
+          delay={4.7}
+          from={{ x: 250, y: 340 }}
+          to={{ x: 170, y: 440 }}
+          weight="5"
         />
-      ))}
+        <GraphEdge
+          delay={4.9}
+          from={{ x: 170, y: 440 }}
+          to={{ x: 90, y: 340 }}
+          weight="2"
+        />
+
+        <GraphNode delay={4.1} x={72} y={322} value="A" />
+        <GraphNode delay={4.2} x={152} y={262} value="B" />
+        <GraphNode delay={4.4} x={232} y={322} value="C" />
+        <GraphNode delay={4.6} x={152} y={422} value="D" />
+
+        {/* Queue - Bottom Center */}
+        {['Q1', 'Q2', 'Q3', 'Q4'].map((value, i) => (
+          <QueueElement
+            key={`queue-${i}`}
+            delay={7 + i * 0.2}
+            index={i}
+            value={value}
+          />
+        ))}
+      </div>
 
       {/* Main Content */}
       <div className="relative w-full max-w-5xl mx-auto z-10">
-        <div className="text-center px-6 py-16">
+        <div className="text-center md:px-6 md:py-16">
           {/* Single Glassmorphic Container */}
-          <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-3xl px-8 py-12 shadow-xl">
+          <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-3xl  px-2 md:px-8 py-2 md:py-12 shadow-xl">
             <h1
               className="font-black mb-8 leading-tight"
               style={{ fontSize: "clamp(2.5em, 8vw, 5em)" }}

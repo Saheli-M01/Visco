@@ -26,12 +26,12 @@ export const Footer = () => {
             Reach out to us:
           </p>
           <a
-            href="mailto:hello@visco.com"
+            href="mailto:visualizecode.official@gmail.com"
             aria-label="Email"
             className="flex items-center space-x-2 p-3 bg-card border border-border/50 rounded-lg text-muted-foreground hover:text-primary hover:border-primary/30 transition-all duration-200"
           >
             <Mail className="h-4 w-4" />
-            <span>hello@visco.com</span>
+            <span className="text-[0.9rem]">visualizecode.official@gmail.com</span>
           </a>
         </div>
 

@@ -69,7 +69,7 @@ export const Topics = () => {
   };
 
   return (
-    <section className="relative py-16 px-6 bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 overflow-hidden">
+    <section className="relative px-4 py-6 md:py-16 md:px-6 bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 overflow-hidden">
       {/* Animated background grid */}
       <div className="absolute inset-0 opacity-15">
         <div
@@ -91,7 +91,7 @@ export const Topics = () => {
           viewport={{ once: true }}
           className="text-center mb-10"
         >
-          <div className="backdrop-blur-md border border-white/20 rounded-3xl px-12 mb-12">
+          <div className="backdrop-blur-md border border-white/20 rounded-3xl px-2 md:px-12 mb-4 md:mb-14">
             <h2 className="text-3xl md:text-5xl font-bold mb-6 text-gray-900">
               Choose Your <span className="text-gray-700">Learning Path</span>
             </h2>

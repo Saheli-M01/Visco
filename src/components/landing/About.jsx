@@ -30,7 +30,7 @@ export const About = () => {
   ];
 
   return (
-    <section className="relative py-16 px-6 bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 overflow-hidden">
+    <section className="relative px-4 py-6 md:py-16 md:px-6 bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 overflow-hidden">
       {/* Animated background grid */}
       <div className="absolute inset-0 opacity-15">
         <div
@@ -51,7 +51,7 @@ export const About = () => {
           viewport={{ once: true }}
           className="text-center mb-8"
         >
-          <div className=" rounded-3xl px-12  mb-14">
+          <div className=" rounded-3xl px-2 md:px-12 mb-4 md:mb-14">
             <h2 className="text-3xl md:text-5xl font-bold mb-6 text-gray-900">
               Making Algorithms{" "}
               <span className="text-gray-700">Accessible</span>
@@ -66,7 +66,7 @@ export const About = () => {
         </motion.div>
 
         {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
@@ -76,7 +76,7 @@ export const About = () => {
               viewport={{ once: true }}
               className="group"
             >
-              <div className="backdrop-blur-md bg-white/10 border border-gray-300/20 rounded-2xl px-6 py-8 shadow-xl h-full text-center hover:bg-white/15 hover:scale-105 duration-300 transition-all">
+              <div className="backdrop-blur-md bg-white/10 border border-gray-300/20 rounded-2xl p-3 md:px-6 md:py-8 shadow-xl h-full text-center hover:bg-white/15 hover:scale-105 duration-300 transition-all">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-white/30 backdrop-blur-sm border border-gray-200/40 rounded-xl mb-6 mx-auto shadow-md transform transition-transform duration-300 group-hover:scale-110">
                   <feature.icon className="h-8 w-8 text-gray-900" />
                 </div>
@@ -101,7 +101,7 @@ export const About = () => {
           viewport={{ once: true }}
           className="mt-12 text-center"
         >
-          <div className=" rounded-3xl px-12 py-12 shadow-xl bg-white/40">
+          <div className=" rounded-3xl p-4 md:p-12  shadow-xl bg-white/40">
             <h3 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900">
               Our Mission
             </h3>

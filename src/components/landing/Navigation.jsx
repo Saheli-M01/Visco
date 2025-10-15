@@ -328,7 +328,7 @@ export const Navigation = () => {
         <div className="md:hidden border-t border-white/20 bg-white/20 backdrop-blur-md">
           <div className="mx-auto max-w-6xl px-4 py-3 flex flex-col gap-2">
             {/* Mobile search */}
-            <div className="flex items-center gap-2 bg-white/10 rounded-md px-3 py-2">
+            <div className="flex items-center gap-2 bg-white/10 rounded-md px-3 py-2 border border-gray-700/30">
               <Search className="h-4 w-4 text-gray-700" />
               <input
                 type="text"

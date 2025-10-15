@@ -50,13 +50,6 @@ const SortingPage = () => {
       worst: "O(n + k)",
       space: "O(n + k)"
     },
-    {
-      name: "Radix Sort",
-      best: "O(nk)",
-      average: "O(nk)",
-      worst: "O(nk)",
-      space: "O(n + k)"
-    },
    
     {
       name: "Merge Sort",

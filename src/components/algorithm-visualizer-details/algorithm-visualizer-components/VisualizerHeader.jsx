@@ -12,7 +12,7 @@ const VisualizerHeader = ({
   onClose,
 }) => {
   return (
-    <div className="visualizer-header flex items-center justify-between px-4 py-1 border-b border-white/20 backdrop-blur-md bg-white shadow-lg">
+    <div className="visualizer-header flex items-center justify-between px-4 py-1 border-b border-white/20 backdrop-blur-md bg-white shadow-lg h-12">
       <div className="flex items-center gap-6">
         <div className="">
           <Select

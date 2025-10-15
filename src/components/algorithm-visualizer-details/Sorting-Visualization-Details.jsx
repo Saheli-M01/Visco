@@ -754,7 +754,7 @@ const FullScreenModal = ({ isOpen, onClose, algorithm, topic }) => {
           </div>
 
           {/* Full-screen modal content */}
-          <div className="relative h-full w-full backdrop-blur-sm bg-gray-300 flex flex-col">
+          <div className="relative h-full w-full backdrop-blur-sm bg-gray-300 flex flex-col border">
             {/* Header */}
             <VisualizerHeader
               sortingAlgorithms={sortingAlgorithms}

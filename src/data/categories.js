@@ -52,14 +52,6 @@ export const categories = {
         shortDescription:
           "Uses binary heap data structure for efficient in-place sorting.",
       },
-
-      {
-        name: "Radix Sort",
-        complexity: "O(nk)",
-        difficulty: "Hard",
-        shortDescription:
-          "Non-comparison sort that processes digits from least to most significant.",
-      },
     ],
   },
 

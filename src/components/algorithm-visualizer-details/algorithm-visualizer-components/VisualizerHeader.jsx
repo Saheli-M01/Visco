@@ -14,19 +14,7 @@ const VisualizerHeader = ({
   return (
     <div className="visualizer-header flex items-center justify-between px-4 py-1 border-b border-white/20 backdrop-blur-md bg-white shadow-lg h-12">
       <div className="flex items-center gap-6">
-        <div className="">
-          <Select
-            value={selectedAlgorithm?.name || ""}
-            onChange={handleAlgorithmChange}
-            options={sortingAlgorithms.map((algo) => ({
-              value: algo.name,
-              label: algo.name,
-            }))}
-            ariaLabel="Select algorithm"
-            className="w-full"
-            color="#346cd3ff"
-          />
-        </div>
+        
         {/* Visualization / Details toggle buttons (replaces Tabs) */}
         <div className="flex bg-white/20 rounded-lg p-1 border border-gray-400/50 shadow-inner">
           <button

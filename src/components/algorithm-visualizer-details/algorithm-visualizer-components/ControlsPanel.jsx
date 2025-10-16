@@ -36,7 +36,11 @@ const ControlsPanel = ({
         {/* Mode Toggle */}
         <div className="flex bg-white/20 rounded-lg gap-2 shadow-inner">
           <button
-            onClick={() => setIsAutomatic(false)}
+            onClick={() => {
+              // switching mode should always stop any running automatic execution
+              handlePause();
+              setIsAutomatic(false);
+            }}
             className={`flex-1 py-1 px-2 rounded-md text-sm font-medium transition-all ${
               !isAutomatic
                 ? "bg-gray-800 text-white shadow-md"
@@ -46,7 +50,11 @@ const ControlsPanel = ({
             Manual
           </button>
           <button
-            onClick={() => setIsAutomatic(true)}
+            onClick={() => {
+              // switching mode should stop any running automatic execution
+              handlePause();
+              setIsAutomatic(true);
+            }}
             className={`flex-1 py-1 px-2 rounded-md text-sm font-medium transition-all ${
               isAutomatic
                 ? "bg-gray-800 text-white shadow-md"
@@ -62,10 +70,15 @@ const ControlsPanel = ({
       <div className="flex-1 flex items-center justify-center">
         {isAutomatic ? (
           <div className="flex gap-6 items-center w-full p-2">
-            {/* Play / Pause */}
+            {/* Play / Pause (disabled until visualization is active) */}
             <button
               onClick={isPlaying ? handlePause : handlePlay}
-              className="p-2 rounded-full bg-gray-800 text-white hover:bg-gray-700 transition-all shadow-lg border border-gray-600"
+              disabled={!isVisualizationActive}
+              className={`p-2 rounded-full transition-all shadow-lg  ${
+                !isVisualizationActive
+                  ? "bg-gray-300 text-gray-400 border border-gray-400 cursor-not-allowed"
+                  : "bg-gray-800 text-white hover:bg-gray-700 border border-gray-600"
+              }`}
             >
               {isPlaying ? (
                 <Pause className="h-4 w-4" />

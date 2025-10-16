@@ -30,7 +30,7 @@ const ArrayElement = ({ value, index, styleClass }) => (
 /**
  * ArrayDisplay component - Main visualization container for sorting algorithms
  */
-const ArrayDisplay = ({
+const SortingDisplay = ({
   currentArray = [],
   comparingIndices = [],
   sortingSteps = [],
@@ -39,16 +39,9 @@ const ArrayDisplay = ({
   selectedAlgorithm = null,
 }) => {
   const currentStep = sortingSteps[currentStepIndex] || {};
-  const currentMergeRange = currentStep.mergeRange || null;
+
   const isSwapPhase = ["swap", "swap_step"].includes(currentStep.phase);
 
-  const mergeOverlay = getMergeOverlay({
-    sortingSteps,
-    currentStepIndex,
-    currentStep,
-    currentMergeRange,
-    currentArray,
-  });
   const quickOverlay = getQuickOverlay({
     sortingSteps,
     currentStepIndex,
@@ -160,4 +153,4 @@ const ArrayDisplay = ({
   );
 };
 
-export default ArrayDisplay;
+export default SortingDisplay;

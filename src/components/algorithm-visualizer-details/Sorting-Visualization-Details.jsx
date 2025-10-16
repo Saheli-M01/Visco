@@ -435,20 +435,27 @@ const FullScreenModal = ({ isOpen, onClose, algorithm, topic }) => {
     const algorithmName = event?.target ? event.target.value : event;
     // If no visualization is active, switch immediately
     if (!isVisualizationActive) {
-      const newAlgorithm = sortingAlgorithms.find((algo) => algo.name === algorithmName);
+      const newAlgorithm = sortingAlgorithms.find(
+        (algo) => algo.name === algorithmName
+      );
       setSelectedAlgorithm(newAlgorithm);
       return;
     }
 
     // If the user is currently viewing the Details tab, allow immediate change without prompting
     if (activeTab === 1) {
-      const newAlgorithm = sortingAlgorithms.find((algo) => algo.name === algorithmName);
+      const newAlgorithm = sortingAlgorithms.find(
+        (algo) => algo.name === algorithmName
+      );
       setSelectedAlgorithm(newAlgorithm);
 
       // regenerate steps for the new algorithm using the original array (if present)
       if (originalArray && originalArray.length > 0) {
         const algorithm = getAlgorithm(newAlgorithm?.name);
-        const steps = algorithm.generateSteps([...originalArray], selectedLanguage);
+        const steps = algorithm.generateSteps(
+          [...originalArray],
+          selectedLanguage
+        );
         setSortingSteps(steps);
         setTotalSteps(steps.length);
         setStepHistory(
@@ -465,7 +472,9 @@ const FullScreenModal = ({ isOpen, onClose, algorithm, topic }) => {
           const firstStep = steps[0];
           setCurrentArray([...firstStep.array]);
           setComparingIndices(firstStep.comparing || []);
-          setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
+          setCurrentCodeLine(
+            firstStep.codeLine !== undefined ? firstStep.codeLine : -1
+          );
         }
       }
 
@@ -637,7 +646,9 @@ const FullScreenModal = ({ isOpen, onClose, algorithm, topic }) => {
           const firstStep = steps[0];
           setCurrentArray([...firstStep.array]);
           setComparingIndices(firstStep.comparing || []);
-          setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
+          setCurrentCodeLine(
+            firstStep.codeLine !== undefined ? firstStep.codeLine : -1
+          );
         }
       }
       return;
@@ -739,22 +750,9 @@ const FullScreenModal = ({ isOpen, onClose, algorithm, topic }) => {
     <ThemeProvider theme={theme}>
       <AnimatePresence>
         <div className="fixed inset-0 z-50">
-          {/* Full-screen backdrop */}
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200">
-            {/* Animated background grid */}
-            <div className="absolute inset-0 opacity-15">
-              <div
-                className="absolute inset-0"
-                style={{
-                  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.24) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.32) 1px, transparent 1px)`,
-                  backgroundSize: "3vw 3vw",
-                }}
-              />
-            </div>
-          </div>
-
           {/* Full-screen modal content */}
-          <div className="relative h-full w-full backdrop-blur-sm bg-gray-300 flex flex-col border">
+          <div className="relative h-full w-full backdrop-blur-sm bg-gray-100 flex flex-col border">
+           
             {/* Header */}
             <VisualizerHeader
               sortingAlgorithms={sortingAlgorithms}
@@ -779,14 +777,12 @@ const FullScreenModal = ({ isOpen, onClose, algorithm, topic }) => {
 
               {/* Details Tab */}
               {activeTab === 1 && (
-                <div className="h-full overflow-y-auto bg-gradient-to-br from-white/10 to-white/20 backdrop-blur-sm custom-scrollbar">
-                  <div className="p-2 text-gray-900 max-w-full mx-auto">
-                    <AlgorithmDetails
-                      algorithm={selectedAlgorithm}
-                      topic={topic}
-                      hideVisualizationButton={true}
-                    />
-                  </div>
+                <div className="py-2">
+                  <AlgorithmDetails
+                    algorithm={selectedAlgorithm}
+                    topic={topic}
+                    hideVisualizationButton={true}
+                  />
                 </div>
               )}
             </div>
@@ -799,15 +795,6 @@ const FullScreenModal = ({ isOpen, onClose, algorithm, topic }) => {
         message="Changing the language now will regenerate the visualization steps and reset progress. Do you want to continue?"
         onCancel={cancelLanguageChange}
         onConfirm={confirmLanguageChange}
-        confirmLabel="Continue"
-        cancelLabel="Cancel"
-      />
-      <ConfirmModal
-        isOpen={showAlgorithmChangeConfirm}
-        title="Change algorithm and regenerate?"
-        message="Changing the algorithm now will regenerate the visualization steps and reset progress. Do you want to continue?"
-        onCancel={cancelAlgorithmChange}
-        onConfirm={confirmAlgorithmChange}
         confirmLabel="Continue"
         cancelLabel="Cancel"
       />

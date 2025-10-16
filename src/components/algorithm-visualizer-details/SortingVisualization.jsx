@@ -1,7 +1,7 @@
 import React from "react";
 import CodePreview from "./algorithm-visualizer-components/CodePreview";
 import StepHistory from "./algorithm-visualizer-components/StepHistory";
-import ArrayDisplay from "./algorithm-visualizer-components/SortingDisplay";
+import SortingDisplay from "./algorithm-visualizer-components/SortingDisplay";
 import ControlsPanel from "./algorithm-visualizer-components/ControlsPanel";
 import ArrayInputCard from "./algorithm-visualizer-components/ArrayInputCard";
 
@@ -103,7 +103,7 @@ const AlgorithmVisualization = ({
                 </div>
               </div>
             ) : (
-              <ArrayDisplay
+              <SortingDisplay
                 currentArray={currentArray}
                 comparingIndices={comparingIndices}
                 sortingSteps={sortingSteps}

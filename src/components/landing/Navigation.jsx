@@ -114,54 +114,16 @@ export const Navigation = () => {
     const q = (searchQuery || "").trim();
     if (!q) return;
     const qLower = q.toLowerCase();
-
-    // Try to find exact match first across categories
-    let found = null;
-    for (const [catId, cat] of Object.entries(categories)) {
-      const alg = (cat.algorithms || []).find(
-        (a) => a.name.toLowerCase() === qLower
-      );
-      if (alg) {
-        found = { catId, alg };
-        break;
-      }
-    }
-
-    // Fallback to substring match
-    if (!found) {
-      for (const [catId, cat] of Object.entries(categories)) {
-        const alg = (cat.algorithms || []).find((a) =>
-          a.name.toLowerCase().includes(qLower)
-        );
-        if (alg) {
-          found = { catId, alg };
-          break;
-        }
-      }
-    }
-
-    if (found) {
-      // navigate to the category page and dispatch search + open events
-      const path = `/${found.catId}`;
-      if (location.pathname !== path) {
-        navigate(path);
-        // allow navigation to settle
-        setTimeout(() => {
-          dispatchSearch(q);
-          window.dispatchEvent(
-            new CustomEvent("openAlgorithm", {
-              detail: { name: found.alg.name },
-            })
-          );
-        }, 200);
-      } else {
-        dispatchSearch(q);
-        window.dispatchEvent(
-          new CustomEvent("openAlgorithm", { detail: { name: found.alg.name } })
-        );
-      }
+    // If user has a suggestion highlighted, open that algorithm (handled elsewhere).
+    // Otherwise navigate to a dedicated search results page and dispatch the search
+    const searchPath = `/search?q=${encodeURIComponent(q)}`;
+    if (location.pathname !== "/search") {
+      navigate(searchPath);
+      // allow navigation to settle then dispatch a global search event so SearchPage will pick it up
+      setTimeout(() => dispatchSearch(q), 150);
     } else {
-      // no match: still dispatch search so the list filters if present
+      // already on search - update the URL and dispatch immediately
+      navigate(searchPath);
       dispatchSearch(q);
     }
   };

@@ -10,6 +10,7 @@ import ArrayPage from "./components/TopicPages/ArrayPage";
 import GraphPage from "./components/TopicPages/GraphPage";
 import TreePage from "./components/TopicPages/TreePage";
 import LinkedListPage from "./components/TopicPages/LinkedListPage";
+import SearchPage from "./components/TopicPages/SearchPage";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/sorting" element={<SortingPage />} />
+            <Route path="/search" element={<SearchPage />} />
             <Route path="/array" element={<ArrayPage />} />
             <Route path="/graph" element={<GraphPage />} />
             <Route path="/tree" element={<TreePage />} />

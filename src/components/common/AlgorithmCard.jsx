@@ -1,0 +1,68 @@
+import React from "react";
+import { motion } from "framer-motion";
+import { Clock, ChevronRight } from "lucide-react";
+
+const getDifficultyColor = (difficulty) => {
+  switch (difficulty) {
+    case "Easy":
+      return "text-green-600 bg-green-100/50";
+    case "Medium":
+      return "text-yellow-600 bg-yellow-100/50";
+    case "Hard":
+      return "text-red-600 bg-red-100/50";
+    default:
+      return "text-gray-600 bg-gray-100/50";
+  }
+};
+
+const AlgorithmCard = ({ algorithm, index = 0, onClick }) => {
+  const interactive = [
+    "Bubble Sort",
+    "Selection Sort",
+    "Insertion Sort",
+    "Merge Sort",
+    "Quick Sort",
+    "Heap Sort",
+  ];
+  const isInteractive = interactive.includes(algorithm.name);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.05 * index }}
+      onClick={() => isInteractive && onClick && onClick(algorithm)}
+      className={`backdrop-blur-sm bg-white/60 border border-white/30 rounded-xl px-4 sm:px-6 py-4 sm:py-6 shadow-md transition-all group ${
+        isInteractive ? "hover:bg-white/85 cursor-pointer" : "opacity-60 cursor-default"
+      }`}
+    >
+      <div className="flex items-center justify-between mb-3">
+        <h3 className={`text-base sm:text-lg font-semibold text-gray-900 transition-colors ${isInteractive ? "group-hover:text-gray-700" : "text-gray-600"}`}>
+          {algorithm.name}
+        </h3>
+        {isInteractive ? (
+          <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-gray-900 transition-colors" />
+        ) : (
+          <span className="text-xs font-medium text-red-400">Coming Soon</span>
+        )}
+      </div>
+
+      <div className="flex items-center gap-2 sm:gap-3 mb-3">
+        <div className="flex items-center text-gray-600">
+          <Clock className="h-3 w-3 mr-1" />
+          <code className="font-mono text-xs">{algorithm.complexity}</code>
+        </div>
+
+        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(algorithm.difficulty)}`}>
+          {algorithm.difficulty}
+        </span>
+      </div>
+
+      <p className="text-gray-700 text-sm font-medium leading-relaxed">
+        {algorithm.shortDescription || `Learn about ${algorithm.name} algorithm and its implementation.`}
+      </p>
+    </motion.div>
+  );
+};
+
+export default AlgorithmCard;

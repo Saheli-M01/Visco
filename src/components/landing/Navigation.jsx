@@ -195,7 +195,7 @@ export const Navigation = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-white/10 border border-white/20 shadow-lg">
+    <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-white/70 border border-white/20 shadow-lg">
       <div className="mx-auto max-w-6xl px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
@@ -205,15 +205,14 @@ export const Navigation = () => {
             className="flex items-center gap-3 text-xl font-extrabold tracking-tight cursor-pointer"
           >
             {/* Use public asset - Vite serves files from /assets */}
-          
-              <img
-                src="/assets/logo_black.png"
-                alt="Visco logo"
-                className="object-contain w-[2.7rem] h-[2.7rem]"
-              />
-           
 
-            <span className="text-gray-900 font-bold">Visco</span>
+            <img
+              src="/assets/brand.png"
+              alt="Visco logo"
+              className=" h-[3rem]"
+            />
+
+          
           </a>
 
           {/* Desktop nav */}

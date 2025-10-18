@@ -209,7 +209,7 @@ export const Navigation = () => {
             <img
               src="/assets/brand.png"
               alt="Visco logo"
-              className=" h-[3rem]"
+              className=" h-[2.5rem]"
             />
 
           

@@ -9,15 +9,15 @@ export const Footer = () => {
 
         {/* Left Side: Brand & Description */}
         <div className="max-w-2xl">
-          <div className="flex items-center space-x-3 mb-4">
+          <div className="flex items-center mb-4">
            
               <img
-                src="/assets/logo_black.jpg"
+                src="/assets/brand.png"
                 alt="Visco logo"
-                className="object-contain w-[2.7rem] h-[2.7rem]"
+                className=" h-[2.5rem]"
               />
      
-            <span className="font-display font-bold text-xl">Visco</span>
+    
           </div>
 
           <p className="text-muted-foreground leading-relaxed">

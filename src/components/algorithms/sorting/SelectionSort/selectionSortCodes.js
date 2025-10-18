@@ -78,35 +78,27 @@ public class SelectionSortExample {
     }
 }
 `,
-  c: `/* Selection Sort - C (runnable with a main) */
-#include <stdio.h>
+  'c#': `// Selection Sort - C# (runnable)
+using System;
 
-void selectionSort(int a[], int n) {
+class SelectionSortExample {
+  static void SelectionSort(int[] a) {
+    int n = a.Length;
     for (int i = 0; i < n - 1; i++) {
-        int minIdx = i;
-        for (int j = i + 1; j < n; j++) {
-            if (a[j] < a[minIdx]) minIdx = j;
-        }
-        if (minIdx != i) {
-            int tmp = a[i];
-            a[i] = a[minIdx];
-            a[minIdx] = tmp;
-        }
+      int minIdx = i;
+      for (int j = i + 1; j < n; j++) if (a[j] < a[minIdx]) minIdx = j;
+      if (minIdx != i) {
+        int tmp = a[i]; a[i] = a[minIdx]; a[minIdx] = tmp;
+      }
     }
-}
+  }
 
-int main() {
-    int arr[] = {64, 25, 12, 22, 11};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    printf("Original: ");
-    for (int i = 0; i < n; ++i) printf("%d ", arr[i]);
-    printf("\n");
-    selectionSort(arr, n);
-    printf("Sorted:   ");
-    for (int i = 0; i < n; ++i) printf("%d ", arr[i]);
-    printf("\n");
-    return 0;
-}
+  static void Main() {
+    int[] arr = {64, 25, 12, 22, 11};
+    Console.WriteLine("Original: " + string.Join(" ", arr));
+    SelectionSort(arr);
+    Console.WriteLine("Sorted:   " + string.Join(" ", arr));
+  }
 `,
   cpp: `// Selection Sort - C++ (runnable)
 #include <bits/stdc++.h>

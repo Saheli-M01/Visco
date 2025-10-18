@@ -76,33 +76,28 @@ public class InsertionSortExample {
     }
 }
 `,
-  c: `/* Insertion Sort - C (runnable with a main) */
-#include <stdio.h>
+  'c#': `// Insertion Sort - C# (runnable)
+using System;
 
-void insertionSort(int a[], int n) {
-    for (int i = 1; i < n; i++) {
-        int key = a[i];
-        int j = i - 1;
-        while (j >= 0 && a[j] > key) {
-            a[j + 1] = a[j];
-            j = j - 1;
-        }
-        a[j + 1] = key;
+class InsertionSortExample {
+  static void InsertionSort(int[] a) {
+    for (int i = 1; i < a.Length; i++) {
+      int key = a[i];
+      int j = i - 1;
+      while (j >= 0 && a[j] > key) {
+        a[j + 1] = a[j];
+        j = j - 1;
+      }
+      a[j + 1] = key;
     }
-}
+  }
 
-int main() {
-    int arr[] = {12, 11, 13, 5, 6};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    printf("Original: ");
-    for (int i = 0; i < n; ++i) printf("%d ", arr[i]);
-    printf("\n");
-    insertionSort(arr, n);
-    printf("Sorted:   ");
-    for (int i = 0; i < n; ++i) printf("%d ", arr[i]);
-    printf("\n");
-    return 0;
-}
+  static void Main() {
+    int[] arr = {12, 11, 13, 5, 6};
+    Console.WriteLine("Original: " + string.Join(" ", arr));
+    InsertionSort(arr);
+    Console.WriteLine("Sorted:   " + string.Join(" ", arr));
+  }
 `,
   cpp: `// Insertion Sort - C++ (runnable)
 #include <bits/stdc++.h>

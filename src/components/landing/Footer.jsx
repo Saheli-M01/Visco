@@ -12,7 +12,7 @@ export const Footer = () => {
           <div className="flex items-center space-x-3 mb-4">
            
               <img
-                src="/assets/logo_black.png"
+                src="/assets/logo_black.jpg"
                 alt="Visco logo"
                 className="object-contain w-[2.7rem] h-[2.7rem]"
               />

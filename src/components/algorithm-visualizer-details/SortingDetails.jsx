@@ -82,7 +82,7 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
   }, [algorithm.name]);
 
   return (
-    <div className="mx-auto w-full h-full max-w-7xl px-2 sm:px-6">
+    <div className="mx-auto h-screen w-screen max-w-7xl px-2 sm:px-6">
       <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 sm:gap-6">
         {/* Left: Overview + Implementation */}
         <div className="lg:col-span-3 space-y-4 sm:space-y-6">

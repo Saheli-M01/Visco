@@ -72,46 +72,25 @@ public class QuickSortExample {
     }
 }
 `,
-  c: `/* Quick Sort - C (runnable) */
-#include <stdio.h>
-#include <stdlib.h>
+  'c#': `// Quick Sort - C# (runnable)
+using System;
+using System.Linq;
 
-int* quick_sort_copy(int* arr, int n) {
-    if (n <= 1) {
-        int* out = malloc(sizeof(int) * n);
-        for (int i = 0; i < n; ++i) out[i] = arr[i];
-        return out;
-    }
-    int pivot = arr[n - 1];
-    int leftCount = 0, rightCount = 0;
-    for (int i = 0; i < n - 1; ++i) if (arr[i] < pivot) leftCount++; else rightCount++;
-    int* left = malloc(sizeof(int) * leftCount);
-    int* right = malloc(sizeof(int) * rightCount);
-    int li = 0, ri = 0;
-    for (int i = 0; i < n - 1; ++i) {
-        if (arr[i] < pivot) left[li++] = arr[i];
-        else right[ri++] = arr[i];
-    }
-    int* sLeft = quick_sort_copy(left, leftCount);
-    int* sRight = quick_sort_copy(right, rightCount);
-    int* res = malloc(sizeof(int) * n);
-    int idx = 0;
-    for (int i = 0; i < leftCount; ++i) res[idx++] = sLeft[i];
-    res[idx++] = pivot;
-    for (int i = 0; i < rightCount; ++i) res[idx++] = sRight[i];
-    free(left); free(right); free(sLeft); free(sRight);
-    return res;
-}
+class QuickSortExample {
+  static int[] QuickSort(int[] arr) {
+    if (arr.Length <= 1) return arr.ToArray();
+    int pivot = arr[arr.Length - 1];
+    var left = arr.Take(arr.Length - 1).Where(x => x < pivot).ToArray();
+    var right = arr.Take(arr.Length - 1).Where(x => x >= pivot).ToArray();
+    return QuickSort(left).Concat(new[]{pivot}).Concat(QuickSort(right)).ToArray();
+  }
 
-int main() {
-    int arr[] = {10, 7, 8, 9, 1, 5};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    printf("Original: "); for (int i = 0; i < n; ++i) printf("%d ", arr[i]); printf("\n");
-    int* sorted = quick_sort_copy(arr, n);
-    printf("Sorted:   "); for (int i = 0; i < n; ++i) printf("%d ", sorted[i]); printf("\n");
-    free(sorted);
-    return 0;
-}
+  static void Main() {
+    int[] arr = {10, 7, 8, 9, 1, 5};
+    Console.WriteLine("Original: " + string.Join(" ", arr));
+    var sorted = QuickSort(arr);
+    Console.WriteLine("Sorted:   " + string.Join(" ", sorted));
+  }
 `,
   cpp: `// Quick Sort - C++ (runnable)
 #include <bits/stdc++.h>

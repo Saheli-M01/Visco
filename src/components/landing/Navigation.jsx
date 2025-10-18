@@ -202,8 +202,17 @@ export const Navigation = () => {
           <a
             href="#home"
             onClick={handleLogoClick}
-            className="text-xl font-extrabold tracking-tight cursor-pointer"
+            className="flex items-center gap-3 text-xl font-extrabold tracking-tight cursor-pointer"
           >
+            {/* Use public asset - Vite serves files from /assets */}
+          
+              <img
+                src="/assets/logo_black.png"
+                alt="Visco logo"
+                className="object-contain w-[2.7rem] h-[2.7rem]"
+              />
+           
+
             <span className="text-gray-900 font-bold">Visco</span>
           </a>
 
@@ -255,7 +264,9 @@ export const Navigation = () => {
                       onMouseEnter={() => setActiveIndex(idx)}
                       onClick={() => openFoundAlgorithm(s)}
                     >
-                      <div className="font-medium text-gray-900">{s.alg.name}</div>
+                      <div className="font-medium text-gray-900">
+                        {s.alg.name}
+                      </div>
                       <div className="text-xs text-gray-500">{s.catId}</div>
                     </li>
                   ))}

@@ -205,13 +205,13 @@ export const Navigation = () => {
             className="flex items-center gap-3 text-xl font-extrabold tracking-tight cursor-pointer"
           >
             {/* Use public asset - Vite serves files from /assets */}
-            <div className="flex items-center justify-center w-[3rem] h-[3rem] rounded-[8px] bg-gray-800 border-2 border-gray-900">
+          
               <img
-                src="/assets/logo_white.png"
+                src="/assets/logo_black.png"
                 alt="Visco logo"
                 className="object-contain w-[2.7rem] h-[2.7rem]"
               />
-            </div>
+           
 
             <span className="text-gray-900 font-bold">Visco</span>
           </a>

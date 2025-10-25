@@ -1,6 +1,6 @@
 import React from "react";
-import { parseIndexFromDesc, findPersistedValue, safeValue } from "../../../algorithm-visualizer-details/algorithm-visualizer-components/shared/stepHelpers";
-import VariableCard from "../../../algorithm-visualizer-details/algorithm-visualizer-components/shared/VariableCard";
+import { parseIndexFromDesc, findPersistedValue, safeValue } from "../../../algorithm-visualizer-details/algorithm-visualizer-components/stepHelpers";
+import VariableCard from "../../../algorithm-visualizer-details/algorithm-visualizer-components/VariableCard";
 
 export default function BubbleVisualizer({
   currentArray = [],

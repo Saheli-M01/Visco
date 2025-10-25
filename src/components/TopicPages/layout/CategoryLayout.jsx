@@ -10,7 +10,7 @@ import {
   BarChart3,
 } from "lucide-react";
 import {
-  FullScreenModal,
+  FullScreenModalSorting,
   AlgorithmDetails,
 } from "@/components/algorithm-visualizer-details";
 import AlgorithmCard from "@/components/common/AlgorithmCard";
@@ -396,7 +396,7 @@ const CategoryLayout = ({ category, features, complexityData }) => {
       </div>
 
       {/* Algorithm Full-Screen Modal */}
-      <FullScreenModal
+      <FullScreenModalSorting
         isOpen={isModalOpen}
         onClose={closeModal}
         algorithm={selectedAlgorithm?.algorithm}

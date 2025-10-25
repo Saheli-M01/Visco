@@ -3,8 +3,8 @@ import {
   safeValue,
   rangeMatches,
   findPersistedValue,
-} from "../../../algorithm-visualizer-details/algorithm-visualizer-components/shared/stepHelpers";
-import VariableCard from "../../../algorithm-visualizer-details/algorithm-visualizer-components/shared/VariableCard";
+} from "../../../algorithm-visualizer-details/algorithm-visualizer-components/stepHelpers";
+import VariableCard from "../../../algorithm-visualizer-details/algorithm-visualizer-components/VariableCard";
 
 export default function MergeVisualizer({
   currentStep = {},
@@ -32,24 +32,31 @@ export default function MergeVisualizer({
 
   // left/right
   const leftVarObj =
-    currentStep.leftVar ??
-    findPersistedValue(
-      sortingSteps,
-      currentStepIndex,
-      ["leftVar", "leftPtr"],
-      mergeScopeCheck
-    );
+    // Do not surface left variable during call frame announcements
+    (currentStep.phase === "call-left" || currentStep.phase === "call-right" || currentStep.phase === "condition-check"|| currentStep.phase === "calculate-mid" || currentStep.phase === "base")
+      ? null
+      : currentStep.leftVar ??
+        findPersistedValue(
+          sortingSteps,
+          currentStepIndex,
+          ["leftVar", "leftPtr"],
+          mergeScopeCheck
+        );
   const rightVarObj =
-    currentStep.rightVar ??
-    (typeof currentStep.rightPtr === "number"
-      ? { value: currentStep.rightPtr }
-      : null) ??
-    findPersistedValue(
-      sortingSteps,
-      currentStepIndex,
-      ["rightVar", "rightPtr"],
-      mergeScopeCheck
-    );
+    // Do not surface right variable during call frame announcements
+    (currentStep.phase === "call-left" || currentStep.phase === "call-right" || currentStep.phase === "condition-check" || currentStep.phase === "calculate-mid" || currentStep.phase === "base")
+      ? null
+      :
+        (currentStep.rightVar ??
+          (typeof currentStep.rightPtr === "number"
+            ? { value: currentStep.rightPtr }
+            : null) ??
+          findPersistedValue(
+            sortingSteps,
+            currentStepIndex,
+            ["rightVar", "rightPtr"],
+            mergeScopeCheck
+          ));
 
   // i variable
   let iVarObj =
@@ -96,7 +103,7 @@ export default function MergeVisualizer({
 
     // Otherwise, keep looking for a step that includes an explicit mergeRange
     // (this preserves the previous behavior and gives us the bounds)
-    if (st.mergeRange && st.phase && st.phase !== "conquer") {
+    if (st.mergeRange && st.phase && st.phase !== "call-merge") {
       mergeSnapshotStep = st;
       break;
     }
@@ -312,7 +319,7 @@ return (
             />
           )}
         </div>
-        <div className="flex-1 flex justify-end">
+        <div className="flex-1 flex justify-end ml-2">
           {iVarObj && (
             <VariableCard
               label="i"
@@ -360,7 +367,7 @@ export function getMergeOverlay({
       mergeSnapshotStep = st;
       break;
     }
-    if (st.mergeRange && st.phase && st.phase !== "conquer") {
+    if (st.mergeRange && st.phase && st.phase !== "call-merge") {
       mergeSnapshotStep = st;
       break;
     }

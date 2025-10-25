@@ -1,5 +1,5 @@
 import React from "react";
-import { safeValue } from "../../../algorithm-visualizer-details/algorithm-visualizer-components/shared/stepHelpers";
+import { safeValue } from "../../../algorithm-visualizer-details/algorithm-visualizer-components/stepHelpers";
 
 // Minimal heap visualizer: shows a call frame when heapSort starts and the current outer-loop i variable
 const HeapVisualizer = ({

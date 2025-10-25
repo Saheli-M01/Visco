@@ -10,6 +10,7 @@ const ArrayInputCard = ({
   setPivotStrategy,
 }) => {
   const [arrayInput, setArrayInput] = useState("");
+  const [targetInput, setTargetInput] = useState("");
   const [showValidationPopup, setShowValidationPopup] = useState(false);
   const [validationError, setValidationError] = useState("");
   const [currentArrayLength, setCurrentArrayLength] = useState(0);
@@ -92,8 +93,31 @@ const ArrayInputCard = ({
       setShowValidationPopup(true);
       return;
     }
-    // call parent with parsed array
-    handleGo(res.value);
+    // parse target if provided (for Binary Search)
+    const normalizedAlgoName = (selectedAlgorithm?.name || "").toLowerCase();
+    let targetValue = null;
+    if (normalizedAlgoName.includes("binary search") || normalizedAlgoName.includes("binarysearch")) {
+      if (targetInput == null || targetInput === "") {
+        setValidationError("Please enter a target value for Binary Search");
+        setShowValidationPopup(true);
+        return;
+      }
+      const tn = Number(targetInput);
+      if (Number.isNaN(tn)) {
+        setValidationError(`Invalid target: ${targetInput}`);
+        setShowValidationPopup(true);
+        return;
+      }
+      targetValue = tn;
+    }
+
+    // call parent with parsed array and optional target
+    // debug: log values passed to parent
+    try {
+      // eslint-disable-next-line no-console
+      console.debug("ArrayInputCard.onGo", { parsedArray: res.value, targetValue });
+    } catch (e) {}
+    handleGo(res.value, targetValue);
     // Save to history (keep most recent first, dedupe)
     try {
       const trimmed = arrayInput.trim();
@@ -125,6 +149,15 @@ const ArrayInputCard = ({
             placeholder="Enter comma-separated numbers — Maximum 10 values"
             className="w-full h-15 rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 resize-none focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-[0.75rem] px-2 py-1 transition-all duration-200"
           />
+          {/* Target input for Binary Search */}
+          {(selectedAlgorithm?.name || "").toLowerCase().includes("binary") && (
+            <textarea
+              value={targetInput}
+              onChange={(e) => setTargetInput(e.target.value)}
+              placeholder="Target value to search"
+              className="w-[200px] rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 resize-none focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-[0.75rem] px-2 py-1 transition-all duration-200"
+            />
+          )}
           <button
             onClick={onGo}
             className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-all shadow-md text-sm font-medium border border-gray-600"

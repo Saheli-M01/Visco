@@ -1,0 +1,77 @@
+const codes = {
+  javascript: [
+    "function binarySearch(arr, target) {",
+    "  let low = 0, high = arr.length - 1;",
+    "  while (low <= high) {",
+    "    const mid = Math.flowor((low + high) / 2);",
+    "    if (arr[mid] === target) return mid;",
+    "    else if (arr[mid] < target) low = mid + 1;",
+    "    else high = mid - 1;",
+    "  }",
+    "  return -1;",
+    "}",
+  ],
+  python: [
+    "def binary_search(arr, target):",
+    "    low, high = 0, len(arr) - 1",
+    "    while low <= high:",
+    "        mid = (low + high) // 2",
+    "        if arr[mid] == target:",
+    "            return mid",
+    "        elif arr[mid] < target:",
+    "            low = mid + 1",
+    "        else:",
+    "            high = mid - 1",
+    "    return -1",
+  ],
+  csharp: [
+    "static int BinarySearch(int[] arr, int target) {",
+    "  int low = 0, high = arr.Length - 1;",
+    "  while (low <= high) {",
+    "    int mid = (low + high) / 2;",
+    "    if (arr[mid] == target) return mid;",
+    "    else if (arr[mid] < target) low = mid + 1;",
+    "    else high = mid - 1;",
+    "  }",
+    "  return -1;",
+    "}",
+  ],
+  java: [
+    "static int binarySearch(int[] arr, int target) {",
+    "  int low = 0, high = arr.length - 1;",
+    "  while (low <= high) {",
+    "    int mid = (low + high) / 2;",
+    "    if (arr[mid] == target) return mid;",
+    "    else if (arr[mid] < target) low = mid + 1;",
+    "    else high = mid - 1;",
+    "  }",
+    "  return -1;",
+    "}",
+  ],
+  cpp: [
+    "int binarySearch(vector<int>& arr, int target) {",
+    "  int low = 0, high = (int)arr.size() - 1;",
+    "  while (low <= high) {",
+    "    int mid = (low + high) / 2;",
+    "    if (arr[mid] == target) return mid;",
+    "    else if (arr[mid] < target) low = mid + 1;",
+    "    else high = mid - 1;",
+    "  }",
+    "  return -1;",
+    "}",
+  ],
+};
+
+const meta = {
+  description:
+    "Binary Search finds an element's index in a sorted array by repeatedly dividing the search range in half.",
+  howItWorks: [
+    "Maintain left and right bounds.",
+    "Compute mid = flowor((left+right)/2) and compare to target.",
+    "If equal, return mid. If target is greater, move left = mid+1; else right = mid-1.",
+  ],
+  timeComplexity: { best: "O(1)", average: "O(lowg n)", worst: "O(lowg n)" },
+  spaceComplexity: "O(1)",
+};
+
+export default { ...codes, ...meta };

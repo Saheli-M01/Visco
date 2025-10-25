@@ -33,7 +33,11 @@ export default function MergeVisualizer({
   // left/right
   const leftVarObj =
     // Do not surface left variable during call frame announcements
-    (currentStep.phase === "call-left" || currentStep.phase === "call-right" || currentStep.phase === "condition-check"|| currentStep.phase === "calculate-mid" || currentStep.phase === "base")
+    currentStep.phase === "call-left" ||
+    currentStep.phase === "call-right" ||
+    currentStep.phase === "condition-check" ||
+    currentStep.phase === "calculate-mid" ||
+    currentStep.phase === "base"
       ? null
       : currentStep.leftVar ??
         findPersistedValue(
@@ -44,19 +48,22 @@ export default function MergeVisualizer({
         );
   const rightVarObj =
     // Do not surface right variable during call frame announcements
-    (currentStep.phase === "call-left" || currentStep.phase === "call-right" || currentStep.phase === "condition-check" || currentStep.phase === "calculate-mid" || currentStep.phase === "base")
+    currentStep.phase === "call-left" ||
+    currentStep.phase === "call-right" ||
+    currentStep.phase === "condition-check" ||
+    currentStep.phase === "calculate-mid" ||
+    currentStep.phase === "base"
       ? null
-      :
-        (currentStep.rightVar ??
-          (typeof currentStep.rightPtr === "number"
-            ? { value: currentStep.rightPtr }
-            : null) ??
-          findPersistedValue(
-            sortingSteps,
-            currentStepIndex,
-            ["rightVar", "rightPtr"],
-            mergeScopeCheck
-          ));
+      : currentStep.rightVar ??
+        (typeof currentStep.rightPtr === "number"
+          ? { value: currentStep.rightPtr }
+          : null) ??
+        findPersistedValue(
+          sortingSteps,
+          currentStepIndex,
+          ["rightVar", "rightPtr"],
+          mergeScopeCheck
+        );
 
   // i variable
   let iVarObj =
@@ -96,7 +103,10 @@ export default function MergeVisualizer({
     if (!st || !st.phase) continue;
 
     // If the step is a push-temp or form-temp and carries a tempArray, prefer it
-    if ((st.phase === "push-temp" || st.phase === "form-temp") && Array.isArray(st.tempArray)) {
+    if (
+      (st.phase === "push-temp" || st.phase === "form-temp") &&
+      Array.isArray(st.tempArray)
+    ) {
       mergeSnapshotStep = st;
       break;
     }
@@ -144,11 +154,7 @@ export default function MergeVisualizer({
         .find((f) => f.low === st.low && f.high === st.high);
       if (frame) frame.mid = st.mid;
       activeCallFrames.reverse();
-    } else if (
-      
-      st.low !== undefined &&
-      st.high !== undefined
-    ) {
+    } else if (st.low !== undefined && st.high !== undefined) {
       const frame = activeCallFrames
         .reverse()
         .find((f) => f.low === st.low && f.high === st.high);
@@ -200,15 +206,20 @@ export default function MergeVisualizer({
     }
 
     snapshot =
-      Array.isArray(mergeSnapshotStep.tempArray) && mergeSnapshotStep.tempArray.length >= 0
+      Array.isArray(mergeSnapshotStep.tempArray) &&
+      mergeSnapshotStep.tempArray.length >= 0
         ? mergeSnapshotStep.tempArray
-        : mergeSnapshotStep.tempSnapshot || (mergeSnapshotStep.temp?.array ?? null);
+        : mergeSnapshotStep.tempSnapshot ||
+          (mergeSnapshotStep.temp?.array ?? null);
   }
 
   // If the current step is a push-temp, highlight the most recently pushed
   // element (the last element in the snapshot)
   const isPushPhase = currentStep.phase === "push-temp";
-  const pushHighlightIndex = isPushPhase && Array.isArray(snapshot) && snapshot.length > 0 ? snapshot.length - 1 : null;
+  const pushHighlightIndex =
+    isPushPhase && Array.isArray(snapshot) && snapshot.length > 0
+      ? snapshot.length - 1
+      : null;
 
   // Merged indices
   const mergedDoneIndices = new Set();
@@ -224,7 +235,7 @@ export default function MergeVisualizer({
     }
   }
 
-return (
+  return (
     <div className="w-full px-8 flex flex-col">
       {/* Call stack frames (merge recursion) - ABOVE array */}
       {showCallUI && (
@@ -271,31 +282,36 @@ return (
         </div>
       )}
 
-
       <div className="mt-1 flex items-center justify-between w-full">
         <div className="flex-1"></div>
 
         <div className="flex justify-center gap-4 items-center">
-          {leftVarObj && currentStep.phase !== "merge-complete" && currentStep.phase !== "subarray-sorted" && (
-            <VariableCard
-              label="left"
-              value={
-                leftVarObj.value !== undefined ? leftVarObj.value : leftVarObj
-              }
-              bgColor="bg-orange-300"
-            />
-          )}
+          {leftVarObj &&
+            currentStep.phase !== "merge-complete" &&
+            currentStep.phase !== "subarray-sorted" && (
+              <VariableCard
+                label="left"
+                value={
+                  leftVarObj.value !== undefined ? leftVarObj.value : leftVarObj
+                }
+                bgColor="bg-orange-300"
+              />
+            )}
 
           {showMergeTemp && (
             <div className="flex flex-col items-center max-w-full min-h-14 h-auto px-3 py-1 bg-cyan-400 rounded-lg shadow-md">
-              <div className="text-xs font-semibold text-gray-700">tempArray</div>
+              <div className="text-xs font-semibold text-gray-700">
+                tempArray
+              </div>
               {snapshot && (
                 <div className="flex gap-2 mt-1 items-end">
                   {snapshot.map((v, i) => (
                     <div key={i} className="flex flex-col items-center">
                       <div
                         className={`h-8 w-8 flex items-center justify-center bg-lime-200 text-gray-800 text-sm font-semibold rounded ${
-                          pushHighlightIndex === i ? "ring-2 ring-amber-400 animate-pulse" : ""
+                          pushHighlightIndex === i
+                            ? "ring-2 ring-amber-400 animate-pulse"
+                            : ""
                         }`}
                         title={`temp[${i}] = ${v}`}
                       >
@@ -309,15 +325,19 @@ return (
             </div>
           )}
 
-          {rightVarObj && currentStep.phase !== "merge-complete" && currentStep.phase !== "subarray-sorted" && (
-            <VariableCard
-              label="right"
-              value={
-                rightVarObj.value !== undefined ? rightVarObj.value : rightVarObj
-              }
-              bgColor="bg-orange-300"
-            />
-          )}
+          {rightVarObj &&
+            currentStep.phase !== "merge-complete" &&
+            currentStep.phase !== "subarray-sorted" && (
+              <VariableCard
+                label="right"
+                value={
+                  rightVarObj.value !== undefined
+                    ? rightVarObj.value
+                    : rightVarObj
+                }
+                bgColor="bg-orange-300"
+              />
+            )}
         </div>
         <div className="flex-1 flex justify-end ml-2">
           {iVarObj && (
@@ -363,7 +383,10 @@ export function getMergeOverlay({
   for (let s = currentStepIndex; s >= 0; s--) {
     const st = sortingSteps[s];
     if (!st || !st.phase) continue;
-    if ((st.phase === "push-temp" || st.phase === "form-temp") && Array.isArray(st.tempArray)) {
+    if (
+      (st.phase === "push-temp" || st.phase === "form-temp") &&
+      Array.isArray(st.tempArray)
+    ) {
       mergeSnapshotStep = st;
       break;
     }

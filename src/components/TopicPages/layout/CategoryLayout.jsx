@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import {
   FullScreenModalSorting,
-  AlgorithmDetails,
+  FullScreenModalArray,
 } from "@/components/algorithm-visualizer-details";
 import AlgorithmCard from "@/components/common/AlgorithmCard";
 
@@ -396,12 +396,21 @@ const CategoryLayout = ({ category, features, complexityData }) => {
       </div>
 
       {/* Algorithm Full-Screen Modal */}
-      <FullScreenModalSorting
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        algorithm={selectedAlgorithm?.algorithm}
-        topic={selectedAlgorithm?.topic}
-      />
+      {category.id === "array" ? (
+        <FullScreenModalArray
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          algorithm={selectedAlgorithm?.algorithm}
+          topic={selectedAlgorithm?.topic}
+        />
+      ) : (
+        <FullScreenModalSorting
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          algorithm={selectedAlgorithm?.algorithm}
+          topic={selectedAlgorithm?.topic}
+        />
+      )}
     </div>
   );
 };

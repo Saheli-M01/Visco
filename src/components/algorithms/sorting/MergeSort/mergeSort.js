@@ -5,21 +5,6 @@ export const mergeSort = {
   generateSteps: (arr, language = "javascript") => {
     const steps = [];
     const a = [...arr];
-    
-    // Direct line number constants (no calculation needed)
-    const HEADER_LINE = 28;
-    const COND_LINE = 29;
-    const RETURN_LINE = 30;
-    const MID_LINE = 31;
-    const LEFT_CALL_LINE = 32;
-    const RIGHT_CALL_LINE = 33;
-    const MERGE_CALL_LINE = 34;
-    const WHILE_END_LINE = 14;
-
-    // Merge function lines (fixed)
-    const MERGE_HEADER_LINE = 1;
-    const MERGE_COMPARE_LINE = 5;
-
 
     // Merge helper that records step-by-step actions for visualization
     function merge(low, mid, high) {
@@ -31,7 +16,9 @@ export const mergeSort = {
       for (let ii = 0; ii < n1; ii++) L[ii] = a[low + ii];
       for (let jj = 0; jj < n2; jj++) R[jj] = a[mid + 1 + jj];
 
-      let i = 0, j = 0, k = low;
+      let i = 0,
+        j = 0,
+        k = low;
       const tempArray = [];
 
       // Visualize the ranges being merged
@@ -40,7 +27,7 @@ export const mergeSort = {
         comparing: [],
         swapped: [],
         description: `Forming Temp array or list`,
-        codeLine: MERGE_HEADER_LINE,
+        codeLine: 1,
         phase: "form-temp",
         mergeRange: [low, high],
         leftRange: [low, mid],
@@ -54,7 +41,7 @@ export const mergeSort = {
         comparing: [],
         swapped: [],
         description: `int left = ${low}`,
-        codeLine: MERGE_HEADER_LINE + 1,
+        codeLine: 2,
         phase: "set-left",
         leftVar: { value: low },
         mergeRange: [low, high],
@@ -68,7 +55,7 @@ export const mergeSort = {
         comparing: [],
         swapped: [],
         description: `int right = ${rightPtrStart}`,
-        codeLine: MERGE_HEADER_LINE + 2,
+        codeLine: 3,
         phase: "set-right",
         rightVar: { value: rightPtrStart },
         mergeRange: [low, high],
@@ -86,7 +73,7 @@ export const mergeSort = {
           comparing: [],
           swapped: [],
           description: `while (${leftPtr} <= ${mid} && ${rightPtr} <= ${high})`,
-          codeLine: MERGE_COMPARE_LINE,
+          codeLine: 5,
           phase: "while-check",
           mid: { value: mid, leftIndex: low, rightIndex: high },
           leftPtr,
@@ -103,7 +90,7 @@ export const mergeSort = {
             comparing: [],
             swapped: [],
             description: `While condition false - exit loop`,
-            codeLine: WHILE_END_LINE,
+            codeLine: 14,
             phase: "while-exit",
             mid: { value: mid, leftIndex: low, rightIndex: high },
             leftPtr: low + i,
@@ -376,7 +363,16 @@ export const mergeSort = {
           tempArray: [...tempArray],
         });
       }
-
+      steps.push({
+        array: [...a],
+        comparing: [],
+       
+        description: `for loop exits`,
+        codeLine: 25,
+        phase: "for-exit",
+        mid: { value: mid, leftIndex: low, rightIndex: high },
+        tempArray: [...tempArray],
+      });
       // Mark the merged range as completed
       const mergedIndices = [];
       for (let idx = low; idx <= high; idx++) mergedIndices.push(idx);
@@ -385,13 +381,11 @@ export const mergeSort = {
         comparing: [],
         swapped: mergedIndices,
         description: `Merged [${low}-${high}]`,
-        codeLine: MERGE_CALL_LINE - 1,
+        codeLine: 26,
         phase: "merge-complete",
         mergeRange: [low, high],
         mid: { value: mid, leftIndex: low, rightIndex: high },
-        leftVar: { value: low },
-        rightVar: { value: high },
-        tempArray: [...tempArray],
+        
       });
     }
 
@@ -402,7 +396,7 @@ export const mergeSort = {
         comparing: [],
         swapped: [],
         description: `Check base case: is (low = ${l} >= high = ${r})?`,
-        codeLine: COND_LINE,
+        codeLine: 29,
         phase: "condition-check",
         low: l,
         high: r,
@@ -414,7 +408,7 @@ export const mergeSort = {
           comparing: [],
           swapped: [l],
           description: `Base case: single element at ${l}`,
-          codeLine: RETURN_LINE,
+          codeLine: 30,
           phase: "base",
         });
         return;
@@ -427,7 +421,7 @@ export const mergeSort = {
         comparing: [],
         swapped: [],
         description: `Calculate mid: ${l} + (${r} - ${l}) / 2 = ${m}`,
-        codeLine: MID_LINE,
+        codeLine: 31,
         phase: "calculate-mid",
         low: l,
         high: r,
@@ -440,7 +434,7 @@ export const mergeSort = {
         comparing: [],
         swapped: [],
         description: `Call mergeSort(arr, low=${l}, mid=${m})`,
-        codeLine: LEFT_CALL_LINE,
+        codeLine: 32,
         phase: "call-left",
         low: l,
         high: m,
@@ -448,14 +442,13 @@ export const mergeSort = {
 
       mergeSortRec(l, m);
 
-
       // Right recursive call
       steps.push({
         array: [...a],
         comparing: [],
         swapped: [],
         description: `Call mergeSort(arr, mid + 1 =${m + 1}, high=${r})`,
-        codeLine: RIGHT_CALL_LINE,
+        codeLine: 33,
         phase: "call-right",
         low: m + 1,
         high: r,
@@ -463,16 +456,14 @@ export const mergeSort = {
 
       mergeSortRec(m + 1, r);
 
-     
-
       // Announce the merge call
       steps.push({
         array: [...a],
         comparing: [],
         swapped: [],
         description: `Call merge: (arr, ${l}, ${m}, ${r})`,
-        codeLine: MERGE_CALL_LINE,
-        phase: "conquer",
+        codeLine: 34,
+        phase: "call-merge",
         mergeRange: [l, r],
         mid: { value: m, leftIndex: l, rightIndex: r },
       });
@@ -484,7 +475,7 @@ export const mergeSort = {
         comparing: [],
         swapped: [],
         description: `Subarray sorted: [${l}-${r}]`,
-        codeLine: MERGE_CALL_LINE,
+        codeLine: 27,
         phase: "subarray-sorted",
       });
     }
@@ -495,7 +486,7 @@ export const mergeSort = {
       comparing: [],
       swapped: [],
       description: `Initial call: mergeSort(arr, 0, ${a.length - 1})`,
-      codeLine: HEADER_LINE,
+      codeLine: 28,
       phase: "start",
       low: 0,
       high: a.length - 1,
@@ -714,6 +705,6 @@ export const mergeSort = {
 
   getCode: (language) => {
     const lines = mergeSort.getCodeLines(language);
-    return lines.join('\n');
+    return lines.join("\n");
   },
 };

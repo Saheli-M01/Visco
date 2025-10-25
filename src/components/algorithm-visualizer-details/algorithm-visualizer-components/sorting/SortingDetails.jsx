@@ -5,14 +5,14 @@ import { Clock, BarChart3, Code, Play, BookOpen } from "lucide-react";
 // Dynamic code loaders (lazy import to keep bundle small)
 const codeLoaders = {
   "Bubble Sort": () =>
-    import("../algorithms/sorting/BubbleSort/bubbleSortCodes"),
+    import("../../../algorithms/sorting/BubbleSort/bubbleSortCodes"),
   "Selection Sort": () =>
-    import("../algorithms/sorting/SelectionSort/selectionSortCodes"),
+    import("../../../algorithms/sorting/SelectionSort/selectionSortCodes"),
   "Insertion Sort": () =>
-    import("../algorithms/sorting/InsertionSort/insertionSortCodes"),
-  "Merge Sort": () => import("../algorithms/sorting/MergeSort/mergeSortCodes"),
-  "Quick Sort": () => import("../algorithms/sorting/QuickSort/quickSortCodes"),
-  "Heap Sort": () => import("../algorithms/sorting/HeapSort/heapSortCodes"),
+    import("../../../algorithms/sorting/InsertionSort/insertionSortCodes"),
+  "Merge Sort": () => import("../../../algorithms/sorting/MergeSort/mergeSortCodes"),
+  "Quick Sort": () => import("../../../algorithms/sorting/QuickSort/quickSortCodes"),
+  "Heap Sort": () => import("../../../algorithms/sorting/HeapSort/heapSortCodes"),
 };
 
 const AlgorithmDetails = ({ algorithm, topic }) => {

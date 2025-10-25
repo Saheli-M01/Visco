@@ -3,8 +3,8 @@ import {
   safeValue,
   findPersistedValue,
   parseIndexFromDesc,
-} from "../../../algorithm-visualizer-details/algorithm-visualizer-components/shared/stepHelpers";
-import VariableCard from "../../../algorithm-visualizer-details/algorithm-visualizer-components/shared/VariableCard";
+} from "../../../algorithm-visualizer-details/algorithm-visualizer-components/stepHelpers";
+import VariableCard from "../../../algorithm-visualizer-details/algorithm-visualizer-components/VariableCard";
 
 export default function QuickVisualizer({
   currentStep = {},

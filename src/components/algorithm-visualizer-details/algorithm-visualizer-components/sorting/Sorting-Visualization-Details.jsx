@@ -3,10 +3,10 @@ import { AnimatePresence } from "framer-motion";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AlgorithmDetails from "./SortingDetails";
 import AlgorithmVisualization from "./SortingVisualization";
-import { categories } from "../../data/categories";
-import { getAlgorithm, parseArray } from "../algorithms/algorithmFactory";
-import VisualizerHeader from "./algorithm-visualizer-components/VisualizerHeader";
-import ConfirmModal from "./Modal";
+import { categories } from "../../../../data/categories";
+import { getAlgorithm, parseArray } from "../../../algorithms/algorithmFactory";
+import VisualizerHeader from "../VisualizerHeader";
+import ConfirmModal from "../../Modal";
 
 // Custom MUI theme for glassmorphic design
 const theme = createTheme({
@@ -109,7 +109,7 @@ const theme = createTheme({
   },
 });
 
-const FullScreenModal = ({ isOpen, onClose, algorithm, topic }) => {
+const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(algorithm);
 
@@ -802,4 +802,4 @@ const FullScreenModal = ({ isOpen, onClose, algorithm, topic }) => {
   );
 };
 
-export default FullScreenModal;
+export default FullScreenModalSorting;

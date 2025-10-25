@@ -6,7 +6,7 @@ import { ChevronRight, BarChart3 } from "lucide-react";
 import { Navigation } from "@/components/landing";
 import { useLocation } from "react-router-dom";
 import AlgorithmCard from "@/components/common/AlgorithmCard";
-import { FullScreenModal } from "@/components/algorithm-visualizer-details";
+import { FullScreenModalSorting } from "@/components/algorithm-visualizer-details";
 
 const flattenAlgorithms = () => {
   const list = [];
@@ -80,7 +80,7 @@ const SearchPage = () => {
           ))}
         </div>
       </div>
-      <FullScreenModal
+      <FullScreenModalSorting
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);

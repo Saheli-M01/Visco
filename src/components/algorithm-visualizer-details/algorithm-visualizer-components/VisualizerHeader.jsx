@@ -13,8 +13,7 @@ const VisualizerHeader = ({
 }) => {
   return (
     <div className="visualizer-header flex items-center justify-between px-4 py-1 border-b border-white/20 backdrop-blur-md bg-white shadow-lg h-12">
-      <div className="flex items-center gap-6">
-        
+      <div className="flex justify-center items-center gap-6">
         {/* Visualization / Details toggle buttons (replaces Tabs) */}
         <div className="flex bg-white/20 rounded-lg p-1 border border-gray-400/50 shadow-inner">
           <button
@@ -50,7 +49,10 @@ const VisualizerHeader = ({
           <RefreshCw className="h-4 w-4" />
         </button>
       </div>
-
+      {/* Algorithm name */}
+      <div className="ml-2 text-[1.3rem]  font-semibold text-gray-800 truncate">
+        {selectedAlgorithm?.name ?? "Algorithm"}
+      </div>
       <button
         onClick={onClose}
         className="flex items-center justify-center rounded-full backdrop-blur-sm bg-red-400/20 border border-white/30  transition-all text-red-500 hover:text-red-600 h-6 w-6"

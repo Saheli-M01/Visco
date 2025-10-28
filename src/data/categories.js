@@ -60,13 +60,7 @@ export const categories = {
         shortDescription:
           "Efficient search algorithm for sorted arrays using divide and conquer.",
       },
-      {
-        name: "Linear Search",
-        complexity: "O(n)",
-        difficulty: "Easy",
-        shortDescription:
-          "Simple sequential search through array elements one by one.",
-      },
+     
       {
         name: "Two Pointers",
         complexity: "O(n)",

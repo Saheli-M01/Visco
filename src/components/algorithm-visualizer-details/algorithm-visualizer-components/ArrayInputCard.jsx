@@ -10,6 +10,7 @@ const ArrayInputCard = ({
   setPivotStrategy,
 }) => {
   const [arrayInput, setArrayInput] = useState("");
+  const [targetInput, setTargetInput] = useState("");
   const [showValidationPopup, setShowValidationPopup] = useState(false);
   const [validationError, setValidationError] = useState("");
   const [currentArrayLength, setCurrentArrayLength] = useState(0);
@@ -92,8 +93,41 @@ const ArrayInputCard = ({
       setShowValidationPopup(true);
       return;
     }
-    // call parent with parsed array
-    handleGo(res.value);
+    // parse target if provided (for Binary Search)
+    const normalizedAlgoName = (selectedAlgorithm?.name || "").toLowerCase();
+    let targetValue = null;
+    const isBinary = normalizedAlgoName.includes("binary search") || normalizedAlgoName.includes("binarysearch") || normalizedAlgoName.includes("binary");
+    if (isBinary) {
+      if (targetInput == null || targetInput === "") {
+        setValidationError("Please enter a target value for Binary Search");
+        setShowValidationPopup(true);
+        return;
+      }
+      const tn = Number(targetInput);
+      if (Number.isNaN(tn)) {
+        setValidationError(`Invalid target: ${targetInput}`);
+        setShowValidationPopup(true);
+        return;
+      }
+      targetValue = tn;
+      // For binary search, ensure the parsed array is sorted in non-decreasing order.
+      const a = res.value || [];
+      for (let i = 1; i < a.length; i++) {
+        if (a[i - 1] > a[i]) {
+          setValidationError("Binary Search requires the input array to be sorted in ascending order.");
+          setShowValidationPopup(true);
+          return;
+        }
+      }
+    }
+
+    // call parent with parsed array and optional target
+    // debug: log values passed to parent
+    try {
+      // eslint-disable-next-line no-console
+      console.debug("ArrayInputCard.onGo", { parsedArray: res.value, targetValue });
+    } catch (e) {}
+    handleGo(res.value, targetValue);
     // Save to history (keep most recent first, dedupe)
     try {
       const trimmed = arrayInput.trim();
@@ -110,6 +144,8 @@ const ArrayInputCard = ({
     }
   };
 
+  
+
   return (
     <div className="bg-white  rounded-xl p-2">
       <h3 className="text-md font-semibold text-gray-900 mb-3">Array Input</h3>
@@ -125,9 +161,20 @@ const ArrayInputCard = ({
             placeholder="Enter comma-separated numbers — Maximum 10 values"
             className="w-full h-15 rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 resize-none focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-[0.75rem] px-2 py-1 transition-all duration-200"
           />
+          {/* Target input for Binary Search */}
+          {(selectedAlgorithm?.name || "").toLowerCase().includes("binary") && (
+            <textarea
+              value={targetInput}
+              onChange={(e) => setTargetInput(e.target.value)}
+              placeholder="Target value to search"
+              className="w-[200px] rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 resize-none focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-[0.75rem] px-2 py-1 transition-all duration-200"
+            />
+          )}
           <button
             onClick={onGo}
-            className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-all shadow-md text-sm font-medium border border-gray-600"
+            className={
+              "px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-all shadow-md text-sm font-medium border border-gray-600"
+            }
           >
             Go
           </button>
@@ -146,6 +193,7 @@ const ArrayInputCard = ({
             </div>
           </div>
         )}
+        
         {/* history chips */}
         {history && history.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-2">

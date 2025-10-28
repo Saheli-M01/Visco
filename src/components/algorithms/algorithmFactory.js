@@ -4,6 +4,7 @@ import { insertionSort } from "./sorting/InsertionSort/insertionSort.js";
 import { mergeSort } from "./sorting/MergeSort/mergeSort.js";
 import { quickSort } from "./sorting/QuickSort/quickSort.js";
 import { heapSort } from "./sorting/HeapSort/heapSort.js";
+import {binarySearch } from "./array/BinarySearch/binarySearch.js";
 
 
 // Algorithm factory to get the appropriate algorithm implementation
@@ -27,7 +28,9 @@ export const getAlgorithm = (algorithmName) => {
     "Heap Sort": heapSort,
     "heap sort": heapSort,
     heapsort: heapSort,
-
+    "Binary Search": binarySearch,
+    "binary search": binarySearch,
+    binarysearch: binarySearch,
   };
 
   const normalizedName = algorithmName?.toLowerCase().replace(/\s+/g, "");

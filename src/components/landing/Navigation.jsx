@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Menu, X, Search } from "lucide-react";
+import Select from "../ui/select";
 import { categories } from "@/data/categories";
 
 export const Navigation = () => {
@@ -131,8 +132,28 @@ export const Navigation = () => {
   const navItems = [
     { href: "#home", label: "Home" },
     { href: "#about", label: "About" },
-    { href: "#topics", label: "Topics" },
+    // Topics dropdown will be rendered separately using the custom Select
   ];
+
+  const topicOptions = [
+    { value: "sorting", label: "Sorting" },
+    { value: "array", label: "Array" },
+    { value: "graph", label: "Graph (Coming soon)" },
+    { value: "tree", label: "Tree (Coming soon)" },
+    { value: "linked-list", label: "Linked List (Coming soon)" },
+  ];
+
+  const enabledTopics = new Set(["array", "sorting"]);
+
+  const handleTopicSelect = (val) => {
+    if (!val || val === "topic") return;
+    // disabled topics are inert for now
+    if (!enabledTopics.has(val)) return;
+    // close mobile menu if open
+    closeMenu();
+    // navigate to topic route (routes use paths like /array, /sorting, /linked-list)
+    navigate(`/${val}`);
+  };
 
   const closeMenu = () => setOpen(false);
 
@@ -211,8 +232,6 @@ export const Navigation = () => {
               alt="Visco logo"
               className=" h-[2.5rem]"
             />
-
-          
           </a>
 
           {/* Desktop nav */}
@@ -227,6 +246,26 @@ export const Navigation = () => {
                 {item.label}
               </a>
             ))}
+            {/* Topic label + dropdown icon (click label to go to #topics, click icon to open panel) */}
+            <div className="flex items-center">
+              <a
+                href="#topics"
+                onClick={(e) => handleNavClick(e, "#topics")}
+                className="text-gray-700 hover:text-gray-900 transition-colors font-medium cursor-pointer"
+              >
+                Topic
+              </a>
+              <Select
+                ariaLabel="Topic options"
+                value={"topic"}
+                onChange={handleTopicSelect}
+                options={topicOptions}
+                className="bg-transparent"
+                color="#fbbf24"
+                compact={true}
+                panelless={true}
+              />
+            </div>
           </nav>
 
           {/* Right actions */}
@@ -349,6 +388,34 @@ export const Navigation = () => {
                 {item.label}
               </a>
             ))}
+            {/* Mobile topics list */}
+            <div className="mt-2 border-t border-white/10 pt-2">
+              <div className="text-sm font-medium text-gray-700 mb-1">
+                Topics
+              </div>
+              <div className="flex flex-col gap-1">
+                {topicOptions.slice(1).map((t) => {
+                  const enabled = enabledTopics.has(t.value);
+                  return (
+                    <button
+                      key={t.value}
+                      onClick={() => {
+                        if (!enabled) return;
+                        closeMenu();
+                        navigate(`/${t.value}`);
+                      }}
+                      className={`text-left px-2 py-2 rounded-md text-sm transition-colors ${
+                        enabled
+                          ? "text-gray-800 hover:bg-gray-50"
+                          : "text-gray-400 cursor-not-allowed"
+                      }`}
+                    >
+                      {t.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
             <a
               href="#topics"
               onClick={(e) => handleNavClick(e, "#topics")}

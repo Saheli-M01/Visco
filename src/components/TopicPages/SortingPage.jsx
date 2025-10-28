@@ -42,9 +42,6 @@ const SortingPage = () => {
       worst: "O(n²)",
       space: "O(1)"
     },
-    
-  
-   
     {
       name: "Merge Sort",
       best: "O(n log n)",
@@ -69,11 +66,7 @@ const SortingPage = () => {
   ];
 
   return (
-    <CategoryLayout 
-      category={sortingCategory}
-      features={sortingFeatures}
-      complexityData={complexityData}
-    />
+    <CategoryLayout category={sortingCategory} complexityData={complexityData} />
   );
 };
 

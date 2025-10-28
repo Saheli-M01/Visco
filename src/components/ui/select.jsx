@@ -15,6 +15,8 @@ const Select = ({
   className = "",
   ariaLabel = "select",
   color = "#000",
+  compact = false,
+  panelless = false,
 }) => {
   const [open, setOpen] = useState(false);
   const containerRef = useRef(null);
@@ -53,26 +55,44 @@ const Select = ({
 
   useEffect(() => {
     if (!open) return;
-
     const update = () => {
       const rect = buttonRef.current?.getBoundingClientRect();
       if (!rect) return;
+      const desiredMin = compact ? 160 : rect.width;
       setMenuStyle({
         position: "absolute",
         left: `${rect.left + window.scrollX}px`,
         top: `${rect.bottom + window.scrollY + 6}px`,
-        minWidth: `${rect.width}px`,
+        minWidth: `${Math.max(rect.width, desiredMin)}px`,
         zIndex: 9999,
       });
+    };
+
+    // close the menu if the user scrolls the page (but let internal menu scroll continue)
+    const onWindowScrollClose = (e) => {
+      // If the event target is inside the menu or trigger, ignore — usually window scroll target is document/window
+      const tgt = e?.target;
+      try {
+        if (menuRef.current && (menuRef.current.contains(tgt) || containerRef.current?.contains(tgt))) {
+          return;
+        }
+      } catch (err) {
+        // ignore containment errors
+      }
+      setOpen(false);
     };
 
     // initial
     update();
     window.addEventListener("resize", update);
+    // update position on scroll (capture) so the menu tracks trigger
     window.addEventListener("scroll", update, true);
+    // close menu on any window scroll (non-capture) — keeps menu from lingering while user scrolls the page
+    window.addEventListener("scroll", onWindowScrollClose, { passive: true });
     return () => {
       window.removeEventListener("resize", update);
       window.removeEventListener("scroll", update, true);
+      window.removeEventListener("scroll", onWindowScrollClose, { passive: true });
     };
   }, [open]);
 
@@ -89,15 +109,17 @@ const Select = ({
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen((s) => !s)}
-        className="flex items-center justify-between gap-2 px-3 py-1 rounded-md border min-w-[150px] transition-shadow duration-150"
+        className={`transition-shadow duration-150 ${compact ? 'flex items-center justify-center p-1 rounded-md border w-8 h-8' : 'flex items-center justify-between gap-2 px-3 py-1 rounded-md border min-w-[150px]' } ${className}`}
         style={{
-          background: "rgba(255,255,255,0.9)",
-          color: "inherit",
-          boxShadow: "0 6px 18px rgba(15, 23, 42, 0.06)",
-          borderColor: "rgba(15, 23, 42, 0.25)",
+          // when compact+panelless we want the trigger to be visually minimal (no bg/border/shadow)
+          background: compact && panelless ? 'transparent' : 'rgba(255,255,255,0.9)',
+          color: 'inherit',
+          boxShadow: compact && panelless ? 'none' : '0 6px 18px rgba(15, 23, 42, 0.06)',
+          borderColor: compact && panelless ? 'transparent' : 'rgba(15, 23, 42, 0.25)',
+          borderStyle: 'solid',
         }}
       >
-        <span className="truncate text-sm font-medium">{selected.label}</span>
+        {!compact && <span className="truncate text-sm font-medium">{selected.label}</span>}
         <ChevronDown
           className="ml-1 transition-transform duration-150"
           size={16}
@@ -113,10 +135,17 @@ const Select = ({
             role="listbox"
             tabIndex={-1}
             ref={menuRef}
-            className="bg-white overflow-auto rounded-md shadow-lg ring-1 ring-black ring-opacity-5 border border-gray-200 transform transition-all duration-150 origin-top-right"
+            className={
+              panelless
+                ? "overflow-auto transform transition-all duration-150 origin-top-right"
+                : "bg-white overflow-auto rounded-md shadow-lg ring-1 ring-black ring-opacity-5 border border-gray-200 transform transition-all duration-150 origin-top-right"
+            }
             style={{
               ...menuStyle,
-              padding: '6px 4px',
+              padding: "6px 4px",
+              ...(panelless
+                ? { background: 'white', boxShadow: 'none', border: '1px solid #c9c9c9ff', borderRadius: "10px" }
+                : {}),
             }}
           >
             {options.map((opt) => {

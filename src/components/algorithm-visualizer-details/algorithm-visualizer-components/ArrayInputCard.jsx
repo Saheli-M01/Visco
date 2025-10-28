@@ -96,7 +96,8 @@ const ArrayInputCard = ({
     // parse target if provided (for Binary Search)
     const normalizedAlgoName = (selectedAlgorithm?.name || "").toLowerCase();
     let targetValue = null;
-    if (normalizedAlgoName.includes("binary search") || normalizedAlgoName.includes("binarysearch")) {
+    const isBinary = normalizedAlgoName.includes("binary search") || normalizedAlgoName.includes("binarysearch") || normalizedAlgoName.includes("binary");
+    if (isBinary) {
       if (targetInput == null || targetInput === "") {
         setValidationError("Please enter a target value for Binary Search");
         setShowValidationPopup(true);
@@ -109,6 +110,15 @@ const ArrayInputCard = ({
         return;
       }
       targetValue = tn;
+      // For binary search, ensure the parsed array is sorted in non-decreasing order.
+      const a = res.value || [];
+      for (let i = 1; i < a.length; i++) {
+        if (a[i - 1] > a[i]) {
+          setValidationError("Binary Search requires the input array to be sorted in ascending order.");
+          setShowValidationPopup(true);
+          return;
+        }
+      }
     }
 
     // call parent with parsed array and optional target
@@ -133,6 +143,8 @@ const ArrayInputCard = ({
       // ignore storage errors
     }
   };
+
+  
 
   return (
     <div className="bg-white  rounded-xl p-2">
@@ -160,7 +172,9 @@ const ArrayInputCard = ({
           )}
           <button
             onClick={onGo}
-            className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-all shadow-md text-sm font-medium border border-gray-600"
+            className={
+              "px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-all shadow-md text-sm font-medium border border-gray-600"
+            }
           >
             Go
           </button>
@@ -179,6 +193,7 @@ const ArrayInputCard = ({
             </div>
           </div>
         )}
+        
         {/* history chips */}
         {history && history.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-2">

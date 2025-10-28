@@ -15,7 +15,7 @@ import {
 } from "@/components/algorithm-visualizer-details";
 import AlgorithmCard from "@/components/common/AlgorithmCard";
 
-const CategoryLayout = ({ category, features, complexityData }) => {
+const CategoryLayout = ({ category, complexityData }) => {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -66,7 +66,7 @@ const CategoryLayout = ({ category, features, complexityData }) => {
   // Track active section on scroll
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["algorithms", "why-learn", "complexity"];
+      const sections = ["algorithms", "complexity"];
       const scrollPosition = window.scrollY + 200;
 
       for (const sectionId of sections) {
@@ -134,7 +134,6 @@ const CategoryLayout = ({ category, features, complexityData }) => {
 
   const sidebarItems = [
     { id: "algorithms", label: "Available Algorithms", icon: BookOpen },
-    { id: "why-learn", label: "Why Learn This?", icon: Lightbulb },
   ];
 
   if (complexityData && complexityData.length > 0) {
@@ -285,46 +284,7 @@ const CategoryLayout = ({ category, features, complexityData }) => {
                 </motion.div>
               </div>
 
-              {/* Why Learn This Category */}
-              <div id="why-learn" className="scroll-mt-5 md:scroll-mt-24">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8 }}
-                  className="mb-8 md:mb-16"
-                >
-                  <div className="backdrop-blur-md bg-white/50 border border-white/20 rounded-3xl px-3 sm:px-8 py-6 sm:py-8 md:py-12 shadow-xl">
-                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
-                      Why Learn {category.name}?
-                    </h2>
-                    <p className="text-base sm:text-lg text-gray-700 font-medium leading-relaxed mb-8">
-                      {category.longDescription}
-                    </p>
-
-                    {features && features.length > 0 && (
-                      <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-                        {features.map((feature, index) => (
-                          <motion.div
-                            key={feature.title}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
-                            className="backdrop-blur-sm bg-white border border-gray-300/30 rounded-xl p-4 sm:p-6 text-center"
-                          >
-                            <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">
-                              {feature.title}
-                            </h3>
-                            <p className="text-gray-700 font-medium text-sm">
-                              {feature.description}
-                            </p>
-                          </motion.div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
-              </div>
-
+           
               {/* Complexity Comparison */}
               {complexityData && complexityData.length > 0 && (
                 <div id="complexity" className="scroll-mt-5 md:scroll-mt-24">

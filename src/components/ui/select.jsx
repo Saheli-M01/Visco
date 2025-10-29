@@ -17,6 +17,7 @@ const Select = ({
   color = "#000",
   compact = false,
   panelless = false,
+  chevronSize = 16,
 }) => {
   const [open, setOpen] = useState(false);
   const containerRef = useRef(null);
@@ -122,7 +123,7 @@ const Select = ({
         {!compact && <span className="truncate text-sm font-medium">{selected.label}</span>}
         <ChevronDown
           className="ml-1 transition-transform duration-150"
-          size={16}
+          size={chevronSize}
           strokeWidth={2}
           style={{ color, transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}
         />

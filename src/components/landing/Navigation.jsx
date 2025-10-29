@@ -264,6 +264,7 @@ export const Navigation = () => {
                 color="#fbbf24"
                 compact={true}
                 panelless={true}
+                 chevronSize={20}
               />
             </div>
           </nav>

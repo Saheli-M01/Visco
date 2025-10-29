@@ -243,34 +243,71 @@ section {
 
   /* Custom Scrollbar Styles */
   .custom-scrollbar {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+    /* Use native thin scrollbar where supported and a custom thumb color derived
+       from the design tokens so it adapts to light/dark themes. */
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: hsl(var(--foreground) / 0.22) transparent;
   }
 
+  /* WebKit/Blink (Chrome, Edge, Safari) */
   .custom-scrollbar::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    backdrop-filter: blur(10px);
+    background: hsl(var(--card) / 0.03);
+    border-radius: 999px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.5) 100%);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: linear-gradient(180deg, hsl(var(--foreground) / 0.20), hsl(var(--foreground) / 0.28));
+    border-radius: 999px;
+    border: 1px solid transparent; /* keeps layout consistent */
+    min-height: 24px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: linear-gradient(180deg, hsl(var(--foreground) / 0.32), hsl(var(--foreground) / 0.44));
   }
 
   .custom-scrollbar::-webkit-scrollbar-corner {
     background: transparent;
+  }
+
+  /* Global viewport scrollbar (thin) */
+  html, body {
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: hsl(var(--foreground) / 0.22) transparent;
+  }
+
+  html::-webkit-scrollbar, body::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+  }
+
+  html::-webkit-scrollbar-track, body::-webkit-scrollbar-track {
+    background: hsl(var(--card) / 0.03);
+  }
+
+  html::-webkit-scrollbar-thumb, body::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, hsl(var(--foreground) / 0.20), hsl(var(--foreground) / 0.28));
+    border-radius: 999px;
+    border: 1px solid transparent;
+    min-height: 12px;
+  }
+
+  html::-webkit-scrollbar-thumb:hover, body::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, hsl(var(--foreground) / 0.32), hsl(var(--foreground) / 0.44));
+  }
+
+  html::-webkit-scrollbar-corner, body::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  /* Ensure code blocks (pre/code) that use the utility get the thin scrollbar */
+  pre.custom-scrollbar, .code-block.custom-scrollbar {
+    scrollbar-width: thin;
   }
 }
 

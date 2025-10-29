@@ -5,6 +5,7 @@ import { mergeSort } from "./sorting/MergeSort/mergeSort.js";
 import { quickSort } from "./sorting/QuickSort/quickSort.js";
 import { heapSort } from "./sorting/HeapSort/heapSort.js";
 import {binarySearch } from "./array/BinarySearch/binarySearch.js";
+import { dutchFlag } from "./array/Dutch/dutchFlag.js";
 
 
 // Algorithm factory to get the appropriate algorithm implementation
@@ -31,6 +32,9 @@ export const getAlgorithm = (algorithmName) => {
     "Binary Search": binarySearch,
     "binary search": binarySearch,
     binarysearch: binarySearch,
+    "Dutch Flag": dutchFlag,
+    "dutch flag": dutchFlag,
+    dutchflag: dutchFlag,
   };
 
   const normalizedName = algorithmName?.toLowerCase().replace(/\s+/g, "");

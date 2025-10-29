@@ -1,6 +1,7 @@
 import React from "react";
 import BinarySearchVisualizer from "../../../algorithms/array/BinarySearch/BinarySearchVisualizer";
 import DutchFlagVisualizer from "../../../algorithms/array/Dutch/dutchFlagVisualizer";
+import KadanesVisualizer from "../../../algorithms/array/Kadanes/kadanesVisualizer";
 
 const ArrayElement = ({ value, index, styleClass }) => (
   <div key={`${index}-${value}`} className="flex flex-col items-center pt-2">
@@ -61,6 +62,17 @@ const ArrayDisplay = ({
               currentStep={currentStep}
             />
           )}
+
+          {algoKey.includes("kadane") && (
+            <KadanesVisualizer
+              currentArray={currentArray}
+              sortingSteps={sortingSteps}
+              currentStepIndex={currentStepIndex}
+              currentStep={currentStep}
+              selectedLanguage={selectedLanguage}
+            />
+          )}
+
         </div>
       </div>
     </div>

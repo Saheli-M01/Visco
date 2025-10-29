@@ -10,8 +10,8 @@ const codeLoaders = {
 //     import("../../../algorithms/array/2pointers/twoPointersCodes"),
 //   "Sliding Window": () =>
 //     import("../../../algorithms/array/2pointers/slidingWindowCodes"),
-//   "Kadane's Algorithm": () =>
-//     import("../../../algorithms/array/Kadanes/kadaneCodes"),
+   "Kadane's Algorithm": () =>
+     import("../../../algorithms/array/Kadanes/kadanesCodes"),
   "Dutch Flag": () =>
     import("../../../algorithms/array/Dutch/dutchFlagcodes"),
 };

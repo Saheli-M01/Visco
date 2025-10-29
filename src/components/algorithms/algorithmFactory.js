@@ -4,9 +4,9 @@ import { insertionSort } from "./sorting/InsertionSort/insertionSort.js";
 import { mergeSort } from "./sorting/MergeSort/mergeSort.js";
 import { quickSort } from "./sorting/QuickSort/quickSort.js";
 import { heapSort } from "./sorting/HeapSort/heapSort.js";
-import {binarySearch } from "./array/BinarySearch/binarySearch.js";
+import {binarySearch} from "./array/BinarySearch/binarySearch.js";
 import { dutchFlag } from "./array/Dutch/dutchFlag.js";
-
+import {kadane} from "./array/Kadanes/kadanes";
 
 // Algorithm factory to get the appropriate algorithm implementation
 export const getAlgorithm = (algorithmName) => {
@@ -35,6 +35,10 @@ export const getAlgorithm = (algorithmName) => {
     "Dutch Flag": dutchFlag,
     "dutch flag": dutchFlag,
     dutchflag: dutchFlag,
+    "Kadane's Algorithm": kadane,
+    "kadane's algorithm": kadane,
+    "kadane": kadane,
+    kadane: kadane,
   };
 
   const normalizedName = algorithmName?.toLowerCase().replace(/\s+/g, "");

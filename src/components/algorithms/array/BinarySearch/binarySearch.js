@@ -1,5 +1,5 @@
 // Binary Search Algorithm Implementation (visualized)
-import codes from "./binarySearchCodes";
+
 
 export const binarySearch = {
   name: "Binary Search",

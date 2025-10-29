@@ -66,7 +66,7 @@ export const Topics = () => {
 
   const handleTopicClick = (topic) => {
     // Allow navigation for active topics (sorting and array)
-    if (topic.id === "sorting" || topic.id === "array") navigate(topic.path);
+    if (topic.id === "sorting" || topic.id === "array" || topic.id === "graph") navigate(topic.path);
   };
 
   return (
@@ -107,7 +107,7 @@ export const Topics = () => {
         {/* Topics Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {topics.map((topic, index) => {
-            const isActive = topic.id === "sorting" || topic.id === "array";
+            const isActive = topic.id === "sorting" || topic.id === "array" || topic.id === "graph";
 
             return (
               <motion.div

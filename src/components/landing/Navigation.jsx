@@ -138,12 +138,12 @@ export const Navigation = () => {
   const topicOptions = [
     { value: "sorting", label: "Sorting" },
     { value: "array", label: "Array" },
-    { value: "graph", label: "Graph (Coming soon)" },
+    { value: "graph", label: "Graph" },
     { value: "tree", label: "Tree (Coming soon)" },
     { value: "linked-list", label: "Linked List (Coming soon)" },
   ];
 
-  const enabledTopics = new Set(["array", "sorting"]);
+  const enabledTopics = new Set(["array", "sorting", "graph"]);
 
   const handleTopicSelect = (val) => {
     if (!val || val === "topic") return;

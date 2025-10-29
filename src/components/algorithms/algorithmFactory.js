@@ -6,6 +6,7 @@ import { quickSort } from "./sorting/QuickSort/quickSort.js";
 import { heapSort } from "./sorting/HeapSort/heapSort.js";
 import {binarySearch } from "./array/BinarySearch/binarySearch.js";
 import { dutchFlag } from "./array/Dutch/dutchFlag.js";
+import { breadthFirstSearch } from "./graph/BreadthFirstSearch/breadthFirstSearch.js";
 
 
 // Algorithm factory to get the appropriate algorithm implementation
@@ -35,6 +36,9 @@ export const getAlgorithm = (algorithmName) => {
     "Dutch Flag": dutchFlag,
     "dutch flag": dutchFlag,
     dutchflag: dutchFlag,
+    "Breadth-First Search": breadthFirstSearch,
+    "breadth-first search": breadthFirstSearch,
+    breadthfirstsearch: breadthFirstSearch,
   };
 
   const normalizedName = algorithmName?.toLowerCase().replace(/\s+/g, "");

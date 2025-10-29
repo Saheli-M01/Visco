@@ -12,8 +12,8 @@ const codeLoaders = {
 //     import("../../../algorithms/array/2pointers/slidingWindowCodes"),
 //   "Kadane's Algorithm": () =>
 //     import("../../../algorithms/array/Kadanes/kadaneCodes"),
-//   "Dutch Flag": () =>
-//     import("../../../algorithms/array/DutchFlag/dutchFlagCodes"),
+  "Dutch Flag": () =>
+    import("../../../algorithms/array/Dutch/dutchFlagcodes"),
 };
 
 const AlgorithmDetails = ({ algorithm, topic }) => {
@@ -79,7 +79,7 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
   }, [algorithm.name]);
 
   return (
-    <div className="mx-auto h-screen w-screen max-w-7xl px-2 sm:px-6">
+    <div className="mx-auto px-3">
       <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 sm:gap-6">
         <div className="lg:col-span-3 space-y-4 sm:space-y-6">
           <motion.div
@@ -171,8 +171,8 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
             </ol>
           </motion.div>
 
-          <div className="space-y-4">
-            <div className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-4 shadow-xl">
+          <div className="flex gap-3">
+            <div className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-4 shadow-xl w-full">
               <div className="flex items-center mb-2 sm:mb-3">
                 <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 text-gray-900 mr-2" />
                 <h5 className="text-sm sm:text-base font-semibold text-gray-900">Time Complexity</h5>
@@ -193,7 +193,7 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
               </div>
             </div>
 
-            <div className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-4 shadow-xl">
+            <div className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-4 shadow-xl w-full">
               <div className="flex items-center mb-2 sm:mb-3">
                 <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 text-gray-900 mr-2" />
                 <h5 className="text-sm sm:text-base font-semibold text-gray-900">Space Complexity</h5>

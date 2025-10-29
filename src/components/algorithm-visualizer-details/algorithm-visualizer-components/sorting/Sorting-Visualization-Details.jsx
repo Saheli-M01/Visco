@@ -769,7 +769,7 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
             />
 
             {/* Tab Content */}
-            <div className="flex-1 overflow-hidden">
+             <div className="flex-1 overflow-hidden">
               {/* Visualization Tab */}
               {activeTab === 0 && (
                 <AlgorithmVisualization {...visualizationProps} />
@@ -777,7 +777,7 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
 
               {/* Details Tab */}
               {activeTab === 1 && (
-                <div className="py-2">
+                 <div className="h-full py-2 overflow-y-auto">
                   <AlgorithmDetails
                     algorithm={selectedAlgorithm}
                     topic={topic}

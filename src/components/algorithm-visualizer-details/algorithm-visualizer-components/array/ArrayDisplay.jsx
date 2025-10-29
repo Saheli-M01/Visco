@@ -1,5 +1,6 @@
 import React from "react";
 import BinarySearchVisualizer from "../../../algorithms/array/BinarySearch/BinarySearchVisualizer";
+import DutchFlagVisualizer from "../../../algorithms/array/Dutch/dutchFlagVisualizer";
 
 const ArrayElement = ({ value, index, styleClass }) => (
   <div key={`${index}-${value}`} className="flex flex-col items-center pt-2">
@@ -50,6 +51,14 @@ const ArrayDisplay = ({
               currentStepIndex={currentStepIndex}
               currentStep={currentStep}
               selectedLanguage={selectedLanguage}
+            />
+          )}
+
+          {algoKey.startsWith("dutchflag") && (
+            <DutchFlagVisualizer
+              sortingSteps={sortingSteps}
+              currentStepIndex={currentStepIndex}
+              currentStep={currentStep}
             />
           )}
         </div>

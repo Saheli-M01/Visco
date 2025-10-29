@@ -6,8 +6,8 @@ const ArrayPage = () => {
   const arrayCategory = categories.array;
   const complexityData = [
     { name: "Binary Search", best: "O(1)", average: "O(log n)", worst: "O(log n)", space: "O(1)" },
-    { name: "Two Pointers", best: "O(1)", average: "O(n)", worst: "O(n)", space: "O(1)" },
-    { name: "Sliding Window", best: "O(1)", average: "O(n)", worst: "O(n)", space: "O(1)" },
+   
+    { name: "Sliding Window / 2 Pointers", best: "O(1)", average: "O(n)", worst: "O(n)", space: "O(1)" },
     { name: "Kadane's Algorithm", best: "O(n)", average: "O(n)", worst: "O(n)", space: "O(1)" },
     { name: "Dutch Flag", best: "O(n)", average: "O(n)", worst: "O(n)", space: "O(1)" },
   ];

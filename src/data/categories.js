@@ -62,14 +62,7 @@ export const categories = {
       },
      
       {
-        name: "Two Pointers",
-        complexity: "O(n)",
-        difficulty: "Medium",
-        shortDescription:
-          "Technique using two pointers to solve problems in linear time.",
-      },
-      {
-        name: "Sliding Window",
+        name: "Sliding Window / 2 pointers",
         complexity: "O(n)",
         difficulty: "Medium",
         shortDescription:

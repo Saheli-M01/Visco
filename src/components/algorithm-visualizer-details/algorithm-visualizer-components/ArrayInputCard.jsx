@@ -46,6 +46,17 @@ const ArrayInputCard = ({
       if (Number.isNaN(n)) return { error: `Invalid number: ${p}` };
       nums.push(n);
     }
+    // Additional validation for Dutch Flag: only allow 0,1,2
+    const normalizedAlgoName = (selectedAlgorithm?.name || "").toLowerCase();
+    const isDutch = normalizedAlgoName.includes("dutch");
+    if (isDutch) {
+      for (let i = 0; i < nums.length; i++) {
+        const v = nums[i];
+        if (v !== 0 && v !== 1 && v !== 2) {
+          return { error: `Dutch Flag requires values 0,1,2 only. Found: ${v} at position ${i}` };
+        }
+      }
+    }
     return { value: nums };
   };
 
@@ -63,6 +74,23 @@ const ArrayInputCard = ({
     }
     return validCount;
   };
+
+  // Quick check if current array is valid for Dutch Flag (only 0,1,2)
+  const isDutchAlgorithm = (selectedAlgorithm?.name || "").toLowerCase().includes("dutch");
+  const currentDutchInvalid = (() => {
+    if (!isDutchAlgorithm) return false;
+    if (!arrayInput || arrayInput.trim() === "") return false;
+    const parts = arrayInput
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    for (let p of parts) {
+      const n = Number(p);
+      if (Number.isNaN(n)) return true;
+      if (n !== 0 && n !== 1 && n !== 2) return true;
+    }
+    return false;
+  })();
 
   // Update array length and adjust pivot strategy when input changes
   useEffect(() => {
@@ -172,13 +200,23 @@ const ArrayInputCard = ({
           )}
           <button
             onClick={onGo}
+            disabled={currentDutchInvalid}
             className={
-              "px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-all shadow-md text-sm font-medium border border-gray-600"
+              ("px-4 py-2 rounded-lg transition-all shadow-md text-sm font-medium border ") +
+              (currentDutchInvalid
+                ? "bg-gray-300 text-gray-600 border-gray-300 cursor-not-allowed"
+                : "bg-gray-800 text-white hover:bg-gray-700 border-gray-600")
             }
           >
             Go
           </button>
         </div>
+        {/* Dutch Flag validation warning */}
+        {isDutchAlgorithm && currentDutchInvalid && (
+          <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded-md text-yellow-800 text-sm">
+            Dutch Flag input supports only values 0, 1 and 2. Please correct your input to enable Go.
+          </div>
+        )}
         {showValidationPopup && (
           <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg shadow-lg w-full">
             <div className="flex items-start justify-between gap-2">

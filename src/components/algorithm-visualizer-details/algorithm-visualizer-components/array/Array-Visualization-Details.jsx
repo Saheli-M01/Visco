@@ -29,6 +29,7 @@ const FullScreenModalArray = ({ isOpen, onClose, algorithm, topic }) => {
   const [currentArray, setCurrentArray] = useState([]);
   const [originalArray, setOriginalArray] = useState([]);
   const [isVisualizationActive, setIsVisualizationActive] = useState(false);
+  const [isAutomatic, setIsAutomatic] = useState(false);
   const [targetValue, setTargetValue] = useState(null);
   const [comparingIndices, setComparingIndices] = useState([]);
   const [arraySteps, setArraySteps] = useState([]);
@@ -483,7 +484,8 @@ const FullScreenModalArray = ({ isOpen, onClose, algorithm, topic }) => {
     comparingIndices,
     arrayInputKey,
     handleGo,
-    isAutomatic: false,
+  isAutomatic,
+  setIsAutomatic,
     isPlaying,
     handlePlay,
     handlePause,
@@ -519,7 +521,7 @@ const FullScreenModalArray = ({ isOpen, onClose, algorithm, topic }) => {
             <div className="flex-1 overflow-hidden">
               {activeTab === 0 && <AlgorithmVisualization {...visualizationProps} />}
               {activeTab === 1 && (
-                <div className="py-2">
+                <div className="h-full py-2 overflow-y-auto custom-scrollbar">
                   <AlgorithmDetails algorithm={selectedAlgorithm} topic={topic} hideVisualizationButton={true} />
                 </div>
               )}

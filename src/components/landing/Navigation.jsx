@@ -114,9 +114,7 @@ export const Navigation = () => {
   const handleSearchEnter = () => {
     const q = (searchQuery || "").trim();
     if (!q) return;
-    const qLower = q.toLowerCase();
-    // If user has a suggestion highlighted, open that algorithm (handled elsewhere).
-    // Otherwise navigate to a dedicated search results page and dispatch the search
+    // Navigate to search page and dispatch the search
     const searchPath = `/search?q=${encodeURIComponent(q)}`;
     if (location.pathname !== "/search") {
       navigate(searchPath);
@@ -127,6 +125,7 @@ export const Navigation = () => {
       navigate(searchPath);
       dispatchSearch(q);
     }
+    clearSuggestions();
   };
 
   const navItems = [

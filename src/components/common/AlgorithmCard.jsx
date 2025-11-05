@@ -25,6 +25,7 @@ const AlgorithmCard = ({ algorithm, index = 0, onClick }) => {
     "Heap Sort",
     "Binary Search",
     "Dutch Flag",
+    "Kadane's Algorithm",
   ];
   const isInteractive = interactive.includes(algorithm.name);
 

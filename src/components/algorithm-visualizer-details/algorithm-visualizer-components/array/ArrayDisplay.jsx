@@ -1,6 +1,7 @@
 import React from "react";
 import BinarySearchVisualizer from "../../../algorithms/array/BinarySearch/BinarySearchVisualizer";
 import DutchFlagVisualizer from "../../../algorithms/array/Dutch/dutchFlagVisualizer";
+import KadanesVisualizer from "../../../algorithms/array/Kadanes/kadanesVisualizer";
 
 const ArrayElement = ({ value, index, styleClass }) => (
   <div key={`${index}-${value}`} className="flex flex-col items-center pt-2">
@@ -27,6 +28,12 @@ const ArrayDisplay = ({
 
   const algoKey = (selectedAlgorithm?.name || "").toLowerCase().replace(/\s+/g, "");
 
+  // For Kadane's algorithm: handle subarray highlighting
+  const isKadane = algoKey.includes("kadane");
+  const isCompleted = currentStep.phase === "completed";
+  const start = currentStep.start;
+  const end = currentStep.end;
+
   return (
     <div className="flex flex-col h-full bg-gray-900 rounded-lg overflow-hidden">
       <div className="bg-code-bg rounded-lg p-4 flex-1 flex items-center justify-center overflow-auto">
@@ -35,9 +42,18 @@ const ArrayDisplay = ({
             {currentArray.map((value, index) => {
               const isComparing = comparingIndices.includes(index) && !isSwapPhase;
 
-              const baseClass = isComparing
-                ? "bg-indigo-400 text-white border-indigo-600 scale-110 animate-pulse"
-                : "bg-gray-700 text-white border-gray-600";
+              // Kadane's algorithm: highlight subarray range
+              let baseClass;
+              if (isKadane && typeof start === "number" && typeof end === "number" && index >= start && index <= end) {
+                // In completed phase, use green; otherwise use yellow/orange
+                baseClass = isCompleted
+                  ? "bg-amber-400 text-white border-amber-700 scale-105"
+                  : "bg-yellow-400 text-gray-900 border-yellow-600";
+              } else if (isComparing) {
+                baseClass = "bg-indigo-400 text-white border-indigo-600 scale-110 animate-pulse";
+              } else {
+                baseClass = "bg-gray-700 text-white border-gray-600";
+              }
 
               return <ArrayElement key={`${index}-${value}`} value={value} index={index} styleClass={baseClass} />;
             })}
@@ -61,6 +77,17 @@ const ArrayDisplay = ({
               currentStep={currentStep}
             />
           )}
+
+          {algoKey.includes("kadane") && (
+            <KadanesVisualizer
+              currentArray={currentArray}
+              sortingSteps={sortingSteps}
+              currentStepIndex={currentStepIndex}
+              currentStep={currentStep}
+              selectedLanguage={selectedLanguage}
+            />
+          )}
+
         </div>
       </div>
     </div>

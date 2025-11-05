@@ -1,5 +1,4 @@
 // Dutch Flag Algorithm Implementation
-import codes from "./dutchFlagcodes";
 
 export const dutchFlag = {
   name: "Dutch Flag",

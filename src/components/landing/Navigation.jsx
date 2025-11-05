@@ -261,7 +261,7 @@ export const Navigation = () => {
                 onChange={handleTopicSelect}
                 options={topicOptions}
                 className="bg-transparent"
-                color="#fbbf24"
+                color="#1b1b1bff"
                 compact={true}
                 panelless={true}
                  chevronSize={20}

@@ -61,12 +61,13 @@ export const categories = {
           "Efficient search algorithm for sorted arrays using divide and conquer.",
       },
      
-      {
-        name: "Sliding Window / 2 pointers",
+     
+        {
+        name: "Dutch Flag",
         complexity: "O(n)",
         difficulty: "Medium",
         shortDescription:
-          "Pattern for problems involving subarrays of fixed or variable size.",
+          "Partition array into three parts in single pass (0s, 1s, 2s).",
       },
       {
         name: "Kadane's Algorithm",
@@ -75,13 +76,28 @@ export const categories = {
         shortDescription:
           "Find maximum sum subarray in linear time using dynamic programming.",
       },
-      {
-        name: "Dutch Flag",
+       {
+        name: "Sliding Window / 2 pointers (Container With Most Water)",
         complexity: "O(n)",
         difficulty: "Medium",
         shortDescription:
-          "Partition array into three parts in single pass (0s, 1s, 2s).",
+          "Pattern for problems involving subarrays of fixed or variable size.",
       },
+      {
+        name: "Moore's Voting (Boyer-Moore)",
+        complexity: "O(n)",
+        difficulty: "Medium",
+        shortDescription:
+          "Find a majority element (if exists) in linear time with constant space.",
+      },
+      {
+        name: "Next Permutation",
+        complexity: "O(n)",
+        difficulty: "Easy",
+        shortDescription:
+          "Rearrange numbers into the lexicographically next greater permutation.",
+      },
+    
     ],
   },
 

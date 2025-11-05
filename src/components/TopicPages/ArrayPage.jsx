@@ -12,14 +12,14 @@ const ArrayPage = () => {
       worst: "O(log n)",
       space: "O(1)",
     },
-
     {
-      name: "Sliding Window / 2 Pointers (Container With Most Water)",
-      best: "O(1)",
+      name: "Dutch Flag",
+      best: "O(n)",
       average: "O(n)",
       worst: "O(n)",
       space: "O(1)",
     },
+
     {
       name: "Kadane's Algorithm",
       best: "O(n)",
@@ -27,9 +27,10 @@ const ArrayPage = () => {
       worst: "O(n)",
       space: "O(1)",
     },
+
     {
-      name: "Dutch Flag",
-      best: "O(n)",
+      name: "Sliding Window / 2 Pointers (Container With Most Water)",
+      best: "O(1)",
       average: "O(n)",
       worst: "O(n)",
       space: "O(1)",
@@ -47,9 +48,8 @@ const ArrayPage = () => {
       average: "O(n)",
       worst: "O(n)",
       space: "O(1)",
-    }
+    },
   ];
-
 
   return (
     <CategoryLayout category={arrayCategory} complexityData={complexityData} />

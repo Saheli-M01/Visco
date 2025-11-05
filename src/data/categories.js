@@ -61,13 +61,7 @@ export const categories = {
           "Efficient search algorithm for sorted arrays using divide and conquer.",
       },
      
-      {
-        name: "Sliding Window / 2 pointers (Container With Most Water)",
-        complexity: "O(n)",
-        difficulty: "Medium",
-        shortDescription:
-          "Pattern for problems involving subarrays of fixed or variable size.",
-      },
+     
         {
         name: "Dutch Flag",
         complexity: "O(n)",
@@ -81,6 +75,13 @@ export const categories = {
         difficulty: "Medium",
         shortDescription:
           "Find maximum sum subarray in linear time using dynamic programming.",
+      },
+       {
+        name: "Sliding Window / 2 pointers (Container With Most Water)",
+        complexity: "O(n)",
+        difficulty: "Medium",
+        shortDescription:
+          "Pattern for problems involving subarrays of fixed or variable size.",
       },
       {
         name: "Moore's Voting (Boyer-Moore)",

@@ -5,85 +5,236 @@ export const kadane = {
 
   generateSteps: (arr, language = "javascript") => {
     const steps = [];
-    if (!Array.isArray(arr) || arr.length === 0) return steps;
-
     const snapshot = [...arr];
 
-    // Initial state
+    // Line 1: function entry
+    steps.push({
+      array: snapshot,
+      description: `Enter kadane function`,
+
+      phase: "code-line",
+      codeLine: 0,
+    });
+
+    // Line 2: if-check for empty array
+    steps.push({
+      array: snapshot,
+      description: `Check if array is empty (if statement)`,
+
+      phase: "cond-line",
+      codeLine: 1,
+    });
+
+    // Line 3: return when empty
+    if (!Array.isArray(arr) || arr.length === 0) {
+      steps.push({
+        array: snapshot,
+        description: `Array empty -> return default result`,
+
+        phase: "return",
+        codeLine: 2,
+      });
+      return steps;
+    }
+
+    // Line 4: form currentSum (maxEndingHere)
     let currentSum = arr[0];
+    steps.push({
+      array: snapshot,
+      description: `Set currentSum = arr[0] -> currentSum = ${currentSum}`,
+      currentSum,
+      maxSoFar: undefined,
+      start: undefined,
+      end: undefined,
+
+      phase: "currentSum-phase",
+      codeLine: 4,
+    });
+
+    // Line 5: form maxSoFar
     let maxSoFar = arr[0];
+    steps.push({
+      array: snapshot,
+      description: `Set maxSoFar = ${maxSoFar}`,
+      currentSum,
+      maxSoFar,
+      start: undefined,
+      end: undefined,
+
+      phase: "maxSoFar-phase",
+      codeLine: 5,
+    });
+
+    // Line 6: form start, end, s
     let start = 0;
     let s = 0;
     let end = 0;
-
     steps.push({
       array: snapshot,
-      description: `Initialize: currentSum = ${currentSum}, maxSoFar = ${maxSoFar}`,
+      description: `Initialize start, end, s -> start=${start}, end=${end}, s=${s}`,
       currentSum,
       maxSoFar,
       start,
       end,
-      currentIndex: 0,
-      phase: "init",
-      codeLine: 0,
+
+      phase: "start_end_s-phase",
+      codeLine: 6,
     });
 
     // Iterate through array starting from index 1
+   // Iterate through array starting from index 1
     for (let i = 1; i < arr.length; i++) {
-      const val = arr[i];
-
-      // Before update
+      // Line 8: for-loop entry
       steps.push({
         array: snapshot,
-        description: `Consider arr[${i}] = ${val}`,
+        description: `Enter for-loop: i = ${i}`,
+        i,
         currentSum,
         maxSoFar,
         start,
         end,
         currentIndex: i,
-        phase: "consider",
-        codeLine: 2,
+        phase: "for-loop",
+        codeLine: 8,
+      });
+
+      const val = arr[i];
+
+      // Line 9: if condition check
+      steps.push({
+        array: snapshot,
+        description: `Check if arr[${i}] = (${val}) > currentSum + arr[${i}] = (${currentSum + val})`,
+        i,
+        currentSum,
+        maxSoFar,
+        start,
+        end,
+        currentIndex: i,
+        phase: "if-check",
+        codeLine: 9,
       });
 
       // Decide whether to start new subarray at i or extend
       const newCurrent = Math.max(val, currentSum + val);
       const startedNew = newCurrent === val;
+      
       if (startedNew) {
+        // Line 10-11: Start new subarray
+        steps.push({
+          array: snapshot,
+          description: `Start new subarray: currentSum = arr[${i}] = ${val}`,
+          i,
+          currentSum: val,
+          maxSoFar,
+          start,
+          end,
+          currentIndex: i,
+          phase: "new-subarray",
+          codeLine: 10,
+        });
+        
         s = i;
+        steps.push({
+          array: snapshot,
+          description: `Update s = ${i}`,
+          i,
+          currentSum: val,
+          maxSoFar,
+          start,
+          end,
+          s,
+          currentIndex: i,
+          phase: "update-s",
+          codeLine: 11,
+        });
+        currentSum = val;
+      } else {
+        // Line 13: Extend current subarray
+        currentSum += val;
+        steps.push({
+          array: snapshot,
+          description: `Extend subarray: currentSum += arr[${i}] → currentSum = ${currentSum}`,
+          i,
+          currentSum,
+          maxSoFar,
+          start,
+          end,
+          currentIndex: i,
+          phase: "extend-subarray",
+          codeLine: 13,
+        });
       }
-      currentSum = newCurrent;
 
+      // Line 16: Check if new max found
       steps.push({
         array: snapshot,
-        description: startedNew
-          ? `Start new subarray at index ${i}: currentSum = ${currentSum}`
-          : `Extend subarray with ${val}: currentSum = ${currentSum}`,
+        description: `Check if currentSum (${currentSum}) > maxSoFar (${maxSoFar})`,
+        i,
         currentSum,
         maxSoFar,
-        start: s,
+        start,
         end,
         currentIndex: i,
-        phase: "update-current",
-        codeLine: 3,
+        phase: "max-check",
+        codeLine: 15,
       });
 
       if (currentSum > maxSoFar) {
+        // Lines 17-19: Update max
         maxSoFar = currentSum;
-        start = s;
-        end = i;
         steps.push({
           array: snapshot,
-          description: `New max found: maxSoFar = ${maxSoFar} (from ${start} to ${end})`,
+          description: `Update maxSoFar = ${maxSoFar}`,
+          i,
           currentSum,
           maxSoFar,
           start,
           end,
           currentIndex: i,
           phase: "update-max",
-          codeLine: 4,
+          codeLine: 16,
+        });
+
+        start = s;
+      
+        steps.push({
+          array: snapshot,
+          description: `Update range: start = ${start}`,
+          i,
+          currentSum,
+          maxSoFar,
+          start,
+          end,
+          currentIndex: i,
+          phase: "update-range",
+          codeLine: 17,
+        });
+          end = i;
+           steps.push({
+          array: snapshot,
+          description: `Update range:end = ${end}`,
+          i,
+          currentSum,
+          maxSoFar,
+          start,
+          end,
+          currentIndex: i,
+          phase: "update-range",
+          codeLine: 18,
         });
       }
     }
+    // Mark loop exit to hide loop-scoped variables like `i`
+    steps.push({
+      array: snapshot,
+      description: `for-exit`,
+      currentSum,
+      maxSoFar,
+      start,
+      end,
+      phase: "for-exit",
+      codeLine: 20,
+    });
 
     steps.push({
       array: snapshot,
@@ -103,145 +254,137 @@ export const kadane = {
   getCodeLines: (language) => {
     const lines = {
       javascript: [
-        "function kadane(arr) {",
-        "  if (!arr || arr.length === 0) return { maxSum: 0, start: -1, end: -1 };",
-        "  let maxEndingHere = arr[0];",
-        "  let maxSoFar = arr[0];",
-        "  let start = 0, end = 0, s = 0;",
-        "  ",
-        "  for (let i = 1; i < arr.length; i++) {",
-        "    if (arr[i] > maxEndingHere + arr[i]) {",
-        "      maxEndingHere = arr[i];",
-        "      s = i;",
-        "    } else {",
-        "      maxEndingHere += arr[i];",
-        "    }",
-        "",
-        "    if (maxEndingHere > maxSoFar) {",
-        "      maxSoFar = maxEndingHere;",
-        "      start = s;",
-        "      end = i;",
-        "    }",
-        "  }",
-        "  ",
-        "  return { maxSum: maxSoFar, start, end };",
-        "}",
+        "function kadane(arr) {", // 1
+        "  if (!arr || arr.length === 0);", // 2
+        "     return { maxSum: 0, start: -1, end: -1 };", // 3
+        "  let currentSumingHere = arr[0];", // 4
+        "  let maxSoFar = arr[0];", // 5
+        "  let start = 0, end = 0, s = 0;", // 6
+        "  ", // 7
+        "  for (let i = 1; i < arr.length; i++) {", // 8
+        "    if (arr[i] > currentSumingHere + arr[i]) {", // 9
+        "      currentSumingHere = arr[i];", // 10
+        "      s = i;", // 11
+        "    } else {", // 12
+        "      currentSumingHere += arr[i];", // 13
+        "    }", // 14
+        "", // 15
+        "    if (currentSumingHere > maxSoFar) {", // 16
+        "      maxSoFar = currentSumingHere;", // 17
+        "      start = s;", // 18
+        "      end = i;", // 19
+        "    }", // 20
+        "  }", // 20
+        "  ", // 21
+        "  return { maxSum: maxSoFar, start, end };", //22
+        "}", //23
       ],
       python: [
-        "def kadane(arr):",
-        "    if not arr:",
-        "        return {'maxSum': 0, 'start': -1, 'end': -1}",
-        "    ",
-        "    max_ending_here = max_so_far = arr[0]",
-        "    start = end = s = 0",
-        "    ",
-        "    for i in range(1, len(arr)):",
-        "        if arr[i] > max_ending_here + arr[i]:",
-        "            max_ending_here = arr[i]",
-        "            s = i",
-        "        else:",
-        "            max_ending_here += arr[i]",
-        "",
-        "        if max_ending_here > max_so_far:",
-        "            max_so_far = max_ending_here",
-        "            start = s",
-        "            end = i",
-        "    ",
-        "    return {'maxSum': max_so_far, 'start': start, 'end': end}",
+        "def kadane(arr):", // 1
+        "    if not arr:", // 2
+        "        return {'maxSum': 0, 'start': -1, 'end': -1}", // 3
+        "    currentSum = arr[0]", // 4
+        "    maxSoFar = arr[0]", // 5
+        "    start = end = s = 0", // 6
+        "    ", // 7
+        "    for i in range(1, len(arr)):", //8
+        "        if arr[i] > currentSum + arr[i]:", // 9
+        "            currentSum = arr[i]", // 10
+        "            s = i", // 11
+        "        else:", // 12
+        "            currentSum += arr[i]", // 13
+        "", // 14
+        "", // 15
+        "        if currentSum > maxSoFar:", // 16
+        "            maxSoFar = currentSum", // 17
+        "            start = s", // 18
+        "            end = i", // 19
+        "    ", // 20
+        "", // 21
+        "    return {'maxSum': maxSoFar, 'start': start, 'end': end}", // 22
+        "", // 23
       ],
       java: [
-        "public class KadaneExample {",
-        "    static class Result {",
-        "        int maxSum, start, end;",
-        "        Result(int m, int s, int e) { maxSum = m; start = s; end = e; }",
-        "    }",
-        "",
-        "    static Result kadane(int[] arr) {",
-        "        if (arr == null || arr.length == 0)",
-        "            return new Result(0, -1, -1);",
-        "        ",
-        "        int maxEnding = arr[0], maxSoFar = arr[0];",
-        "        int start = 0, end = 0, s = 0;",
-        "        ",
-        "        for (int i = 1; i < arr.length; i++) {",
-        "            if (arr[i] > maxEnding + arr[i]) {",
-        "                maxEnding = arr[i];",
-        "                s = i;",
-        "            } else {",
-        "                maxEnding += arr[i];",
-        "            }",
-        "            ",
-        "            if (maxEnding > maxSoFar) {",
-        "                maxSoFar = maxEnding;",
-        "                start = s;",
-        "                end = i;",
-        "            }",
-        "        }",
-        "        ",
-        "        return new Result(maxSoFar, start, end);",
-        "    }",
-        "}",
+        "public static Map<String, Integer> kadane(int[] arr) {", // 1
+        "    if (arr == null || arr.length == 0) {", // 2
+        '        return Map.of("maxSum", 0, "start", -1, "end", -1);', // 3
+        "    }", // 4
+        "    int currentSum = arr[0];", // 5
+        "    int maxSoFar = arr[0];", // 6
+        "    int start = 0, end = 0, s = 0;", // 7
+        "    ", // 8
+        "    for (int i = 1; i < arr.length; i++) {", // 9
+        "        if (arr[i] > currentSum + arr[i]) {", // 10
+        "            currentSum = arr[i];", // 11
+        "            s = i;", // 12
+        "        } else {", // 13
+        "            currentSum += arr[i];", // 14
+        "        }", // 15
+        "        if (currentSum > maxSoFar) {", // 16
+        "            maxSoFar = currentSum;", // 17
+        "            start = s;", // 18
+        "            end = i;", // 19
+        "        }", // 20
+        "    }", // 21
+        '    return Map.of("maxSum", maxSoFar, "start", start, "end", end);', // 22
+        "}", // 23
       ],
       csharp: [
-        "class KadaneExample {",
-        "    static (int maxSum, int start, int end) Kadane(int[] arr) {",
-        "        if (arr == null || arr.Length == 0)",
-        "            return (0, -1, -1);",
-        "        ",
-        "        int maxEnding = arr[0], maxSoFar = arr[0];",
-        "        int start = 0, end = 0, s = 0;",
-        "        ",
-        "        for (int i = 1; i < arr.Length; i++) {",
-        "            if (arr[i] > maxEnding + arr[i]) {",
-        "                maxEnding = arr[i];",
-        "                s = i;",
-        "            } else {",
-        "                maxEnding += arr[i];",
-        "            }",
-        "            ",
-        "            if (maxEnding > maxSoFar) {",
-        "                maxSoFar = maxEnding;",
-        "                start = s;",
-        "                end = i;",
-        "            }",
-        "        }",
-        "        ",
-        "        return (maxSoFar, start, end);",
-        "    }",
-        "}",
+        "public static Dictionary<string, int> Kadane(int[] arr) {", // 1
+        "    if (arr == null || arr.Length == 0) {", // 2
+        '        return new Dictionary<string, int> { {"maxSum", 0}, {"start", -1}, {"end", -1} };', // 3
+        "    }", // 4
+        "    int currentSum = arr[0];", // 5
+        "    int maxSoFar = arr[0];", // 6
+        "    int start = 0, end = 0, s = 0;", // 7
+        "    ", // 8
+        "    for (int i = 1; i < arr.Length; i++) {", // 9
+        "        if (arr[i] > currentSum + arr[i]) {", // 10
+        "            currentSum = arr[i];", // 11
+        "            s = i;", // 12
+        "        } else {", // 13
+        "            currentSum += arr[i];", // 14
+        "        }", // 15
+        "        if (currentSum > maxSoFar) {", // 16
+        "            maxSoFar = currentSum;", // 17
+        "            start = s;", // 18
+        "            end = i;", // 19
+        "        }", // 20
+        "    }", // 21
+        '    return new Dictionary<string, int> { {"maxSum", maxSoFar}, {"start", start}, {"end", end} };', // 22
+        "}", // 23
       ],
       cpp: [
-        "tuple<int,int,int> kadane(const vector<int>& arr) {",
-        "    if (arr.empty())",
-        "        return {0, -1, -1};",
-        "    ",
-        "    int maxEnding = arr[0], maxSoFar = arr[0];",
-        "    int start = 0, end = 0, s = 0;",
-        "    ",
-        "    for (size_t i = 1; i < arr.size(); ++i) {",
-        "        if (arr[i] > maxEnding + arr[i]) {",
-        "            maxEnding = arr[i];",
-        "            s = i;",
-        "        } else {",
-        "            maxEnding += arr[i];",
-        "        }",
-        "        ",
-        "        if (maxEnding > maxSoFar) {",
-        "            maxSoFar = maxEnding;",
-        "            start = s;",
-        "            end = i;",
-        "        }",
-        "    }",
-        "    ",
-        "    return {maxSoFar, start, end};",
-        "}",
+        "std::map<std::string, int> kadane(const std::vector<int>& arr) {", // 1
+        "    if (arr.empty()) {", // 2
+        '        return {{"maxSum", 0}, {"start", -1}, {"end", -1}};', // 3
+        "    }", // 4
+        "    int currentSum = arr[0];", // 5
+        "    int maxSoFar = arr[0];", // 6
+        "    int start = 0, end = 0, s = 0;", // 7
+        "    ", // 8
+        "    for (size_t i = 1; i < arr.size(); i++) {", // 9
+        "        if (arr[i] > currentSum + arr[i]) {", // 10
+        "            currentSum = arr[i];", // 11
+        "            s = i;", // 12
+        "        } else {", // 13
+        "            currentSum += arr[i];", // 14
+        "        }", // 15
+        "        if (currentSum > maxSoFar) {", // 16
+        "            maxSoFar = currentSum;", // 17
+        "            start = s;", // 18
+        "            end = i;", // 19
+        "        }", // 20
+        "    ", // 21
+        '    return {{"maxSum", maxSoFar}, {"start", start}, {"end", end}};', // 22
+        "}", // 23
       ],
     };
     return lines[language] || lines.javascript;
   },
 
   getCode: (language) => {
-    return this.getCodeLines(language).join('\n');
+    return this.getCodeLines(language).join("\n");
   },
 };
 

@@ -14,6 +14,8 @@ const codeLoaders = {
      import("../../../algorithms/array/Kadanes/kadanesCodes"),
   "Dutch Flag": () =>
     import("../../../algorithms/array/Dutch/dutchFlagcodes"),
+  "Next Permutation": () =>
+    import("../../../algorithms/array/NextPermutation/nextPermutationCodes"),
 };
 
 const AlgorithmDetails = ({ algorithm, topic }) => {

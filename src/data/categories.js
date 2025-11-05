@@ -38,7 +38,7 @@ export const categories = {
         shortDescription:
           "Efficient in-place sorting using partitioning around a pivot element.",
       },
-    
+
       {
         name: "Heap Sort",
         complexity: "O(n log n)",
@@ -60,9 +60,8 @@ export const categories = {
         shortDescription:
           "Efficient search algorithm for sorted arrays using divide and conquer.",
       },
-     
-     
-        {
+
+      {
         name: "Dutch Flag",
         complexity: "O(n)",
         difficulty: "Medium",
@@ -76,7 +75,7 @@ export const categories = {
         shortDescription:
           "Find maximum sum subarray in linear time using dynamic programming.",
       },
-       {
+      {
         name: "Sliding Window / 2 pointers (Container With Most Water)",
         complexity: "O(n)",
         difficulty: "Medium",
@@ -97,7 +96,6 @@ export const categories = {
         shortDescription:
           "Rearrange numbers into the lexicographically next greater permutation.",
       },
-    
     ],
   },
 

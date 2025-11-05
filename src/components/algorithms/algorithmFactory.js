@@ -7,6 +7,7 @@ import { heapSort } from "./sorting/HeapSort/heapSort.js";
 import {binarySearch} from "./array/BinarySearch/binarySearch.js";
 import { dutchFlag } from "./array/Dutch/dutchFlag.js";
 import {kadane} from "./array/Kadanes/kadanes";
+import { nextPermutation } from "./array/NextPermutation/nextPermutation.js";
 
 // Algorithm factory to get the appropriate algorithm implementation
 export const getAlgorithm = (algorithmName) => {
@@ -39,6 +40,10 @@ export const getAlgorithm = (algorithmName) => {
     "kadane's algorithm": kadane,
     "kadane": kadane,
     kadane: kadane,
+    "Next Permutation": nextPermutation,
+    "next permutation": nextPermutation,
+    "nextpermutation": nextPermutation,
+    nextpermutation: nextPermutation,
   };
 
   const normalizedName = algorithmName?.toLowerCase().replace(/\s+/g, "");

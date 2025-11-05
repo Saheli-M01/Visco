@@ -40,8 +40,13 @@ const CategoryLayout = ({ category, complexityData }) => {
 
   useEffect(() => {
     const handler = (e) => {
+      // Only respond to search events when explicitly triggered (e.g., from search page navigation)
+      // Ignore real-time search updates while on topic pages
       const q = e?.detail?.query || "";
-      setSearchQuery(q.toLowerCase());
+      // Only update if coming from navigation (URL has search param) or search page
+      if (window.location.pathname === "/search" || window.location.search.includes("q=")) {
+        setSearchQuery(q.toLowerCase());
+      }
     };
     window.addEventListener("algorithmSearch", handler);
     return () => window.removeEventListener("algorithmSearch", handler);

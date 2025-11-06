@@ -89,7 +89,7 @@ const HeapVisualizer = ({
 
   // For each callId, scan its steps (up to current index) to collect var values and exit state
   const activeCalls = []; // array of { callId, seenLargest, seenL, seenR, largestValue, lValue, rValue, inHeapify }
-  const heapPhases = new Set(["var-largest", "var-l", "var-r", "if-check", "if-exit", "comparison", "swap"]);
+  const heapPhases = new Set(["call-heapify", "var-largest", "var-l", "var-r", "if-check", "if-exit", "comparison", "swap"]);
   for (const id of callIdOrder) {
     let seenLargest = false,
       seenL = false,

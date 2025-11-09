@@ -60,7 +60,13 @@ export const categories = {
         shortDescription:
           "Efficient search algorithm for sorted arrays using divide and conquer.",
       },
-
+ {
+        name: "Next Permutation",
+        complexity: "O(n)",
+        difficulty: "Easy",
+        shortDescription:
+          "Rearrange numbers into the lexicographically next greater permutation.",
+      },
       {
         name: "Dutch Flag",
         complexity: "O(n)",
@@ -89,13 +95,7 @@ export const categories = {
         shortDescription:
           "Find a majority element (if exists) in linear time with constant space.",
       },
-      {
-        name: "Next Permutation",
-        complexity: "O(n)",
-        difficulty: "Easy",
-        shortDescription:
-          "Rearrange numbers into the lexicographically next greater permutation.",
-      },
+     
     ],
   },
 

@@ -27,7 +27,9 @@ export const nextPermutation = {
     for (let i = arr.length - 2; i >= 0; i--) {
       steps.push({
         array: [...arr],
-        description: `Checking position ${i}: arr[${i}] = ${arr[i]}, arr[${i + 1}] = ${arr[i + 1]}`,
+        description: `Checking position ${i}: arr[${i}] = ${arr[i]}, arr[${
+          i + 1
+        }] = ${arr[i + 1]}`,
         comparing: [i, i + 1],
         pivot: -1,
         phase: "finding-pivot",
@@ -38,7 +40,9 @@ export const nextPermutation = {
         pivot = i;
         steps.push({
           array: [...arr],
-          description: `Found pivot at index ${pivot}: arr[${pivot}] = ${arr[pivot]} < arr[${pivot + 1}] = ${arr[pivot + 1]}`,
+          description: `Found pivot at index ${pivot}: arr[${pivot}] = ${
+            arr[pivot]
+          } < arr[${pivot + 1}] = ${arr[pivot + 1]}`,
           comparing: [pivot, pivot + 1],
           pivot,
           phase: "pivot-found",
@@ -52,7 +56,8 @@ export const nextPermutation = {
     if (pivot === -1) {
       steps.push({
         array: [...arr],
-        description: "No pivot found - array is in descending order (largest permutation)",
+        description:
+          "No pivot found - array is in descending order (largest permutation)",
         pivot: -1,
         phase: "no-pivot",
         codeLine: 4,
@@ -180,7 +185,8 @@ export const nextPermutation = {
     // Final step
     steps.push({
       array: [...arr],
-      description: "Complete! This is the next lexicographically greater permutation",
+      description:
+        "Complete! This is the next lexicographically greater permutation",
       phase: "completed",
       codeLine: 15,
     });
@@ -188,188 +194,168 @@ export const nextPermutation = {
     return steps;
   },
 
-  getCode: (language = "javascript") => {
-    const codes = {
-      javascript: `function nextPermutation(nums) {
-  // Find the largest index i such that nums[i] < nums[i + 1]
-  let pivot = -1;
-  for (let i = nums.length - 2; i >= 0; i--) {
-    if (nums[i] < nums[i + 1]) {
-      pivot = i;
-      break;
-    }
-  }
-  
-  // If no such index exists, reverse the entire array
-  if (pivot === -1) {
-    nums.reverse();
-    return;
-  }
-  
-  // Find the largest index j such that nums[j] > nums[pivot]
-  let successor = -1;
-  for (let j = nums.length - 1; j > pivot; j--) {
-    if (nums[j] > nums[pivot]) {
-      successor = j;
-      break;
-    }
-  }
-  
-  // Swap nums[pivot] and nums[successor]
-  [nums[pivot], nums[successor]] = [nums[successor], nums[pivot]];
-  
-  // Reverse the suffix starting at pivot + 1
-  let left = pivot + 1;
-  let right = nums.length - 1;
-  while (left < right) {
-    [nums[left], nums[right]] = [nums[right], nums[left]];
-    left++;
-    right--;
-  }
-}`,
+  getCodeLines: (language) => {
+    const lines = {
+      javascript: [
+        "function nextPermutation(nums) {", //1
+        "  const n = nums.length;", // 2
+        "  let ind = -1;", // 3
+        "  ", // 4
+        "  for (let i = n - 2; i >= 0; i--) {", // 5
+        "    if (nums[i] < nums[i + 1]) {", // 6
+        "      ind = i;", // 7
+        "      break;", // 8
+        "    }", // 9
+        "  }", // 10
+        "  ", // 11
+        "  if (ind === -1) {", // 12
+        "    nums.reverse();", // 13
+        "    return;", // 14
+        "  }", // 15
+        "  ", // 16
+        "  for (let i = n - 1; i > ind; i--) {", // 17
+        "    if (nums[i] > nums[ind]) {", // 18
+        "      [nums[ind], nums[i]] = [nums[i], nums[ind]];", // 19
+        "      break;", // 20
+        "    }", // 21
+        "  }", // 22
+        "  ", // 23
+        "  const left = nums.slice(0, ind + 1);", // 24
+        "  const right = nums.slice(ind + 1).reverse();", // 25
+        "  nums.splice(0, n, ...left, ...right);", // 26
+        "}", // 27
+      ],
 
-      python: `def next_permutation(nums):
-    # Find the largest index i such that nums[i] < nums[i + 1]
-    pivot = -1
-    for i in range(len(nums) - 2, -1, -1):
-        if nums[i] < nums[i + 1]:
-            pivot = i
-            break
-    
-    # If no such index exists, reverse the entire array
-    if pivot == -1:
-        nums.reverse()
-        return
-    
-    # Find the largest index j such that nums[j] > nums[pivot]
-    successor = -1
-    for j in range(len(nums) - 1, pivot, -1):
-        if nums[j] > nums[pivot]:
-            successor = j
-            break
-    
-    # Swap nums[pivot] and nums[successor]
-    nums[pivot], nums[successor] = nums[successor], nums[pivot]
-    
-    # Reverse the suffix starting at pivot + 1
-    left = pivot + 1
-    right = len(nums) - 1
-    while left < right:
-        nums[left], nums[right] = nums[right], nums[left]
-        left += 1
-        right -= 1`,
+      python: [
+        "def next_permutation(nums):", // 1
+        "    n = len(nums)", // 2
+        "    ind = -1", // 3
+        "    ", // 4
+        "    for i in range(n - 2, -1, -1):", // 5
+        "        if nums[i] < nums[i + 1]:", // 6
+        "            ind = i", // 7
+        "            break", // 8
+        "    ", // 9
+        "", // 10
+        "  ", // 11
+        "    if ind == -1:", // 12
+        "        nums.reverse()", // 13
+        "        return", // 14
+        "    ", // 15
+        "  ", // 16
+        "    for i in range(n - 1, ind, -1):", // 17
+        "        if nums[i] > nums[ind]:", // 18
+        "            nums[ind], nums[i] = nums[i], nums[ind]", // 19
+        "            break", // 20
+        "    ", // 21
+        "    ", // 22
+        "    ", // 23
+        "    nums[ind + 1:] = reversed(nums[ind + 1:])",
+      ],
 
-      java: `public void nextPermutation(int[] nums) {
-    // Find the largest index i such that nums[i] < nums[i + 1]
-    int pivot = -1;
-    for (int i = nums.length - 2; i >= 0; i--) {
-        if (nums[i] < nums[i + 1]) {
-            pivot = i;
-            break;
-        }
-    }
-    
-    // If no such index exists, reverse the entire array
-    if (pivot == -1) {
-        reverse(nums, 0, nums.length - 1);
-        return;
-    }
-    
-    // Find the largest index j such that nums[j] > nums[pivot]
-    int successor = -1;
-    for (int j = nums.length - 1; j > pivot; j--) {
-        if (nums[j] > nums[pivot]) {
-            successor = j;
-            break;
-        }
-    }
-    
-    // Swap nums[pivot] and nums[successor]
-    swap(nums, pivot, successor);
-    
-    // Reverse the suffix starting at pivot + 1
-    reverse(nums, pivot + 1, nums.length - 1);
-}
+      java: [
+        "public static void nextPermutation(int[] nums) {",
+        "    int n = nums.length;",
+        "    int ind = -1;",
+        "    ",
+        "    for (int i = n - 2; i >= 0; i--) {",
+        "        if (nums[i] < nums[i + 1]) {",
+        "            ind = i;",
+        "            break;",
+        "        }",
+        "    }",
+        "    ",
+        "    if (ind == -1) {",
+        "        reverse(nums, 0, n - 1);",
+        "        return;",
+        "    }",
+        "    ",
+        "    for (int i = n - 1; i > ind; i--) {",
+        "        if (nums[i] > nums[ind]) {",
+        "            swap(nums, ind, i);",
+        "            break;",
+        "        }",
+        "    }",
+        "    ",
+        "    reverse(nums, ind + 1, n - 1);",
+        "}",
+        "",
+        "private static void swap(int[] arr, int i, int j) {",
+        "    int temp = arr[i];",
+        "    arr[i] = arr[j];",
+        "    arr[j] = temp;",
+        "}",
+        "",
+        "private static void reverse(int[] arr, int start, int end) {",
+        "    while (start < end) {",
+        "        swap(arr, start++, end--);",
+        "    }",
+        "}",
+      ],
 
-private void swap(int[] nums, int i, int j) {
-    int temp = nums[i];
-    nums[i] = nums[j];
-    nums[j] = temp;
-}
+      csharp: [
+        "public static void NextPermutation(int[] nums) {",
+        "    int n = nums.Length;",
+        "    int ind = -1;",
+        "    ",
+        "    for (int i = n - 2; i >= 0; i--) {",
+        "        if (nums[i] < nums[i + 1]) {",
+        "            ind = i;",
+        "            break;",
+        "        }",
+        "    }",
+        "    ",
+        "    if (ind == -1) {",
+        "        Array.Reverse(nums);",
+        "        return;",
+        "    }",
+        "    ",
+        "    for (int i = n - 1; i > ind; i--) {",
+        "        if (nums[i] > nums[ind]) {",
+        "            int temp = nums[ind];",
+        "            nums[ind] = nums[i];",
+        "            nums[i] = temp;",
+        "            break;",
+        "        }",
+        "    }",
+        "    ",
+        "    Array.Reverse(nums, ind + 1, n - ind - 1);",
+        "}",
+      ],
 
-private void reverse(int[] nums, int left, int right) {
-    while (left < right) {
-        swap(nums, left, right);
-        left++;
-        right--;
-    }
-}`,
-
-      cpp: `void nextPermutation(vector<int>& nums) {
-    // Find the largest index i such that nums[i] < nums[i + 1]
-    int pivot = -1;
-    for (int i = nums.size() - 2; i >= 0; i--) {
-        if (nums[i] < nums[i + 1]) {
-            pivot = i;
-            break;
-        }
-    }
-    
-    // If no such index exists, reverse the entire array
-    if (pivot == -1) {
-        reverse(nums.begin(), nums.end());
-        return;
-    }
-    
-    // Find the largest index j such that nums[j] > nums[pivot]
-    int successor = -1;
-    for (int j = nums.size() - 1; j > pivot; j--) {
-        if (nums[j] > nums[pivot]) {
-            successor = j;
-            break;
-        }
-    }
-    
-    // Swap nums[pivot] and nums[successor]
-    swap(nums[pivot], nums[successor]);
-    
-    // Reverse the suffix starting at pivot + 1
-    reverse(nums.begin() + pivot + 1, nums.end());
-}`,
-
-      "c#": `public void NextPermutation(int[] nums) {
-    // Find the largest index i such that nums[i] < nums[i + 1]
-    int pivot = -1;
-    for (int i = nums.Length - 2; i >= 0; i--) {
-        if (nums[i] < nums[i + 1]) {
-            pivot = i;
-            break;
-        }
-    }
-    
-    // If no such index exists, reverse the entire array
-    if (pivot == -1) {
-        Array.Reverse(nums);
-        return;
-    }
-    
-    // Find the largest index j such that nums[j] > nums[pivot]
-    int successor = -1;
-    for (int j = nums.Length - 1; j > pivot; j--) {
-        if (nums[j] > nums[pivot]) {
-            successor = j;
-            break;
-        }
-    }
-    
-    // Swap nums[pivot] and nums[successor]
-    (nums[pivot], nums[successor]) = (nums[successor], nums[pivot]);
-    
-    // Reverse the suffix starting at pivot + 1
-    Array.Reverse(nums, pivot + 1, nums.Length - pivot - 1);
-}`,
+      cpp: [
+        "void nextPermutation(vector<int>& nums) {",
+        "    int n = nums.size();",
+        "    int ind = -1;",
+        "    ",
+        "    for (int i = n - 2; i >= 0; i--) {",
+        "        if (nums[i] < nums[i + 1]) {",
+        "            ind = i;",
+        "            break;",
+        "        }",
+        "    }",
+        "    ",
+        "    if (ind == -1) {",
+        "        reverse(nums.begin(), nums.end());",
+        "        return;",
+        "    }",
+        "    ",
+        "    for (int i = n - 1; i > ind; i--) {",
+        "        if (nums[i] > nums[ind]) {",
+        "            swap(nums[ind], nums[i]);",
+        "            break;",
+        "        }",
+        "    }",
+        "    ",
+        "    reverse(nums.begin() + ind + 1, nums.end());",
+        "}",
+      ],
     };
+    return lines[language] || lines.javascript;
+  },
 
-    return codes[language] || codes.javascript;
+  getCode: (language) => {
+    return this.getCodeLines(language).join("\n");
   },
 };
+export default nextPermutation;

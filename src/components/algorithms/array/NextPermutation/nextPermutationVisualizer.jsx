@@ -1,5 +1,5 @@
 import React from "react";
-import { VariableCard } from "@/components/algorithm-visualizer-details/algorithm-visualizer-components/VariableCard";
+import VariableCard from "@/components/algorithm-visualizer-details/algorithm-visualizer-components/VariableCard";
 
 export const NextPermutationVisualizer = ({ step }) => {
   if (!step) return null;

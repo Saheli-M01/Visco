@@ -23,6 +23,11 @@ Run the dev server:
 npm run dev
 ```
 
+Open the C++ runner page during development:
+
+- Route: http://localhost:8080/compiler/cpp
+- Try the default example: enter `10` as stdin, click Run → expect `55`.
+
 Build production assets:
 
 ```powershell
@@ -189,6 +194,12 @@ This project is built with:
 ## How can I deploy this project?
 
 Simply open [Lovable](https://lovable.dev/projects/d73a947a-69a9-4f10-a5a3-43fc3455de87) and click on Share -> Publish.
+
+### Notes for API routes on Vercel
+
+- This repo includes a serverless function at `api/run-code.js` that proxies requests to the Piston API for C++ execution.
+- `vercel.json` has a rewrite to preserve `/api/*` routes. Ensure this file is deployed.
+- If you test locally, prefer using `vercel dev` so `/api` works in dev. Alternatively, the frontend has a dev-time fallback that attempts to call Piston directly (may be blocked by CORS depending on environment).
 
 ## Can I connect a custom domain to my Lovable project?
 

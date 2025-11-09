@@ -9,6 +9,14 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    // Optional: during local dev, you can proxy API calls to a remote endpoint
+    // or run `vercel dev` which serves serverless functions locally.
+    // proxy: {
+    //   "/api": {
+    //     target: "http://localhost:3000",
+    //     changeOrigin: true,
+    //   },
+    // },
   },
   plugins: [
     react(),

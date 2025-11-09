@@ -318,6 +318,13 @@ export const Navigation = () => {
             >
               Get Started
             </a>
+            {/* Link to the C++ compiler page */}
+            <button
+              onClick={() => { closeMenu(); navigate('/compiler/cpp'); }}
+              className="hidden md:inline-flex items-center rounded-xl bg-gray-900 text-white px-4 py-2 text-sm font-semibold shadow-md hover:bg-black/90 transition-all"
+            >
+              Test your code
+            </button>
             <button
               className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-md backdrop-blur-sm bg-white/20 border border-white/30 hover:bg-white/30 transition-all"
               aria-label="Toggle menu"
@@ -423,6 +430,13 @@ export const Navigation = () => {
             >
               Get Started
             </a>
+            {/* Mobile link to compiler */}
+            <button
+              onClick={() => { closeMenu(); navigate('/compiler/cpp'); }}
+              className="mt-2 inline-flex items-center rounded-xl bg-gray-900 text-white px-4 py-2 text-sm font-semibold shadow-md hover:bg-black/90"
+            >
+              Test your code
+            </button>
           </div>
         </div>
       )}

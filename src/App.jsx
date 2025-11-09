@@ -11,6 +11,7 @@ import GraphPage from "./components/TopicPages/GraphPage";
 import TreePage from "./components/TopicPages/TreePage";
 import LinkedListPage from "./components/TopicPages/LinkedListPage";
 import SearchPage from "./components/TopicPages/SearchPage";
+import CppRunner from "./components/code-runner/CppRunner";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ function App() {
             <Route path="/graph" element={<GraphPage />} />
             <Route path="/tree" element={<TreePage />} />
             <Route path="/linked-list" element={<LinkedListPage />} />
+            <Route path="/compiler/cpp" element={<CppRunner />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -113,7 +113,10 @@ const ArrayDisplay = ({
 
           {algoKey.includes("nextpermutation") && (
             <NextPermutationVisualizer
-              step={currentStep}
+              currentArray={currentArray}
+              sortingSteps={sortingSteps}
+              currentStepIndex={currentStepIndex}
+              currentStep={currentStep}
             />
           )}
 

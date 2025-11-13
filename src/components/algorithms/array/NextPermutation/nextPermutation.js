@@ -7,193 +7,402 @@ export const nextPermutation = {
     const steps = [];
     const snapshot = [...arr];
 
-    // Step 1: Function entry
+    // Line 0: Function entry
     steps.push({
       array: [...snapshot],
-      description: "Start: Find the next lexicographically greater permutation",
+      description: "Function called with array",
       phase: "start",
       codeLine: 0,
     });
 
-    // Step 2: Find pivot (rightmost ascending pair)
+    // Line 1: Declare n variable
     steps.push({
       array: [...snapshot],
-      description: "Step 1: Find the largest index i where arr[i] < arr[i + 1]",
-      phase: "find-pivot-start",
+      description: `Set n = ${arr.length} (array length)`,
+      phase: "n-in",
       codeLine: 1,
+    });
+
+    // Line 2: Initialize ind = -1
+    steps.push({
+      array: [...snapshot],
+      description: "Initialize pivot index ind = -1",
+      pivot: -1,
+      phase: "initialization",
+      codeLine: 2,
+    });
+
+    // Line 4: Start for loop to find pivot
+    steps.push({
+      array: [...snapshot],
+      description: "Start loop: searching for pivot from right to left",
+      pivot: -1,
+      i: arr.length - 2,
+      phase: "find-pivot-start",
+      codeLine: 4,
     });
 
     let pivot = -1;
     for (let i = arr.length - 2; i >= 0; i--) {
+      // Line 5: Check condition
       steps.push({
         array: [...arr],
-        description: `Checking position ${i}: arr[${i}] = ${arr[i]}, arr[${
-          i + 1
-        }] = ${arr[i + 1]}`,
+        description: `Check if arr[${i}] (${arr[i]}) < arr[${i + 1}] (${arr[i + 1]})`,
         comparing: [i, i + 1],
-        pivot: -1,
+        pivot: pivot,
+        i: i,
         phase: "finding-pivot",
-        codeLine: 2,
-      });
-
-      if (arr[i] < arr[i + 1]) {
-        pivot = i;
-        steps.push({
-          array: [...arr],
-          description: `Found pivot at index ${pivot}: arr[${pivot}] = ${
-            arr[pivot]
-          } < arr[${pivot + 1}] = ${arr[pivot + 1]}`,
-          comparing: [pivot, pivot + 1],
-          pivot,
-          phase: "pivot-found",
-          codeLine: 3,
-        });
-        break;
-      }
-    }
-
-    // If no pivot found, array is in descending order (largest permutation)
-    if (pivot === -1) {
-      steps.push({
-        array: [...arr],
-        description:
-          "No pivot found - array is in descending order (largest permutation)",
-        pivot: -1,
-        phase: "no-pivot",
-        codeLine: 4,
-      });
-
-      // Reverse entire array to get smallest permutation
-      arr.reverse();
-      steps.push({
-        array: [...arr],
-        description: "Reverse entire array to get the smallest permutation",
-        phase: "reverse-all",
         codeLine: 5,
       });
 
+      if (arr[i] < arr[i + 1]) {
+        // Line 6: Set ind = i
+        pivot = i;
+        steps.push({
+          array: [...arr],
+          description: `Found! Set ind = ${pivot}`,
+          comparing: [],
+          pivot,
+          i: i,
+          phase: "pivot-found",
+          codeLine: 6,
+        });
+        
+        // Line 7: Break from loop
+        steps.push({
+          array: [...arr],
+          description: `Break from loop (pivot found at index ${pivot})`,
+          pivot,
+          i: i,
+          phase: "pivot-break",
+          codeLine: 7,
+        });
+        break;
+      }
+       steps.push({
+      array: [...snapshot],
+      description: "i decrement",
+      pivot,
+      i: i - 1,
+      phase: "i-decrement",
+      codeLine: 4,
+    });
+    }
+
+    // Line 11: Check if ind === -1
+    steps.push({
+      array: [...arr],
+      description: pivot === -1 ? "Check: ind === -1? YES - no pivot found" : "Check: ind === -1? NO - pivot exists",
+      pivot,
+      phase: "check-no-pivot",
+      codeLine: 11,
+    });
+
+    if (pivot === -1) {
+      // Line 12: Reverse array
       steps.push({
         array: [...arr],
-        description: "Complete! This is the smallest (first) permutation",
+        description: "No pivot found - array is in descending order (largest permutation)",
+        pivot: -1,
+        phase: "no-pivot",
+        codeLine: 12,
+      });
+
+      arr.reverse();
+      
+      steps.push({
+        array: [...arr],
+        description: "Reversed entire array to get smallest permutation",
+        pivot: -1,
+        phase: "reversed-all",
+        codeLine: 12,
+      });
+
+      // Line 13: Return
+      steps.push({
+        array: [...arr],
+        description: "Return - Complete! This is the smallest permutation",
         phase: "completed",
-        codeLine: 6,
+        codeLine: 13,
       });
 
       return steps;
     }
 
-    // Step 3: Find successor (rightmost element greater than pivot)
+    // Line 16: Start loop to find successor
     steps.push({
       array: [...arr],
-      description: "Step 2: Find the largest index j where arr[j] > arr[pivot]",
+      description: `Start loop: searching for successor from right, starting at index ${arr.length - 1}`,
       pivot,
+      i: arr.length - 1,
       phase: "find-successor-start",
-      codeLine: 7,
+      codeLine: 16,
     });
 
     let successor = -1;
     for (let j = arr.length - 1; j > pivot; j--) {
+      // Line 17: Check condition
       steps.push({
         array: [...arr],
-        description: `Checking position ${j}: arr[${j}] = ${arr[j]} vs arr[pivot(${pivot})] = ${arr[pivot]}`,
+        description: `Check if arr[${j}] (${arr[j]}) > arr[${pivot}] (${arr[pivot]})`,
         comparing: [pivot, j],
-        pivot,
-        successor: -1,
+      
+        i: j,
         phase: "finding-successor",
-        codeLine: 8,
+        codeLine: 17,
       });
 
       if (arr[j] > arr[pivot]) {
         successor = j;
-        steps.push({
-          array: [...arr],
-          description: `Found successor at index ${successor}: arr[${successor}] = ${arr[successor]} > arr[${pivot}] = ${arr[pivot]}`,
-          comparing: [pivot, successor],
-          pivot,
-          successor,
-          phase: "successor-found",
-          codeLine: 9,
-        });
+
+        // We will branch the visualization by language to match code lines
+        const isJavaLike = (language === "java" || language === "csharp");
+        const tempValue = arr[j]; // value at nums[i]
+        const pivotValueBefore = arr[pivot]; // save before any assignment
+
+        if (isJavaLike) {
+          // Line 18: highlight temp creation: int temp = nums[i];
+          steps.push({
+            array: [...arr],
+            description: `Create temp = arr[${j}] (${tempValue})`,
+            comparing: [pivot, j],
+            pivot,
+            i: j,
+            temp: { value: tempValue, index: j },
+            phase: "before-swap",
+            codeLine: 18,
+          });
+
+          // Line 19: nums[i] = nums[ind]; (assign successor position from pivot)
+          arr[j] = pivotValueBefore;
+          steps.push({
+            array: [...arr],
+            description: `nums[${j}] = nums[${pivot}] → arr[${j}] = ${pivotValueBefore}`,
+            swapped: [pivot, j],
+            pivot,
+            i: j,
+            temp: { value: tempValue, index: j },
+            phase: "swap-assign-1",
+            codeLine: 19,
+          });
+
+          // Line 20: nums[ind] = temp; (complete swap)
+          arr[pivot] = tempValue;
+          steps.push({
+            array: [...arr],
+            description: `nums[${pivot}] = temp → arr[${pivot}] = ${tempValue}`,
+            swapped: [pivot, j],
+            pivot,
+            i: j,
+            temp: { value: tempValue, index: j },
+            phase: "swap-assign-2",
+            codeLine: 20,
+          });
+
+          // Line 21: break;
+          steps.push({
+            array: [...arr],
+            description: "Break from loop (found and swapped)",
+            pivot,
+            i: j,
+            phase: "successor-break",
+            codeLine: 21,
+          });
+        } else {
+          // Other languages: single swap line
+          steps.push({
+            array: [...arr],
+            description: `Found at index ${j}! Now swap arr[${pivot}] and arr[${j}]`,
+            comparing: [pivot, j],
+            pivot,
+            i: j,
+            phase: "before-swap",
+            codeLine: 18,
+          });
+
+          [arr[pivot], arr[successor]] = [arr[successor], arr[pivot]];
+
+          steps.push({
+            array: [...arr],
+            description: `Swapped: arr[${pivot}] = ${arr[pivot]}, arr[${j}] = ${arr[j]}`,
+            swapped: [pivot, j],
+            pivot,
+            i: j,
+            phase: "after-swap",
+            codeLine: 19,
+          });
+
+          steps.push({
+            array: [...arr],
+            description: "Break from loop (found and swapped)",
+            pivot,
+            i: j,
+            phase: "successor-break",
+            codeLine: 20,
+          });
+        }
         break;
       }
     }
 
-    // Step 4: Swap pivot and successor
-    steps.push({
-      array: [...arr],
-      description: `Step 3: Swap arr[${pivot}] and arr[${successor}]`,
-      comparing: [pivot, successor],
-      pivot,
-      successor,
-      phase: "before-swap",
-      codeLine: 10,
-    });
-
-    [arr[pivot], arr[successor]] = [arr[successor], arr[pivot]];
-
-    steps.push({
-      array: [...arr],
-      description: `Swapped: arr[${pivot}] = ${arr[pivot]}, arr[${successor}] = ${arr[successor]}`,
-      swapped: [pivot, successor],
-      pivot,
-      successor,
-      phase: "after-swap",
-      codeLine: 11,
-    });
-
-    // Step 5: Reverse suffix after pivot
+    // Reverse suffix (language-specific visualization)
     const reverseStart = pivot + 1;
-    steps.push({
-      array: [...arr],
-      description: `Step 4: Reverse the suffix starting from index ${reverseStart}`,
-      reverseRange: [reverseStart, arr.length - 1],
-      pivot,
-      phase: "reverse-start",
-      codeLine: 12,
-    });
-
     let left = reverseStart;
     let right = arr.length - 1;
 
-    while (left < right) {
+    const isJavaLikeReverse = (language === "java" || language === "csharp");
+
+    if (isJavaLikeReverse) {
+      // Line 26: initialize left/right
       steps.push({
         array: [...arr],
-        description: `Reversing: swap arr[${left}] and arr[${right}]`,
-        comparing: [left, right],
+        description: `Initialize left = ind + 1 (${reverseStart}), right = n - 1 (${arr.length - 1})`,
         reverseRange: [reverseStart, arr.length - 1],
         pivot,
-        phase: "reversing",
-        codeLine: 13,
+        left,
+        right,
+        phase: "reverse-init",
+        codeLine: 25,
       });
 
-      [arr[left], arr[right]] = [arr[right], arr[left]];
+      // While loop with detailed steps 27-32
+      while (left < right) {
+        // Line 27: while condition check
+        steps.push({
+          array: [...arr],
+          description: `Check while(left < right): ${left} < ${right} → true`,
+          reverseRange: [reverseStart, arr.length - 1],
+          pivot,
+          left,
+          right,
+          phase: "reverse-check",
+          codeLine: 26,
+        });
 
+        // Line 28: temp = nums[left]
+        const tempValue = arr[left];
+        steps.push({
+          array: [...arr],
+          description: `int temp = arr[${left}] (${tempValue})`,
+          reverseRange: [reverseStart, arr.length - 1],
+          pivot,
+          left,
+          right,
+          temp: { value: tempValue, index: left },
+          phase: "reverse-temp",
+          codeLine: 27,
+        });
+
+        // Line 29: nums[left] = nums[right]
+        const rightValBefore = arr[right];
+        arr[left] = rightValBefore;
+        steps.push({
+          array: [...arr],
+          description: `arr[${left}] = arr[${right}] (${rightValBefore})`,
+          swapped: [left, right],
+          reverseRange: [reverseStart, arr.length - 1],
+          pivot,
+          left,
+          right,
+          temp: { value: tempValue, index: left },
+          phase: "reverse-assign-left",
+          codeLine: 28,
+        });
+
+        // Line 30: nums[right] = temp
+        arr[right] = tempValue;
+        steps.push({
+          array: [...arr],
+          description: `arr[${right}] = temp (${tempValue})`,
+          swapped: [left, right],
+          reverseRange: [reverseStart, arr.length - 1],
+          pivot,
+          left,
+          right,
+          temp: { value: tempValue, index: left },
+          phase: "reverse-assign-right",
+          codeLine: 29,
+        });
+
+        // Line 31: left++
+        left++;
+        steps.push({
+          array: [...arr],
+          description: `left++ → ${left}`,
+          reverseRange: [reverseStart, arr.length - 1],
+          pivot,
+          left,
+          right,
+          phase: "reverse-left-inc",
+          codeLine: 30,
+        });
+
+        // Line 32: right--
+        right--;
+        steps.push({
+          array: [...arr],
+          description: `right-- → ${right}`,
+          reverseRange: [reverseStart, arr.length - 1],
+          pivot,
+          left,
+          right,
+          phase: "reverse-right-dec",
+          codeLine: 31,
+        });
+      }
+    } else {
+      // Generic visualization for other languages
       steps.push({
         array: [...arr],
-        description: `Swapped: arr[${left}] = ${arr[left]}, arr[${right}] = ${arr[right]}`,
-        swapped: [left, right],
+        description: `Reverse the suffix starting from index ${reverseStart} to end of array`,
         reverseRange: [reverseStart, arr.length - 1],
         pivot,
-        phase: "reversed-pair",
-        codeLine: 14,
+        phase: "reverse-start",
+        codeLine: 23,
       });
 
-      left++;
-      right--;
+      while (left < right) {
+        steps.push({
+          array: [...arr],
+          description: `Reversing suffix: swap arr[${left}] (${arr[left]}) with arr[${right}] (${arr[right]})`,
+          comparing: [left, right],
+          reverseRange: [reverseStart, arr.length - 1],
+          pivot,
+          left,
+          right,
+          phase: "reversing",
+          codeLine: 23,
+        });
+
+        [arr[left], arr[right]] = [arr[right], arr[left]];
+
+        steps.push({
+          array: [...arr],
+          description: `Swapped: arr[${left}] = ${arr[left]}, arr[${right}] = ${arr[right]}`,
+          swapped: [left, right],
+          reverseRange: [reverseStart, arr.length - 1],
+          pivot,
+          left,
+          right,
+          phase: "reversed-pair",
+          codeLine: 23,
+        });
+
+        left++;
+        right--;
+      }
     }
 
-    // Final step
+    // Line 24: Return
     steps.push({
       array: [...arr],
-      description:
-        "Complete! This is the next lexicographically greater permutation",
+      description: "Return - Complete! This is the next lexicographically greater permutation",
       phase: "completed",
-      codeLine: 15,
+      codeLine: 33,
     });
 
     return steps;
   },
-
   getCodeLines: (language) => {
     const lines = {
       javascript: [
@@ -220,10 +429,10 @@ export const nextPermutation = {
         "    }", // 21
         "  }", // 22
         "  ", // 23
-        "  const left = nums.slice(0, ind + 1);", // 24
-        "  const right = nums.slice(ind + 1).reverse();", // 25
-        "  nums.splice(0, n, ...left, ...right);", // 26
-        "}", // 27
+        "  nums.splice(ind + 1, n - ind - 1, ...nums.slice(ind + 1).reverse());", // 24
+        "  return", //25
+        "", // 26
+       
       ],
 
       python: [
@@ -250,105 +459,113 @@ export const nextPermutation = {
         "    ", // 21
         "    ", // 22
         "    ", // 23
-        "    nums[ind + 1:] = reversed(nums[ind + 1:])",
+        "    nums[ind + 1:] = reversed(nums[ind + 1:])", // 24
+        "", // 25
       ],
 
       java: [
-        "public static void nextPermutation(int[] nums) {",
-        "    int n = nums.length;",
-        "    int ind = -1;",
-        "    ",
-        "    for (int i = n - 2; i >= 0; i--) {",
-        "        if (nums[i] < nums[i + 1]) {",
-        "            ind = i;",
-        "            break;",
-        "        }",
-        "    }",
-        "    ",
-        "    if (ind == -1) {",
-        "        reverse(nums, 0, n - 1);",
-        "        return;",
-        "    }",
-        "    ",
-        "    for (int i = n - 1; i > ind; i--) {",
-        "        if (nums[i] > nums[ind]) {",
-        "            swap(nums, ind, i);",
-        "            break;",
-        "        }",
-        "    }",
-        "    ",
-        "    reverse(nums, ind + 1, n - 1);",
-        "}",
-        "",
-        "private static void swap(int[] arr, int i, int j) {",
-        "    int temp = arr[i];",
-        "    arr[i] = arr[j];",
-        "    arr[j] = temp;",
-        "}",
-        "",
-        "private static void reverse(int[] arr, int start, int end) {",
-        "    while (start < end) {",
-        "        swap(arr, start++, end--);",
-        "    }",
-        "}",
+        "public static void nextPermutation(int[] nums) {", // 1
+        "    int n = nums.length;", // 2
+        "    int ind = -1;", // 3
+        "    ", // 4
+        "    for (int i = n - 2; i >= 0; i--) {", // 5
+        "        if (nums[i] < nums[i + 1]) {", // 6
+        "            ind = i;", // 7
+        "            break;", // 8
+        "        }", // 9
+        "    }", // 10
+        "    ",// 11
+        "    if (ind == -1) {", // 12
+        "        reverse(nums, 0, n - 1);", // 13
+        "        return;", // 14
+        "    }", // 15
+        "    ", // 16
+        "    for (int i = n - 1; i > ind; i--) {", // 17
+        "        if (nums[i] > nums[ind]) {", // 18
+        "           int temp = nums[i];", //19
+        "           nums[i] = nums[ind];", // 20
+        "           nums[ind] = temp;", // 21
+        "           break;", // 22
+        "        }", // 23
+        "    }", // 24
+        "    ", // 25
+        "    int left = ind + 1, right = n - 1;", // 26
+        "    while(left < right) {", // 27
+        "        int temp = nums[left];", // 28
+        "        nums[left] = nums[right];", // 29
+        "        nums[right] = temp;", // 30
+        "        left++;", // 31
+        "        right--;", // 32
+        "    }", // 33
+        "    return", // 34
+        "}", // 35
       ],
 
       csharp: [
-        "public static void NextPermutation(int[] nums) {",
-        "    int n = nums.Length;",
-        "    int ind = -1;",
-        "    ",
-        "    for (int i = n - 2; i >= 0; i--) {",
-        "        if (nums[i] < nums[i + 1]) {",
-        "            ind = i;",
-        "            break;",
-        "        }",
-        "    }",
-        "    ",
-        "    if (ind == -1) {",
-        "        Array.Reverse(nums);",
-        "        return;",
-        "    }",
-        "    ",
-        "    for (int i = n - 1; i > ind; i--) {",
-        "        if (nums[i] > nums[ind]) {",
-        "            int temp = nums[ind];",
-        "            nums[ind] = nums[i];",
-        "            nums[i] = temp;",
-        "            break;",
-        "        }",
-        "    }",
-        "    ",
-        "    Array.Reverse(nums, ind + 1, n - ind - 1);",
-        "}",
+         "void nextPermutation(vector<int>& nums) {", // 1
+        "    int n = nums.size();", // 2
+        "    int ind = -1;", // 3
+        "    ", // 4
+        "    for (int i = n - 2; i >= 0; i--) {", // 5
+        "        if (nums[i] < nums[i + 1]) {", // 6
+        "            ind = i;", // 7
+        "            break;", // 8
+        "        }",// 9
+        "    }", // 10
+        "    ", // 11
+        "    if (ind == -1) {", // 12
+        "        reverse(nums.begin(), nums.end());", // 13
+        "        return;", // 14
+        "    }", // 15
+        "    ", // 16
+        "    for (int i = n - 1; i > ind; i--) {", // 17
+        "        if (nums[i] > nums[ind]) {", // 18
+        "           int temp = nums[i];", //19
+        "           nums[i] = nums[ind];", // 20
+        "           nums[ind] = temp;", // 21
+        "           break;", // 22
+        "        }", // 23
+        "    }", // 24
+        "    ", // 25
+        "    int left = ind + 1, right = n - 1;", // 26
+        "    while(left < right) {", // 27
+        "        int temp = nums[left];", // 28
+        "        nums[left] = nums[right];", // 29
+        "        nums[right] = temp;", // 30
+        "        left++;", // 31
+        "        right--;", // 32
+        "    }", // 33
+        "    return", // 34
+        "}", // 35
       ],
 
       cpp: [
-        "void nextPermutation(vector<int>& nums) {",
-        "    int n = nums.size();",
-        "    int ind = -1;",
-        "    ",
-        "    for (int i = n - 2; i >= 0; i--) {",
-        "        if (nums[i] < nums[i + 1]) {",
-        "            ind = i;",
-        "            break;",
-        "        }",
-        "    }",
-        "    ",
-        "    if (ind == -1) {",
-        "        reverse(nums.begin(), nums.end());",
-        "        return;",
-        "    }",
-        "    ",
-        "    for (int i = n - 1; i > ind; i--) {",
-        "        if (nums[i] > nums[ind]) {",
-        "            swap(nums[ind], nums[i]);",
-        "            break;",
-        "        }",
-        "    }",
-        "    ",
-        "    reverse(nums.begin() + ind + 1, nums.end());",
-        "}",
+        "void nextPermutation(vector<int>& nums) {", // 1
+        "    int n = nums.size();", // 2
+        "    int ind = -1;", // 3
+        "    ", // 4
+        "    for (int i = n - 2; i >= 0; i--) {", // 5
+        "        if (nums[i] < nums[i + 1]) {", // 6
+        "            ind = i;", // 7
+        "            break;", // 8
+        "        }",// 9
+        "    }", // 10
+        "    ", // 11
+        "    if (ind == -1) {", // 12
+        "        reverse(nums.begin(), nums.end());", // 13
+        "        return;", // 14
+        "    }", // 15
+        "    ", // 16
+        "    for (int i = n - 1; i > ind; i--) {", // 17
+        "        if (nums[i] > nums[ind]) {", // 18
+        "            swap(nums[ind], nums[i]);", //19
+        "            break;", // 20
+        "        }", // 21
+        "    }", // 22
+        "    ", // 23
+        "    reverse(nums.begin() + ind + 1, nums.end());", // 24
+        "    return", // 25
+        "}", // 26
       ],
     };
     return lines[language] || lines.javascript;

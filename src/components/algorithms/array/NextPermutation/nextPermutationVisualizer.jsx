@@ -1,54 +1,122 @@
 import React from "react";
 import VariableCard from "@/components/algorithm-visualizer-details/algorithm-visualizer-components/VariableCard";
+import { findPersistedValue } from "@/components/algorithm-visualizer-details/algorithm-visualizer-components/stepHelpers";
 
-export const NextPermutationVisualizer = ({ step }) => {
-  if (!step) return null;
+export const NextPermutationVisualizer = ({ 
+  currentArray = [],
+  sortingSteps = [],
+  currentStepIndex = 0,
+  currentStep = {}
+}) => {
+  const step = currentStep || sortingSteps[currentStepIndex] || {};
 
-  const pivot = step.pivot;
-  const successor = step.successor;
-  const reverseRange = step.reverseRange;
+  // ind (pivot index) - tracks the pivot position, starts from initialization and persists until completed
+  let indObj = null;
+  // Hide only in start and completed phases
+  if (step.phase !== "start" && step.phase !== "completed") {
+    if (typeof step.pivot === "number") {
+      indObj = { value: step.pivot };
+    }
+    // Start showing from initialization phase with value -1
+    if (!indObj && (step.phase === "initialization" || step.phase === "find-pivot-start")) {
+      indObj = { value: -1 };
+    }
+    if (!indObj) {
+      const persisted = findPersistedValue(sortingSteps, currentStepIndex, ["pivot"]);
+      if (persisted !== null && persisted !== undefined) {
+        indObj = { value: persisted };
+      }
+    }
+  }
+
+  // n (array length) - show during algorithm except start & completed phases
+  let nObj = null;
+  if (step.phase !== "start" && step.phase !== "completed") {
+    nObj = { value: currentArray?.length || step.array?.length || 0 };
+  }
+
+  // i - loop variable for finding pivot
+  let iObj = null;
+  if (typeof step.i === "number" && step.phase !== "successor-break") {
+    iObj = { value: step.i };
+  }
+
+  // j - loop variable for finding successor (unused, kept for reference)
+  let jObj = null;
+  if (typeof step.j === "number") {
+    jObj = { value: step.j };
+  }
+
+  // left and right - for reversing suffix
+  let leftObj = null;
+  if (typeof step.left === "number") {
+    leftObj = { value: step.left };
+  }
+
+  let rightObj = null;
+  if (typeof step.right === "number") {
+    rightObj = { value: step.right };
+  }
+
+  // temp - temporary variable for swaps (Java/C# only)
+  let tempObj = null;
+  if (step.temp && typeof step.temp.value !== "undefined") {
+    tempObj = { value: step.temp.value, index: step.temp.index };
+  }
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {/* Pivot Variable */}
-        {typeof pivot === "number" && pivot >= -1 && (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-5">
+        {nObj && (
           <VariableCard
-            label="Pivot (i)"
-            value={pivot === -1 ? "Not found" : `Index ${pivot}${step.array[pivot] !== undefined ? ` (value: ${step.array[pivot]})` : ""}`}
-            description="Largest index where arr[i] < arr[i+1]"
+            label="n"
+            value={nObj.value}
+            bgColor="bg-purple-300"
           />
         )}
-
-        {/* Successor Variable */}
-        {typeof successor === "number" && successor >= 0 && (
+        
+        {indObj && (
           <VariableCard
-            label="Successor (j)"
-            value={`Index ${successor}${step.array[successor] !== undefined ? ` (value: ${step.array[successor]})` : ""}`}
-            description="Largest index where arr[j] > arr[pivot]"
+            label="ind"
+            value={indObj.value}
+            bgColor="bg-sky-300"
           />
         )}
-
-        {/* Reverse Range */}
-        {reverseRange && Array.isArray(reverseRange) && (
+        {iObj && (
           <VariableCard
-            label="Reverse Range"
-            value={`[${reverseRange[0]}, ${reverseRange[1]}]`}
-            description="Reversing suffix after pivot"
+            label="i"
+            value={iObj.value}
+            bgColor="bg-orange-300"
           />
         )}
-      </div>
-
-      {/* Algorithm Steps Info */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h4 className="font-semibold text-blue-900 mb-2">Algorithm Steps:</h4>
-        <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside">
-          <li>Find pivot: largest i where arr[i] &lt; arr[i+1]</li>
-          <li>If no pivot, reverse entire array (wrap to smallest)</li>
-          <li>Find successor: largest j where arr[j] &gt; arr[pivot]</li>
-          <li>Swap arr[pivot] and arr[successor]</li>
-          <li>Reverse suffix after pivot to get next permutation</li>
-        </ol>
+        {jObj && (
+          <VariableCard
+            label="j"
+            value={jObj.value}
+            bgColor="bg-pink-300"
+          />
+        )}
+        {leftObj && (
+          <VariableCard
+            label="left"
+            value={leftObj.value}
+            bgColor="bg-lime-300"
+          />
+        )}
+        {rightObj && (
+          <VariableCard
+            label="right"
+            value={rightObj.value}
+            bgColor="bg-pink-300"
+          />
+        )}
+        {tempObj && (
+          <VariableCard
+            label="temp"
+            value={tempObj.value}
+            bgColor="bg-yellow-300"
+          />
+        )}
       </div>
     </div>
   );

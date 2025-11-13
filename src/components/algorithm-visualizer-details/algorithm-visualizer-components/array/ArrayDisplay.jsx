@@ -3,6 +3,7 @@ import BinarySearchVisualizer from "../../../algorithms/array/BinarySearch/Binar
 import DutchFlagVisualizer from "../../../algorithms/array/Dutch/dutchFlagVisualizer";
 import KadanesVisualizer from "../../../algorithms/array/Kadanes/kadanesVisualizer";
 import { NextPermutationVisualizer } from "../../../algorithms/array/NextPermutation/nextPermutationVisualizer";
+import SlidingWindowVisualizer from "../../../algorithms/array/SlidingWindow/slidingWindowVisualizer";
 
 const ArrayElement = ({ value, index, styleClass }) => (
   <div key={`${index}-${value}`} className="flex flex-col items-center pt-2">
@@ -113,6 +114,15 @@ const ArrayDisplay = ({
 
           {algoKey.includes("nextpermutation") && (
             <NextPermutationVisualizer
+              currentArray={currentArray}
+              sortingSteps={sortingSteps}
+              currentStepIndex={currentStepIndex}
+              currentStep={currentStep}
+            />
+          )}
+
+          {(algoKey.includes("slidingwindow") || algoKey.includes("containerwithmostwater")) && (
+            <SlidingWindowVisualizer
               currentArray={currentArray}
               sortingSteps={sortingSteps}
               currentStepIndex={currentStepIndex}

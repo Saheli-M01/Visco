@@ -8,6 +8,7 @@ import {binarySearch} from "./array/BinarySearch/binarySearch.js";
 import { dutchFlag } from "./array/Dutch/dutchFlag.js";
 import {kadane} from "./array/Kadanes/kadanes";
 import { nextPermutation } from "./array/NextPermutation/nextPermutation.js";
+import { slidingWindow } from "./array/SlidingWindow/slidingWindow.js";
 
 // Algorithm factory to get the appropriate algorithm implementation
 export const getAlgorithm = (algorithmName) => {
@@ -44,6 +45,9 @@ export const getAlgorithm = (algorithmName) => {
     "next permutation": nextPermutation,
     "nextpermutation": nextPermutation,
     nextpermutation: nextPermutation,
+    "Sliding Window": slidingWindow,
+    "sliding window": slidingWindow,
+    slidingwindow: slidingWindow,
   };
 
   const normalizedName = algorithmName?.toLowerCase().replace(/\s+/g, "");

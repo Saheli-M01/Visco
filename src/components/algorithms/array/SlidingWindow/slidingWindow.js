@@ -15,19 +15,27 @@ export const slidingWindow = {
       codeLine: 0,
     });
 
-    // Line 1: Initialize variables
+    // Line 1: Initialize maxArea
     let maxArea = 0;
-    let left = 0;
-    let right = arr.length - 1;
-
     steps.push({
       array: snapshot,
-      description: `Initialize: maxArea = ${maxArea}, left = ${left}, right = ${right}`,
+      description: `Initialize maxArea = ${maxArea}`,
+      maxArea,
+      phase: "maxArea-init",
+      codeLine: 1,
+    });
+
+    // Line 1: Initialize left and right pointers
+    let left = 0;
+    let right = arr.length - 1;
+    steps.push({
+      array: snapshot,
+      description: `Initialize pointers: left = ${left}, right = ${right}`,
       maxArea,
       left,
       right,
-      phase: "initialization",
-      codeLine: 1,
+      phase: "left-right-init",
+      codeLine: 2,
     });
 
     // Line 2: Start while loop
@@ -38,7 +46,7 @@ export const slidingWindow = {
       left,
       right,
       phase: "loop-start",
-      codeLine: 2,
+      codeLine: 3,
     });
 
     while (left < right) {
@@ -50,30 +58,59 @@ export const slidingWindow = {
       // Line 3: Calculate current area
       steps.push({
         array: snapshot,
-        description: `Calculate area: width = ${width}, height = min(${arr[left]}, ${arr[right]}) = ${height}, area = ${currentArea}`,
+        description: `Calculate width = ${width}`,
         maxArea,
         left,
         right,
         currentArea,
         width,
         height,
-        comparing: [left, right],
-        phase: "calculate-area",
-        codeLine: 3,
+        comparing: [],
+        phase: "width-init",
+        codeLine: 4,
       });
-
+      steps.push({
+        array: snapshot,
+        description: `Calculate height = min(${arr[left]}`,
+        maxArea,
+        left,
+        right,
+        currentArea,
+        width,
+        height,
+        comparing: [],
+        phase: "h-init",
+        codeLine: 5,
+      });
+      steps.push({
+        array: snapshot,
+        description: `Calculate area: ${width} * ${height} = ${currentArea}`,
+        maxArea,
+        left,
+        right,
+        currentArea,
+        width,
+        height,
+        comparing: [],
+        phase: "area-init",
+        codeLine: 6,
+      });
+      
+    
+      
       // Line 4: Update maxArea if needed
       if (currentArea > maxArea) {
+        
         maxArea = currentArea;
         steps.push({
           array: snapshot,
-          description: `New maximum found! Update maxArea from ${maxArea - currentArea} to ${maxArea}`,
+          description: `New maximum found! Update maxArea from ${currentArea} to ${maxArea}`,
           maxArea,
           left,
           right,
           currentArea,
           phase: "update-max",
-          codeLine: 4,
+          codeLine: 7,
         });
       } else {
         steps.push({
@@ -84,35 +121,56 @@ export const slidingWindow = {
           right,
           currentArea,
           phase: "no-update",
-          codeLine: 4,
+          codeLine: 7,
         });
       }
-
+      steps.push({
+        array: snapshot,
+        description: `arr[${left}] = (${arr[left]}) < arr[${right}] = (${arr[right]})`,
+        maxArea,
+        left,
+        right,
+        comparing: [],
+        phase: "if-check",
+        codeLine: 8,
+      });
       // Line 5: Move pointer - choose smaller height
       if (arr[left] < arr[right]) {
+        left++;
         steps.push({
           array: snapshot,
-          description: `arr[${left}] (${arr[left]}) < arr[${right}] (${arr[right]}), move left pointer`,
+          description: `Move left pointer`,
           maxArea,
           left,
           right,
-          comparing: [left, right],
+          comparing: [],
           phase: "move-left",
-          codeLine: 5,
+          codeLine: 9,
         });
-        left++;
+        
       } else {
         steps.push({
           array: snapshot,
-          description: `arr[${left}] (${arr[left]}) ≥ arr[${right}] (${arr[right]}), move right pointer`,
+          description: `If fails, else will be executed`,
           maxArea,
           left,
           right,
-          comparing: [left, right],
+          comparing: [],
           phase: "move-right",
-          codeLine: 5,
+          codeLine: 10,
         });
         right--;
+        steps.push({
+          array: snapshot,
+          description: `Move right pointer`,
+          maxArea,
+          left,
+          right,
+          comparing: [],
+          phase: "move-right",
+          codeLine: 11,
+        });
+        
       }
 
       // Show pointer after move
@@ -123,7 +181,7 @@ export const slidingWindow = {
         left,
         right,
         phase: "pointers-updated",
-        codeLine: 5,
+        codeLine:12,
       });
 
       // Check loop condition
@@ -135,7 +193,7 @@ export const slidingWindow = {
           left,
           right,
           phase: "loop-continue",
-          codeLine: 2,
+          codeLine: 3,
         });
       }
     }
@@ -143,10 +201,7 @@ export const slidingWindow = {
     // Line 6: Return result
     steps.push({
       array: snapshot,
-      description: `Loop ended (left = ${left}, right = ${right}). Return maxArea = ${maxArea}`,
-      maxArea,
-      left,
-      right,
+      description: `Loop ended. Return maxArea = ${maxArea}`,
       phase: "completed",
       codeLine: 6,
     });

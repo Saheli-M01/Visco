@@ -48,6 +48,10 @@ export const getAlgorithm = (algorithmName) => {
     "Sliding Window": slidingWindow,
     "sliding window": slidingWindow,
     slidingwindow: slidingWindow,
+    "Sliding Window / 2 pointers (Container With Most Water)": slidingWindow,
+    "sliding window / 2 pointers (container with most water)": slidingWindow,
+    "Container With Most Water": slidingWindow,
+    "container with most water": slidingWindow,
   };
 
   const normalizedName = algorithmName?.toLowerCase().replace(/\s+/g, "");

@@ -12,6 +12,13 @@ const ArrayPage = () => {
       worst: "O(log n)",
       space: "O(1)",
     },
+     {
+      name: "Next Permutation",
+      best: "O(n)",
+      average: "O(n)",
+      worst: "O(n)",
+      space: "O(1)",
+    },
     {
       name: "Dutch Flag",
       best: "O(n)",
@@ -42,13 +49,7 @@ const ArrayPage = () => {
       worst: "O(n)",
       space: "O(1)",
     },
-    {
-      name: "Next Permutation",
-      best: "O(n)",
-      average: "O(n)",
-      worst: "O(n)",
-      space: "O(1)",
-    },
+   
   ];
 
   return (

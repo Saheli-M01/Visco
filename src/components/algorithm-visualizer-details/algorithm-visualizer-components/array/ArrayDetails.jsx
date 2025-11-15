@@ -6,10 +6,9 @@ import { Clock, BarChart3, Code, Play, BookOpen } from "lucide-react";
 const codeLoaders = {
   "Binary Search": () =>
     import("../../../algorithms/array/BinarySearch/binarySearchCodes"),
-//   "Two Pointers": () =>
-//     import("../../../algorithms/array/2pointers/twoPointersCodes"),
+
   "Sliding Window / 2 pointers (Container With Most Water)": () =>
-    import("../../../algorithms/array/SlidingWindow/SlidingWindowCodes"),
+    import("../../../algorithms/array/SlidingWindow/slidingWindowCodes"),
    "Kadane's Algorithm": () =>
      import("../../../algorithms/array/Kadanes/kadanesCodes"),
   "Dutch Flag": () =>

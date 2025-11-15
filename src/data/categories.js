@@ -91,7 +91,7 @@ export const categories = {
       {
         name: "Moore's Voting (Boyer-Moore)",
         complexity: "O(n)",
-        difficulty: "Medium",
+        difficulty: "Hard",
         shortDescription:
           "Find a majority element (if exists) in linear time with constant space.",
       },

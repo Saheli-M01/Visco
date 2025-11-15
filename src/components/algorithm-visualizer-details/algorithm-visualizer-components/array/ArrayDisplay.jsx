@@ -3,7 +3,7 @@ import BinarySearchVisualizer from "../../../algorithms/array/BinarySearch/Binar
 import DutchFlagVisualizer from "../../../algorithms/array/Dutch/dutchFlagVisualizer";
 import KadanesVisualizer from "../../../algorithms/array/Kadanes/kadanesVisualizer";
 import { NextPermutationVisualizer } from "../../../algorithms/array/NextPermutation/nextPermutationVisualizer";
-import SlidingWindowVisualizer from "../../../algorithms/array/SlidingWindow/slidingWindowVisualizer";
+import SlidingWindowVisualizer from "../../../algorithms/array/SlidingWindow/slidingWindowVisualizer.jsx";
 
 const ArrayElement = ({ value, index, styleClass }) => (
   <div key={`${index}-${value}`} className="flex flex-col items-center pt-2">

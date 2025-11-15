@@ -25,46 +25,55 @@ const MooresVotingVisualizer = ({
       thresholdObj = { value: step.threshold };
     }
     if (!thresholdObj) {
-      const persisted = findPersistedValue(sortingSteps, currentStepIndex, ["threshold"]);
+      const persisted = findPersistedValue(sortingSteps, currentStepIndex, [
+        "threshold",
+      ]);
       if (persisted !== null && persisted !== undefined) {
         thresholdObj = { value: persisted };
       }
     }
   }
 
-  // candidate1 - first potential majority element
-  let candidate1Obj = null;
-  if (step.phase !== "start" && step.phase !== "init-threshold" && step.phase !== "completed") {
-    if (step.candidate1 !== undefined && step.candidate1 !== null) {
-      candidate1Obj = { value: step.candidate1 };
-    } else if (step.phase !== "init-candidates") {
-      const persisted = findPersistedValue(sortingSteps, currentStepIndex, ["candidate1"]);
-      if (persisted !== undefined) {
-        candidate1Obj = { value: persisted === null ? "null" : persisted };
-      }
+let candidate1Obj = null;
+// Show candidate1 in 'init-candidates' even if null; hide in start, init-threshold, init-counts and completed
+if (step.phase === "init-candidates") {
+  candidate1Obj = { value: step.candidate1 === null ? "null" : step.candidate1 };
+} else if (step.phase !== "start" && step.phase !== "init-threshold" && step.phase !== "init-counts" && step.phase !== "completed") {
+  if (step.candidate1 !== undefined) {
+    candidate1Obj = { value: step.candidate1 === null ? "null" : step.candidate1 };
+  } else {
+    const persisted = findPersistedValue(sortingSteps, currentStepIndex, ["candidate1"]);
+    if (persisted !== undefined) {
+      candidate1Obj = { value: persisted === null ? "null" : persisted };
     }
   }
+}
 
-  // candidate2 - second potential majority element
-  let candidate2Obj = null;
-  if (step.phase !== "start" && step.phase !== "init-threshold" && step.phase !== "completed") {
-    if (step.candidate2 !== undefined && step.candidate2 !== null) {
-      candidate2Obj = { value: step.candidate2 };
-    } else if (step.phase !== "init-candidates") {
-      const persisted = findPersistedValue(sortingSteps, currentStepIndex, ["candidate2"]);
-      if (persisted !== undefined) {
-        candidate2Obj = { value: persisted === null ? "null" : persisted };
-      }
+let candidate2Obj = null;
+// Show candidate2 in 'init-candidates' even if null; hide in start, init-threshold, init-counts and completed
+if (step.phase === "init-candidates") {
+  candidate2Obj = { value: step.candidate2 === null ? "null" : step.candidate2 };
+} else if (step.phase !== "start" && step.phase !== "init-threshold" && step.phase !== "init-counts" && step.phase !== "completed") {
+  if (step.candidate2 !== undefined) {
+    candidate2Obj = { value: step.candidate2 === null ? "null" : step.candidate2 };
+  } else {
+    const persisted = findPersistedValue(sortingSteps, currentStepIndex, ["candidate2"]);
+    if (persisted !== undefined) {
+      candidate2Obj = { value: persisted === null ? "null" : persisted };
     }
   }
-
+}
   // count1 - counter for candidate1
   let count1Obj = null;
-  if (step.phase !== "start" && step.phase !== "init-threshold" && step.phase !== "completed" && step.phase !== "second-pass-start" && step.phase !== "count-verification") {
+  // count1 is shown in init-counts and persisted in all later phases (including init-candidates)
+  if (
+    step.phase !== "start" &&
+    step.phase !== "init-threshold" &&
+    step.phase !== "completed"
+  ) {
     if (typeof step.count1 === "number") {
       count1Obj = { value: step.count1 };
-    }
-    if (!count1Obj && step.phase !== "init-candidates" && step.phase !== "init-counts") {
+    } else {
       const persisted = findPersistedValue(sortingSteps, currentStepIndex, ["count1"]);
       if (persisted !== null && persisted !== undefined) {
         count1Obj = { value: persisted };
@@ -72,13 +81,15 @@ const MooresVotingVisualizer = ({
     }
   }
 
-  // count2 - counter for candidate2
   let count2Obj = null;
-  if (step.phase !== "start" && step.phase !== "init-threshold" && step.phase !== "completed" && step.phase !== "second-pass-start" && step.phase !== "count-verification") {
+  if (
+    step.phase !== "start" &&
+    step.phase !== "init-threshold" &&
+    step.phase !== "completed"
+  ) {
     if (typeof step.count2 === "number") {
       count2Obj = { value: step.count2 };
-    }
-    if (!count2Obj && step.phase !== "init-candidates" && step.phase !== "init-counts") {
+    } else {
       const persisted = findPersistedValue(sortingSteps, currentStepIndex, ["count2"]);
       if (persisted !== null && persisted !== undefined) {
         count2Obj = { value: persisted };
@@ -86,71 +97,38 @@ const MooresVotingVisualizer = ({
     }
   }
 
-  // currentIndex - current element being examined
-  let currentIndexObj = null;
-  if (typeof step.currentIndex === "number") {
-    currentIndexObj = { value: step.currentIndex };
-  }
+
 
   // currentValue - value at current index
   let currentValueObj = null;
-  if (typeof step.currentValue === "number") {
+    if (typeof step.currentValue === "number" && step.phase !== "completed") {
     currentValueObj = { value: step.currentValue };
   }
 
   // actualCount1 - verified count for candidate1
   let actualCount1Obj = null;
-  if (typeof step.actualCount1 === "number") {
+    if (typeof step.actualCount1 === "number" && step.phase !== "completed") {
     actualCount1Obj = { value: step.actualCount1 };
   }
 
   // actualCount2 - verified count for candidate2
   let actualCount2Obj = null;
-  if (typeof step.actualCount2 === "number") {
+    if (typeof step.actualCount2 === "number" && step.phase !== "completed") {
     actualCount2Obj = { value: step.actualCount2 };
   }
 
   // result - final result array
   let resultObj = null;
-  if (step.result && Array.isArray(step.result)) {
+    if (step.result && Array.isArray(step.result) && step.phase !== "completed") {
     resultObj = { value: `[${step.result.join(", ")}]` };
   }
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mt-5">
         {nObj && (
-          <VariableCard
-            label="n"
-            value={nObj.value}
-            bgColor="bg-purple-300"
-          />
+          <VariableCard label="n" value={nObj.value} bgColor="bg-purple-300" />
         )}
-        
-        {thresholdObj && (
-          <VariableCard
-            label="threshold"
-            value={thresholdObj.value}
-            bgColor="bg-pink-300"
-          />
-        )}
-        
-        {candidate1Obj && (
-          <VariableCard
-            label="candidate1"
-            value={candidate1Obj.value}
-            bgColor="bg-blue-300"
-          />
-        )}
-        
-        {candidate2Obj && (
-          <VariableCard
-            label="candidate2"
-            value={candidate2Obj.value}
-            bgColor="bg-green-300"
-          />
-        )}
-        
         {count1Obj && (
           <VariableCard
             label="count1"
@@ -158,7 +136,7 @@ const MooresVotingVisualizer = ({
             bgColor="bg-cyan-300"
           />
         )}
-        
+
         {count2Obj && (
           <VariableCard
             label="count2"
@@ -166,15 +144,22 @@ const MooresVotingVisualizer = ({
             bgColor="bg-lime-300"
           />
         )}
-        
-        {currentIndexObj && (
+        {candidate1Obj && (
           <VariableCard
-            label="i"
-            value={currentIndexObj.value}
-            bgColor="bg-orange-300"
+            label="candidate1"
+            value={candidate1Obj.value}
+            bgColor="bg-blue-300"
           />
         )}
-        
+
+        {candidate2Obj && (
+          <VariableCard
+            label="candidate2"
+            value={candidate2Obj.value}
+            bgColor="bg-green-300"
+          />
+        )}
+
         {currentValueObj && (
           <VariableCard
             label="num"
@@ -182,7 +167,7 @@ const MooresVotingVisualizer = ({
             bgColor="bg-yellow-300"
           />
         )}
-        
+
         {actualCount1Obj && (
           <VariableCard
             label="actualCount1"
@@ -190,7 +175,7 @@ const MooresVotingVisualizer = ({
             bgColor="bg-indigo-300"
           />
         )}
-        
+
         {actualCount2Obj && (
           <VariableCard
             label="actualCount2"
@@ -198,12 +183,12 @@ const MooresVotingVisualizer = ({
             bgColor="bg-teal-300"
           />
         )}
-        
+
         {resultObj && (
           <VariableCard
             label="result"
             value={resultObj.value}
-            bgColor="bg-emerald-300"
+            bgColor="bg-amber-300"
           />
         )}
       </div>

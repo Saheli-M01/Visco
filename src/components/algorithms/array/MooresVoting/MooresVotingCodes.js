@@ -1,37 +1,57 @@
-export const MooresVotingCodes = {
-  description: `Moore's Voting Algorithm is used to find all elements that appear more than ⌊n/3⌋ times in an array. The algorithm works in two phases: the first phase identifies potential candidates, and the second phase verifies them.`,
+export const description = "Moore's Voting Algorithm is used to find all elements that appear more than ⌊n/3⌋ times in an array. The algorithm works in two phases: the first phase identifies potential candidates, and the second phase verifies them.";
 
-  howItWorks: [
-    "Initialize two candidates and two counters to track potential majority elements",
-    "First Pass: Iterate through array. If element matches a candidate, increment its count. If a count is 0, assign current element as candidate. Otherwise, decrement both counts",
-    "Second Pass: Count actual occurrences of both candidates in the array",
-    "Verify if each candidate's count exceeds n/3 threshold",
-    "Return all verified candidates as the result"
-  ],
+export const howItWorks = [
+  "Initialize two candidates and two counters to track potential majority elements",
+  "First Pass: Iterate through array. If element matches a candidate, increment its count. If a count is 0, assign current element as candidate. Otherwise, decrement both counts",
+  "Second Pass: Count actual occurrences of both candidates in the array",
+  "Verify if each candidate's count exceeds n/3 threshold",
+  "Return all verified candidates as the result",
+];
 
-  complexities: {
-    time: "O(n) - Two linear passes through the array",
-    space: "O(1) - Only constant extra space for candidates and counters"
-  },
+export const timeComplexity = {
+  best: "O(n)",
+  average: "O(n)",
+  worst: "O(n)",
+};
 
-  pseudoCode: `1. Initialize candidate1 = null, candidate2 = null
-2. Initialize count1 = 0, count2 = 0
-3. First Pass:
-   For each element in array:
-     - If element equals candidate1: increment count1
-     - Else if element equals candidate2: increment count2
-     - Else if count1 is 0: set candidate1 = element, count1 = 1
-     - Else if count2 is 0: set candidate2 = element, count2 = 1
-     - Else: decrement both count1 and count2
-4. Second Pass:
-   Reset count1 = 0, count2 = 0
-   Count actual occurrences of candidate1 and candidate2
-5. Add to result if count > n/3
-6. Return result`,
+export const spaceComplexity = "O(1)";
 
-  codes: {
-    javascript: {
-      code: `function majorityElement(nums) {
+export const pseudoCode = `majorityElement(nums):
+  n = length of nums
+  candidate1 = null, candidate2 = null
+  count1 = 0, count2 = 0
+  
+  // First pass: Find potential candidates
+  for each num in nums:
+    if candidate1 == num:
+      count1++
+    else if candidate2 == num:
+      count2++
+    else if count1 == 0:
+      candidate1 = num
+      count1 = 1
+    else if count2 == 0:
+      candidate2 = num
+      count2 = 1
+    else:
+      count1--
+      count2--
+  
+  // Second pass: Verify candidates
+  count1 = 0, count2 = 0
+  for each num in nums:
+    if num == candidate1: count1++
+    if num == candidate2: count2++
+  
+  result = []
+  if count1 > n/3: add candidate1 to result
+  if count2 > n/3 and candidate2 != candidate1: add candidate2 to result
+  
+  return result`;
+
+const codes = {
+  javascript: `
+function majorityElement(nums) {
   const n = nums.length;
   let candidate1 = null, candidate2 = null;
   let count1 = 0, count2 = 0;
@@ -69,16 +89,24 @@ export const MooresVotingCodes = {
 }
 
 // Example usage:
-const nums = [3, 2, 3];
-console.log(majorityElement(nums)); // Output: [3]
+const nums1 = [3, 2, 3];
+console.log('Input:', nums1);
+console.log('Majority Elements:', majorityElement(nums1)); // Output: [3]
 
 const nums2 = [1, 2, 2, 3, 2, 1, 1, 3];
-console.log(majorityElement(nums2)); // Output: [1, 2]`,
-      language: "javascript"
-    },
+console.log('\\nInput:', nums2);
+console.log('Majority Elements:', majorityElement(nums2)); // Output: [1, 2]
 
-    python: {
-      code: `def majorityElement(nums):
+const nums3 = [1];
+console.log('\\nInput:', nums3);
+console.log('Majority Elements:', majorityElement(nums3)); // Output: [1]
+`,
+
+  python: `
+def majorityElement(nums):
+    """
+    Find all elements that appear more than n/3 times
+    """
     n = len(nums)
     candidate1, candidate2 = None, None
     count1, count2 = 0, 0
@@ -113,19 +141,25 @@ console.log(majorityElement(nums2)); // Output: [1, 2]`,
     
     return result
 
-# Example usage:
-nums = [3, 2, 3]
-print(majorityElement(nums))  # Output: [3]
+if __name__ == '__main__':
+    nums1 = [3, 2, 3]
+    print('Input:', nums1)
+    print('Majority Elements:', majorityElement(nums1))  # Output: [3]
+    
+    nums2 = [1, 2, 2, 3, 2, 1, 1, 3]
+    print('\\nInput:', nums2)
+    print('Majority Elements:', majorityElement(nums2))  # Output: [1, 2]
+    
+    nums3 = [1]
+    print('\\nInput:', nums3)
+    print('Majority Elements:', majorityElement(nums3))  # Output: [1]
+`,
 
-nums2 = [1, 2, 2, 3, 2, 1, 1, 3]
-print(majorityElement(nums2))  # Output: [1, 2]`,
-      language: "python"
-    },
+  java: `
+import java.util.*;
 
-    java: {
-      code: `import java.util.*;
-
-public class Solution {
+class Solution {
+    // Function to find all majority elements (appearing more than n/3 times)
     public List<Integer> majorityElement(int[] nums) {
         int n = nums.length;
         Integer candidate1 = null, candidate2 = null;
@@ -162,25 +196,31 @@ public class Solution {
         
         return result;
     }
-    
-    // Example usage:
+}
+
+public class Main {
     public static void main(String[] args) {
         Solution sol = new Solution();
-        int[] nums = {3, 2, 3};
-        System.out.println(sol.majorityElement(nums)); // Output: [3]
+        
+        int[] nums1 = {3, 2, 3};
+        System.out.print("Input: ");
+        for (int x : nums1) System.out.print(x + " ");
+        System.out.println("\\nMajority Elements: " + sol.majorityElement(nums1)); // Output: [3]
         
         int[] nums2 = {1, 2, 2, 3, 2, 1, 1, 3};
-        System.out.println(sol.majorityElement(nums2)); // Output: [1, 2]
+        System.out.print("\\nInput: ");
+        for (int x : nums2) System.out.print(x + " ");
+        System.out.println("\\nMajority Elements: " + sol.majorityElement(nums2)); // Output: [1, 2]
     }
-}`,
-      language: "java"
-    },
+}
+`,
 
-    csharp: {
-      code: `using System;
+  'c#': `
+using System;
 using System.Collections.Generic;
 
 public class Solution {
+    // Function to find all majority elements (appearing more than n/3 times)
     public IList<int> MajorityElement(int[] nums) {
         int n = nums.Length;
         int? candidate1 = null, candidate2 = null;
@@ -217,77 +257,96 @@ public class Solution {
         
         return result;
     }
-    
-    // Example usage:
-    static void Main() {
-        Solution sol = new Solution();
-        int[] nums = {3, 2, 3};
-        Console.WriteLine(string.Join(", ", sol.MajorityElement(nums))); // Output: 3
-        
-        int[] nums2 = {1, 2, 2, 3, 2, 1, 1, 3};
-        Console.WriteLine(string.Join(", ", sol.MajorityElement(nums2))); // Output: 1, 2
-    }
-}`,
-      language: "csharp"
-    },
-
-    cpp: {
-      code: `#include <vector>
-#include <iostream>
-using namespace std;
-
-vector<int> majorityElement(vector<int>& nums) {
-    int n = nums.size();
-    int candidate1 = 0, candidate2 = 0;
-    int count1 = 0, count2 = 0;
-    
-    // First pass: Find potential candidates
-    for (int num : nums) {
-        if (count1 > 0 && candidate1 == num) {
-            count1++;
-        } else if (count2 > 0 && candidate2 == num) {
-            count2++;
-        } else if (count1 == 0) {
-            candidate1 = num;
-            count1 = 1;
-        } else if (count2 == 0) {
-            candidate2 = num;
-            count2 = 1;
-        } else {
-            count1--;
-            count2--;
-        }
-    }
-    
-    // Second pass: Verify candidates
-    count1 = count2 = 0;
-    for (int num : nums) {
-        if (num == candidate1) count1++;
-        if (num == candidate2) count2++;
-    }
-    
-    vector<int> result;
-    if (count1 > n / 3) result.push_back(candidate1);
-    if (count2 > n / 3 && candidate2 != candidate1) result.push_back(candidate2);
-    
-    return result;
 }
 
-// Example usage:
-int main() {
-    vector<int> nums = {3, 2, 3};
-    vector<int> result = majorityElement(nums);
-    // Output: 3
-    
-    vector<int> nums2 = {1, 2, 2, 3, 2, 1, 1, 3};
-    vector<int> result2 = majorityElement(nums2);
-    // Output: 1, 2
-    
-    return 0;
-}`,
-      language: "cpp"
+public class Program {
+    public static void Main(string[] args) {
+        Solution sol = new Solution();
+        
+        int[] nums1 = {3, 2, 3};
+        Console.Write("Input: ");
+        foreach (int x in nums1) Console.Write(x + " ");
+        Console.Write("\\nMajority Elements: ");
+        foreach (int x in sol.MajorityElement(nums1)) Console.Write(x + " ");
+        Console.WriteLine(); // Output: 3
+        
+        int[] nums2 = {1, 2, 2, 3, 2, 1, 1, 3};
+        Console.Write("\\nInput: ");
+        foreach (int x in nums2) Console.Write(x + " ");
+        Console.Write("\\nMajority Elements: ");
+        foreach (int x in sol.MajorityElement(nums2)) Console.Write(x + " ");
+        Console.WriteLine(); // Output: 1 2
     }
-  }
+}
+`,
+
+  cpp: `
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    // Function to find all majority elements (appearing more than n/3 times)
+    vector<int> majorityElement(vector<int>& nums) {
+        int n = nums.size();
+        int candidate1 = 0, candidate2 = 0;
+        int count1 = 0, count2 = 0;
+        
+        // First pass: Find potential candidates
+        for (int num : nums) {
+            if (count1 > 0 && candidate1 == num) {
+                count1++;
+            } else if (count2 > 0 && candidate2 == num) {
+                count2++;
+            } else if (count1 == 0) {
+                candidate1 = num;
+                count1 = 1;
+            } else if (count2 == 0) {
+                candidate2 = num;
+                count2 = 1;
+            } else {
+                count1--;
+                count2--;
+            }
+        }
+        
+        // Second pass: Verify candidates
+        count1 = count2 = 0;
+        for (int num : nums) {
+            if (num == candidate1) count1++;
+            if (num == candidate2) count2++;
+        }
+        
+        vector<int> result;
+        if (count1 > n / 3) result.push_back(candidate1);
+        if (count2 > n / 3 && candidate2 != candidate1) result.push_back(candidate2);
+        
+        return result;
+    }
 };
 
-export default MooresVotingCodes;
+int main() {
+    Solution sol;
+    
+    vector<int> nums1 = {3, 2, 3};
+    cout << "Input: ";
+    for (int x : nums1) cout << x << " ";
+    cout << "\nMajority Elements: ";
+    vector<int> result1 = sol.majorityElement(nums1);
+    for (int x : result1) cout << x << " ";
+    cout << endl; // Output: 3
+    
+    vector<int> nums2 = {1, 2, 2, 3, 2, 1, 1, 3};
+    cout << "\nInput: ";
+    for (int x : nums2) cout << x << " ";
+    cout << "\nMajority Elements: ";
+    vector<int> result2 = sol.majorityElement(nums2);
+    for (int x : result2) cout << x << " ";
+    cout << endl; // Output: 1 2
+    
+    return 0;
+}
+`,
+};
+
+export default codes;

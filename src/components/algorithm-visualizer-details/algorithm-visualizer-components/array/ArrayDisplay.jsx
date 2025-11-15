@@ -66,9 +66,9 @@ const ArrayDisplay = ({
               } else if (isSlidingWindow) {
                 // Sliding Window: highlight left and right pointers
                 if (index === leftPointer && typeof leftPointer === "number") {
-                  baseClass = "bg-blue-500 text-white border-blue-700 scale-110 shadow-xl";
+                  baseClass = "bg-blue-300 text-gray-800 border-blue-700 scale-110 shadow-xl";
                 } else if (index === rightPointer && typeof rightPointer === "number") {
-                  baseClass = "bg-purple-500 text-white border-purple-700 scale-110 shadow-xl";
+                  baseClass = "bg-purple-300 text-gray-800 border-purple-700 scale-110 shadow-xl";
                 } else if (isComparing) {
                   baseClass = "bg-cyan-400 text-white border-cyan-600 scale-105";
                 } else {

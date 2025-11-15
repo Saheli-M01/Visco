@@ -62,9 +62,7 @@ export const slidingWindow = {
         maxArea,
         left,
         right,
-        currentArea,
         width,
-        height,
         comparing: [],
         phase: "width-init",
         codeLine: 4,
@@ -75,8 +73,6 @@ export const slidingWindow = {
         maxArea,
         left,
         right,
-        currentArea,
-        width,
         height,
         comparing: [],
         phase: "h-init",
@@ -89,8 +85,6 @@ export const slidingWindow = {
         left,
         right,
         currentArea,
-        width,
-        height,
         comparing: [],
         phase: "area-init",
         codeLine: 6,
@@ -197,13 +191,18 @@ export const slidingWindow = {
         });
       }
     }
-
-    // Line 6: Return result
+steps.push({
+      array: snapshot,
+      description: `Loop ended.`,
+      phase: "while-ends",
+      codeLine: 13,
+    });
+    // Line 14: Return result
     steps.push({
       array: snapshot,
-      description: `Loop ended. Return maxArea = ${maxArea}`,
+      description: `Return maxArea = ${maxArea}`,
       phase: "completed",
-      codeLine: 6,
+      codeLine: 14,
     });
 
     return steps;
@@ -213,30 +212,39 @@ export const slidingWindow = {
     const lines = {
       javascript: [
         "function maxArea(height) {", // 0
-        "  let maxArea = 0, left = 0, right = height.length - 1;", // 1
-        "  while (left < right) {", // 2
-        "    const area = (right - left) * Math.min(height[left], height[right]);", // 3
-        "    maxArea = Math.max(maxArea, area);", // 4
-        "    height[left] < height[right] ? left++ : right--;", // 5
-        "  }", // 6
-        "  return maxArea;", // 7
-        "}", // 8
+        "  let maxArea = 0;", //1 
+        "  left = 0, right = height.length - 1;", // 2
+        "  while (left < right) {", // 3
+        "  const width = right - left;", //4
+        "  const h = Math.min(height[left], height[right]);",//5
+        "  const area = width * h;", // 6
+        "  maxArea = Math.max(maxArea, area);", // 7
+        "    if (height[left] < height[right]) {", // 8
+        "       left++;", // 9
+        "    } else{", // 10
+        "       right--;", // 11  
+        "    }", // 12
+        "  }", // 13
+        " return maxArea;", // 14
+        "}", // 15
       ],
 
       python: [
         "def maxArea(height):", // 0
-        "    max_area = 0", // 1
+        "    maxArea = 0", // 1
         "    left, right = 0, len(height) - 1", // 2
         "    while left < right:", // 3
         "        width = right - left", // 4
         "        h = min(height[left], height[right])", // 5
         "        area = width * h", // 6
-        "        max_area = max(max_area, area)", // 7
+        "        maxArea = max(maxArea, area)", // 7
         "        if height[left] < height[right]:", // 8
         "            left += 1", // 9
         "        else:", // 10
         "            right -= 1", // 11
-        "    return max_area", // 12
+        "", // 12
+        "", // 13
+        "    return maxArea", // 14
       ],
 
       java: [

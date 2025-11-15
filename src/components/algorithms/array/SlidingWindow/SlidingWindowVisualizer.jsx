@@ -52,42 +52,42 @@ const SlidingWindowVisualizer = ({
     }
   }
 
-  // width - persist using findPersistedValue
+  // width - show only in calculation/update phases; hide in while-ends & completed
   let widthObj = null;
-  if (["width-init", "h-init", "area-init", "compare-max", "update-max", "no-update"].includes(step.phase)) {
+  if (["width-init", "h-init", "area-init", "compare-max", "update-max", "no-update"].includes(step.phase) && step.phase !== "while-ends" && step.phase !== "completed") {
     if (typeof step.width === "number") {
       widthObj = { value: step.width };
     }
   }
-  if (!widthObj) {
+  if (!widthObj && step.phase !== "while-ends" && step.phase !== "completed") {
     const persisted = findPersistedValue(sortingSteps, currentStepIndex, ["width"]);
     if (persisted !== null && persisted !== undefined) {
       widthObj = { value: persisted };
     }
   }
 
-  // height - persist using findPersistedValue
+  // height - show only in calculation/update phases; hide in while-ends & completed
   let heightObj = null;
-  if (["h-init", "area-init", "compare-max", "update-max", "no-update"].includes(step.phase)) {
+  if (["h-init", "area-init", "compare-max", "update-max", "no-update"].includes(step.phase) && step.phase !== "while-ends" && step.phase !== "completed") {
     if (typeof step.height === "number") {
       heightObj = { value: step.height };
     }
   }
-  if (!heightObj) {
+  if (!heightObj && step.phase !== "while-ends" && step.phase !== "completed") {
     const persisted = findPersistedValue(sortingSteps, currentStepIndex, ["height"]);
     if (persisted !== null && persisted !== undefined) {
       heightObj = { value: persisted };
     }
   }
 
-  // currentArea - persist using findPersistedValue
+  // currentArea - show only in calculation/update phases; hide in while-ends & completed
   let currentAreaObj = null;
-  if (["area-init", "compare-max", "update-max", "no-update"].includes(step.phase)) {
+  if (["area-init", "compare-max", "update-max", "no-update"].includes(step.phase) && step.phase !== "while-ends" && step.phase !== "completed") {
     if (typeof step.currentArea === "number") {
       currentAreaObj = { value: step.currentArea };
     }
   }
-  if (!currentAreaObj) {
+  if (!currentAreaObj && step.phase !== "while-ends" && step.phase !== "completed") {
     const persisted = findPersistedValue(sortingSteps, currentStepIndex, ["currentArea"]);
     if (persisted !== null && persisted !== undefined) {
       currentAreaObj = { value: persisted };
@@ -131,7 +131,7 @@ const SlidingWindowVisualizer = ({
         
         {heightObj && (
           <VariableCard
-            label="height"
+            label="h"
             value={heightObj.value}
             bgColor="bg-orange-300"
           />

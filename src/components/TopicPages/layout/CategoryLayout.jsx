@@ -15,7 +15,7 @@ import {
 } from "@/components/algorithm-visualizer-details";
 import AlgorithmCard from "@/components/common/AlgorithmCard";
 
-const CategoryLayout = ({ category, complexityData }) => {
+const CategoryLayout = ({ category, complexityData, sections }) => {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -274,18 +274,42 @@ const CategoryLayout = ({ category, complexityData }) => {
                   transition={{ duration: 0.8, delay: 0.1 }}
                   className="mb-8 md:mb-16"
                 >
-                  <div className="backdrop-blur-md bg-white/40 border border-white/20 rounded-3xl px-3 sm:px-8 py-6 sm:py-8 md:py-12 shadow-xl">
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
-                      {filteredAlgorithms.map((algorithm, index) => (
-                        <AlgorithmCard
-                          key={algorithm.name}
-                          algorithm={algorithm}
-                          index={index}
-                          onClick={handleAlgorithmClick}
-                        />
+                  {sections && sections.length > 0 ? (
+                    // Render with sections
+                    <div className="space-y-8">
+                      {sections.map((section, sectionIndex) => (
+                        <div key={section.title} className="backdrop-blur-md bg-white/40 border border-white/20 rounded-3xl px-3 sm:px-8 py-6 sm:py-8 md:py-12 shadow-xl">
+                          <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">
+                            {section.title}
+                          </h3>
+                          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
+                            {section.algorithms.map((algorithm, index) => (
+                              <AlgorithmCard
+                                key={algorithm.name}
+                                algorithm={algorithm}
+                                index={index}
+                                onClick={handleAlgorithmClick}
+                              />
+                            ))}
+                          </div>
+                        </div>
                       ))}
                     </div>
-                  </div>
+                  ) : (
+                    // Render without sections (original behavior)
+                    <div className="backdrop-blur-md bg-white/40 border border-white/20 rounded-3xl px-3 sm:px-8 py-6 sm:py-8 md:py-12 shadow-xl">
+                      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
+                        {filteredAlgorithms.map((algorithm, index) => (
+                          <AlgorithmCard
+                            key={algorithm.name}
+                            algorithm={algorithm}
+                            index={index}
+                            onClick={handleAlgorithmClick}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </motion.div>
               </div>
 

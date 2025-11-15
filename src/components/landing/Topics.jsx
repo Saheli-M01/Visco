@@ -30,6 +30,14 @@ const topicConfigs = [
     path: "/array"
   },
   {
+    id: "linked-list",
+    title: "Linked Lists",
+    icon: Link,
+    color: "from-red-500 to-red-600",
+    description: "Connect and manipulate node structures",
+    path: "/linked-list"
+  },
+  {
     id: "graph",
     title: "Graph Algorithms",
     icon: Network,
@@ -45,14 +53,7 @@ const topicConfigs = [
     description: "Explore hierarchical data structures",
     path: "/tree"
   },
-  {
-    id: "linked-list",
-    title: "Linked Lists",
-    icon: Link,
-    color: "from-red-500 to-red-600",
-    description: "Connect and manipulate node structures",
-    path: "/linked-list"
-  }
+  
 ];
 
 export const Topics = () => {
@@ -66,7 +67,7 @@ export const Topics = () => {
 
   const handleTopicClick = (topic) => {
     // Allow navigation for active topics (sorting and array)
-    if (topic.id === "sorting" || topic.id === "array") navigate(topic.path);
+    if (topic.id === "sorting" || topic.id === "array" || topic.id === "linked-list") navigate(topic.path);
   };
 
   return (
@@ -107,7 +108,7 @@ export const Topics = () => {
         {/* Topics Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {topics.map((topic, index) => {
-            const isActive = topic.id === "sorting" || topic.id === "array";
+            const isActive = topic.id === "sorting" || topic.id === "array" || topic.id === "linked-list"; 
 
             return (
               <motion.div

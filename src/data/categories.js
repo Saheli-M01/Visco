@@ -201,47 +201,104 @@ export const categories = {
     id: "linkedList",
 
     algorithms: [
+      // Singly Linked List Operations
       {
-        name: "Singly Linked List",
+        name: "Singly Linked List - Creation",
         complexity: "O(n)",
         difficulty: "Easy",
         shortDescription:
-          "Basic linear data structure with nodes containing data and next pointer.",
+          "Create a singly linked list with nodes containing data and next pointer.",
+        category: "singly",
       },
       {
-        name: "Doubly Linked List",
-        complexity: "O(n)",
-        difficulty: "Medium",
-        shortDescription:
-          "Bidirectional list with previous and next pointers for efficient traversal.",
-      },
-      {
-        name: "Circular Linked List",
-        complexity: "O(n)",
-        difficulty: "Medium",
-        shortDescription:
-          "List where last node points back to first, creating circular structure.",
-      },
-      {
-        name: "List Reversal",
+        name: "Singly Linked List - Traversal",
         complexity: "O(n)",
         difficulty: "Easy",
         shortDescription:
-          "Reverse linked list iteratively or recursively by changing pointers.",
+          "Visit each node in the list from head to tail sequentially.",
+        category: "singly",
       },
       {
-        name: "Cycle Detection",
+        name: "Singly Linked List - Insertion",
+        complexity: "O(1) / O(n)",
+        difficulty: "Easy",
+        shortDescription:
+          "Insert at head (O(1)), tail (O(n)), kth position, or after value X.",
+        category: "singly",
+      },
+      {
+        name: "Singly Linked List - Deletion",
+        complexity: "O(1) / O(n)",
+        difficulty: "Easy",
+        shortDescription:
+          "Delete at head (O(1)), tail (O(n)), kth position, or node with value X.",
+        category: "singly",
+      },
+      // Doubly Linked List Operations
+      {
+        name: "Doubly Linked List - Creation",
         complexity: "O(n)",
         difficulty: "Medium",
         shortDescription:
-          "Floyd's cycle detection algorithm using slow and fast pointers.",
+          "Create a doubly linked list with prev and next pointers in each node.",
+        category: "doubly",
       },
       {
-        name: "Merge Two Lists",
-        complexity: "O(n + m)",
-        difficulty: "Easy",
+        name: "Doubly Linked List - Traversal",
+        complexity: "O(n)",
+        difficulty: "Medium",
         shortDescription:
-          "Combine two sorted linked lists into single sorted list.",
+          "Traverse forward or backward through the doubly linked list.",
+        category: "doubly",
+      },
+      {
+        name: "Doubly Linked List - Insertion",
+        complexity: "O(1)",
+        difficulty: "Medium",
+        shortDescription:
+          "Insert at head, tail, or any position with O(1) complexity given node reference.",
+        category: "doubly",
+      },
+      {
+        name: "Doubly Linked List - Deletion",
+        complexity: "O(1)",
+        difficulty: "Medium",
+        shortDescription:
+          "Delete at head, tail, or any position with O(1) complexity given node reference.",
+        category: "doubly",
+      },
+      // Circular Linked List Operations
+      {
+        name: "Circular Linked List - Creation",
+        complexity: "O(n)",
+        difficulty: "Medium",
+        shortDescription:
+          "Create circular linked list where last node points back to first node.",
+        category: "circular",
+      },
+      {
+        name: "Circular Linked List - Traversal",
+        complexity: "O(n)",
+        difficulty: "Medium",
+        shortDescription:
+          "Traverse circular list with careful termination to avoid infinite loops.",
+        category: "circular",
+      },
+      {
+        name: "Circular Linked List - Insertion",
+        complexity: "O(1)",
+        difficulty: "Medium",
+        shortDescription:
+          "Insert nodes in circular list maintaining circular structure.",
+        category: "circular",
+      },
+      {
+        name: "Circular Linked List - Deletion",
+        complexity: "O(1)",
+        difficulty: "Medium",
+        shortDescription:
+          "Delete nodes from circular list while maintaining circular structure.",
+        category: "circular",
       },
     ],
   },

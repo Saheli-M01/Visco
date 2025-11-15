@@ -6,6 +6,53 @@ import { categories } from "@/data/categories";
 const LinkedListPage = () => {
   const linkedListCategory = categories.linkedList;
 
+  // Group algorithms by category
+  const singlyAlgorithms = linkedListCategory.algorithms.filter(
+    (algo) => algo.category === "singly"
+  );
+  const doublyAlgorithms = linkedListCategory.algorithms.filter(
+    (algo) => algo.category === "doubly"
+  );
+  const circularAlgorithms = linkedListCategory.algorithms.filter(
+    (algo) => algo.category === "circular"
+  );
+
+  const sections = [
+    {
+      title: "Singly Linked List",
+      algorithms: singlyAlgorithms,
+    },
+    {
+      title: "Doubly Linked List",
+      algorithms: doublyAlgorithms,
+    },
+    {
+      title: "Circular Linked List",
+      algorithms: circularAlgorithms,
+    },
+  ];
+
+  // Complexity data for the table
+  const complexityData = [
+    // Singly Linked List
+    { name: "Singly LL - Creation", best: "O(n)", average: "O(n)", worst: "O(n)", space: "O(1)" },
+    { name: "Singly LL - Traversal", best: "O(n)", average: "O(n)", worst: "O(n)", space: "O(1)" },
+    { name: "Singly LL - Insertion (head)", best: "O(1)", average: "O(1)", worst: "O(1)", space: "O(1)" },
+    { name: "Singly LL - Insertion (position/tail)", best: "O(1)", average: "O(n)", worst: "O(n)", space: "O(1)" },
+    { name: "Singly LL - Deletion (head)", best: "O(1)", average: "O(1)", worst: "O(1)", space: "O(1)" },
+    { name: "Singly LL - Deletion (position/tail)", best: "O(1)", average: "O(n)", worst: "O(n)", space: "O(1)" },
+    // Doubly Linked List
+    { name: "Doubly LL - Creation", best: "O(n)", average: "O(n)", worst: "O(n)", space: "O(1)" },
+    { name: "Doubly LL - Traversal", best: "O(n)", average: "O(n)", worst: "O(n)", space: "O(1)" },
+    { name: "Doubly LL - Insertion", best: "O(1)", average: "O(1)", worst: "O(1)", space: "O(1)" },
+    { name: "Doubly LL - Deletion", best: "O(1)", average: "O(1)", worst: "O(1)", space: "O(1)" },
+    // Circular Linked List
+    { name: "Circular LL - Creation", best: "O(n)", average: "O(n)", worst: "O(n)", space: "O(1)" },
+    { name: "Circular LL - Traversal", best: "O(n)", average: "O(n)", worst: "O(n)", space: "O(1)" },
+    { name: "Circular LL - Insertion", best: "O(1)", average: "O(1)", worst: "O(1)", space: "O(1)" },
+    { name: "Circular LL - Deletion", best: "O(1)", average: "O(1)", worst: "O(1)", space: "O(1)" },
+  ];
+
   const listTypes = [
     {
       title: "Singly Linked List",
@@ -139,7 +186,7 @@ const LinkedListPage = () => {
   ];
 
   return (
-    <CategoryLayout category={linkedListCategory}>
+    <CategoryLayout category={linkedListCategory} complexityData={complexityData} sections={sections}>
       {/* List Types */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}

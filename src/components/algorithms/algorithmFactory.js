@@ -9,6 +9,7 @@ import { dutchFlag } from "./array/Dutch/dutchFlag.js";
 import {kadane} from "./array/Kadanes/kadanes";
 import { nextPermutation } from "./array/NextPermutation/nextPermutation.js";
 import { slidingWindow } from "./array/SlidingWindow/slidingWindow.js";
+import { mooresVoting } from "./array/MooresVoting/mooresVoting.js";
 
 // Algorithm factory to get the appropriate algorithm implementation
 export const getAlgorithm = (algorithmName) => {
@@ -52,6 +53,16 @@ export const getAlgorithm = (algorithmName) => {
     "sliding window / 2 pointers (container with most water)": slidingWindow,
     "Container With Most Water": slidingWindow,
     "container with most water": slidingWindow,
+    "Moore's Voting Algorithm": mooresVoting,
+    "moore's voting algorithm": mooresVoting,
+    "moores voting": mooresVoting,
+    mooresvoting: mooresVoting,
+    "Moore's Voting": mooresVoting,
+    "moore's voting": mooresVoting,
+    "Moore's Voting (Boyer-Moore)": mooresVoting,
+    "moore's voting (boyer-moore)": mooresVoting,
+    "Boyer-Moore": mooresVoting,
+    "boyer-moore": mooresVoting,
   };
 
   const normalizedName = algorithmName?.toLowerCase().replace(/\s+/g, "");

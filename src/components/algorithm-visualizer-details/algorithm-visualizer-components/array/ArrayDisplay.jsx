@@ -4,6 +4,7 @@ import DutchFlagVisualizer from "../../../algorithms/array/Dutch/dutchFlagVisual
 import KadanesVisualizer from "../../../algorithms/array/Kadanes/kadanesVisualizer";
 import { NextPermutationVisualizer } from "../../../algorithms/array/NextPermutation/nextPermutationVisualizer";
 import SlidingWindowVisualizer from "../../../algorithms/array/SlidingWindow/SlidingWindowVisualizer.jsx";
+import MooresVotingVisualizer from "../../../algorithms/array/MooresVoting/MooresVotingVisualizer.jsx";
 
 const ArrayElement = ({ value, index, styleClass }) => (
   <div key={`${index}-${value}`} className="flex flex-col items-center pt-2">
@@ -48,6 +49,12 @@ const ArrayDisplay = ({
   const leftPointer = currentStep.left;
   const rightPointer = currentStep.right;
 
+  // For Moore's Voting: highlight current examining element and candidates
+  const isMooresVoting = algoKey.includes("mooresvoting") || algoKey.includes("moore");
+  const currentIndex = currentStep.currentIndex;
+  const candidate1 = currentStep.candidate1;
+  const candidate2 = currentStep.candidate2;
+
   return (
     <div className="flex flex-col h-full bg-gray-900 rounded-lg overflow-hidden">
       <div className="bg-code-bg rounded-lg p-4 flex-1 flex items-center justify-center overflow-auto">
@@ -69,6 +76,19 @@ const ArrayDisplay = ({
                   baseClass = "bg-blue-300 text-gray-800 border-blue-700 scale-110 shadow-xl";
                 } else if (index === rightPointer && typeof rightPointer === "number") {
                   baseClass = "bg-purple-300 text-gray-800 border-purple-700 scale-110 shadow-xl";
+                } else if (isComparing) {
+                  baseClass = "bg-cyan-400 text-white border-cyan-600 scale-105";
+                } else {
+                  baseClass = "bg-gray-700 text-white border-gray-600";
+                }
+              } else if (isMooresVoting) {
+                // Moore's Voting: highlight current index, candidates
+                if (index === currentIndex && typeof currentIndex === "number") {
+                  baseClass = "bg-yellow-400 text-gray-900 border-yellow-600 scale-110 shadow-xl";
+                } else if (value === candidate1 && candidate1 !== null && candidate1 !== undefined) {
+                  baseClass = "bg-blue-400 text-white border-blue-700 scale-105";
+                } else if (value === candidate2 && candidate2 !== null && candidate2 !== undefined && candidate2 !== candidate1) {
+                  baseClass = "bg-green-400 text-white border-green-700 scale-105";
                 } else if (isComparing) {
                   baseClass = "bg-cyan-400 text-white border-cyan-600 scale-105";
                 } else {
@@ -139,6 +159,15 @@ const ArrayDisplay = ({
 
           {(algoKey.includes("slidingwindow") || algoKey.includes("containerwithmostwater")) && (
             <SlidingWindowVisualizer
+              currentArray={currentArray}
+              sortingSteps={sortingSteps}
+              currentStepIndex={currentStepIndex}
+              currentStep={currentStep}
+            />
+          )}
+
+          {(algoKey.includes("mooresvoting") || algoKey.includes("moore")) && (
+            <MooresVotingVisualizer
               currentArray={currentArray}
               sortingSteps={sortingSteps}
               currentStepIndex={currentStepIndex}

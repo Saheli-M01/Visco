@@ -28,6 +28,7 @@ const AlgorithmCard = ({ algorithm, index = 0, onClick }) => {
     "Kadane's Algorithm",
     "Next Permutation",
     "Sliding Window / 2 pointers (Container With Most Water)",
+    "Moore's Voting (Boyer-Moore)",
   ];
   const isInteractive = interactive.includes(algorithm.name);
 

@@ -3,6 +3,7 @@ import BinarySearchVisualizer from "../../../algorithms/array/BinarySearch/Binar
 import DutchFlagVisualizer from "../../../algorithms/array/Dutch/dutchFlagVisualizer";
 import KadanesVisualizer from "../../../algorithms/array/Kadanes/kadanesVisualizer";
 import { NextPermutationVisualizer } from "../../../algorithms/array/NextPermutation/nextPermutationVisualizer";
+import SlidingWindowVisualizer from "../../../algorithms/array/SlidingWindow/slidingWindowVisualizer";
 
 const ArrayElement = ({ value, index, styleClass }) => (
   <div key={`${index}-${value}`} className="flex flex-col items-center pt-2">
@@ -42,6 +43,11 @@ const ArrayDisplay = ({
   const swapped = currentStep.swapped || [];
   const reverseRange = currentStep.reverseRange;
 
+  // For Sliding Window: highlight left and right pointers
+  const isSlidingWindow = algoKey.includes("slidingwindow") || algoKey.includes("containerwithmostwater");
+  const leftPointer = currentStep.left;
+  const rightPointer = currentStep.right;
+
   return (
     <div className="flex flex-col h-full bg-gray-900 rounded-lg overflow-hidden">
       <div className="bg-code-bg rounded-lg p-4 flex-1 flex items-center justify-center overflow-auto">
@@ -57,6 +63,17 @@ const ArrayDisplay = ({
                 baseClass = isCompleted
                   ? "bg-amber-400 text-white border-amber-700 scale-105"
                   : "bg-yellow-400 text-gray-900 border-yellow-600";
+              } else if (isSlidingWindow) {
+                // Sliding Window: highlight left and right pointers
+                if (index === leftPointer && typeof leftPointer === "number") {
+                  baseClass = "bg-blue-300 text-gray-800 border-blue-700 scale-110 shadow-xl";
+                } else if (index === rightPointer && typeof rightPointer === "number") {
+                  baseClass = "bg-purple-300 text-gray-800 border-purple-700 scale-110 shadow-xl";
+                } else if (isComparing) {
+                  baseClass = "bg-cyan-400 text-white border-cyan-600 scale-105";
+                } else {
+                  baseClass = "bg-gray-700 text-white border-gray-600";
+                }
               } else if (isNextPerm) {
                 // Next Permutation: highlight pivot, successor, swapped, reverse range
                 if (swapped.includes(index)) {
@@ -113,6 +130,15 @@ const ArrayDisplay = ({
 
           {algoKey.includes("nextpermutation") && (
             <NextPermutationVisualizer
+              currentArray={currentArray}
+              sortingSteps={sortingSteps}
+              currentStepIndex={currentStepIndex}
+              currentStep={currentStep}
+            />
+          )}
+
+          {(algoKey.includes("slidingwindow") || algoKey.includes("containerwithmostwater")) && (
+            <SlidingWindowVisualizer
               currentArray={currentArray}
               sortingSteps={sortingSteps}
               currentStepIndex={currentStepIndex}

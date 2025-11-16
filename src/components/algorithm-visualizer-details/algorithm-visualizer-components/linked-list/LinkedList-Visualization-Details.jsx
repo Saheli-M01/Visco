@@ -46,7 +46,7 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
     }
   }, [showLanguageChangeConfirm]);
 
-  const linkedListAlgorithms = categories["linked-list"]?.algorithms || [];
+  const linkedListAlgorithms = categories.linkedList?.algorithms || [];
 
   const getCodeLines = (language, algorithmName) => {
     const algorithm = getAlgorithm(algorithmName);
@@ -77,7 +77,7 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
     setCurrentStep(0);
     if (linkedListSteps.length > 0) {
       const firstStep = linkedListSteps[0];
-      setCurrentList([...firststep.array]);
+      setCurrentList([...firstStep.array]);
       setcomparingIndices(firstStep.comparing || []);
       setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
     }
@@ -131,7 +131,7 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
     const firstStep = linkedListSteps[0];
     setCurrentStepIndex(0);
     setCurrentStep(0);
-    setCurrentList([...firststep.array]);
+    setCurrentList([...firstStep.array]);
     setcomparingIndices(firstStep.comparing || []);
     setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
   };
@@ -201,19 +201,19 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
         steps.map((step, index) => ({
           step: index,
           description: step.description,
-          list: step.array,
+          array: step.array,
           phase: step.phase,
         }))
       );
 
       setCurrentStepIndex(0);
       setCurrentStep(0);
-      if (steps.length > 0) {
-        const firstStep = steps[0];
-        setCurrentList([...firstStep.array]);
-        setcomparingIndices(firstStep.comparing || []);
-        setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
-      }
+        if (steps.length > 0) {
+          const firstStep = steps[0];
+          setCurrentList([...firstStep.array]);
+          setcomparingIndices(firstStep.comparing || []);
+          setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
+        }
 
       if (wasPlaying) {
         setTimeout(() => {
@@ -283,7 +283,7 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
           steps.map((step, index) => ({
             step: index,
             description: step.description,
-            list: step.array,
+            array: step.array,
             phase: step.phase,
           }))
         );
@@ -291,7 +291,7 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
         setCurrentStep(0);
         if (steps.length > 0) {
           const firstStep = steps[0];
-          setCurrentList([...firststep.array]);
+          setCurrentList([...firstStep.array]);
           setcomparingIndices(firstStep.comparing || []);
           setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
         }
@@ -319,7 +319,7 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
           steps.map((step, index) => ({
             step: index,
             description: step.description,
-            list: step.array,
+            array: step.array,
             phase: step.phase,
           }))
         );
@@ -327,7 +327,7 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
         setCurrentStep(0);
         if (steps.length > 0) {
           const firstStep = steps[0];
-          setCurrentList([...firststep.array]);
+          setCurrentList([...firstStep.array]);
           setcomparingIndices(firstStep.comparing || []);
           setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
         }
@@ -357,7 +357,7 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
 
     if (steps.length > 0) {
       const firstStep = steps[0];
-      setCurrentList([...firststep.array]);
+      setCurrentList([...firstStep.array]);
       setcomparingIndices(firstStep.comparing || []);
       setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
     }
@@ -389,7 +389,7 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
           steps.map((step, index) => ({
             step: index,
             description: step.description,
-            list: step.array,
+            array: step.array,
             phase: step.phase,
           }))
         );
@@ -397,7 +397,7 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
         setCurrentStep(0);
         if (steps.length > 0) {
           const firstStep = steps[0];
-          setCurrentList([...firststep.array]);
+          setCurrentList([...firstStep.array]);
           setcomparingIndices(firstStep.comparing || []);
           setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
         }
@@ -424,7 +424,7 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
         setCurrentStep(0);
         if (steps.length > 0) {
           const firstStep = steps[0];
-          setCurrentList([...firststep.array]);
+          setCurrentList([...firstStep.array]);
           setcomparingIndices(firstStep.comparing || []);
           setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
         }
@@ -456,7 +456,7 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
         setCurrentStep(0);
         if (steps.length > 0) {
           const firstStep = steps[0];
-          setCurrentList([...firststep.array]);
+          setCurrentList([...firstStep.array]);
           setcomparingIndices(firstStep.comparing || []);
           setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
         }
@@ -491,6 +491,8 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
     setCurrentStep,
     setCurrentList,
     setcomparingIndices,
+    // canonical camelCase setter expected by visualization
+    setComparingIndices: setcomparingIndices,
     setCurrentCodeLine,
     currentStepRef,
     stepHistoryRef,

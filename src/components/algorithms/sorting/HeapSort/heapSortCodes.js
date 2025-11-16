@@ -13,7 +13,7 @@ export const timeComplexity = {
 
 export const spaceComplexity = "O(1)";
 
-export const pseudoCode = `heapSort(A):\n  buildMaxHeap(A)\n  for i = n-1 downto 1:\n    swap(A[0], A[i])\n    heapSize--\n    heapify(A, 0)`;
+
 
 const codes = {
   javascript: `// Heap Sort - JavaScript (runnable)

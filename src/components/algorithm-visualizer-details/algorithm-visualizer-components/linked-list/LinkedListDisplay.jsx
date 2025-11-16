@@ -27,6 +27,7 @@ const LinkedListDisplay = ({
   currentStepIndex = 0,
   selectedLanguage = "javascript",
   selectedAlgorithm = null,
+  displayInputString = null,
 }) => {
   const currentStep = linkedListSteps[currentStepIndex] || {};
   const algoKey = (selectedAlgorithm?.name || "").toLowerCase().replace(/\s+/g, "");
@@ -45,7 +46,11 @@ const LinkedListDisplay = ({
           {/* Linked List Nodes */}
           <div className="flex justify-center items-center gap-0 flex-wrap p-4">
             {currentList.length === 0 ? (
-              <div className="text-gray-400 text-lg font-mono">Empty List</div>
+              displayInputString ? (
+                <div className="text-gray-300 text-lg font-mono">Input: {displayInputString}</div>
+              ) : (
+                <div className="text-gray-400 text-lg font-mono">Empty List</div>
+              )
             ) : (
               currentList.map((value, index) => {
                 const iscomparing = comparingIndices.includes(index);
@@ -94,16 +99,7 @@ const LinkedListDisplay = ({
             </div>
           )}
 
-          {/* Algorithm-Specific Visualizers */}
-          {algoKey.includes("singlylinkedlist") && (
-            <SinglyLinkedListVisualizer
-              currentList={currentList}
-              linkedListSteps={linkedListSteps}
-              currentStepIndex={currentStepIndex}
-              currentStep={currentStep}
-              selectedLanguage={selectedLanguage}
-            />
-          )}
+         
         </div>
       </div>
     </div>

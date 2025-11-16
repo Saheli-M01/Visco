@@ -42,6 +42,7 @@ const AlgorithmCard = ({ algorithm, index = 0, onClick }) => {
     "Next Permutation",
     "Sliding Window / 2 pointers (Container With Most Water)",
     "Moore's Voting (Boyer-Moore)",
+    "Singly Linked List - Creation",
   
   ];
   const isInteractive = interactive.includes(algorithm.name);
@@ -68,7 +69,7 @@ const AlgorithmCard = ({ algorithm, index = 0, onClick }) => {
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3 mb-3">
-        <div className="flex items-center text-gray-600">
+        <div className="flex items-center bg-white/80 text-gray-800  border border-gray-300/80 px-3 py-1 rounded-full text-xs font-medium">
           <Clock className="h-3 w-3 mr-1" />
           <code className="font-mono text-xs">{algorithm.complexity}</code>
         </div>

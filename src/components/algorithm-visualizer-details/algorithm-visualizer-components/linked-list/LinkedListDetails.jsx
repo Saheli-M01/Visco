@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Clock, BarChart3, Code, Play, BookOpen } from "lucide-react";
+import { Clock, BarChart3, Code, BookOpen } from "lucide-react";
 
-// Dynamic code loaders
+// Dynamic code loaders (lazy import to keep bundle small)
 const codeLoaders = {
- 
+  "Singly Linked List - Creation": () =>
+    import("../../../algorithms/linked-list/singlyLinkedList/creation/creationCodes"),
 };
 
 const LinkedListDetails = ({ algorithm, topic }) => {
@@ -30,6 +31,7 @@ const LinkedListDetails = ({ algorithm, topic }) => {
     howItWorks: [],
     timeComplexity: {},
     spaceComplexity: "",
+    pseudoCode: "",
   });
 
   const copyCode = async (code) => {
@@ -53,13 +55,13 @@ const LinkedListDetails = ({ algorithm, topic }) => {
         if (!mounted) return;
         const codes = mod && (mod.default || mod);
         setLoadedCodes((s) => ({ ...s, [algorithm.name]: codes }));
-        if (codes && !codes[implLang])
-          setImplLang(Object.keys(codes)[0] || "javascript");
+        if (codes && !codes[implLang]) setImplLang(Object.keys(codes)[0] || "javascript");
         setAlgoMeta({
           description: mod.description || "",
           howItWorks: mod.howItWorks || [],
           timeComplexity: mod.timeComplexity || {},
           spaceComplexity: mod.spaceComplexity || "",
+          pseudoCode: mod.pseudoCode || "",
         });
       })
       .catch((err) => console.error("Failed to load code module", err))
@@ -85,161 +87,115 @@ const LinkedListDetails = ({ algorithm, topic }) => {
           >
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
               <div className="flex-1 min-w-0">
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2 break-words">
-                  {algorithm.name}
-                </h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2 break-words">{algorithm.name}</h3>
                 <p className="text-sm sm:text-base text-gray-700 font-medium">
-                  {topic}
+                  {typeof topic === "string" ? topic : topic?.title || topic?.id || (Array.isArray(topic) ? topic.join(", ") : JSON.stringify(topic))}
                 </p>
               </div>
-              <span
-                className={`${getDifficultyColor(
-                  algorithm.difficulty
-                )} text-sm font-semibold px-3 py-1 rounded-full self-start whitespace-nowrap`}
-              >
-                {algorithm.difficulty}
-              </span>
-            </div>
-
-            <p className="text-sm sm:text-base text-gray-700 leading-relaxed mb-4">
-              {algoMeta.description || algorithm.description}
-            </p>
-
-            {/* How It Works */}
-            {algoMeta.howItWorks && algoMeta.howItWorks.length > 0 && (
-              <div className="space-y-3 mt-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <BookOpen className="w-5 h-5 text-blue-600" />
-                  <h4 className="text-base sm:text-lg font-bold text-gray-900">
-                    How It Works
-                  </h4>
+              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                <span className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium ${getDifficultyColor(algorithm.difficulty)}`}>
+                  {algorithm.difficulty}
+                </span>
+                <div className="flex items-center text-gray-600 bg-white/30 px-2 sm:px-3 py-1 rounded-full">
+                  <Clock className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                  <span className="font-mono text-xs sm:text-sm">{algorithm.complexity}</span>
                 </div>
-                <ol className="list-decimal list-inside space-y-2 text-sm sm:text-base text-gray-700">
-                  {algoMeta.howItWorks.map((step, idx) => (
-                    <li key={idx} className="leading-relaxed">
-                      {step}
-                    </li>
-                  ))}
-                </ol>
               </div>
-            )}
-          </motion.div>
-
-          {/* Implementation Code Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-4 sm:p-6 shadow-xl"
-          >
-            <div className="flex items-center gap-2 mb-4">
-              <Code className="w-5 h-5 text-blue-600" />
-              <h4 className="text-base sm:text-lg font-bold text-gray-900">
-                Implementation
-              </h4>
             </div>
 
-            {loadingCode ? (
-              <div className="text-sm text-gray-500">Loading code...</div>
-            ) : (
-              <>
-                {/* Language Selector */}
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {loadedCodes[algorithm.name] &&
-                    Object.keys(loadedCodes[algorithm.name]).map((lang) => (
-                      <button
-                        key={lang}
-                        onClick={() => setImplLang(lang)}
-                        className={`px-3 py-1 text-xs sm:text-sm rounded-lg font-medium transition-all ${
-                          implLang === lang
-                            ? "bg-blue-600 text-white shadow-md"
-                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                        }`}
-                      >
-                        {lang.charAt(0).toUpperCase() + lang.slice(1)}
-                      </button>
-                    ))}
+            <p className="text-sm sm:text-base text-gray-700 leading-relaxed font-medium">{algoMeta.description}</p>
+          </motion.div>
+
+          {/* Implementation (moved here) */}
+          {codeLoaders[algorithm.name] && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.25 }}
+              className="backdrop-blur-sm bg-white border border-white/30 rounded-2xl p-4 shadow-xl"
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <Code className="h-4 w-4 sm:h-5 sm:w-5 text-gray-900" />
+                  <h4 className="text-base sm:text-lg font-semibold text-gray-900">Implementation</h4>
+                </div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  {Object.keys(loadedCodes[algorithm.name] || {}).map((lang) => (
+                    <button key={lang} onClick={() => setImplLang(lang)} className={`px-2 py-1 rounded-md text-xs font-medium ${implLang === lang ? "bg-gray-900 text-white" : "bg-white/30 text-gray-900"}`}>
+                      {lang.toUpperCase()}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="relative">
+                <div className="flex flex-1 bg-gray-900 rounded-lg overflow-hidden">
+                  <pre className="text-gray-100 px-3 py-2 text-[0.9rem] overflow-auto custom-scrollbar flex-1 w-full whitespace-pre-wrap font-mono max-h-60 sm:max-h-72">
+                    <code>
+                      {loadingCode && !loadedCodes[algorithm.name]
+                        ? "Loading implementation..."
+                        : (loadedCodes[algorithm.name] || {})[implLang] || algoMeta.pseudoCode || "No implementation available."}
+                    </code>
+                  </pre>
                 </div>
 
-                {/* Code Block */}
-                {loadedCodes[algorithm.name] &&
-                loadedCodes[algorithm.name][implLang] ? (
-                  <div className="relative">
-                    <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-xs sm:text-sm">
-                      <code>{loadedCodes[algorithm.name][implLang]}</code>
-                    </pre>
-                    <button
-                      onClick={() =>
-                        copyCode(loadedCodes[algorithm.name][implLang])
-                      }
-                      className="absolute top-2 right-2 p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-xs text-white"
-                    >
-                      {copied ? "Copied!" : "Copy"}
-                    </button>
-                  </div>
-                ) : (
-                  <div className="text-sm text-gray-500">
-                    No code available for {implLang}.
-                  </div>
-                )}
-              </>
-            )}
-          </motion.div>
+                <div className="absolute top-2 sm:top-3 right-2 sm:right-3 flex items-center gap-2">
+                  <button onClick={() => copyCode((loadedCodes[algorithm.name] || {})[implLang])} className="px-2 sm:px-3 py-1 bg-white/30 text-gray-100 rounded-md text-xs sm:text-sm font-medium hover:bg-white/50">Copy</button>
+                  {copied && <span className="text-xs sm:text-sm text-green-400">Copied!</span>}
+                </div>
+              </div>
+            </motion.div>
+          )}
         </div>
 
-        {/* Right: Complexity Analysis */}
-        <div className="lg:col-span-3 space-y-4 sm:space-y-6">
-          {/* Time Complexity */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-4 sm:p-6 shadow-xl"
-          >
-            <div className="flex items-center gap-2 mb-4">
-              <Clock className="w-5 h-5 text-blue-600" />
-              <h4 className="text-base sm:text-lg font-bold text-gray-900">
-                Time Complexity
-              </h4>
+        {/* Right: How It Works + Complexities */}
+        <div className="lg:col-span-3 space-y-4">
+          {/* How It Works (moved here) */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-4 sm:p-6 shadow-xl">
+            <div className="flex items-center mb-3 sm:mb-4">
+              <BookOpen className="h-4 w-4 sm:h-5 sm:w-5 text-gray-900 mr-2" />
+              <h4 className="text-lg sm:text-xl font-semibold text-gray-900">How It Works</h4>
             </div>
-            <div className="space-y-2 sm:space-y-3">
-              {algoMeta.timeComplexity &&
-              Object.keys(algoMeta.timeComplexity).length > 0 ? (
-                Object.entries(algoMeta.timeComplexity).map(([key, value]) => (
-                  <div key={key} className="flex justify-between items-center">
-                    <span className="text-xs sm:text-sm text-gray-700 font-medium capitalize">
-                      {key}:
-                    </span>
-                    <code className="text-xs sm:text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded font-mono">
-                      {value}
-                    </code>
-                  </div>
-                ))
-              ) : (
-                <div className="text-xs sm:text-sm text-gray-500">
-                  No complexity data available.
-                </div>
-              )}
-            </div>
+            <ol className="space-y-2 sm:space-y-3">
+              {algoMeta.howItWorks.map((step, index) => (
+                <motion.li key={index} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3, delay: 0.2 + index * 0.1 }} className="flex items-start">
+                  <span className="inline-flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 bg-white/30 text-gray-900 rounded-full text-xs sm:text-sm font-bold mr-2 sm:mr-3 mt-0.5 flex-shrink-0">{index + 1}</span>
+                  <span className="text-sm sm:text-base text-gray-700 font-medium">{step}</span>
+                </motion.li>
+              ))}
+            </ol>
           </motion.div>
 
-          {/* Space Complexity */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-4 sm:p-6 shadow-xl"
-          >
-            <div className="flex items-center gap-2 mb-4">
-              <BarChart3 className="w-5 h-5 text-blue-600" />
-              <h4 className="text-base sm:text-lg font-bold text-gray-900">
-                Space Complexity
-              </h4>
+          <div className="flex gap-3">
+            <div className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-4 shadow-xl w-full">
+              <div className="flex items-center mb-2 sm:mb-3">
+                <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 text-gray-900 mr-2" />
+                <h5 className="text-sm sm:text-base font-semibold text-gray-900">Time Complexity</h5>
+              </div>
+              <div className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
+                <div className="flex justify-between items-center gap-2">
+                  <span className="text-gray-700 font-medium">Best:</span>
+                  <code className="bg-white/30 px-2 py-0.5 rounded text-gray-900 font-mono">{algoMeta.timeComplexity.best}</code>
+                </div>
+                <div className="flex justify-between items-center gap-2">
+                  <span className="text-gray-700 font-medium">Average:</span>
+                  <code className="bg-white/30 px-2 py-0.5 rounded text-gray-900 font-mono">{algoMeta.timeComplexity.average}</code>
+                </div>
+                <div className="flex justify-between items-center gap-2">
+                  <span className="text-gray-700 font-medium">Worst:</span>
+                  <code className="bg-white/30 px-2 py-0.5 rounded text-gray-900 font-mono">{algoMeta.timeComplexity.worst}</code>
+                </div>
+              </div>
             </div>
-            <code className="text-xs sm:text-sm bg-purple-100 text-purple-800 px-3 py-2 rounded-lg font-mono block text-center">
-              {algoMeta.spaceComplexity || "N/A"}
-            </code>
-          </motion.div>
+
+            <div className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-4 shadow-xl w-full">
+              <div className="flex items-center mb-2 sm:mb-3">
+                <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 text-gray-900 mr-2" />
+                <h5 className="text-sm sm:text-base font-semibold text-gray-900">Space Complexity</h5>
+              </div>
+              <code className="bg-white/30 px-3 py-1.5 rounded text-gray-900 font-mono text-xs sm:text-sm inline-block">{algoMeta.spaceComplexity}</code>
+            </div>
+          </div>
         </div>
       </div>
     </div>

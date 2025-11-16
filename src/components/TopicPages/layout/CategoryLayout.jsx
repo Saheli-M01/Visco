@@ -411,7 +411,7 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
           algorithm={selectedAlgorithm?.algorithm}
           topic={selectedAlgorithm?.topic}
         />
-      ) : category.id === "linked-list" ? (
+      ) : category.id === "linkedList" ? (
         <FullScreenModalLinkedList
           isOpen={isModalOpen}
           onClose={closeModal}

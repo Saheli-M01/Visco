@@ -87,7 +87,8 @@ const LinkedListInputCard = ({
     }
 
     // Call parent handler with parsed list and optional operation value
-    handleGo(res.value, operationVal);
+    // also pass the raw trimmed input string as the third arg so parent can display it
+    handleGo(res.value, operationVal, trimmed);
   };
 
   const onHistorySelect = (item) => {
@@ -95,86 +96,76 @@ const LinkedListInputCard = ({
   };
 
   return (
-    <div className="relative mb-6">
-      <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-4 shadow-lg">
-        <h3 className="text-lg font-semibold text-white mb-3">
-          Configure Linked List
-        </h3>
+    <div className="bg-white  rounded-xl p-2">
+      <h3 className="text-md font-semibold text-gray-900 mb-3">Linked List Input</h3>
+      <div className="space-y-3">
+        <div className="relative flex gap-1">
+          <textarea
+            value={listInput}
+            onChange={(e) => {
+              setListInput(e.target.value);
+              if (showValidationPopup) setShowValidationPopup(false);
+            }}
+            placeholder="Enter comma-separated numbers — Maximum 10 values"
+            className="w-full h-15 rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 resize-none focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-[0.75rem] px-2 py-1 transition-all duration-200"
+          />
 
-        {/* List Input */}
-        <div className="space-y-3">
-          <div>
-            <label className="block text-sm text-gray-300 mb-2">
-              Enter node values (comma-separated, max 10):
-            </label>
-            <input
-              type="text"
-              value={listInput}
-              onChange={(e) => {
-                setListInput(e.target.value);
-                if (showValidationPopup) setShowValidationPopup(false);
-              }}
-              placeholder="e.g., 1, 2, 3, 4, 5"
-              className="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          {/* Operation Value Input (for insert, delete, search) */}
-          {selectedAlgorithm && (selectedAlgorithm.name.toLowerCase().includes("insert") || 
-            selectedAlgorithm.name.toLowerCase().includes("delete") || 
+          {/* Operation input (for insert/delete/search) */}
+          {selectedAlgorithm && (selectedAlgorithm.name.toLowerCase().includes("insert") ||
+            selectedAlgorithm.name.toLowerCase().includes("delete") ||
             selectedAlgorithm.name.toLowerCase().includes("search")) && (
-            <div>
-              <label className="block text-sm text-gray-300 mb-2">
-                Operation Value:
-              </label>
-              <input
-                type="text"
-                value={operationValue}
-                onChange={(e) => setOperationValue(e.target.value)}
-                placeholder="e.g., 3"
-                className="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
+            <textarea
+              value={operationValue}
+              onChange={(e) => setOperationValue(e.target.value)}
+              placeholder="Operation value"
+              className="w-[200px] rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 resize-none focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-[0.75rem] px-2 py-1 transition-all duration-200"
+            />
           )}
 
-          {/* Go Button */}
           <button
             onClick={onGo}
-            className="w-full px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+            className={
+              ("px-4 py-2 rounded-lg transition-all shadow-md text-sm font-medium border ") +
+              (showValidationPopup
+                ? "bg-gray-300 text-gray-600 border-gray-300 cursor-not-allowed"
+                : "bg-gray-800 text-white hover:bg-gray-700 border-gray-600")
+            }
           >
-            Visualize
+            Go
           </button>
         </div>
 
-        {/* History */}
-        {history.length > 0 && (
-          <div className="mt-4 pt-4 border-t border-gray-700">
-            <label className="block text-sm text-gray-300 mb-2">
-              Recent Inputs:
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {history.slice(0, 5).map((item, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => onHistorySelect(item)}
-                  className="px-3 py-1 bg-gray-700 hover:bg-gray-600 text-gray-200 text-sm rounded-lg transition-colors"
-                >
-                  {item}
-                </button>
-              ))}
+        {showValidationPopup && (
+          <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg shadow-lg w-full">
+            <div className="flex items-start justify-between gap-2">
+              <div className="text-red-700 text-sm">{validationError}</div>
+              <button
+                onClick={() => setShowValidationPopup(false)}
+                aria-label="Close validation"
+                className="text-red-700 hover:text-red-800 ml-2 font-semibold"
+              >
+                ×
+              </button>
             </div>
           </div>
         )}
-      </div>
 
-      {/* Validation Popup */}
-      {showValidationPopup && (
-        <div className="absolute top-full left-0 right-0 mt-2 z-50">
-          <div className="bg-red-500/90 backdrop-blur-sm border border-red-700 rounded-lg p-3 shadow-xl animate-shake">
-            <p className="text-white text-sm font-medium">{validationError}</p>
+        {/* history chips */}
+        {history && history.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {history.slice(0, 2).map((h, idx) => (
+              <button
+                key={h + idx}
+                onClick={() => setListInput(h)}
+                className="px-3 py-1 bg-gray-100 border border-gray-200 rounded-full text-sm text-gray-800 hover:bg-gray-200"
+                title={`Restore: ${h}`}
+              >
+                {h.length > 24 ? h.slice(0, 22) + "…" : h}
+              </button>
+            ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

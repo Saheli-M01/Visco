@@ -52,8 +52,19 @@ const SortingPage = () => {
     }
   ];
 
+  const sections = [
+    {
+      title: "Sorting Algorithms",
+      algorithms: sortingCategory.algorithms,
+    },
+  ];
+
   return (
-    <CategoryLayout category={sortingCategory} complexityData={complexityData} />
+    <CategoryLayout
+      category={sortingCategory}
+      complexityData={complexityData}
+      sections={sections}
+    />
   );
 };
 

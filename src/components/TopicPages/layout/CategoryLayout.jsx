@@ -276,7 +276,7 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.1 }}
-                  className="mb-8 md:mb-16"
+                  className="mb-8 md:mb-16 "
                 >
                   {sections && sections.length > 0 ? (
                     // Render with sections
@@ -284,11 +284,24 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
                       {sections.map((section, sectionIndex) => (
                         <div
                           key={section.title}
-                          className="backdrop-blur-md bg-white/40 border border-white/20 rounded-3xl px-3 sm:px-8 py-6 sm:py-8 md:py-12 shadow-xl"
+                          className="backdrop-blur-md bg-white/30 border border-white/20 rounded-3xl px-3 sm:px-8 py-6 sm:py-8 md:py-12 shadow-xl"
                         >
-                          <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">
-                            {section.title}
-                          </h3>
+                          {/* Section header: title + optional description */}
+                          <div className="mb-6 px-1">
+                            <div className="flex items-start justify-between">
+                              <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">
+                                {section.title}
+                              </h3>
+                              {section.count !== undefined && (
+                                <span className="text-sm text-gray-500 ml-4 hidden sm:inline">
+                                  {section.count} algorithms
+                                </span>
+                              )}
+                            </div>
+
+                       
+                          </div>
+
                           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
                             {section.algorithms.map((algorithm, index) => (
                               <AlgorithmCard
@@ -329,7 +342,7 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
                     transition={{ duration: 0.8, delay: 0.1 }}
                     className="mb-8 md:mb-16"
                   >
-                    <div className="backdrop-blur-md bg-white/10 border border-white/60 rounded-3xl px-3 sm:px-8 py-6 sm:py-8 md:py-12 shadow-xl">
+                    <div className="backdrop-blur-md bg-white/60 border border-white/60 rounded-3xl px-3 sm:px-8 py-6 sm:py-8 md:py-12 shadow-xl">
                       <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 text-center">
                         Complexity Comparison
                       </h2>

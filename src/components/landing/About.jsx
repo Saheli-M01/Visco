@@ -1,31 +1,31 @@
 import { motion } from "framer-motion";
-import { Code, Eye, BookOpen, Zap } from "lucide-react";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 export const About = () => {
   const features = [
     {
-      icon: Eye,
+      lottie:
+        "https://lottie.host/e3c1f17c-71f4-4714-9ded-27dfdfa2d897/rc2rjpOnqx.lottie",
       title: "Visual Learning",
-      description:
-        "Watch algorithms come to life with smooth, interactive animations that make complex concepts crystal clear.",
+      description: "Interactive animations that make algorithms clear.",
     },
     {
-      icon: Code,
+      lottie:
+        "https://lottie.host/09bbc403-9bea-4a92-bd8a-4cd115d9fae4/ghIIgHxVi0.lottie",
       title: "Multi-Language Support",
-      description:
-        "Study implementations in C++, C#, Java, Javascript and Python with syntax highlighting and detailed explanations.",
+      description: "Working examples in C#, Java, C++, JavaScript and Python.",
     },
     {
-      icon: BookOpen,
-      title: "Step-by-Step Guide",
-      description:
-        "Follow along with detailed breakdowns of each algorithm step, understanding the why behind every move.",
+      lottie:
+        "https://lottie.host/109462f3-39e8-4918-8bdf-60f2f7c43c60/GdKnzeal3X.lottie",
+      title: "Detailed Learning",
+      description: "Clear, step-by-step breakdowns for each algorithm.",
     },
     {
-      icon: Zap,
+      lottie:
+        "https://lottie.host/e5123c35-dd88-46e6-9aa3-542bc406628b/VzID18QIVS.lottie",
       title: "Interactive Controls",
-      description:
-        "Play, pause, step through, and control the speed of visualizations to learn at your own pace.",
+      description: "Play, pause, and step through visualizations.",
     },
   ];
 
@@ -57,16 +57,14 @@ export const About = () => {
               <span className="text-gray-700">Accessible</span>
             </h2>
             <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed font-medium">
-              Visco transforms the way you learn algorithms. Through interactive
-              visualizations, comprehensive code examples, and intuitive
-              controls, we make even the most complex algorithms easy to
-              understand and remember.
+              Visco makes learning algorithms easier with interactive
+              visualizations and concise code examples.
             </p>
           </div>
         </motion.div>
 
         {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
@@ -76,43 +74,25 @@ export const About = () => {
               viewport={{ once: true }}
               className="group"
             >
-              <div className="backdrop-blur-md bg-white/10 border border-gray-300/20 rounded-2xl p-3 md:px-6 md:py-8 shadow-xl h-full text-center hover:bg-white/15 hover:scale-105 duration-300 transition-all">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-white/30 backdrop-blur-sm border border-gray-200/40 rounded-xl mb-6 mx-auto shadow-md transform transition-transform duration-300 group-hover:scale-110">
-                  <feature.icon className="h-8 w-8 text-gray-900" />
+              <div className="relative bg-white/75 backdrop-blur-xl rounded-3xl px-6 py-4  shadow-[0_14px_40px_rgba(2,6,23,0.12)] hover:shadow-[0_24px_60px_rgba(2,6,23,0.16)] ring-1 ring-gray-200/40 transition-transform transform-gpu hover:-translate-y-1 duration-300 h-full text-center">
+                <div className="mx-auto mb-6 w-28 h-28 md:w-36 md:h-36 flex items-center justify-center rounded-full bg-gradient-to-tr from-indigo-50 to-indigo-100 p-2 shadow-inner">
+                  <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center">
+                    <DotLottieReact src={feature.lottie} loop autoplay style={{ width: '100%', height: '100%' }} />
+                  </div>
                 </div>
 
-                <h3 className="text-xl font-semibold mb-4 text-gray-900 group-hover:text-gray-700 transition-colors">
+                <h3 className="text-lg md:text-xl font-semibold mb-2 text-gray-900">
                   {feature.title}
                 </h3>
 
-                <p className="text-gray-700 leading-relaxed font-medium">
+                <p className="text-gray-600 leading-relaxed font-medium mb-4 md:mb-6">
                   {feature.description}
                 </p>
+
               </div>
             </motion.div>
           ))}
         </div>
-
-        {/* Mission Statement */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="mt-12 text-center"
-        >
-          <div className=" rounded-3xl p-4 md:p-12  shadow-xl bg-white/40">
-            <h3 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900">
-              Our Mission
-            </h3>
-            <p className="text-lg text-gray-700 max-w-4xl mx-auto leading-relaxed font-medium">
-              We believe that understanding algorithms shouldn't be a barrier to
-              becoming a great programmer. By combining visual learning with
-              hands-on interaction, Visco empowers learners at all levels to
-              master data structures and algorithms with confidence and clarity.
-            </p>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

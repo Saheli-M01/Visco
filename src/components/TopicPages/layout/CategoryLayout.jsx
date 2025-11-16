@@ -12,6 +12,7 @@ import {
 import {
   FullScreenModalSorting,
   FullScreenModalArray,
+  FullScreenModalLinkedList,
 } from "@/components/algorithm-visualizer-details";
 import AlgorithmCard from "@/components/common/AlgorithmCard";
 
@@ -44,7 +45,10 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
       // Ignore real-time search updates while on topic pages
       const q = e?.detail?.query || "";
       // Only update if coming from navigation (URL has search param) or search page
-      if (window.location.pathname === "/search" || window.location.search.includes("q=")) {
+      if (
+        window.location.pathname === "/search" ||
+        window.location.search.includes("q=")
+      ) {
         setSearchQuery(q.toLowerCase());
       }
     };
@@ -278,7 +282,10 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
                     // Render with sections
                     <div className="space-y-8">
                       {sections.map((section, sectionIndex) => (
-                        <div key={section.title} className="backdrop-blur-md bg-white/40 border border-white/20 rounded-3xl px-3 sm:px-8 py-6 sm:py-8 md:py-12 shadow-xl">
+                        <div
+                          key={section.title}
+                          className="backdrop-blur-md bg-white/40 border border-white/20 rounded-3xl px-3 sm:px-8 py-6 sm:py-8 md:py-12 shadow-xl"
+                        >
                           <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">
                             {section.title}
                           </h3>
@@ -313,7 +320,6 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
                 </motion.div>
               </div>
 
-           
               {/* Complexity Comparison */}
               {complexityData && complexityData.length > 0 && (
                 <div id="complexity" className="scroll-mt-5 md:scroll-mt-24">
@@ -387,6 +393,13 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
       {/* Algorithm Full-Screen Modal */}
       {category.id === "array" ? (
         <FullScreenModalArray
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          algorithm={selectedAlgorithm?.algorithm}
+          topic={selectedAlgorithm?.topic}
+        />
+      ) : category.id === "linked-list" ? (
+        <FullScreenModalLinkedList
           isOpen={isModalOpen}
           onClose={closeModal}
           algorithm={selectedAlgorithm?.algorithm}

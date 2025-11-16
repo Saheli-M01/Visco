@@ -4,13 +4,12 @@ import { insertionSort } from "./sorting/InsertionSort/insertionSort.js";
 import { mergeSort } from "./sorting/MergeSort/mergeSort.js";
 import { quickSort } from "./sorting/QuickSort/quickSort.js";
 import { heapSort } from "./sorting/HeapSort/heapSort.js";
-import {binarySearch} from "./array/BinarySearch/binarySearch.js";
+import { binarySearch } from "./array/BinarySearch/binarySearch.js";
 import { dutchFlag } from "./array/Dutch/dutchFlag.js";
-import {kadane} from "./array/Kadanes/kadanes";
+import { kadane } from "./array/Kadanes/kadanes";
 import { nextPermutation } from "./array/NextPermutation/nextPermutation.js";
 import { slidingWindow } from "./array/SlidingWindow/slidingWindow.js";
 import { mooresVoting } from "./array/MooresVoting/mooresVoting.js";
-import { singlyLinkedList } from "./linked-list/singlyLinkedList/singlyLinkedList.js";
 
 // Algorithm factory to get the appropriate algorithm implementation
 export const getAlgorithm = (algorithmName) => {
@@ -41,11 +40,11 @@ export const getAlgorithm = (algorithmName) => {
     dutchflag: dutchFlag,
     "Kadane's Algorithm": kadane,
     "kadane's algorithm": kadane,
-    "kadane": kadane,
+    kadane: kadane,
     kadane: kadane,
     "Next Permutation": nextPermutation,
     "next permutation": nextPermutation,
-    "nextpermutation": nextPermutation,
+    nextpermutation: nextPermutation,
     nextpermutation: nextPermutation,
     "Sliding Window": slidingWindow,
     "sliding window": slidingWindow,
@@ -64,9 +63,6 @@ export const getAlgorithm = (algorithmName) => {
     "moore's voting (boyer-moore)": mooresVoting,
     "Boyer-Moore": mooresVoting,
     "boyer-moore": mooresVoting,
-    "Singly Linked List": singlyLinkedList,
-    "singly linked list": singlyLinkedList,
-    singlylinkedlist: singlyLinkedList,
     "Singly Linked List - Creation": singlyLinkedList,
     "singly linked list - creation": singlyLinkedList,
     "Singly Linked List - Traversal": singlyLinkedList,

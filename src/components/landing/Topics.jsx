@@ -6,7 +6,7 @@ import {
   GitBranch,
   Link,
   ChevronRight,
-  BarChart3
+  BarChart3,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAlgorithmCounts } from "../../hooks/useAlgorithmCounts.js";
@@ -17,43 +17,42 @@ const topicConfigs = [
     id: "sorting",
     title: "Sorting Algorithms",
     icon: ArrowUpDown,
-    color: "from-indigo-500 to-indigo-600",
+    color: "from-sky-500 to-indigo-600",
     description: "Visualize how data gets organized",
-    path: "/sorting"
+    path: "/sorting",
   },
   {
     id: "array",
     title: "Array Algorithms",
     icon: List,
-    color: "from-green-500 to-green-600",
+    color: "from-lime-500 to-green-600",
     description: "Master array manipulation techniques",
-    path: "/array"
+    path: "/array",
   },
   {
     id: "linked-list",
     title: "Linked Lists",
     icon: Link,
-    color: "from-red-500 to-red-600",
+    color: "from-orange-500 to-red-600",
     description: "Connect and manipulate node structures",
-    path: "/linked-list"
+    path: "/linked-list",
   },
   {
     id: "graph",
     title: "Graph Algorithms",
     icon: Network,
-    color: "from-purple-500 to-purple-600",
+    color: "from-fuchsia-500 to-purple-600",
     description: "Navigate complex network structures",
-    path: "/graph"
+    path: "/graph",
   },
   {
     id: "tree",
     title: "Tree Algorithms",
     icon: GitBranch,
-    color: "from-orange-500 to-orange-600",
+    color: "from-rose-500 to-pink-600",
     description: "Explore hierarchical data structures",
-    path: "/tree"
+    path: "/tree",
   },
-  
 ];
 
 export const Topics = () => {
@@ -62,12 +61,17 @@ export const Topics = () => {
 
   const topics = topicConfigs.map((config) => ({
     ...config,
-    algorithmCount: algorithmCounts[config.id] || 0
+    algorithmCount: algorithmCounts[config.id] || 0,
   }));
 
   const handleTopicClick = (topic) => {
     // Allow navigation for active topics (sorting and array)
-    if (topic.id === "sorting" || topic.id === "array" || topic.id === "linked-list") navigate(topic.path);
+    if (
+      topic.id === "sorting" ||
+      topic.id === "array" ||
+      topic.id === "linked-list"
+    )
+      navigate(topic.path);
   };
 
   return (
@@ -79,7 +83,7 @@ export const Topics = () => {
           style={{
             backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.24) 1px, transparent 1px),
                              linear-gradient(90deg, rgba(0, 0, 0, 0.32) 1px, transparent 1px)`,
-            backgroundSize: "3vw 3vw"
+            backgroundSize: "3vw 3vw",
           }}
         />
       </div>
@@ -98,9 +102,9 @@ export const Topics = () => {
               Choose Your <span className="text-gray-700">Learning Path</span>
             </h2>
             <p className="text-lg text-gray-700 max-w-3xl mx-auto font-medium leading-relaxed">
-              Explore our comprehensive collection of algorithm categories.
-              Each topic contains multiple algorithms with interactive
-              visualizations and detailed explanations.
+              Explore our comprehensive collection of algorithm categories. Each
+              topic contains multiple algorithms with interactive visualizations
+              and detailed explanations.
             </p>
           </div>
         </motion.div>
@@ -108,7 +112,10 @@ export const Topics = () => {
         {/* Topics Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {topics.map((topic, index) => {
-            const isActive = topic.id === "sorting" || topic.id === "array" || topic.id === "linked-list"; 
+            const isActive =
+              topic.id === "sorting" ||
+              topic.id === "array" ||
+              topic.id === "linked-list";
 
             return (
               <motion.div
@@ -123,7 +130,7 @@ export const Topics = () => {
                 }`}
               >
                 <div
-                  className={`backdrop-blur-md bg-white/70 border border-gray-200/60 rounded-2xl px-6 py-8 shadow-xl h-full 
+                  className={`backdrop-blur-md bg-white/70 border border-gray-200 rounded-2xl px-6 py-8 shadow-xl h-full 
                   ${
                     isActive
                       ? "hover:bg-white hover:border-white/30 transition-all duration-300"
@@ -140,7 +147,10 @@ export const Topics = () => {
                     </motion.div>
 
                     {isActive ? (
-                      <motion.div whileHover={{ x: 5 }} transition={{ duration: 0.3 }}>
+                      <motion.div
+                        whileHover={{ x: 5 }}
+                        transition={{ duration: 0.3 }}
+                      >
                         <ChevronRight className="h-5 w-5 text-gray-600 group-hover:text-gray-900 transition-colors" />
                       </motion.div>
                     ) : (

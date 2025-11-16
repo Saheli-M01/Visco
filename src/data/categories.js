@@ -60,7 +60,7 @@ export const categories = {
         shortDescription:
           "Efficient search algorithm for sorted arrays using divide and conquer.",
       },
- {
+      {
         name: "Next Permutation",
         complexity: "O(n)",
         difficulty: "Easy",
@@ -95,7 +95,6 @@ export const categories = {
         shortDescription:
           "Find a majority element (if exists) in linear time with constant space.",
       },
-     
     ],
   },
 
@@ -299,6 +298,39 @@ export const categories = {
         shortDescription:
           "Delete nodes from circular list while maintaining circular structure.",
         category: "circular",
+      },
+      // Doubly Circular Linked List Operations
+      {
+        name: "Doubly Circular Linked List - Creation",
+        complexity: "O(n)",
+        difficulty: "Medium",
+        shortDescription:
+          "Create a circular doubly linked list where nodes have prev/next and list is circular.",
+        category: "doubly-circular",
+      },
+      {
+        name: "Doubly Circular Linked List - Traversal",
+        complexity: "O(n)",
+        difficulty: "Medium",
+        shortDescription:
+          "Traverse forward or backward through the circular doubly linked list.",
+        category: "doubly-circular",
+      },
+      {
+        name: "Doubly Circular Linked List - Insertion",
+        complexity: "O(1)",
+        difficulty: "Medium",
+        shortDescription:
+          "Insert at head, tail, or any position in O(1) given the node reference; O(n) to find a position.",
+        category: "doubly-circular",
+      },
+      {
+        name: "Doubly Circular Linked List - Deletion",
+        complexity: "O(1)",
+        difficulty: "Medium",
+        shortDescription:
+          "Delete at head, tail, or any position in O(1) given the node reference; O(n) to find a node by value.",
+        category: "doubly-circular",
       },
     ],
   },

@@ -1,6 +1,6 @@
 import React from "react";
 import { ArrowRight } from "lucide-react";
-import SinglyLinkedListVisualizer from "../../../algorithms/linked-list/singlyLinkedList/singlyLinkedListVisualizer";
+
 
 const LinkedListNode = ({ value, index, styleClass, showArrow = true }) => (
   <div key={`node-${index}-${value}`} className="flex items-center">

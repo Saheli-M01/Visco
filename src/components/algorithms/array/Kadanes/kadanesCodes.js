@@ -15,7 +15,6 @@ export const timeComplexity = {
 
 export const spaceComplexity = "O(1)";
 
-export const pseudoCode = `kadane(A):\n  max_ending_here = A[0]\n  max_so_far = A[0]\n  for x in A[1:]:\n    max_ending_here = max(x, max_ending_here + x)\n    max_so_far = max(max_so_far, max_ending_here)\n  return max_so_far`;
 
 const codes = {
 	javascript: `// Kadane's Algorithm - JavaScript (runnable)

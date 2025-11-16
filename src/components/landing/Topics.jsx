@@ -23,6 +23,7 @@ const topicConfigs = [
     borderColor: "border-blue-200/50",
     hoverBorder: "group-hover:border-blue-300",
     textAccent: "text-blue-600",
+    chipGradient: "from-blue-200 via-blue-100 to-indigo-200",
     chipBg: "bg-blue-200/80",
     chipText: "text-blue-700",
     description: "Visualize how data gets organized",
@@ -38,6 +39,7 @@ const topicConfigs = [
     borderColor: "border-emerald-200/50",
     hoverBorder: "group-hover:border-emerald-300",
     textAccent: "text-emerald-600",
+    chipGradient: "from-emerald-200 via-emerald-100 to-teal-100",
     chipBg: "bg-emerald-100/80",
     chipText: "text-emerald-700",
     description: "Master array manipulation techniques",
@@ -53,6 +55,7 @@ const topicConfigs = [
     borderColor: "border-orange-200/50",
     hoverBorder: "group-hover:border-orange-300",
     textAccent: "text-orange-600",
+    chipGradient: "from-orange-200 via-orange-100 to-pink-100",
     chipBg: "bg-orange-100/80",
     chipText: "text-orange-700",
     description: "Connect and manipulate node structures",
@@ -68,6 +71,7 @@ const topicConfigs = [
     borderColor: "border-purple-200/50",
     hoverBorder: "group-hover:border-purple-300",
     textAccent: "text-purple-600",
+    chipGradient: "from-purple-200 via-purple-150 to-indigo-150",
     chipBg: "bg-purple-100/80",
     chipText: "text-purple-700",
     description: "Navigate complex network structures",
@@ -83,6 +87,7 @@ const topicConfigs = [
     borderColor: "border-fuchsia-200/50",
     hoverBorder: "group-hover:border-fuchsia-300",
     textAccent: "text-fuchsia-600",
+    chipGradient: "from-fuchsia-200 via-pink-100 to-rose-100",
     chipBg: "bg-fuchsia-100/80",
     chipText: "text-fuchsia-700",
     description: "Explore hierarchical data structures",
@@ -238,14 +243,16 @@ export const Topics = () => {
                     {/* Algorithm count chip */}
                     <div className="flex items-center gap-2 mb-6">
                       <span
-                        className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold shadow-sm border ${
+                        className={`relative inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-center border transition-transform duration-150 overflow-hidden ${
                           isActive
-                            ? `${topic.chipBg} ${topic.chipText} border-white`
-                            : "bg-gray-100 text-gray-600 border-gray-200"
+                            ? `bg-gradient-to-r ${topic.chipGradient} ${topic.chipText} border-white shadow-[0_8px_20px_rgba(15,23,42,0.06)] hover:-translate-y-0.5`
+                            : "bg-gray-100 text-gray-600 border-gray-200 shadow-[0_6px_12px_rgba(15,23,42,0.04)]"
                         }`}
                       >
+                        {/* top highlight to emulate the glossy pill */}
+                        <span className="pointer-events-none absolute -top-2 left-0 w-[120%] h-6 rounded-full bg-white/40 blur-md opacity-20 transform rotate-6" />
                         <BarChart3 className="w-3.5 h-3.5" />
-                        {topic.algorithmCount} algorithms
+                        <span className="whitespace-nowrap">{topic.algorithmCount} algorithms</span>
                       </span>
                     </div>
 

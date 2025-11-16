@@ -23,7 +23,7 @@ const topicConfigs = [
     borderColor: "border-blue-200/50",
     hoverBorder: "group-hover:border-blue-300",
     textAccent: "text-blue-600",
-    chipBg: "bg-blue-100/80",
+    chipBg: "bg-blue-200/80",
     chipText: "text-blue-700",
     description: "Visualize how data gets organized",
     path: "/sorting",
@@ -167,17 +167,17 @@ export const Topics = () => {
                   whileHover={
                     isActive ? { y: -8, scale: 1.02 } : { scale: 0.98 }
                   }
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  className={`relative h-full rounded-3xl p-8 transition-all duration-500 ${
+                  transition={{ duration: 0.12, ease: "easeOut" }}
+                  className={`relative h-full rounded-3xl p-8 transition-all duration-150 ${
                     isActive
                       ? `bg-gradient-to-br ${topic.bgGradient} border-2 ${topic.borderColor} ${topic.hoverBorder} shadow-xl group-hover:shadow-2xl`
-                      : "bg-white/40 border-2 border-gray-200/60 shadow-lg opacity-60"
+                      : "bg-white border-2 border-gray-200/60 shadow-lg opacity-60"
                   }`}
                 >
                   {/* Premium gradient overlay */}
-                  {isActive && (
+                    {isActive && (
                     <div
-                      className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${topic.gradient} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-500`}
+                      className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${topic.gradient} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-150`}
                     />
                   )}
 
@@ -187,7 +187,7 @@ export const Topics = () => {
                       {/* Icon */}
                       <motion.div
                         whileHover={isActive ? { rotate: 5, scale: 1.1 } : {}}
-                        transition={{ duration: 0.3 }}
+                        transition={{ duration: 0.12 }}
                         className={`p-2 rounded-sm shadow-lg ${
                           isActive
                             ? topic.iconBg
@@ -201,7 +201,7 @@ export const Topics = () => {
                       {isActive ? (
                         <motion.div
                           whileHover={{ x: 4 }}
-                          transition={{ duration: 0.2 }}
+                          transition={{ duration: 0.12 }}
                           className="p-2 rounded-xl bg-white/60 backdrop-blur-sm shadow-md"
                         >
                           <ChevronRight
@@ -266,7 +266,7 @@ export const Topics = () => {
                   {/* Shine effect on hover */}
                   {isActive && (
                     <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
-                      <div className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12" />
+                      <div className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-600 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12" />
                     </div>
                   )}
                 </motion.div>

@@ -4,7 +4,7 @@ export const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gradient-to-br from-muted/30 to-background border-t border-border/50">
+    <footer className="bg-gradient-to-br from-white/20 via-white-50 to-white border-t border-border/50">
       <div className="max-w-6xl mx-auto px-6 pt-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
 
         {/* Left Side: Brand & Description */}
@@ -28,14 +28,14 @@ export const Footer = () => {
         </div>
 
         {/* Right Side: Email */}
-        <div className="flex flex-col items-start md:items-end">
+        <div className="flex flex-col items-start md:items-end ">
           <p className="text-sm text-muted-foreground mb-2">
             Reach out to us:
           </p>
           <a
             href="mailto:visualizecode.official@gmail.com"
             aria-label="Email"
-            className="flex items-center space-x-2 p-3 bg-card border border-border/50 rounded-lg text-muted-foreground hover:text-primary hover:border-primary/30 transition-all duration-200"
+            className="flex items-center space-x-2 p-3 bg-gradient-to-br from-blue-100 to-blue-200 border border-border/50 rounded-lg text-gray-700  hover:border-primary/30 transition-all duration-200"
           >
             <Mail className="h-4 w-4" />
             <span className="text-[0.9rem]">visualizecode.official@gmail.com</span>

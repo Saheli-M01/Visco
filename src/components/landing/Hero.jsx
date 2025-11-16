@@ -333,7 +333,7 @@ export default function Hero() {
       <div className="relative w-full max-w-5xl mx-auto z-10">
         <div className="text-center md:px-6 md:py-16">
           {/* Single Glassmorphic Container */}
-          <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-3xl  px-2 md:px-8 py-2 md:py-12 shadow-xl">
+          <div className="backdrop-blur-md bg-white/60 border border-white/10 rounded-3xl  px-2 md:px-8 py-2 md:py-12 shadow-xl">
             <h1
               className="font-black mb-8 leading-tight"
               style={{ fontSize: "clamp(2.5em, 8vw, 5em)" }}

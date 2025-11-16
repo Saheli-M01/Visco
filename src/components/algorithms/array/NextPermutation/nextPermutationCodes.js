@@ -16,30 +16,7 @@ export const timeComplexity = {
 
 export const spaceComplexity = "O(1)";
 
-export const pseudoCode = `nextPermutation(nums):
-  // Find pivot
-  pivot = -1
-  for i from n-2 down to 0:
-    if nums[i] < nums[i+1]:
-      pivot = i
-      break
-  
-  // If no pivot, reverse all
-  if pivot == -1:
-    reverse(nums, 0, n-1)
-    return
-  
-  // Find successor
-  for j from n-1 down to pivot+1:
-    if nums[j] > nums[pivot]:
-      successor = j
-      break
-  
-  // Swap pivot and successor
-  swap(nums[pivot], nums[successor])
-  
-  // Reverse suffix after pivot
-  reverse(nums, pivot+1, n-1)`;
+
 
 const codes = {
 	javascript: `

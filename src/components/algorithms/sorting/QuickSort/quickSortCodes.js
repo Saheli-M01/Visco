@@ -14,8 +14,6 @@ export const timeComplexity = {
 
 export const spaceComplexity = "O(log n) (recursive stack)";
 
-export const pseudoCode = `quickSort(A):\n  if len(A) <= 1: return A\n  pivot = choose_pivot(A)\n  left, right = partition(A, pivot)\n  return quickSort(left) + [pivot] + quickSort(right)`;
-
 const codes = {
   javascript: `// Quick Sort - JavaScript (runnable)
 function quickSort(arr) {

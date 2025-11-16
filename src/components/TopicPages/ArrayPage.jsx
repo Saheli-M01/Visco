@@ -4,6 +4,7 @@ import { categories } from "@/data/categories";
 
 const ArrayPage = () => {
   const arrayCategory = categories.array;
+ 
   const complexityData = [
     {
       name: "Binary Search",
@@ -12,7 +13,7 @@ const ArrayPage = () => {
       worst: "O(log n)",
       space: "O(1)",
     },
-     {
+    {
       name: "Next Permutation",
       best: "O(n)",
       average: "O(n)",
@@ -49,11 +50,21 @@ const ArrayPage = () => {
       worst: "O(n)",
       space: "O(1)",
     },
-   
+  ];
+
+  const sections = [
+    {
+      title: "Array Algorithms",
+      algorithms: arrayCategory.algorithms,
+    },
   ];
 
   return (
-    <CategoryLayout category={arrayCategory} complexityData={complexityData} />
+    <CategoryLayout
+      category={arrayCategory}
+      complexityData={complexityData}
+      sections={sections}
+    />
   );
 };
 

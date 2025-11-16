@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
 
 const StepHistory = ({
-  stepHistory,
-  currentStepIndex,
-  isVisualizationActive,
-  sortingSteps,
-  setCurrentStepIndex,
-  setCurrentStep,
-  setCurrentArray,
-  setComparingIndices,
-  setCurrentCodeLine,
-  currentStepRef,
-  stepHistoryRef,
+  stepHistory = [],
+  currentStepIndex = 0,
+  isVisualizationActive = false,
+  sortingSteps = [],
+  setCurrentStepIndex = () => {},
+  setCurrentStep = () => {},
+  setCurrentArray = () => {},
+  setComparingIndices = () => {},
+  setCurrentCodeLine = () => {},
+  currentStepRef = { current: null },
+  stepHistoryRef = { current: null },
 }) => {
   // Auto-scroll to current step when currentStepIndex changes
   useEffect(() => {
@@ -146,7 +146,7 @@ const StepHistory = ({
                   })()}
                 </div>
                 <div className="flex gap-1 flex-wrap mb-2">
-                  {step.array.map((num, i) => (
+                  {(step.array || []).map((num, i) => (
                     <span
                       key={i}
                       className={`px-2 py-1 rounded text-xs font-medium  ${

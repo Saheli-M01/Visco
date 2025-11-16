@@ -4,12 +4,14 @@ import { insertionSort } from "./sorting/InsertionSort/insertionSort.js";
 import { mergeSort } from "./sorting/MergeSort/mergeSort.js";
 import { quickSort } from "./sorting/QuickSort/quickSort.js";
 import { heapSort } from "./sorting/HeapSort/heapSort.js";
-import {binarySearch} from "./array/BinarySearch/binarySearch.js";
+import { binarySearch } from "./array/BinarySearch/binarySearch.js";
 import { dutchFlag } from "./array/Dutch/dutchFlag.js";
-import {kadane} from "./array/Kadanes/kadanes";
+import { kadane } from "./array/Kadanes/kadanes";
 import { nextPermutation } from "./array/NextPermutation/nextPermutation.js";
 import { slidingWindow } from "./array/SlidingWindow/slidingWindow.js";
 import { mooresVoting } from "./array/MooresVoting/mooresVoting.js";
+import { singlyLinkedListCreation } from "./linked-list/singlyLinkedList/creation/creation.js";
+
 
 // Algorithm factory to get the appropriate algorithm implementation
 export const getAlgorithm = (algorithmName) => {
@@ -40,11 +42,11 @@ export const getAlgorithm = (algorithmName) => {
     dutchflag: dutchFlag,
     "Kadane's Algorithm": kadane,
     "kadane's algorithm": kadane,
-    "kadane": kadane,
+    kadane: kadane,
     kadane: kadane,
     "Next Permutation": nextPermutation,
     "next permutation": nextPermutation,
-    "nextpermutation": nextPermutation,
+    nextpermutation: nextPermutation,
     nextpermutation: nextPermutation,
     "Sliding Window": slidingWindow,
     "sliding window": slidingWindow,
@@ -63,6 +65,32 @@ export const getAlgorithm = (algorithmName) => {
     "moore's voting (boyer-moore)": mooresVoting,
     "Boyer-Moore": mooresVoting,
     "boyer-moore": mooresVoting,
+    "Singly Linked List - Creation": singlyLinkedListCreation,
+    "singly linked list - creation": singlyLinkedListCreation,
+    // "Singly Linked List - Traversal": singlyLinkedList,
+    // "singly linked list - traversal": singlyLinkedList,
+    // "Singly Linked List - Insertion": singlyLinkedList,
+    // "singly linked list - insertion": singlyLinkedList,
+    // "Singly Linked List - Deletion": singlyLinkedList,
+    // "singly linked list - deletion": singlyLinkedList,
+    // "Doubly Linked List - Creation": singlyLinkedList, // Placeholder
+    // "doubly linked list - creation": singlyLinkedList,
+    // "Doubly Linked List - Traversal": singlyLinkedList, // Placeholder
+    // "doubly linked list - traversal": singlyLinkedList,
+    // "Doubly Linked List - Insertion": singlyLinkedList, // Placeholder
+    // "doubly linked list - insertion": singlyLinkedList,
+    // "Doubly Linked List - Deletion": singlyLinkedList, // Placeholder
+    // "doubly linked list - deletion": singlyLinkedList,
+    // "Circular Linked List - Creation": singlyLinkedList, // Placeholder
+    // "circular linked list - creation": singlyLinkedList,
+    // "Circular Linked List - Traversal": singlyLinkedList, // Placeholder
+    // "circular linked list - traversal": singlyLinkedList,
+    // "Circular Linked List - Insertion": singlyLinkedList, // Placeholder
+    // "circular linked list - insertion": singlyLinkedList,
+    // "Circular Linked List - Deletion": singlyLinkedList, // Placeholder
+    // "circular linked list - deletion": singlyLinkedList,
+    // "linked list": singlyLinkedList,
+    // linkedlist: singlyLinkedList,
   };
 
   const normalizedName = algorithmName?.toLowerCase().replace(/\s+/g, "");

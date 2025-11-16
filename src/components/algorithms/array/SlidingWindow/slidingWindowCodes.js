@@ -17,7 +17,7 @@ export const timeComplexity = {
 
 export const spaceComplexity = "O(1)";
 
-export const pseudoCode = `maxArea(height):\n  maxArea = 0\n  left = 0, right = length - 1\n  while left < right:\n    area = (right - left) × min(height[left], height[right])\n    maxArea = max(maxArea, area)\n    if height[left] < height[right]:\n      left++\n    else:\n      right--\n  return maxArea`;
+
 
 const codes = {
   javascript: `// Container With Most Water - JavaScript

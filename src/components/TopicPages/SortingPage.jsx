@@ -5,20 +5,7 @@ import { categories } from "@/data/categories";
 const SortingPage = () => {
   const sortingCategory = categories.sorting;
 
-  const sortingFeatures = [
-    {
-      title: "Time Complexity Analysis",
-      description: "Learn to evaluate and compare different sorting algorithms based on their performance characteristics."
-    },
-    {
-      title: "Stability & In-Place Sorting", 
-      description: "Understand the difference between stable and unstable sorts, and memory-efficient in-place algorithms."
-    },
-    {
-      title: "Real-World Applications",
-      description: "Discover where each sorting algorithm excels in practical scenarios and system design."
-    }
-  ];
+
 
   const complexityData = [
     {
@@ -65,8 +52,19 @@ const SortingPage = () => {
     }
   ];
 
+  const sections = [
+    {
+      title: "Sorting Algorithms",
+      algorithms: sortingCategory.algorithms,
+    },
+  ];
+
   return (
-    <CategoryLayout category={sortingCategory} complexityData={complexityData} />
+    <CategoryLayout
+      category={sortingCategory}
+      complexityData={complexityData}
+      sections={sections}
+    />
   );
 };
 

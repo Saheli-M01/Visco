@@ -5,13 +5,26 @@ import { Clock, ChevronRight } from "lucide-react";
 const getDifficultyColor = (difficulty) => {
   switch (difficulty) {
     case "Easy":
-      return "text-green-600 bg-green-100/50";
+      return "text-green-700 bg-green-200/70 border border-green-500";
     case "Medium":
-      return "text-yellow-600 bg-yellow-100/50";
+      return "text-yellow-600 bg-yellow-200/70 border border-yellow-500";
     case "Hard":
-      return "text-red-600 bg-red-100/50";
+      return "text-red-600 bg-red-200/70 border border-red-500";
     default:
-      return "text-gray-600 bg-gray-100/50";
+      return "text-gray-600 bg-gray-100/50 border border-gray-500";
+  }
+};
+
+const getCardBackground = (difficulty) => {
+  switch (difficulty) {
+    case "Easy":
+      return "bg-gradient-to-br from-emerald-100/60 to-white/80 border-green-100";
+    case "Medium":
+      return "bg-gradient-to-br from-orange-100/60 to-white/80 border-orange-100";
+    case "Hard":
+      return "bg-gradient-to-br from-red-100/60 to-white/80 border-red-100";
+    default:
+      return "bg-white/60 border-white/30";
   }
 };
 
@@ -29,6 +42,8 @@ const AlgorithmCard = ({ algorithm, index = 0, onClick }) => {
     "Next Permutation",
     "Sliding Window / 2 pointers (Container With Most Water)",
     "Moore's Voting (Boyer-Moore)",
+    "Singly Linked List - Creation",
+  
   ];
   const isInteractive = interactive.includes(algorithm.name);
 
@@ -38,8 +53,8 @@ const AlgorithmCard = ({ algorithm, index = 0, onClick }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.05 * index }}
       onClick={() => isInteractive && onClick && onClick(algorithm)}
-      className={`backdrop-blur-sm bg-white/60 border border-white/30 rounded-xl px-4 sm:px-6 py-4 sm:py-6 shadow-md transition-all group ${
-        isInteractive ? "hover:bg-white/85 cursor-pointer" : "opacity-60 cursor-default"
+      className={`backdrop-blur-sm ${getCardBackground(algorithm.difficulty)} rounded-xl px-4 sm:px-6 py-4 sm:py-6 shadow-md transition-all group ${
+        isInteractive ? "hover:shadow-lg hover:scale-[1.01] cursor-pointer" : "opacity-60 cursor-default"
       }`}
     >
       <div className="flex items-center justify-between mb-3">
@@ -54,12 +69,12 @@ const AlgorithmCard = ({ algorithm, index = 0, onClick }) => {
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3 mb-3">
-        <div className="flex items-center text-gray-600">
+        <div className="flex items-center bg-white/80 text-gray-800  border border-gray-300/80 px-3 py-1 rounded-full text-xs font-medium">
           <Clock className="h-3 w-3 mr-1" />
           <code className="font-mono text-xs">{algorithm.complexity}</code>
         </div>
 
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(algorithm.difficulty)}`}>
+        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getDifficultyColor(algorithm.difficulty)}`}>
           {algorithm.difficulty}
         </span>
       </div>

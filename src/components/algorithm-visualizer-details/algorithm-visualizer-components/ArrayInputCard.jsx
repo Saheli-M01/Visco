@@ -176,7 +176,7 @@ const ArrayInputCard = ({
 
   return (
     <div className="bg-white  rounded-xl p-2">
-      <h3 className="text-md font-semibold text-gray-900 mb-3">Array Input</h3>
+      <h3 className="text-md font-semibold text-gray-900 mb-3">Input</h3>
       <div className="space-y-3">
         <div className="relative flex gap-1">
           <textarea

@@ -245,7 +245,13 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
 
         {/* Main Content */}
         <main
-          className="relative overflow-hidden flex-1 "
+          className={`relative overflow-hidden flex-1 ${
+            category?.id === "array"
+              ? "page-bg-array"
+              : category?.id === "sorting"
+              ? "page-bg-sorting"
+              : ""
+          }`}
           style={{
             marginLeft: isMobile ? 0 : collapsed ? 72 : 256,
             transition: "margin-left 0.28s ease",
@@ -268,10 +274,7 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
           >
             <div className="max-w-6xl mx-auto">
               {/* Available Algorithms */}
-              <div id="algorithms" className="scroll-mt-5 md:scroll-mt-24">
-                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-2">
-                  Available Algorithms
-                </h2>
+              <div id="algorithms" className="scroll-mt-5 md:scroll-mt-24 ">
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -284,8 +287,11 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
                       {sections.map((section, sectionIndex) => (
                         <div
                           key={section.title}
-                          className="backdrop-blur-md bg-white/30 border border-white/20 rounded-3xl px-3 sm:px-8 py-6 sm:py-8 md:py-12 shadow-xl"
+                          className="backdrop-blur-md bg-white/80 border border-white/20 rounded-3xl px-3 sm:px-8 py-6 sm:py-8 md:py-12 shadow-xl"
                         >
+                          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-2">
+                            Available Algorithms
+                          </h2>
                           {/* Section header: title + optional description */}
                           <div className="mb-6 px-1">
                             <div className="flex items-start justify-between">
@@ -298,8 +304,6 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
                                 </span>
                               )}
                             </div>
-
-                       
                           </div>
 
                           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
@@ -342,7 +346,7 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
                     transition={{ duration: 0.8, delay: 0.1 }}
                     className="mb-8 md:mb-16"
                   >
-                    <div className="backdrop-blur-md bg-white/60 border border-white/60 rounded-3xl px-3 sm:px-8 py-6 sm:py-8 md:py-12 shadow-xl">
+                    <div className="backdrop-blur-md bg-white/80 border border-white/60 rounded-3xl px-3 sm:px-8 py-6 sm:py-8 md:py-12 shadow-xl">
                       <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 text-center">
                         Complexity Comparison
                       </h2>

@@ -54,7 +54,7 @@ const ArrayPage = () => {
 
   const sections = [
     {
-      title: "Array Algorithms",
+      title: "Array Operations",
       algorithms: arrayCategory.algorithms,
     },
   ];

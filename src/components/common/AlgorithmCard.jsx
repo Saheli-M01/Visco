@@ -53,7 +53,7 @@ const AlgorithmCard = ({ algorithm, index = 0, onClick }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.05 * index }}
       onClick={() => isInteractive && onClick && onClick(algorithm)}
-      className={`backdrop-blur-sm ${getCardBackground(algorithm.difficulty)} rounded-xl px-4 sm:px-6 py-4 sm:py-6 shadow-md transition-all group ${
+      className={`backdrop-blur-sm ${getCardBackground(algorithm.difficulty)} rounded-xl px-4 sm:px-6 py-4 sm:py-6 shadow-md border transition-all group ${
         isInteractive ? "hover:shadow-lg hover:scale-[1.01] cursor-pointer" : "opacity-60 cursor-default"
       }`}
     >

@@ -74,7 +74,7 @@ export const About = () => {
               viewport={{ once: true }}
               className="group"
             >
-              <div className="relative bg-white backdrop-blur-xl rounded-3xl px-6 py-4  shadow-[0_14px_40px_rgba(2,6,23,0.12)] hover:shadow-[0_24px_60px_rgba(2,6,23,0.16)] ring-1 ring-gray-200/40 transition-transform transform-gpu hover:-translate-y-1 duration-300 h-full text-center">
+              <div className="relative bg-white backdrop-blur-xl rounded-3xl px-6 py-4  shadow-[0_14px_40px_rgba(2,6,23,0.12)] ring-1 ring-gray-200/40 transition-transform transform-gpu hover:-translate-y-1 duration-300 h-full text-center">
                 <div className="mx-auto mb-6 w-28 h-28 md:w-36 md:h-36 flex items-center justify-center rounded-full bg-gradient-to-tr from-indigo-50 to-indigo-100 p-2 shadow-inner">
                   <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center">
                     <DotLottieReact src={feature.lottie} loop autoplay style={{ width: '100%', height: '100%' }} />

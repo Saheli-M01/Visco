@@ -6,7 +6,10 @@ export const rangeMatches = (a, b) =>
 
 export const parseIndexFromDesc = (desc, key) => {
   if (!desc || typeof desc !== "string") return null;
-  // Try a few patterns: 'key => number', 'key = number', or 'key:number' and return the last numeric match if any.
+  // Only attempt parsing if the description actually mentions the key (avoid matching unrelated numeric values like '(value 4)').
+  const keyWord = new RegExp(`\\b${key}\\b`);
+  if (!keyWord.test(desc)) return null;
+  // Try a few patterns: 'key => number', 'key = number', or 'key:number'
   const arrowPattern = new RegExp(`${key}\\s*=>\\s*(\\d+)`);
   const eqPattern = new RegExp(`${key}\\s*=\\s*(\\d+)`);
   const colonPattern = new RegExp(`${key}\\s*:\\s*(\\d+)`);
@@ -18,9 +21,7 @@ export const parseIndexFromDesc = (desc, key) => {
   m = desc.match(colonPattern);
   if (m) return Number(m[1]);
 
-  // Fallback: find all numbers and return the last one (useful if description contains '... => 0  randomIndex=4' style)
-  const allNums = desc.match(/(\d+)/g);
-  if (allNums && allNums.length) return Number(allNums[allNums.length - 1]);
+  // No fallback to unrelated numbers — only return explicit matches above.
   return null;
 };
 

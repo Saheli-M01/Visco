@@ -3,10 +3,10 @@ import { AnimatePresence } from "framer-motion";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AlgorithmDetails from "./ArrayDetails";
 import AlgorithmVisualization from "./ArrayVisualization";
-import { categories } from "../../../../data/categories";
-import { getAlgorithm, parseArray } from "../../../algorithms/algorithmFactory";
-import VisualizerHeader from "../VisualizerHeader";
-import ConfirmModal from "../../Modal";
+import { categories } from "../../../data/categories";
+import { getAlgorithm, parseArray } from "../../algorithms/algorithmFactory";
+import VisualizerHeader from "../algorithm-visualizer-components/VisualizerHeader";
+import ConfirmModal from "../Modal";
 
 const theme = createTheme({});
 

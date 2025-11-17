@@ -3,10 +3,10 @@ import { AnimatePresence } from "framer-motion";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import LinkedListDetails from "./LinkedListDetails";
 import LinkedListVisualization from "./LinkedListVisualization";
-import { categories } from "../../../../data/categories";
-import { getAlgorithm } from "../../../algorithms/algorithmFactory";
-import VisualizerHeader from "../VisualizerHeader";
-import ConfirmModal from "../../Modal";
+import { categories } from "../../../data/categories";
+import { getAlgorithm } from "../../algorithms/algorithmFactory";
+import VisualizerHeader from "../algorithm-visualizer-components/VisualizerHeader";
+import ConfirmModal from "../Modal";
 
 const theme = createTheme({});
 

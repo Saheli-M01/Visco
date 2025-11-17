@@ -1,9 +1,9 @@
 import React from "react";
-import CodePreview from "../CodePreview";
-import StepHistory from "../StepHistory";
+import CodePreview from "../algorithm-visualizer-components/CodePreview";
+import StepHistory from "../algorithm-visualizer-components/StepHistory";
 import SortingDisplay from "./SortingDisplay";
-import ControlsPanel from "../ControlsPanel";
-import ArrayInputCard from "../ArrayInputCard";
+import ControlsPanel from "../algorithm-visualizer-components/ControlsPanel";
+import ArrayInputCard from "../algorithm-visualizer-components/ArrayInputCard";
 
 const AlgorithmVisualization = ({
   selectedLanguage,

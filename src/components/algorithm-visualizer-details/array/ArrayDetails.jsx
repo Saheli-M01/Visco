@@ -5,20 +5,20 @@ import { Clock, BarChart3, Code, Play, BookOpen } from "lucide-react";
 // Dynamic code loaders (lazy import to keep bundle small)
 const codeLoaders = {
   "Binary Search": () =>
-    import("../../../algorithms/array/BinarySearch/binarySearchCodes"),
+    import("../../algorithms/array/BinarySearch/binarySearchCodes"),
 
   "Sliding Window / 2 pointers (Container With Most Water)": () =>
-    import("../../../algorithms/array/SlidingWindow/slidingWindowCodes"),
+    import("../../algorithms/array/SlidingWindow/slidingWindowCodes"),
   "Kadane's Algorithm": () =>
-    import("../../../algorithms/array/Kadanes/kadanesCodes"),
+    import("../../algorithms/array/Kadanes/kadanesCodes"),
   "Dutch Flag": () =>
-    import("../../../algorithms/array/Dutch/dutchFlagcodes"),
+    import("../../algorithms/array/Dutch/dutchFlagcodes"),
   "Next Permutation": () =>
-    import("../../../algorithms/array/NextPermutation/nextPermutationCodes"),
+    import("../../algorithms/array/NextPermutation/nextPermutationCodes"),
   "Moore's Voting Algorithm": () =>
-    import("../../../algorithms/array/MooresVoting/MooresVotingCodes"),
+    import("../../algorithms/array/MooresVoting/MooresVotingCodes"),
   "Moore's Voting (Boyer-Moore)": () =>
-    import("../../../algorithms/array/MooresVoting/MooresVotingCodes"),
+    import("../../algorithms/array/MooresVoting/MooresVotingCodes"),
 };
 
 const AlgorithmDetails = ({ algorithm, topic }) => {

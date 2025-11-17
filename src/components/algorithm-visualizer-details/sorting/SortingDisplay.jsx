@@ -1,14 +1,14 @@
 import React from "react";
-import BubbleVisualizer from "../../../algorithms/sorting/BubbleSort/BubbleVisualizer";
-import InsertionVisualizer from "../../../algorithms/sorting/InsertionSort/InsertionVisualizer";
-import SelectionVisualizer from "../../../algorithms/sorting/SelectionSort/SelectionVisualizer";
+import BubbleVisualizer from "../../algorithms/sorting/BubbleSort/BubbleVisualizer";
+import InsertionVisualizer from "../../algorithms/sorting/InsertionSort/InsertionVisualizer";
+import SelectionVisualizer from "../../algorithms/sorting/SelectionSort/SelectionVisualizer";
 import MergeVisualizer, {
   getMergeOverlay,
-} from "../../../algorithms/sorting/MergeSort/MergeVisualizer";
+} from "../../algorithms/sorting/MergeSort/MergeVisualizer";
 import QuickVisualizer, {
   getQuickOverlay,
-} from "../../../algorithms/sorting/QuickSort/QuickVisualizer";
-import HeapVisualizer from "../../../algorithms/sorting/HeapSort/HeapVisualizer";
+} from "../../algorithms/sorting/QuickSort/QuickVisualizer";
+import HeapVisualizer from "../../algorithms/sorting/HeapSort/HeapVisualizer";
 
 
 const ArrayElement = ({ value, index, styleClass }) => (

@@ -1,10 +1,10 @@
 import React from "react";
-import BinarySearchVisualizer from "../../../algorithms/array/BinarySearch/BinarySearchVisualizer";
-import DutchFlagVisualizer from "../../../algorithms/array/Dutch/dutchFlagVisualizer";
-import KadanesVisualizer from "../../../algorithms/array/Kadanes/kadanesVisualizer";
-import { NextPermutationVisualizer } from "../../../algorithms/array/NextPermutation/nextPermutationVisualizer";
-import SlidingWindowVisualizer from "../../../algorithms/array/SlidingWindow/SlidingWindowVisualizer.jsx";
-import MooresVotingVisualizer from "../../../algorithms/array/MooresVoting/MooresVotingVisualizer.jsx";
+import BinarySearchVisualizer from "../../algorithms/array/BinarySearch/BinarySearchVisualizer";
+import DutchFlagVisualizer from "../../algorithms/array/Dutch/dutchFlagVisualizer";
+import KadanesVisualizer from "../../algorithms/array/Kadanes/kadanesVisualizer";
+import { NextPermutationVisualizer } from "../../algorithms/array/NextPermutation/nextPermutationVisualizer";
+import SlidingWindowVisualizer from "../../algorithms/array/SlidingWindow/SlidingWindowVisualizer.jsx";
+import MooresVotingVisualizer from "../../algorithms/array/MooresVoting/MooresVotingVisualizer.jsx";
 
 const ArrayElement = ({ value, index, styleClass }) => (
   <div key={`${index}-${value}`} className="flex flex-col items-center pt-2">

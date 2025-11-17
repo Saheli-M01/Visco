@@ -153,8 +153,7 @@ export const Topics = () => {
           {topics.map((topic, index) => {
             const isActive =
               topic.id === "sorting" ||
-              topic.id === "array" ||
-              topic.id === "linked-list";
+              topic.id === "array" ;
 
             return (
               <motion.div
@@ -165,7 +164,9 @@ export const Topics = () => {
                 viewport={{ once: true }}
                 onClick={isActive ? () => handleTopicClick(topic) : undefined}
                 aria-disabled={!isActive}
-                className={`group ${isActive ? "cursor-pointer" : "cursor-not-allowed"}`}
+                className={`group ${
+                  isActive ? "cursor-pointer" : "cursor-not-allowed"
+                }`}
               >
                 <motion.div
                   whileHover={isActive ? { y: -8, scale: 1.02 } : {}}
@@ -177,7 +178,7 @@ export const Topics = () => {
                   }`}
                 >
                   {/* Premium gradient overlay */}
-                    {isActive && (
+                  {isActive && (
                     <div
                       className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${topic.gradient} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-150`}
                     />
@@ -194,7 +195,7 @@ export const Topics = () => {
                       >
                         <topic.icon className="w-7 h-7 text-white" />
                       </motion.div>
-
+                    
                       {/* Badge or Arrow */}
                       {isActive ? (
                         <motion.div
@@ -214,9 +215,11 @@ export const Topics = () => {
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-2xl font-bold mb-3 transition-colors text-gray-900">
-                      {topic.title}
-                    </h3>
+                    <div className="flex items-center gap-3 mb-3">
+                      <h3 className="text-2xl font-bold transition-colors text-gray-900">
+                        {topic.title}
+                      </h3>
+                    </div>
 
                     {/* Description */}
                     <p className="text-sm mb-6 leading-relaxed text-gray-700">
@@ -231,13 +234,19 @@ export const Topics = () => {
                         {/* top highlight to emulate the glossy pill */}
                         <span className="pointer-events-none absolute -top-2 left-0 w-[120%] h-6 rounded-full bg-white/40 blur-md opacity-20 transform rotate-6" />
                         <BarChart3 className="w-3.5 h-3.5" />
-                        <span className="whitespace-nowrap">{topic.algorithmCount} algorithms</span>
+                        <span className="whitespace-nowrap">
+                          {topic.algorithmCount} algorithms
+                        </span>
                       </span>
                     </div>
 
                     {/* Footer */}
                     <div className="pt-5 border-t border-gray-900/10">
-                      <span className={`text-sm font-semibold ${topic.textAccent} ${isActive ? 'group-hover:underline' : ''}`}>
+                      <span
+                        className={`text-sm font-semibold ${topic.textAccent} ${
+                          isActive ? "group-hover:underline" : ""
+                        }`}
+                      >
                         {isActive ? "Click to explore →" : "Stay tuned 🚧"}
                       </span>
                     </div>

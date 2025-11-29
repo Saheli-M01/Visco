@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import categories from "@/data/categories";
-import { ChevronRight, BarChart3 } from "lucide-react";
+import { ChevronLeft, BarChart3 } from "lucide-react";
 import { Navigation } from "@/components/landing";
 import { useLocation } from "react-router-dom";
 import AlgorithmCard from "@/components/common/AlgorithmCard";
@@ -20,7 +20,6 @@ const flattenAlgorithms = () => {
 const SearchPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
 
   const queryFromUrl = useMemo(() => {
     const params = new URLSearchParams(location.search);
@@ -56,17 +55,17 @@ const SearchPage = () => {
       <Navigation />
 
       <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold text-gray-900">Search Results</h2>
+        <div className="mb-4">
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate("/")}
             className="inline-flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-gray-900"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-4 w-4">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-            </svg>
+            <ChevronLeft className="w-5"/>
             Back to home
           </button>
+          <h2 className="text-2xl font-bold text-gray-900 text-center">
+            Search Results
+          </h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -80,21 +79,21 @@ const SearchPage = () => {
                 onClick={handleAlgorithmClick}
               />
             ))
-          ) : (
-            query ? (
-              <div className="col-span-full flex flex-col items-center justify-center py-12">
-                <div className="w-[500px] h-[500px]">
-                  <DotLottieReact
-                    src="https://lottie.host/ac704642-0b9c-4379-a75e-6945a81d169b/RJdqSPDoMQ.lottie"
-                    loop
-                    autoplay
-                    style={{ width: "100%", height: "100%" }}
-                  />
-                </div>
-                <p className="mt-6 text-gray-700 text-lg font-medium">Not available</p>
+          ) : query ? (
+            <div className="col-span-full flex flex-col items-center justify-center py-12">
+              <div className="w-auto h-[50vh]">
+                <DotLottieReact
+                  src="https://lottie.host/ac704642-0b9c-4379-a75e-6945a81d169b/RJdqSPDoMQ.lottie"
+                  loop
+                  autoplay
+                  style={{ width: "100%", height: "100%" }}
+                />
               </div>
-            ) : null
-          )}
+              <p className="mt-6 text-gray-700 text-lg font-medium">
+                Not available
+              </p>
+            </div>
+          ) : null}
         </div>
       </div>
       <FullScreenModalSorting

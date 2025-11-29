@@ -71,7 +71,9 @@ export default function SelectionVisualizer({
   }
 
   // Hide selection j during swap phases and outer_loop
-  if (isSwapPhase || step.phase === "outer_loop") selectionJObj = null;
+  // Only show `j` while we are in inner-loop / comparison phases. Hide during outer loop, min updates, swaps, etc.
+  const jVisiblePhases = ["inner_loop", "comparison", "inner_loop_end", "no_change","min_update"];
+  if (isSwapPhase || !jVisiblePhases.includes(step.phase)) selectionJObj = null;
 
   // Temp handling: read temp from current step or persisted earlier; show only during swap phases
   let tempObj = step.temp ?? null;
@@ -84,7 +86,8 @@ export default function SelectionVisualizer({
     if (mi >= 0 && mi < currentArray.length) minObj = { value: currentArray[mi], index: mi };
   }
   if (!minObj) minObj = findPersistedValue(sortingSteps, currentStepIndex - 1, ["min"]);
-  if (step.phase === "outer_loop") minObj = null;
+  // Keep minObj persisted across phases (including outer_loop) so the minIndex
+  // VariableCard remains visible until the algorithm reaches the `completed` phase.
 
   // Determine whether we have anything to show: min, or derived i/j values
   const isSelectionContext = !!minObj || !!selectionIObj || !!selectionJObj;

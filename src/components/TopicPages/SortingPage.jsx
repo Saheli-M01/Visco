@@ -54,7 +54,7 @@ const SortingPage = () => {
 
   const sections = [
     {
-      title: "Sorting Algorithms",
+      title: "Sorting Techniques",
       algorithms: sortingCategory.algorithms,
     },
   ];

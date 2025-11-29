@@ -7,6 +7,57 @@ export const selectionSort = {
     const a = [...arr];
     const n = a.length;
 
+    // Language-specific line numbers
+    const lineNumbers = {
+      javascript: {
+        outer: 1,
+        minInit: 2,
+        inner: 3,
+        compare: 4,
+        minUpdate: 5,
+        swap: 8,
+      },
+      python: {
+        outer: 1,
+        minInit: 2,
+        inner: 3,
+        compare: 4,
+        minUpdate: 5,
+        swap: 8,
+      },
+      java: {
+        outer: 1,
+        minInit: 2,
+        inner: 3,
+        compare: 4,
+        minUpdate: 5,
+        tempAssign: 8,
+        swapFirst: 9,
+        swapSecond: 10,
+      },
+      csharp: {
+        outer: 1,
+        minInit: 2,
+        inner: 3,
+        compare: 4,
+        minUpdate: 5,
+        tempAssign: 8,
+        swapFirst: 9,
+        swapSecond: 10,
+      },
+      cpp: {
+        outer: 1,
+        minInit: 2,
+        inner: 3,
+        compare: 4,
+        minUpdate: 5,
+        swap: 8,
+      },
+    };
+
+    const lines = lineNumbers[language] || lineNumbers.javascript;
+    const usesTemp = language === "java" || language === "csharp";
+
     // Check if array is already sorted
     let isSorted = true;
     for (let k = 0; k < n - 1; k++) {
@@ -35,50 +86,54 @@ export const selectionSort = {
         comparing: [],
         swapped: [],
         description: `Pass ${i + 1}: Starting outer loop: i = ${i}`,
-        codeLine: 1,
+        codeLine: lines.outer,
         phase: "outer_loop",
       });
 
       let minIndex = i;
-      // Emit an initial min_update step with a structured `min` so the UI
-      // shows the minIndex variable explicitly. Do NOT put this index into
-      // `comparing` — otherwise components that infer `j` from comparing[0]
-      // may display `j` prematurely.
+      // Initial minIndex step
       steps.push({
         array: [...a],
+        comparing: [],
         swapped: [],
-        description: `Initial minIndex ${minIndex} (value ${a[minIndex]})`,
-        codeLine: 2,
+        description: `Initialize minIndex = ${minIndex} (value ${a[minIndex]})`,
+        codeLine: lines.minInit,
         phase: "min_update",
         min: { value: a[minIndex], index: minIndex },
       });
+
       for (let j = i + 1; j < n; j++) {
+          // track last j so we can persist it after the inner loop ends
+          var lastJ = j;
         steps.push({
           array: [...a],
           comparing: [],
           swapped: [],
           description: `Inner loop: j = ${j}`,
-          codeLine: 3,
+          codeLine: lines.inner,
           phase: "inner_loop",
-          j: { value: j },
+            j: { value: j },
         });
-        // compare
+
+        // Compare step
         steps.push({
           array: [...a],
           comparing: [minIndex, j],
           swapped: [],
-          description: `Comparing arr[${minIndex}] = (${a[minIndex]}) with arr[${j}] = (${a[j]})`,
-          codeLine: 4,
+          description: `Comparing arr[${minIndex}] (${a[minIndex]}) with arr[${j}] (${a[j]})`,
+          codeLine: lines.compare,
           phase: "comparison",
           j: { value: j },
         });
+
         if (a[j] < a[minIndex]) {
           minIndex = j;
           steps.push({
             array: [...a],
+            comparing: [],
             swapped: [],
-            description: `New minIndex found at ${minIndex}`,
-            codeLine: 5,
+            description: `Found new minimum at index ${minIndex} (value ${a[minIndex]})`,
+            codeLine: lines.minUpdate,
             phase: "min_update",
             min: { value: a[minIndex], index: minIndex },
           });
@@ -87,59 +142,76 @@ export const selectionSort = {
             array: [...a],
             comparing: [],
             swapped: [],
-            description: `No change`,
-            codeLine: 3,
+            description: `Current minimum (${a[minIndex]}) is smaller, no change`,
+            codeLine: lines.compare,
             phase: "no_change",
           });
         }
       }
 
+      // After the inner loop finishes, add a short step to indicate inner-loop end
+      // and persist the last j value so the UI can show the j VariableCard in the
+      // inner-loop-end phase.
+      if (typeof lastJ !== 'undefined' && lastJ !== null) {
+        steps.push({
+          array: [...a],
+          comparing: [],
+          swapped: [],
+          description: `Inner loop complete, last j = ${lastJ}`,
+          codeLine: lines.inner,
+          phase: "inner_loop_end",
+          selectionJ: lastJ,
+        });
+      }
+
+      // Swap logic
       if (minIndex !== i) {
-        // Swap using language-appropriate steps
         const v1 = a[i];
         const v2 = a[minIndex];
-  if (language === "java" || language === "csharp") {
+
+        if (usesTemp) {
           // temp = a[i]
           steps.push({
             array: [...a],
             comparing: [i, minIndex],
             swapped: [],
-            description: `temp = ${v1}`,
+            description: `temp = arr[${i}] = ${v1}`,
             temp: { value: v1, index: i },
-            codeLine: 8,
+            codeLine: lines.tempAssign,
             phase: "swap_step",
           });
+
           // a[i] = a[minIndex]
           a[i] = v2;
           steps.push({
             array: [...a],
             comparing: [i, minIndex],
-            swapped: [i, minIndex],
-            description: `arr[${i}] = ${v2}`,
+            swapped: [i],
+            description: `arr[${i}] = arr[${minIndex}] = ${v2}`,
             temp: { value: v1, index: i },
-            codeLine: 9,
+            codeLine: lines.swapFirst,
             phase: "swap_step",
           });
+
           // a[minIndex] = temp
           a[minIndex] = v1;
           steps.push({
             array: [...a],
             comparing: [i, minIndex],
             swapped: [i, minIndex],
-            description: `arr[${minIndex}] = ${v1}`,
-            temp: { value: v1, index: i },
-            codeLine: 10,
+            description: `arr[${minIndex}] = temp = ${v1}`,
+            codeLine: lines.swapSecond,
             phase: "swap",
           });
         } else {
-          // JS-like single swap
+          // Single swap for JS/Python/C++
           [a[i], a[minIndex]] = [a[minIndex], a[i]];
           steps.push({
             array: [...a],
             comparing: [i, minIndex],
             swapped: [i, minIndex],
-            description: `Swapping: ${v1} ↔ ${v2}`,
-            codeLine: 8,
+            description: `Swapping arr[${i}] (${v1}) ↔ arr[${minIndex}] (${v2})`,
+            codeLine: lines.swap,
             phase: "swap",
           });
         }
@@ -148,92 +220,77 @@ export const selectionSort = {
           array: [...a],
           comparing: [],
           swapped: [],
-          description: `No swap needed for position ${i}`,
+          description: `Element at position ${i} is already minimum, no swap needed`,
           codeLine: -1,
           phase: "no_swap",
         });
       }
     }
 
-    // propagate temp for C/Java but limit propagation to within each outer_loop pass
-    const languageUsesTemp = language === "java" || language === "csharp";
-    if (languageUsesTemp) {
-      // collect indices where a new outer_loop/pass starts
+    // Propagate temp variable for Java/C# within each pass
+    if (usesTemp) {
       const outerStarts = [];
       for (let k = 0; k < steps.length; k++) {
         if (steps[k] && steps[k].phase === "outer_loop") outerStarts.push(k);
       }
 
-      if (outerStarts.length === 0) {
-        // fallback: propagate as before if no outer_loop markers found
+      for (let seg = 0; seg < outerStarts.length; seg++) {
+        const start = outerStarts[seg];
+        const end =
+          seg + 1 < outerStarts.length ? outerStarts[seg + 1] : steps.length;
         let lastTemp = null;
-        for (let k = 0; k < steps.length; k++) {
+
+        for (let k = start; k < end; k++) {
           if (steps[k].hasOwnProperty("temp")) {
             if (steps[k].temp) lastTemp = steps[k].temp;
           } else {
             if (lastTemp) steps[k].temp = lastTemp;
           }
         }
-      } else {
-        // For each pass segment, propagate temp only inside that segment
-        for (let seg = 0; seg < outerStarts.length; seg++) {
-          const start = outerStarts[seg];
-          const end = seg + 1 < outerStarts.length ? outerStarts[seg + 1] : steps.length;
-          let lastTemp = null;
-          for (let k = start; k < end; k++) {
-            if (steps[k].hasOwnProperty("temp")) {
-              if (steps[k].temp) lastTemp = steps[k].temp;
-            } else {
-              if (lastTemp) steps[k].temp = lastTemp;
-            }
-          }
-        }
       }
     }
 
-    // Propagate `min` so it remains visible for the entire outer-loop pass
-    // and only clears when the next `outer_loop` step is reached.
-    // This ensures the UI shows the minIndex throughout inner/comparison/swap
-    // steps and hides it on the outer_loop marker.
+    // Propagate min within each outer-loop pass
     const outerStartsForMin = [];
     for (let k = 0; k < steps.length; k++) {
-      if (steps[k] && steps[k].phase === "outer_loop") outerStartsForMin.push(k);
+      if (steps[k] && steps[k].phase === "outer_loop")
+        outerStartsForMin.push(k);
     }
 
-    if (outerStartsForMin.length === 0) {
-      // No explicit outer_loop markers: propagate min globally except on outer_loop
+    for (let seg = 0; seg < outerStartsForMin.length; seg++) {
+      const start = outerStartsForMin[seg];
+      const end =
+        seg + 1 < outerStartsForMin.length
+          ? outerStartsForMin[seg + 1]
+          : steps.length;
       let lastMin = null;
-      for (let k = 0; k < steps.length; k++) {
+
+      // Start from start+1 to skip the outer_loop step itself
+      for (let k = start + 1; k < end; k++) {
         const st = steps[k];
         if (!st) continue;
+
         if (st.hasOwnProperty("min") && st.min) {
           lastMin = st.min;
           continue;
         }
+
         if (lastMin && st.phase !== "outer_loop") {
           st.min = lastMin;
         }
       }
-    } else {
-      // Propagate min within each outer-loop segment only and do not attach to the outer_loop step
-      for (let seg = 0; seg < outerStartsForMin.length; seg++) {
-        const start = outerStartsForMin[seg];
-        const end = seg + 1 < outerStartsForMin.length ? outerStartsForMin[seg + 1] : steps.length;
-        let lastMin = null;
-        // start+1 to skip the outer_loop step itself
-        for (let k = start + 1; k < end; k++) {
-          const st = steps[k];
-          if (!st) continue;
-          if (st.hasOwnProperty("min") && st.min) {
-            lastMin = st.min;
-            continue;
-          }
-          if (lastMin && st.phase !== "outer_loop") {
-            st.min = lastMin;
-          }
-        }
-      }
     }
+
+    // Final completed step: mark the algorithm as finished and allow UI to hide
+    // any persisted variable cards when `phase === 'completed'`.
+    steps.push({
+      array: [...a],
+      comparing: [],
+      swapped: [],
+      description: "Selection sort completed",
+      codeLine: -1,
+      phase: "completed",
+    });
 
     return steps;
   },
@@ -241,7 +298,7 @@ export const selectionSort = {
   getCodeLines: (language) => {
     const codeLines = {
       javascript: [
-        "function selectionSort(arr) {", //0
+        "function selectionSort(arr, n) {", //0
         "  for (let i = 0; i < n - 1; i++) {", //1
         "    let minIndex = i;", //2
         "    for (let j = i + 1; j < n; j++) {", //3
@@ -255,59 +312,63 @@ export const selectionSort = {
         "}", //11
       ],
       python: [
-        "def selection_sort(arr):",
-        "    for i in range(len(arr) - 1):",
-        "        minIndex = i",
-        "        for j in range(i + 1, len(arr)):",
-        "            if arr[j] < arr[minIndex]:",
-        "                minIndex = j",
-        "",
-        "",
-        "        arr[i], arr[minIndex] = arr[minIndex], arr[i]",
-        "    return arr",
+        "def selection_sort(arr, n):", // 0
+        "    for i in range(n - 1):", // 1
+        "        minIndex = i", // 2
+        "        for j in range(i + 1, n):", // 3
+        "            if arr[j] < arr[minIndex]:", // 4
+        "                minIndex = j", // 5
+        "", // 6
+        "", // 7
+        "        arr[i], arr[minIndex] = arr[minIndex], arr[i]", // 8
+        "", // 9
+        "    return arr", // 10
       ],
       java: [
-        "public static void selectionSort(int[] arr) {",
-        "    for (int i = 0; i < arr.length - 1; i++) {",
-        "        int minIndex = i;",
-        "        for (int j = i + 1; j < arr.length; j++) {",
-        "            if (arr[j] < arr[minIndex]) {",
-        "                minIndex = j;",
-        "            }",
-        "        }",
-        "        int temp = arr[i];",
-        "        arr[i] = arr[minIndex];",
-        "        arr[minIndex] = temp;",
-        "    }",
-        "}",
+        "public static int[] selectionSort(int[] arr, int n) {", // 0
+        "    for (int i = 0; i < n - 1; i++) {", // 1
+        "        int minIndex = i;", //2
+        "        for (int j = i + 1; j < n; j++) {", // 3
+        "            if (arr[j] < arr[minIndex]) {", // 4
+        "                minIndex = j;", // 5
+        "            }", // 6
+        "        }", // 7
+        "        int temp = arr[i];", // 8
+        "        arr[i] = arr[minIndex];", // 9
+        "        arr[minIndex] = temp;", // 10
+        "    }", //11
+        "    return arr;", // 12
+        "}", // 13
       ],
       csharp: [
-        "void SelectionSort(int[] arr) {",
-        "    for (int i = 0; i < n - 1; i++) {",
-        "        int minIndex = i;",
-        "        for (int j = i + 1; j < n; j++) {",
-        "            if (arr[j] < arr[minIndex]) {",
-        "                minIndex = j;",
-        "            }",
-        "        }",
-        "        int temp = arr[i];",
-        "        arr[i] = arr[minIndex];",
-        "        arr[minIndex] = temp;",
-        "    }",
-        "}",
+        "int[] SelectionSort(int[] arr, int n) {", // 0
+        "    for (int i = 0; i < n - 1; i++) {", // 1
+        "        int minIndex = i;", //2
+        "        for (int j = i + 1; j < n; j++) {", // 3
+        "            if (arr[j] < arr[minIndex]) {", // 4
+        "                minIndex = j;", // 5
+        "            }", // 6
+        "        }", // 7
+        "        int temp = arr[i];", // 8
+        "        arr[i] = arr[minIndex];", // 9
+        "        arr[minIndex] = temp;", // 10
+        "    }", //11
+        "    return arr;", // 12
+        "}", // 13
       ],
       cpp: [
-        "void selectionSort(vector<int>& arr) {",
-        "    for (int i = 0; i < arr.size() - 1; i++) {",
-        "        int minIndex = i;",
-        "        for (int j = i + 1; j < arr.size(); j++) {",
-        "            if (arr[j] < arr[minIndex]) {",
-        "                minIndex = j;",
-        "            }",
-        "        }",
-        "        swap(arr[i], arr[minIndex]);",
-        "    }",
-        "}",
+        "vector<int> selectionSort(vector<int>& arr, int n) {", // 0
+        "    for (int i = 0; i < n - 1; i++) {", // 1
+        "        int minIndex = i;", // 2
+        "        for (int j = i + 1; j < n; j++) {", // 3
+        "            if (arr[j] < arr[minIndex]) {", // 4
+        "                minIndex = j;", // 5
+        "            }", // 6
+        "        }", // 7
+        "        swap(arr[i], arr[minIndex]);", // 8
+        "    }", // 9
+        "    return arr;", //10
+        "}", // 11
       ],
     };
 
@@ -315,16 +376,17 @@ export const selectionSort = {
   },
 
   getCode: (language) => {
-    // Use the object's getCodeLines so the method can be called as selectionSort.getCode(...)
-    const lines = (this && typeof this.getCodeLines === 'function')
-      ? this.getCodeLines(language)
-      : null;
+    const lines =
+      this && typeof this.getCodeLines === "function"
+        ? this.getCodeLines(language)
+        : null;
 
-    const fallback = (this && typeof this.getCodeLines === 'function')
-      ? this.getCodeLines('javascript')
-      : [];
+    const fallback =
+      this && typeof this.getCodeLines === "function"
+        ? this.getCodeLines("javascript")
+        : [];
 
-    const chosen = (lines && lines.length) ? lines : fallback;
-    return chosen.join('\n');
+    const chosen = lines && lines.length ? lines : fallback;
+    return chosen.join("\n");
   },
 };

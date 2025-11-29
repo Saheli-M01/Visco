@@ -17,14 +17,14 @@ const topicConfigs = [
     id: "sorting",
     title: "Sorting Algorithms",
     icon: ArrowUpDown,
-    gradient: "from-blue-500 via-blue-600 to-indigo-600",
-    bgGradient: "from-blue-50 to-indigo-50",
-    iconBg: "bg-gradient-to-br from-blue-500 to-indigo-600",
+    gradient: "from-sky-500 via-blue-600 to-indigo-600",
+    bgGradient: "from-sky-50 to-indigo-50",
+    iconBg: "bg-gradient-to-br from-sky-500 to-indigo-600",
     borderColor: "border-blue-200/50",
     hoverBorder: "group-hover:border-blue-300",
     textAccent: "text-blue-600",
-    chipGradient: "from-blue-200 via-blue-100 to-indigo-200",
-    chipBg: "bg-blue-200/80",
+    chipGradient: "from-sky-200 via-blue-100 to-indigo-200",
+    chipBg: "bg-sky-200/80",
     chipText: "text-blue-700",
     description: "Visualize how data gets organized",
     path: "/sorting",
@@ -33,15 +33,15 @@ const topicConfigs = [
     id: "array",
     title: "Array Algorithms",
     icon: List,
-    gradient: "from-emerald-500 via-green-600 to-teal-600",
-    bgGradient: "from-emerald-50 to-teal-50",
-    iconBg: "bg-gradient-to-br from-emerald-500 to-teal-600",
-    borderColor: "border-emerald-200/50",
-    hoverBorder: "group-hover:border-emerald-300",
-    textAccent: "text-emerald-600",
-    chipGradient: "from-emerald-200 via-emerald-100 to-teal-100",
-    chipBg: "bg-emerald-100/80",
-    chipText: "text-emerald-700",
+    gradient: "from-amber-500 via-amber-600 to-yellow-600",
+    bgGradient: "from-amber-50 to-yellow-50",
+    iconBg: "bg-gradient-to-br from-amber-300 to-yellow-600",
+    borderColor: "border-amber-200/50",
+    hoverBorder: "group-hover:border-amber-300",
+    textAccent: "text-amber-600",
+    chipGradient: "from-amber-200 via-amber-100 to-yellow-100",
+    chipBg: "bg-amber-100/80",
+    chipText: "text-amber-700",
     description: "Master array manipulation techniques",
     path: "/array",
   },
@@ -115,7 +115,7 @@ export const Topics = () => {
   };
 
   return (
-    <section className="relative px-4 py-6 md:py-16 md:px-6 bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 overflow-hidden">
+    <section className="relative px-4 py-6 md:py-16 md:px-6 bg-white overflow-hidden">
       {/* Animated background grid */}
       <div className="absolute inset-0 opacity-15">
         <div
@@ -153,8 +153,7 @@ export const Topics = () => {
           {topics.map((topic, index) => {
             const isActive =
               topic.id === "sorting" ||
-              topic.id === "array" ||
-              topic.id === "linked-list";
+              topic.id === "array" ;
 
             return (
               <motion.div
@@ -163,24 +162,23 @@ export const Topics = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                onClick={() => handleTopicClick(topic)}
+                onClick={isActive ? () => handleTopicClick(topic) : undefined}
+                aria-disabled={!isActive}
                 className={`group ${
                   isActive ? "cursor-pointer" : "cursor-not-allowed"
                 }`}
               >
                 <motion.div
-                  whileHover={
-                    isActive ? { y: -8, scale: 1.02 } : { scale: 0.98 }
-                  }
+                  whileHover={isActive ? { y: -8, scale: 1.02 } : {}}
                   transition={{ duration: 0.12, ease: "easeOut" }}
                   className={`relative h-full rounded-3xl p-8 transition-all duration-150 ${
                     isActive
                       ? `bg-gradient-to-br ${topic.bgGradient} border-2 ${topic.borderColor} ${topic.hoverBorder} shadow-xl group-hover:shadow-2xl`
-                      : "bg-white border-2 border-gray-200/60 shadow-lg opacity-60"
+                      : `bg-gradient-to-br ${topic.bgGradient} border-2 ${topic.borderColor} shadow-xl opacity-95`
                   }`}
                 >
                   {/* Premium gradient overlay */}
-                    {isActive && (
+                  {isActive && (
                     <div
                       className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${topic.gradient} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-150`}
                     />
@@ -193,15 +191,11 @@ export const Topics = () => {
                       <motion.div
                         whileHover={isActive ? { rotate: 5, scale: 1.1 } : {}}
                         transition={{ duration: 0.12 }}
-                        className={`p-2 rounded-sm shadow-lg ${
-                          isActive
-                            ? topic.iconBg
-                            : "bg-gradient-to-br from-gray-300 to-gray-400"
-                        }`}
+                        className={`p-2 rounded-sm shadow-lg ${topic.iconBg}`}
                       >
                         <topic.icon className="w-7 h-7 text-white" />
                       </motion.div>
-
+                    
                       {/* Badge or Arrow */}
                       {isActive ? (
                         <motion.div
@@ -221,48 +215,36 @@ export const Topics = () => {
                     </div>
 
                     {/* Title */}
-                    <h3
-                      className={`text-2xl font-bold mb-3 transition-colors ${
-                        isActive
-                          ? "text-gray-900 group-hover:text-gray-800"
-                          : "text-gray-500"
-                      }`}
-                    >
-                      {topic.title}
-                    </h3>
+                    <div className="flex items-center gap-3 mb-3">
+                      <h3 className="text-2xl font-bold transition-colors text-gray-900">
+                        {topic.title}
+                      </h3>
+                    </div>
 
                     {/* Description */}
-                    <p
-                      className={`text-sm mb-6 leading-relaxed ${
-                        isActive ? "text-gray-700" : "text-gray-500"
-                      }`}
-                    >
+                    <p className="text-sm mb-6 leading-relaxed text-gray-700">
                       {topic.description}
                     </p>
 
                     {/* Algorithm count chip */}
                     <div className="flex items-center gap-2 mb-6">
                       <span
-                        className={`relative inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-center border transition-transform duration-150 overflow-hidden ${
-                          isActive
-                            ? `bg-gradient-to-r ${topic.chipGradient} ${topic.chipText} border-white shadow-[0_8px_20px_rgba(15,23,42,0.06)] hover:-translate-y-0.5`
-                            : "bg-gray-100 text-gray-600 border-gray-200 shadow-[0_6px_12px_rgba(15,23,42,0.04)]"
-                        }`}
+                        className={`relative inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-center border transition-transform duration-150 overflow-hidden bg-gradient-to-r ${topic.chipGradient} ${topic.chipText} border-white shadow-[0_8px_20px_rgba(15,23,42,0.06)]`}
                       >
                         {/* top highlight to emulate the glossy pill */}
                         <span className="pointer-events-none absolute -top-2 left-0 w-[120%] h-6 rounded-full bg-white/40 blur-md opacity-20 transform rotate-6" />
                         <BarChart3 className="w-3.5 h-3.5" />
-                        <span className="whitespace-nowrap">{topic.algorithmCount} algorithms</span>
+                        <span className="whitespace-nowrap">
+                          {topic.algorithmCount} algorithms
+                        </span>
                       </span>
                     </div>
 
                     {/* Footer */}
                     <div className="pt-5 border-t border-gray-900/10">
                       <span
-                        className={`text-sm font-semibold ${
-                          isActive
-                            ? `${topic.textAccent} group-hover:underline`
-                            : "text-gray-400"
+                        className={`text-sm font-semibold ${topic.textAccent} ${
+                          isActive ? "group-hover:underline" : ""
                         }`}
                       >
                         {isActive ? "Click to explore →" : "Stay tuned 🚧"}

@@ -4,107 +4,108 @@ export const sllCreation = {
   name: "Singly Linked List Creation",
 
   generateSteps: (arr, language = "javascript") => {
-  const steps = [];
+    const steps = [];
 
-  // keep original input text available on every step
-  const inputArray = Array.isArray(arr) ? [...arr] : [];
-  const input = Array.isArray(arr) ? arr.join(",") : String(arr || "");
+    // keep original input text available on every step
+    const inputArray = Array.isArray(arr) ? [...arr] : [];
+    const input = Array.isArray(arr) ? arr.join(",") : String(arr || "");
 
-  // Build linked list structure for visualization (nodes is internal representation)
-  let nodes = [];
+    // Build linked list structure for visualization (nodes is internal representation)
+    let nodes = [];
 
-  // Line 0: Function declaration (empty list)
-  steps.push({
-    array: [],
-    input,
-    head: null,
-    tail: null,
-    description: `Start function: createSLL(arr)`,
-    headNode: null,
-    tailNode: null,
-    phase: "start",
-    codeLine: 0,
-  });
+    // Line 0: Function declaration (empty list)
+    steps.push({
+      array: [],
+      input,
+      head: null,
+      tail: null,
+      description: `Start function: createSLL(arr)`,
+      headNode: null,
+      tailNode: null,
+      phase: "start",
+      codeLine: 0,
+    });
 
-  // Line 1: Initialize head and tail
-  let head = null;
-  let tail = null;
-  steps.push({
-    array: [],
-    input,
-    head: head,
-    tail: tail,
-    description: `Initialize: head = null, tail = null`,
-    headNode: head,
-    tailNode: tail,
-    phase: "initialize",
-    codeLine: 1,
-  });
-
-  // Line 2: Check if array is empty
-  steps.push({
-    array: [],
-    input,
-    head: head,
-    tail: tail,
-    description: `Check: if (arr.length === 0)`,
-    headNode: head,
-    tailNode: tail,
-    phase: "check-empty",
-    codeLine: 2,
-  });
-
-  if (!Array.isArray(arr) || arr.length === 0) {
+    // Line 1: Initialize head and tail
+    let head = null;
+    let tail = null;
     steps.push({
       array: [],
       input,
       head: head,
       tail: tail,
-      description: `Array is empty, return null`,
+      description: `Initialize: head = null, tail = null`,
       headNode: head,
       tailNode: tail,
-      phase: "return-empty",
-      codeLine: 2,
+      phase: "initialize",
+      codeLine: 1,
     });
-    return steps;
-  }
 
-  // Line 3: Start for loop
-  steps.push({
-    array: [],
-    input,
-    head: head,
-    tail: tail,
-    description: `Start loop: for (let i = 0; i < ${arr.length}; i++)`,
-    headNode: head,
-    tailNode: tail,
-    phase: "loop-start",
-    codeLine: 3,
-  });
-
-  // Iterate through array and create nodes
-  for (let i = 0; i < arr.length; i++) {
-    const val = arr[i];
-
-    // Line 4: Loop iteration (show which value we're processing)
+    // Line 2: Check if array is empty
     steps.push({
-      array: nodes.map((n) => n.value),
+      array: [],
       input,
       head: head,
       tail: tail,
-      description: `Loop iteration: i = ${i}, arr[${i}] = ${val}`,
-      i,
-      currentNode: null,
-      currentValue: val,
+      description: `Check: if (arr.length === 0)`,
       headNode: head,
       tailNode: tail,
-      nodes: JSON.parse(JSON.stringify(nodes)),
-      currentIndex: i,
-      phase: "loop-iteration",
+      phase: "check-empty",
+      codeLine: 2,
+    });
+
+    if (!Array.isArray(arr) || arr.length === 0) {
+      steps.push({
+        array: [],
+        input,
+        head: head,
+        tail: tail,
+        description: `Array is empty, return null`,
+        headNode: head,
+        tailNode: tail,
+        phase: "return-empty",
+        codeLine: 2,
+      });
+      return steps;
+    }
+
+    // Line 3: Start for loop
+    steps.push({
+      array: [],
+      input,
+      head: head,
+      tail: tail,
+      description: `Start loop: for (let i = 0; i < ${arr.length}; i++)`,
+      headNode: head,
+      tailNode: tail,
+      phase: "loop-start",
       codeLine: 3,
     });
 
-    // Line 5: Create new node (show node being created)
+    // Iterate through array and create nodes
+    for (let i = 0; i < arr.length; i++) {
+      const val = arr[i];
+
+      // Line 4: Loop iteration (show which value we're processing)
+      steps.push({
+        array: nodes.map((n) => n.value),
+        input,
+        head: head,
+        tail: tail,
+        description: `Loop iteration: i = ${i}, arr[${i}] = ${val}`,
+        i,
+        currentNode: null,
+        currentValue: val,
+        headNode: head,
+        tailNode: tail,
+        nodes: JSON.parse(JSON.stringify(nodes)),
+        currentIndex: i,
+        phase: "loop-iteration",
+        codeLine: 3,
+      });
+
+      // Line 5: Create new node (show node being created)
+     // Line 5: Create new node (show node being created)
     const newNode = { value: val, next: null };
     steps.push({
       array: nodes.map((n) => n.value),
@@ -121,16 +122,18 @@ export const sllCreation = {
       nodes: JSON.parse(JSON.stringify(nodes)),
       currentIndex: i,
       phase: "create-node",
-      codeLine: 4,
+      codeLine: 5,
     });
 
-    // Line 6: Check if head is null
+    // CONSTRUCTOR EXECUTION STEPS START HERE
+
+    // Line 17: Enter Node class
     steps.push({
       array: nodes.map((n) => n.value),
       input,
       head: head,
       tail: tail,
-      description: `Check: if (head === null)`,
+      description: `Enter Node class`,
       i,
       currentValue: val,
       newNode: { value: val, next: null },
@@ -138,306 +141,402 @@ export const sllCreation = {
       tailNode: tail,
       nodes: JSON.parse(JSON.stringify(nodes)),
       currentIndex: i,
-      phase: "check-head",
-      codeLine: 5,
+      phase: "constructor-class",
+      codeLine: 17,
     });
 
-    if (head === null) {
-      // Line 7: First node - set both head and tail
-      head = 0; // Store index for visualization
-      tail = 0;
-      nodes.push({ value: val, next: null });
-
-      steps.push({
-        array: nodes.map((n) => n.value),
-        input,
-        head: head,
-        tail: tail,
-        description: `First node: head = tail = Node(${val})`,
-        i,
-        currentNode: 0,
-        currentValue: val,
-        headNode: head,
-        tailNode: tail,
-        nodes: JSON.parse(JSON.stringify(nodes)),
-        currentIndex: i,
-        phase: "first-node",
-        codeLine: 6,
-      });
-    } else {
-      // Line 8: Else block
-      steps.push({
-        array: nodes.map((n) => n.value),
-        input,
-        head: head,
-        tail: tail,
-        description: `Else: head is not null, append to tail`,
-        i,
-        currentValue: val,
-        previousNode: tail,
-        headNode: head,
-        tailNode: tail,
-        nodes: JSON.parse(JSON.stringify(nodes)),
-        currentIndex: i,
-        phase: "else-block",
-        codeLine: 7,
-      });
-
-      // Line 9: Link tail->next to new node
-      steps.push({
-        array: nodes.map((n) => n.value),
-        input,
-        head: head,
-        tail: tail,
-        description: `Link: tail.next = Node(${val})`,
-        i,
-        currentValue: val,
-        previousNode: tail,
-        headNode: head,
-        tailNode: tail,
-        nodes: JSON.parse(JSON.stringify(nodes)),
-        currentIndex: i,
-        phase: "link-tail",
-        codeLine: 8,
-      });
-
-      // Update the previous tail's next pointer and append new node
-      nodes[tail].next = nodes.length;
-      nodes.push({ value: val, next: null });
-
-      steps.push({
-        array: nodes.map((n) => n.value),
-        input,
-        head: head,
-        tail: nodes.length - 1,
-        description: `Linked: tail(${nodes[tail].value}).next → Node(${val})`,
-        i,
-        currentValue: val,
-        previousNode: tail,
-        headNode: head,
-        tailNode: nodes.length - 1, // new node index
-        nodes: JSON.parse(JSON.stringify(nodes)),
-        currentIndex: i,
-        phase: "node-linked",
-        codeLine: 9,
-      });
-
-      // Line 10: Update tail
-      tail = nodes.length - 1;
-      steps.push({
-        array: nodes.map((n) => n.value),
-        input,
-        head: head,
-        tail: tail,
-        description: `Update: tail = Node(${val})`,
-        i,
-        currentValue: val,
-        headNode: head,
-        tailNode: tail,
-        nodes: JSON.parse(JSON.stringify(nodes)),
-        currentIndex: i,
-        phase: "update-tail",
-        codeLine: 9,
-      });
-    }
-
-    // Line 11: Close else/if block
+    // Line 20: Constructor function declaration
     steps.push({
       array: nodes.map((n) => n.value),
       input,
       head: head,
       tail: tail,
-      description: `Close if-else block for iteration ${i}`,
+      description: `Constructor: constructor(${val})`,
       i,
       currentValue: val,
+      newNode: { value: val, next: null },
       headNode: head,
       tailNode: tail,
       nodes: JSON.parse(JSON.stringify(nodes)),
       currentIndex: i,
-      phase: "close-block",
-      codeLine: 10,
+      phase: "constructor-signature",
+      codeLine: 20,
     });
-  }
 
-  // Line 12: Close loop
-  steps.push({
-    array: nodes.map((n) => n.value),
-    input,
-    head: head,
-    tail: tail,
-    description: `Exit loop: all ${arr.length} elements processed`,
-    i: arr.length,
-    headNode: head,
-    tailNode: tail,
-    nodes: JSON.parse(JSON.stringify(nodes)),
-    phase: "loop-exit",
-    codeLine: 11,
-  });
+    // Line 21: Set this.value = value
+    steps.push({
+      array: nodes.map((n) => n.value),
+      input,
+      head: head,
+      tail: tail,
+      description: `Set: this.value = ${val}`,
+      i,
+      currentValue: val,
+      newNode: { value: val, next: null },
+      headNode: head,
+      tailNode: tail,
+      nodes: JSON.parse(JSON.stringify(nodes)),
+      currentIndex: i,
+      phase: "constructor-set-value",
+      codeLine: 21,
+    });
 
-  // Line 13: Return head
-  steps.push({
-    array: nodes.map((n) => n.value),
-    input,
-    head: head,
-    tail: tail,
-    description: `Return head: Linked list with ${nodes.length} node(s)`,
-    headNode: head,
-    tailNode: tail,
-    nodes: JSON.parse(JSON.stringify(nodes)),
-    phase: "return-head",
-    codeLine: 12,
-  });
+    // Line 22: Set this.next = null
+    steps.push({
+      array: nodes.map((n) => n.value),
+      input,
+      head: head,
+      tail: tail,
+      description: `Set: this.next = null`,
+      i,
+      currentValue: val,
+      newNode: { value: val, next: null },
+      headNode: head,
+      tailNode: tail,
+      nodes: JSON.parse(JSON.stringify(nodes)),
+      currentIndex: i,
+      phase: "constructor-set-next",
+      codeLine: 22,
+    });
 
-  // Line 14: Function end
-  steps.push({
-    array: nodes.map((n) => n.value),
-    input,
-    head: head,
-    tail: tail,
-    description: `Function completed successfully`,
-    headNode: head,
-    tailNode: tail,
-    nodes: JSON.parse(JSON.stringify(nodes)),
-    phase: "completed",
-    codeLine: 13,
-  });
+    // Line 23: Exit constructor
+    steps.push({
+      array: nodes.map((n) => n.value),
+      input,
+      head: head,
+      tail: tail,
+      description: `Exit constructor, return Node(${val})`,
+      i,
+      currentValue: val,
+      newNode: { value: val, next: null },
+      headNode: head,
+      tailNode: tail,
+      nodes: JSON.parse(JSON.stringify(nodes)),
+      currentIndex: i,
+      phase: "constructor-exit",
+      codeLine: 23,
+    });
 
-  return steps;
-},
+
+      // Line 6: Check if head is null
+      steps.push({
+        array: nodes.map((n) => n.value),
+        input,
+        head: head,
+        tail: tail,
+        description: `Check: if (head === null)`,
+        i,
+        currentValue: val,
+        newNode: { value: val, next: null },
+        headNode: head,
+        tailNode: tail,
+        nodes: JSON.parse(JSON.stringify(nodes)),
+        currentIndex: i,
+        phase: "check-head",
+        codeLine: 5,
+      });
+
+      if (head === null) {
+        // Line 7: First node - set both head and tail
+        head = 0; // Store index for visualization
+        tail = 0;
+        nodes.push({ value: val, next: null });
+
+        steps.push({
+          array: nodes.map((n) => n.value),
+          input,
+          head: head,
+          tail: tail,
+          description: `First node: head = tail = Node(${val})`,
+          i,
+          currentNode: 0,
+          currentValue: val,
+          headNode: head,
+          tailNode: tail,
+          nodes: JSON.parse(JSON.stringify(nodes)),
+          currentIndex: i,
+          phase: "first-node",
+          codeLine: 6,
+        });
+      } else {
+        // Line 8: Else block
+        steps.push({
+          array: nodes.map((n) => n.value),
+          input,
+          head: head,
+          tail: tail,
+          description: `Else: head is not null, append to tail`,
+          i,
+          currentValue: val,
+          previousNode: tail,
+          headNode: head,
+          tailNode: tail,
+          nodes: JSON.parse(JSON.stringify(nodes)),
+          currentIndex: i,
+          phase: "else-block",
+          codeLine: 7,
+        });
+
+        // Line 9: Link tail->next to new node
+        steps.push({
+          array: nodes.map((n) => n.value),
+          input,
+          head: head,
+          tail: tail,
+          description: `Link: tail.next = Node(${val})`,
+          i,
+          currentValue: val,
+          previousNode: tail,
+          headNode: head,
+          tailNode: tail,
+          nodes: JSON.parse(JSON.stringify(nodes)),
+          currentIndex: i,
+          phase: "link-tail",
+          codeLine: 8,
+        });
+
+        // Update the previous tail's next pointer and append new node
+        nodes[tail].next = nodes.length;
+        nodes.push({ value: val, next: null });
+
+        steps.push({
+          array: nodes.map((n) => n.value),
+          input,
+          head: head,
+          tail: nodes.length - 1,
+          description: `Linked: tail(${nodes[tail].value}).next → Node(${val})`,
+          i,
+          currentValue: val,
+          previousNode: tail,
+          headNode: head,
+          tailNode: nodes.length - 1, // new node index
+          nodes: JSON.parse(JSON.stringify(nodes)),
+          currentIndex: i,
+          phase: "node-linked",
+          codeLine: 9,
+        });
+
+        // Line 10: Update tail
+        tail = nodes.length - 1;
+        steps.push({
+          array: nodes.map((n) => n.value),
+          input,
+          head: head,
+          tail: tail,
+          description: `Update: tail = Node(${val})`,
+          i,
+          currentValue: val,
+          headNode: head,
+          tailNode: tail,
+          nodes: JSON.parse(JSON.stringify(nodes)),
+          currentIndex: i,
+          phase: "update-tail",
+          codeLine: 9,
+        });
+      }
+
+      // Line 11: Close else/if block
+      steps.push({
+        array: nodes.map((n) => n.value),
+        input,
+        head: head,
+        tail: tail,
+        description: `Close if-else block for iteration ${i}`,
+        i,
+        currentValue: val,
+        headNode: head,
+        tailNode: tail,
+        nodes: JSON.parse(JSON.stringify(nodes)),
+        currentIndex: i,
+        phase: "close-block",
+        codeLine: 10,
+      });
+    }
+
+    // Line 12: Close loop
+    steps.push({
+      array: nodes.map((n) => n.value),
+      input,
+      head: head,
+      tail: tail,
+      description: `Exit loop: all ${arr.length} elements processed`,
+      i: arr.length,
+      headNode: head,
+      tailNode: tail,
+      nodes: JSON.parse(JSON.stringify(nodes)),
+      phase: "loop-exit",
+      codeLine: 11,
+    });
+
+    // Line 13: Return head
+    steps.push({
+      array: nodes.map((n) => n.value),
+      input,
+      head: head,
+      tail: tail,
+      description: `Return head: Linked list with ${nodes.length} node(s)`,
+      headNode: head,
+      tailNode: tail,
+      nodes: JSON.parse(JSON.stringify(nodes)),
+      phase: "return-head",
+      codeLine: 12,
+    });
+
+    // Line 14: Function end
+    steps.push({
+      array: nodes.map((n) => n.value),
+      input,
+      head: head,
+      tail: tail,
+      description: `Function completed successfully`,
+      headNode: head,
+      tailNode: tail,
+      nodes: JSON.parse(JSON.stringify(nodes)),
+      phase: "completed",
+      codeLine: 13,
+    });
+
+    return steps;
+  },
   getCodeLines: (language) => {
     const lines = {
-     javascript: [
-    "function createSLL(arr) {", // 0 - Function/Class declaration
-    "  let head = null, tail = null;", // 1 - Initialize head and tail
-    "  if (arr.length === 0) return null;", // 2 - Check empty array
-    "  for (let i = 0; i < arr.length; i++) {", // 3 - Loop through array
-    "    const newNode = new Node(arr[i]);", // 4 - Create new node
-    "    if (head === null) {", // 5 - Check if first node
-    "      head = tail = newNode;", // 6 - Set first node
-    "    } else {", // 7 - Else block
-    "      tail.next = newNode;", // 8 - Link to tail
-    "      tail = newNode;", // 9 - Update tail
-    "    }", // 10 - Close else
-    "  }", // 11 - Close loop
-    "  return head;", // 12 - Return head
-    "}", // 13 - Close function
-    "// Node constructor",
-    "class Node {",
-    "  constructor(value) {",
-    "    this.value = value;",
-    "    this.next = null;",
-    "  }",
-    "}",
-  ],
+      javascript: [
+        "function createSLL(arr) {", // 0 
+        "  let head = null, tail = null;", // 1 
+        "  if (arr.length === 0)", // 2 
+        "    return null;", //3
+        "  for (let i = 0; i < arr.length; i++) {", // 4 
+        "    const newNode = new Node(arr[i]);", // 5 
+        "    if (head === null) {", // 6 
+        "      head = newNode;", // 7 
+        "      tail = newNode", // 8
+        "    } else {", // 9 
+        "      tail.next = newNode;", // 10 
+        "      tail = newNode;", // 11
+        "    }", // 12
+        "  }", // 13
+        "  return head;", // 14 
+        "}", // 15 
+        "// Node constructor", //16
+        "class Node {", // 17
+        "  value;", // 18
+        "  next;", // 19
+        "  constructor(value) {", // 20
+        "    this.value = value;", // 21
+        "    this.next = null;", // 22
+        "  }", // 23
+        "}", // 24
+      ],
 
-  python: [
-    "def create_sll(arr):", // 0 - Function/Class declaration
-    "    head = None", // 1 - Initialize head and tail
-    "    tail = None", // 1 (cont.) - Initialize tail
-    "    if len(arr) == 0:", // 2 - Check empty array
-    "        return None", // 2 (cont.) - Return None
-    "    for value in arr:", // 3 - Loop through array
-    "        new_node = Node(value)", // 4 - Create new node
-    "        if head is None:", // 5 - Check if first node
-    "            head = new_node", // 6 - Set first node
-    "            tail = new_node", // 6 (cont.) - Set tail
-    "        else:", // 7 - Else block
-    "            tail.next = new_node", // 8 - Link to tail
-    "            tail = new_node", // 9 - Update tail
-    "    return head", // 12 - Return head
-    "# Node constructor",
-    "class Node:",
-    "    def __init__(self, value):",
-    "        self.value = value",
-    "        self.next = None",
-  ],
+      python: [
+        "def create_sll(arr):", // 0 
+        "    head, tail = None, None", // 1 
+        "    if len(arr) == 0:", // 2 
+        "        return None", // 3
+        "    for value in arr:", // 4
+        "        new_node = Node(value)", // 5 
+        "        if head is None:", // 6 
+        "            head = new_node", // 7 
+        "            tail = new_node", // 8 
+        "        else:", // 9 
+        "            tail.next = new_node", // 10 
+        "            tail = new_node", // 11 
+        "", // 12
+        "", // 13
+        "    return head", // 14 
+        "", // 15
+        "# Node constructor", // 16
+        "class Node:", // 17
+        "    value: int", // 18
+        `    next: "Node" | None`, // 19
+        "    def __init__(self, value):", // 20
+        "        self.value = value", //21
+        "        self.next = None", //22
+      ],
 
-  java: [
-    "public Node createSLL(int[] arr) {", // 0 - Function/Class declaration
-    "    Node head = null;", // 1 - Initialize head and tail
-    "    Node tail = null;", // 1 (cont.) - Initialize tail
-    "    if (arr.length == 0) return null;", // 2 - Check empty array
-    "", // 3 - Loop through array (placeholder)
-    "    for (int i = 0; i < arr.length; i++) {", // 3 - Loop through array
-    "        Node newNode = new Node(arr[i]);", // 4 - Create new node
-    "        if (head == null) {", // 5 - Check if first node
-    "            head = newNode;", // 6 - Set first node
-    "            tail = newNode;", // 6 (cont.) - Set tail
-    "        } else {", // 7 - Else block
-    "            tail.next = newNode;", // 8 - Link to tail
-    "            tail = newNode;", // 9 - Update tail
-    "        }", // 10 - Close else
-    "    }", // 11 - Close loop
-    "    return head;", // 12 - Return head
-    "}", // 13 - Close function
-    "// Node class",
-    "class Node {",
-    "    int data;",
-    "    Node next;",
-    "    Node(int data) {",
-    "        this.data = data;",
-    "        this.next = null;",
-    "    }",
-    "}",
-  ],
+      java: [
+        "public Node createSLL(int[] arr) {", // 0 
+        "    Node head = null, tail = null;", // 1 
+        "    if (arr.length == 0)", // 2 
+        "       return null;", // 3 
+        "    for (int i = 0; i < arr.length; i++) {", // 4 
+        "        Node newNode = new Node(arr[i]);", // 5 
+        "        if (head == null) {", // 6 
+        "            head = newNode;", // 7
+        "            tail = newNode;", // 8 
+        "        } else {", // 9 
+        "            tail.next = newNode;", // 10 
+        "            tail = newNode;", // 11 
+        "        }", // 12 
+        "    }", // 13 
+        "    return head;", // 14 
+        "}", // 15 
+        "// Node class", //16
+        "class Node {", // 17
+        "    int data;", //18
+        "    Node next;", //19
+        "    Node(int data) {", //20
+        "        this.data = data;", //21
+        "        this.next = null;", //22
+        "    }", //23
+        "}", //24
+      ],
 
-  csharp: [
-    "public Node CreateSLL(int[] arr) {", // 0 - Function/Class declaration
-    "    Node head = null;", // 1 - Initialize head and tail
-    "    Node tail = null;", // 1 (cont.) - Initialize tail
-    "    if (arr.Length == 0) return null;", // 2 - Check empty array
-    "", // 3 - Loop through array (placeholder)
-    "    for (int i = 0; i < arr.Length; i++) {", // 3 - Loop through array
-    "        Node newNode = new Node(arr[i]);", // 4 - Create new node
-    "        if (head == null) {", // 5 - Check if first node
-    "            head = newNode;", // 6 - Set first node
-    "            tail = newNode;", // 6 (cont.) - Set tail
-    "        } else {", // 7 - Else block
-    "            tail.Next = newNode;", // 8 - Link to tail
-    "            tail = newNode;", // 9 - Update tail
-    "        }", // 10 - Close else
-    "    }", // 11 - Close loop
-    "    return head;", // 12 - Return head
-    "}", // 13 - Close function
-    "// Node class",
-    "public class Node {",
-    "    public int Value;",
-    "    public Node Next;",
-    "    public Node(int value) {",
-    "        this.Value = value;",
-    "        this.Next = null;",
-    "    }",
-    "}",
-  ],
+      csharp: [
+        "public Node CreateSLL(int[] arr) {", // 0 
+        "    Node head = null, tail = null;", // 1 
+        "    if (arr.Length == 0)", // 2  
+        "       return null;", // 3 
+        "    for (int i = 0; i < arr.Length; i++) {", // 4 
+        "        Node newNode = new Node(arr[i]);", // 5 
+        "        if (head == null) {", // 6 
+        "            head = newNode;", // 7 
+        "            tail = newNode;", // 8 
+        "        } else {", // 9
+        "            tail.Next = newNode;", // 10 
+        "            tail = newNode;", // 11 
+        "        }", // 12 
+        "    }", // 13 
+        "    return head;", // 14 
+        "}", // 15
+        "// Node class", //16
+        "public class Node {", //17
+        "    public int Value;", //18
+        "    public Node Next;", // 19
+        "    public Node(int value) {", //20
+        "        this.Value = value;", //21
+        "        this.Next = null;", //22
+        "    }", //23
+        "}", //24
+      ],
 
-  cpp: [
-    "Node* createSLL(int arr[], int size) {", // 0 - Function/Class declaration
-    "    Node* head = nullptr;", // 1 - Initialize head and tail
-    "    Node* tail = nullptr;", // 1 (cont.) - Initialize tail
-    "    if (size == 0) return nullptr;", // 2 - Check empty array
-    "", // 3 - Loop through array (placeholder)
-    "    for (int i = 0; i < size; i++) {", // 3 - Loop through array
-    "        Node* newNode = new Node(arr[i]);", // 4 - Create new node
-    "        if (head == nullptr) {", // 5 - Check if first node
-    "            head = newNode;", // 6 - Set first node
-    "            tail = newNode;", // 6 (cont.) - Set tail
-    "        } else {", // 7 - Else block
-    "            tail->next = newNode;", // 8 - Link to tail
-    "            tail = newNode;", // 9 - Update tail
-    "        }", // 10 - Close else
-    "    }", // 11 - Close loop
-    "    return head;", // 12 - Return head
-    "}", // 13 - Close function
-    "// Node struct",
-    "struct Node {",
-    "    int value;",
-    "    Node* next;",
-    "    Node(int value) {",
-    "        this->value = value;",
-    "        this->next = nullptr;",
-    "    }",
-    "};",
-  ],
+      cpp: [
+        "Node* createSLL(int arr[], int size) {", // 0 
+        "   Node* head = nullptr, *tail = nullptr;", // 1 
+        "    if (size == 0) ", // 2
+        "       return nullptr;", // 3 
+        "    for (int i = 0; i < size; i++) {", // 4
+        "        Node* newNode = new Node(arr[i]);", // 5 
+        "        if (head == nullptr) {", // 6 
+        "            head = newNode;", // 7
+        "            tail = newNode;", // 8 
+        "        } else {", // 9 
+        "            tail->next = newNode;", // 10 
+        "            tail = newNode;", // 11 
+        "        }", // 12
+        "    }", // 13 
+        "    return head;", // 14 
+        "}", // 15 
+        "// Node struct", // 16
+        "struct Node {", // 17
+        "    int value;", //18
+        "    Node* next;", //19
+        "    Node(int value) {", // 20
+        "        this->value = value;", //21
+        "        this->next = nullptr;", // 22
+        "    }", // 23
+        "};", // 24
+      ],
     };
     return lines[language] || lines.javascript;
   },

@@ -20,11 +20,20 @@ const NodePill = ({ value, isCurrent, isHead, isTail }) => {
   );
 };
 
-const NewNodeCard = ({ value }) => {
+const NewNodeConstructor = ({ value, next }) => {
   return (
-    <div className="h-12 w-28 rounded-lg flex flex-col items-center justify-center font-medium bg-yellow-300 text-gray-900 border-2 border-yellow-500 shadow-md">
-      <div className="text-xs text-gray-700">newNode</div>
-      <div className="text-lg font-bold">{value}</div>
+    <div className="flex flex-col items-center">
+      <div className="text-xs text-gray-700 mb-1">newNode</div>
+      <div className="flex h-12 w-36 rounded-lg overflow-hidden text-sm font-medium shadow-md">
+        <div className="flex-1 flex flex-col items-center justify-center bg-yellow-300 text-gray-900 border-r border-yellow-500">
+          <div className="text-xs text-gray-600">value</div>
+          <div className="text-lg font-bold">{value}</div>
+        </div>
+        <div className="w-16 flex flex-col items-center justify-center bg-white text-gray-700 border-l border-gray-200">
+          <div className="text-xs text-gray-500">next</div>
+          <div className="text-sm">{next === null || next === undefined ? "null" : next}</div>
+        </div>
+      </div>
     </div>
   );
 };
@@ -114,8 +123,9 @@ const CreationVisualizer = ({ steps = [], currentStepIndex = 0, currentList = []
           }
 
           const newNodeVal = newNodeObj ? (newNodeObj.value ?? newNodeObj) : null;
+          const newNodeNext = newNodeObj ? (newNodeObj.next ?? null) : null;
           if (loopPhases.has(step.phase) && newNodeVal !== null) {
-            return <NewNodeCard value={newNodeVal} />;
+            return <NewNodeConstructor value={newNodeVal} next={newNodeNext} />;
           }
           return null;
         })()}

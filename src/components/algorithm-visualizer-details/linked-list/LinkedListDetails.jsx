@@ -5,7 +5,7 @@ import { Clock, BarChart3, Code, BookOpen } from "lucide-react";
 // Dynamic code loaders (lazy import to keep bundle small)
 const codeLoaders = {
   "Singly Linked List - Creation": () =>
-    import("../../algorithms/linked-list/singlyLinkedList/creation/creationCodes"),
+    import("../../algorithms/linked-list/singlyLinkedList/sllCreation/sllCreationCodes"),
 };
 
 const LinkedListDetails = ({ algorithm, topic }) => {

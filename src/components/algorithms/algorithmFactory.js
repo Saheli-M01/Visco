@@ -10,7 +10,7 @@ import { kadane } from "./array/Kadanes/kadanes";
 import { nextPermutation } from "./array/NextPermutation/nextPermutation.js";
 import { slidingWindow } from "./array/SlidingWindow/slidingWindow.js";
 import { mooresVoting } from "./array/MooresVoting/mooresVoting.js";
-import { singlyLinkedListCreation } from "./linked-list/singlyLinkedList/creation/creation.js";
+import { sllCreation } from "./linked-list/singlyLinkedList/sllCreation/sllCreation.js";
 
 
 // Algorithm factory to get the appropriate algorithm implementation
@@ -65,8 +65,8 @@ export const getAlgorithm = (algorithmName) => {
     "moore's voting (boyer-moore)": mooresVoting,
     "Boyer-Moore": mooresVoting,
     "boyer-moore": mooresVoting,
-    "Singly Linked List - Creation": singlyLinkedListCreation,
-    "singly linked list - creation": singlyLinkedListCreation,
+    "Singly Linked List - Creation": sllCreation,
+    "singly linked list - creation": sllCreation,
     // "Singly Linked List - Traversal": singlyLinkedList,
     // "singly linked list - traversal": singlyLinkedList,
     // "Singly Linked List - Insertion": singlyLinkedList,

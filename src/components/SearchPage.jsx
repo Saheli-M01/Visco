@@ -7,6 +7,7 @@ import { Navigation } from "@/components/landing";
 import { useLocation } from "react-router-dom";
 import AlgorithmCard from "@/components/common/AlgorithmCard";
 import { FullScreenModalSorting } from "@/components/algorithm-visualizer-details";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 const flattenAlgorithms = () => {
   const list = [];
@@ -69,15 +70,31 @@ const SearchPage = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {algorithms.map((alg, idx) => (
-            <AlgorithmCard
-              key={`${alg.catId}-${alg.name}`}
-              algorithm={alg}
-              index={idx}
-              isInteractive={true}
-              onClick={handleAlgorithmClick}
-            />
-          ))}
+          {algorithms.length > 0 ? (
+            algorithms.map((alg, idx) => (
+              <AlgorithmCard
+                key={`${alg.catId}-${alg.name}`}
+                algorithm={alg}
+                index={idx}
+                isInteractive={true}
+                onClick={handleAlgorithmClick}
+              />
+            ))
+          ) : (
+            query ? (
+              <div className="col-span-full flex flex-col items-center justify-center py-12">
+                <div className="w-[500px] h-[500px]">
+                  <DotLottieReact
+                    src="https://lottie.host/ac704642-0b9c-4379-a75e-6945a81d169b/RJdqSPDoMQ.lottie"
+                    loop
+                    autoplay
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                </div>
+                <p className="mt-6 text-gray-700 text-lg font-medium">Not available</p>
+              </div>
+            ) : null
+          )}
         </div>
       </div>
       <FullScreenModalSorting

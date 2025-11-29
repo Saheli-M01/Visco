@@ -20,6 +20,15 @@ const NodePill = ({ value, isCurrent, isHead, isTail }) => {
   );
 };
 
+const NewNodeCard = ({ value }) => {
+  return (
+    <div className="h-12 w-28 rounded-lg flex flex-col items-center justify-center font-medium bg-yellow-300 text-gray-900 border-2 border-yellow-500 shadow-md">
+      <div className="text-xs text-gray-700">newNode</div>
+      <div className="text-lg font-bold">{value}</div>
+    </div>
+  );
+};
+
 const CreationVisualizer = ({ steps = [], currentStepIndex = 0, currentList = [] }) => {
   const step = steps[currentStepIndex] || {};
   const head = step.headNode;
@@ -40,32 +49,80 @@ const CreationVisualizer = ({ steps = [], currentStepIndex = 0, currentList = []
     if (persisted !== null && persisted !== undefined) tailVal = persisted;
   }
 
+  // During the initialize phase, explicitly show head/tail as null
+  // headVal / tailVal now contain either the explicit step value or a persisted value (or remain undefined)
+  // normalize display values (show null when undefined/null)
+  const displayHeadVal = headVal === undefined || headVal === null ? null : headVal;
+  const displayTailVal = tailVal === undefined || tailVal === null ? null : tailVal;
+
+  // Map head/tail indices to actual node values when possible (users expect values)
+  const headCardValue = (() => {
+    if (displayHeadVal === null) return null;
+    if (typeof displayHeadVal === "number" && currentList && currentList[displayHeadVal] !== undefined) return currentList[displayHeadVal];
+    return displayHeadVal;
+  })();
+
+  const tailCardValue = (() => {
+    if (displayTailVal === null) return null;
+    if (typeof displayTailVal === "number" && currentList && currentList[displayTailVal] !== undefined) return currentList[displayTailVal];
+    return displayTailVal;
+  })();
+
+  // compute persisted i (loop index). prefer explicit step.i, then currentIndex, then persisted.
+  let iVal = undefined;
+  if (step.i !== undefined) iVal = step.i;
+  else if (step.currentIndex !== undefined) iVal = step.currentIndex;
+  else {
+    const persistedI = findPersistedValue(steps, currentStepIndex, ["i", "currentIndex"]);
+    if (persistedI !== null && persistedI !== undefined) iVal = persistedI;
+  }
+  // show i=0 at loop-start if not yet set
+  if (step.phase === "loop-start" && (iVal === undefined || iVal === null)) {
+    iVal = 0;
+  }
+
+  const loopPhases = new Set([
+    "loop-start",
+    "loop-iteration",
+    "create-node",
+    "check-head",
+    "first-node",
+    "else-block",
+    "link-tail",
+    "node-linked",
+    "update-tail",
+    "close-block",
+    "loop-exit",
+  ]);
+
   return (
     <div className="p-3">
-      <div className="flex items-start justify-between mb-2">
-        <div className="text-sm text-gray-300">{step.description || "No step"}</div>
-        <div className="flex items-center gap-3">
-          <div className="text-xs text-gray-400">
-            Input: <span className="text-white font-mono ml-1">{step.input ?? ""}</span>
-          </div>
-          <div className="text-xs text-gray-400">
-            i: <span className="text-white ml-1">{typeof step.i === 'number' ? step.i : (step.currentIndex !== undefined ? step.currentIndex : '—')}</span>
-          </div>
-          <div className="text-xs text-gray-400">
-            head: <span className="text-white ml-1">{head === null || head === undefined ? 'null' : head}</span>
-          </div>
-          <div className="text-xs text-gray-400">
-            tail: <span className="text-white ml-1">{tail === null || tail === undefined ? 'null' : tail}</span>
-          </div>
-        </div>
+     
+      {/* show variable cards persistently (use persisted values or show null); show i during loop phases */}
+      <div className="mb-3 flex items-center gap-3">
+        {loopPhases.has(step.phase) && (
+          <VariableCard label="i" value={iVal === undefined || iVal === null ? "—" : iVal} bgColor="bg-sky-300" />
+        )}
+
+        {/* show newNode distinctly during create-node and persist it through loop phases until loop-exit */}
+        {(() => {
+          let newNodeObj = undefined;
+          if (step.newNode !== undefined && step.newNode !== null) newNodeObj = step.newNode;
+          else {
+            const persisted = findPersistedValue(steps, currentStepIndex, ["newNode"]);
+            if (persisted !== null && persisted !== undefined) newNodeObj = persisted;
+          }
+
+          const newNodeVal = newNodeObj ? (newNodeObj.value ?? newNodeObj) : null;
+          if (loopPhases.has(step.phase) && newNodeVal !== null) {
+            return <NewNodeCard value={newNodeVal} />;
+          }
+          return null;
+        })()}
+
+        <VariableCard label="head" value={headCardValue === null ? "null" : headCardValue} bgColor="bg-emerald-300" />
+        <VariableCard label="tail" value={tailCardValue === null ? "null" : tailCardValue} bgColor="bg-fuchsia-300" />
       </div>
-      {/* show variable cards during initialize phase */}
-      {step.phase === "initialize" && (
-        <div className="mb-3 flex items-center gap-3">
-          <VariableCard label="head" value={headVal === null ? "null" : headVal} bgColor="bg-emerald-300" />
-          <VariableCard label="tail" value={tailVal === null ? "null" : tailVal} bgColor="bg-fuchsia-300" />
-        </div>
-      )}
 
       <div className="flex items-center overflow-auto py-2">
         {currentList.length === 0 ? (

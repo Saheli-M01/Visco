@@ -153,7 +153,7 @@ export const Topics = () => {
           {topics.map((topic, index) => {
             const isActive =
               topic.id === "sorting" ||
-              topic.id === "array" ;
+              topic.id === "array" ||  topic.id === "linked-list" ;
 
             return (
               <motion.div

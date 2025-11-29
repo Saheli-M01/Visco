@@ -219,7 +219,7 @@ export const sllCreation = {
         nodes: JSON.parse(JSON.stringify(nodes)),
         currentIndex: i,
         phase: "node-linked",
-        codeLine: 8,
+        codeLine: 9,
       });
 
       // Line 10: Update tail
@@ -266,6 +266,7 @@ export const sllCreation = {
     head: head,
     tail: tail,
     description: `Exit loop: all ${arr.length} elements processed`,
+    i: arr.length,
     headNode: head,
     tailNode: tail,
     nodes: JSON.parse(JSON.stringify(nodes)),
@@ -305,99 +306,138 @@ export const sllCreation = {
 },
   getCodeLines: (language) => {
     const lines = {
-      javascript: [
-        "function createSLL(arr) {", // 0 - Function/Class declaration
-        "  let head = null, tail = null;", // 1 - Initialize head and tail
-        "  if (arr.length === 0) return null;", // 2 - Check empty array
-        "  for (let i = 0; i < arr.length; i++) {", // 3 - Loop through array
-        "    const newNode = new Node(arr[i]);", // 4 - Create new node
-        "    if (head === null) {", // 5 - Check if first node
-        "      head = tail = newNode;", // 6 - Set first node
-        "    } else {", // 7 - Else block
-        "      tail.next = newNode;", // 8 - Link to tail
-        "      tail = newNode;", // 9 - Update tail
-        "    }", // 10 - Close else
-        "  }", // 11 - Close loop
-        "  return head;", // 12 - Return head
-        "}", // 13 - Close function
-      ],
+     javascript: [
+    "function createSLL(arr) {", // 0 - Function/Class declaration
+    "  let head = null, tail = null;", // 1 - Initialize head and tail
+    "  if (arr.length === 0) return null;", // 2 - Check empty array
+    "  for (let i = 0; i < arr.length; i++) {", // 3 - Loop through array
+    "    const newNode = new Node(arr[i]);", // 4 - Create new node
+    "    if (head === null) {", // 5 - Check if first node
+    "      head = tail = newNode;", // 6 - Set first node
+    "    } else {", // 7 - Else block
+    "      tail.next = newNode;", // 8 - Link to tail
+    "      tail = newNode;", // 9 - Update tail
+    "    }", // 10 - Close else
+    "  }", // 11 - Close loop
+    "  return head;", // 12 - Return head
+    "}", // 13 - Close function
+    "// Node constructor",
+    "class Node {",
+    "  constructor(value) {",
+    "    this.value = value;",
+    "    this.next = null;",
+    "  }",
+    "}",
+  ],
 
-      python: [
-        "def create_sll(arr):", // 0 - Function/Class declaration
-        "    head = None", // 1 - Initialize head and tail
-        "    tail = None", // 1 (cont.) - Initialize tail
-        "    if len(arr) == 0:", // 2 - Check empty array
-        "        return None", // 2 (cont.) - Return None
-        "    for value in arr:", // 3 - Loop through array
-        "        new_node = Node(value)", // 4 - Create new node
-        "        if head is None:", // 5 - Check if first node
-        "            head = new_node", // 6 - Set first node
-        "            tail = new_node", // 6 (cont.) - Set tail
-        "        else:", // 7 - Else block
-        "            tail.next = new_node", // 8 - Link to tail
-        "            tail = new_node", // 9 - Update tail
-        "    return head", // 12 - Return head
-      ],
+  python: [
+    "def create_sll(arr):", // 0 - Function/Class declaration
+    "    head = None", // 1 - Initialize head and tail
+    "    tail = None", // 1 (cont.) - Initialize tail
+    "    if len(arr) == 0:", // 2 - Check empty array
+    "        return None", // 2 (cont.) - Return None
+    "    for value in arr:", // 3 - Loop through array
+    "        new_node = Node(value)", // 4 - Create new node
+    "        if head is None:", // 5 - Check if first node
+    "            head = new_node", // 6 - Set first node
+    "            tail = new_node", // 6 (cont.) - Set tail
+    "        else:", // 7 - Else block
+    "            tail.next = new_node", // 8 - Link to tail
+    "            tail = new_node", // 9 - Update tail
+    "    return head", // 12 - Return head
+    "# Node constructor",
+    "class Node:",
+    "    def __init__(self, value):",
+    "        self.value = value",
+    "        self.next = None",
+  ],
 
-      java: [
-        "public Node createSLL(int[] arr) {", // 0 - Function/Class declaration
-        "    Node head = null;", // 1 - Initialize head and tail
-        "    Node tail = null;", // 1 (cont.) - Initialize tail
-        "    if (arr.length == 0) return null;", // 2 - Check empty array
-        "", // 3 - Loop through array (placeholder)
-        "    for (int i = 0; i < arr.length; i++) {", // 3 - Loop through array
-        "        Node newNode = new Node(arr[i]);", // 4 - Create new node
-        "        if (head == null) {", // 5 - Check if first node
-        "            head = newNode;", // 6 - Set first node
-        "            tail = newNode;", // 6 (cont.) - Set tail
-        "        } else {", // 7 - Else block
-        "            tail.next = newNode;", // 8 - Link to tail
-        "            tail = newNode;", // 9 - Update tail
-        "        }", // 10 - Close else
-        "    }", // 11 - Close loop
-        "    return head;", // 12 - Return head
-        "}", // 13 - Close function
-      ],
+  java: [
+    "public Node createSLL(int[] arr) {", // 0 - Function/Class declaration
+    "    Node head = null;", // 1 - Initialize head and tail
+    "    Node tail = null;", // 1 (cont.) - Initialize tail
+    "    if (arr.length == 0) return null;", // 2 - Check empty array
+    "", // 3 - Loop through array (placeholder)
+    "    for (int i = 0; i < arr.length; i++) {", // 3 - Loop through array
+    "        Node newNode = new Node(arr[i]);", // 4 - Create new node
+    "        if (head == null) {", // 5 - Check if first node
+    "            head = newNode;", // 6 - Set first node
+    "            tail = newNode;", // 6 (cont.) - Set tail
+    "        } else {", // 7 - Else block
+    "            tail.next = newNode;", // 8 - Link to tail
+    "            tail = newNode;", // 9 - Update tail
+    "        }", // 10 - Close else
+    "    }", // 11 - Close loop
+    "    return head;", // 12 - Return head
+    "}", // 13 - Close function
+    "// Node class",
+    "class Node {",
+    "    int data;",
+    "    Node next;",
+    "    Node(int data) {",
+    "        this.data = data;",
+    "        this.next = null;",
+    "    }",
+    "}",
+  ],
 
-      csharp: [
-        "public Node CreateSLL(int[] arr) {", // 0 - Function/Class declaration
-        "    Node head = null;", // 1 - Initialize head and tail
-        "    Node tail = null;", // 1 (cont.) - Initialize tail
-        "    if (arr.Length == 0) return null;", // 2 - Check empty array
-        "", // 3 - Loop through array (placeholder)
-        "    for (int i = 0; i < arr.Length; i++) {", // 3 - Loop through array
-        "        Node newNode = new Node(arr[i]);", // 4 - Create new node
-        "        if (head == null) {", // 5 - Check if first node
-        "            head = newNode;", // 6 - Set first node
-        "            tail = newNode;", // 6 (cont.) - Set tail
-        "        } else {", // 7 - Else block
-        "            tail.Next = newNode;", // 8 - Link to tail
-        "            tail = newNode;", // 9 - Update tail
-        "        }", // 10 - Close else
-        "    }", // 11 - Close loop
-        "    return head;", // 12 - Return head
-        "}", // 13 - Close function
-      ],
+  csharp: [
+    "public Node CreateSLL(int[] arr) {", // 0 - Function/Class declaration
+    "    Node head = null;", // 1 - Initialize head and tail
+    "    Node tail = null;", // 1 (cont.) - Initialize tail
+    "    if (arr.Length == 0) return null;", // 2 - Check empty array
+    "", // 3 - Loop through array (placeholder)
+    "    for (int i = 0; i < arr.Length; i++) {", // 3 - Loop through array
+    "        Node newNode = new Node(arr[i]);", // 4 - Create new node
+    "        if (head == null) {", // 5 - Check if first node
+    "            head = newNode;", // 6 - Set first node
+    "            tail = newNode;", // 6 (cont.) - Set tail
+    "        } else {", // 7 - Else block
+    "            tail.Next = newNode;", // 8 - Link to tail
+    "            tail = newNode;", // 9 - Update tail
+    "        }", // 10 - Close else
+    "    }", // 11 - Close loop
+    "    return head;", // 12 - Return head
+    "}", // 13 - Close function
+    "// Node class",
+    "public class Node {",
+    "    public int Value;",
+    "    public Node Next;",
+    "    public Node(int value) {",
+    "        this.Value = value;",
+    "        this.Next = null;",
+    "    }",
+    "}",
+  ],
 
-      cpp: [
-        "Node* createSLL(int arr[], int size) {", // 0 - Function/Class declaration
-        "    Node* head = nullptr;", // 1 - Initialize head and tail
-        "    Node* tail = nullptr;", // 1 (cont.) - Initialize tail
-        "    if (size == 0) return nullptr;", // 2 - Check empty array
-        "", // 3 - Loop through array (placeholder)
-        "    for (int i = 0; i < size; i++) {", // 3 - Loop through array
-        "        Node* newNode = new Node(arr[i]);", // 4 - Create new node
-        "        if (head == nullptr) {", // 5 - Check if first node
-        "            head = newNode;", // 6 - Set first node
-        "            tail = newNode;", // 6 (cont.) - Set tail
-        "        } else {", // 7 - Else block
-        "            tail->next = newNode;", // 8 - Link to tail
-        "            tail = newNode;", // 9 - Update tail
-        "        }", // 10 - Close else
-        "    }", // 11 - Close loop
-        "    return head;", // 12 - Return head
-        "}", // 13 - Close function
-      ],
+  cpp: [
+    "Node* createSLL(int arr[], int size) {", // 0 - Function/Class declaration
+    "    Node* head = nullptr;", // 1 - Initialize head and tail
+    "    Node* tail = nullptr;", // 1 (cont.) - Initialize tail
+    "    if (size == 0) return nullptr;", // 2 - Check empty array
+    "", // 3 - Loop through array (placeholder)
+    "    for (int i = 0; i < size; i++) {", // 3 - Loop through array
+    "        Node* newNode = new Node(arr[i]);", // 4 - Create new node
+    "        if (head == nullptr) {", // 5 - Check if first node
+    "            head = newNode;", // 6 - Set first node
+    "            tail = newNode;", // 6 (cont.) - Set tail
+    "        } else {", // 7 - Else block
+    "            tail->next = newNode;", // 8 - Link to tail
+    "            tail = newNode;", // 9 - Update tail
+    "        }", // 10 - Close else
+    "    }", // 11 - Close loop
+    "    return head;", // 12 - Return head
+    "}", // 13 - Close function
+    "// Node struct",
+    "struct Node {",
+    "    int value;",
+    "    Node* next;",
+    "    Node(int value) {",
+    "        this->value = value;",
+    "        this->next = nullptr;",
+    "    }",
+    "};",
+  ],
     };
     return lines[language] || lines.javascript;
   },

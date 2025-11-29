@@ -137,30 +137,62 @@ class SinglyLinkedList {
 using System;
 using System.Collections.Generic;
 
-class Node {
-  public int value;
-  public Node next;
-  public Node(int v) { value = v; next = null; }
+class Node
+{
+    public int Value;
+    public Node Next;
+
+    public Node(int value)
+    {
+        Value = value;
+        Next = null;
+    }
 }
 
-class SinglyLinkedList {
-  public Node head, tail;
-  public SinglyLinkedList() { head = tail = null; }
-  public void Append(int v) {
-    var node = new Node(v);
-    if (head == null) head = tail = node; else { tail.next = node; tail = node; }
-  }
-  public List<int> ToList() {
-    var out = new List<int>();
-    var cur = head;
-    while (cur != null) { out.Add(cur.value); cur = cur.next; }
-    return out;
-  }
-  static void Main() {
-    var l = new SinglyLinkedList();
-    int[] vals = {1,2,3,4}; foreach (var v in vals) l.Append(v);
-    Console.WriteLine("List values: " + string.Join(",", l.ToList()));
-  }
+class SinglyLinkedList
+{
+    private Node head;
+    private Node tail;
+
+    public void Append(int value)
+    {
+        var newNode = new Node(value);
+
+        if (head == null)
+            head = tail = newNode;
+        else
+        {
+            tail.Next = newNode;
+            tail = newNode;
+        }
+    }
+
+    public List<int> ToList()
+    {
+        List<int> list = new();
+        Node current = head;
+
+        while (current != null)
+        {
+            list.Add(current.Value);
+            current = current.Next;
+        }
+
+        return list;
+    }
+
+    static void Main()
+    {
+        var list = new SinglyLinkedList();
+        int[] values = { 1, 2, 3, 4 };
+
+        foreach (var v in values)
+            list.Append(v);
+
+        Console.WriteLine("List values: " + string.Join(",", list.ToList()));
+    }
+}
+
 `,
 
   cpp: `// Singly Linked List - Creation (C++)

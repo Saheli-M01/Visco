@@ -250,7 +250,9 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
               ? "page-bg-array"
               : category?.id === "sorting"
               ? "page-bg-sorting"
-              : ""
+              : category?.id === "linkedList"
+              ? "page-bg-linked-list"
+              :""
           }`}
           style={{
             marginLeft: isMobile ? 0 : collapsed ? 72 : 256,

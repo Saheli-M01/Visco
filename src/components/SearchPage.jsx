@@ -5,7 +5,7 @@ import categories from "@/data/categories";
 import { ChevronLeft, BarChart3 } from "lucide-react";
 import { Navigation } from "@/components/landing";
 import { useLocation } from "react-router-dom";
-import AlgorithmCard from "@/components/common/AlgorithmCard";
+import AlgorithmCard from "@/components/algorithm-visualizer-details/AlgorithmCard";
 import { FullScreenModalSorting } from "@/components/algorithm-visualizer-details";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 

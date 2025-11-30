@@ -53,7 +53,7 @@ const AlgorithmCard = ({ algorithm, index = 0, onClick }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.05 * index }}
       onClick={() => isInteractive && onClick && onClick(algorithm)}
-      className={`backdrop-blur-sm ${getCardBackground(algorithm.difficulty)} rounded-xl px-4 sm:px-6 py-4 sm:py-6 shadow-md border transition-all group ${
+      className={`relative backdrop-blur-sm ${getCardBackground(algorithm.difficulty)} rounded-xl px-4 sm:px-6 py-4 sm:py-6 shadow-md border transition-all group ${
         isInteractive ? "hover:shadow-lg hover:scale-[1.01] cursor-pointer" : "opacity-60 cursor-default"
       }`}
     >
@@ -82,6 +82,15 @@ const AlgorithmCard = ({ algorithm, index = 0, onClick }) => {
       <p className="text-gray-700 text-sm font-medium leading-relaxed">
         {algorithm.shortDescription || `Learn about ${algorithm.name} algorithm and its implementation.`}
       </p>
+
+      {/* Work in Progress chip for the specific Singly Linked List - Creation card */}
+      {algorithm.name === "Singly Linked List - Creation" && (
+        <div className="absolute bottom-3 right-3">
+          <span className="inline-block px-3 py-1 text-xs font-semibold text-amber-800 bg-amber-100/90 border border-amber-200 rounded-full shadow-sm">
+            Work in Progress
+          </span>
+        </div>
+      )}
     </motion.div>
   );
 };

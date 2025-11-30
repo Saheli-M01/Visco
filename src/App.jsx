@@ -11,10 +11,22 @@ import GraphPage from "./components/TopicPages/GraphPage";
 import TreePage from "./components/TopicPages/TreePage";
 import LinkedListPage from "./components/TopicPages/LinkedListPage";
 import SearchPage from "./components/SearchPage";
+import Loading from "./components/Loading";
+import { useEffect, useState } from "react";
 
 const queryClient = new QueryClient();
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Keep loading visible briefly while app initializes (e.g. fetches, lazy loads)
+    const t = setTimeout(() => setIsLoading(false), 700);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (isLoading) return <Loading />;
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>

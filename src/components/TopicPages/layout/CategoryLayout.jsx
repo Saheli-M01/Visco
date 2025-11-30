@@ -14,7 +14,7 @@ import {
   FullScreenModalArray,
   FullScreenModalLinkedList,
 } from "@/components/algorithm-visualizer-details";
-import AlgorithmCard from "@/components/common/AlgorithmCard";
+import AlgorithmCard from "@/components/algorithm-visualizer-details/AlgorithmCard";
 
 const CategoryLayout = ({ category, complexityData, sections }) => {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(null);

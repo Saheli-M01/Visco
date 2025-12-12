@@ -230,28 +230,7 @@ section {
   }
 
   /* Page-level subtle gradients for topic pages */
-  .page-bg-array {
-    background: linear-gradient(
-      180deg,
-      rgba(255, 249, 226, 0.759),
-      rgba(255, 254, 249, 0.72)
-    );
-  }
-
-  .page-bg-sorting {
-    background: linear-gradient(
-      180deg,
-      rgba(235, 246, 255, 0.766),
-      rgba(230, 241, 255, 0.7)
-    );
-  }
-  .page-bg-linked-list {
-    background: linear-gradient(
-      180deg,
-      rgba(255, 240, 235, 0.766),
-      rgba(255, 236, 230, 0.7)
-    );
-  }
+  
   /* Animations */
   .animate-float {
     animation: float 6s ease-in-out infinite;

@@ -245,13 +245,13 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
 
         {/* Main Content */}
         <main
-          className={`relative overflow-hidden flex-1 ${
+          className={`relative overflow-hidden flex-1 bg-gradient-to-br ${
             category?.id === "array"
-              ? "page-bg-array"
+              ? "from-amber-50 to-yellow-50"
               : category?.id === "sorting"
-              ? "page-bg-sorting"
+              ? "from-sky-50 to-blue-50"
               : category?.id === "linkedList"
-              ? "page-bg-linked-list"
+              ? "from-orange-50 to-red-50"
               :""
           }`}
           style={{

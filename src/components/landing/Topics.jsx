@@ -19,8 +19,9 @@ const topicConfigs = [
     icon: ArrowUpDown,
     gradient: "from-sky-500 via-blue-600 to-indigo-600",
     bgGradient: "from-sky-50 to-indigo-50",
+    glow: "from-sky-100 via-sky-200 to-transparent", // tuned to be visible on light BG
     iconBg: "bg-gradient-to-br from-sky-500 to-indigo-600",
-    borderColor: "border-blue-200/50",
+    borderGradient: "from-white via-blue-200 to-white",
     hoverBorder: "group-hover:border-blue-300",
     textAccent: "text-blue-600",
     chipGradient: "from-sky-200 via-blue-100 to-indigo-200",
@@ -35,8 +36,9 @@ const topicConfigs = [
     icon: List,
     gradient: "from-amber-500 via-amber-600 to-yellow-600",
     bgGradient: "from-amber-50 to-yellow-50",
+    glow: "from-amber-100 via-amber-200 to-transparent",
     iconBg: "bg-gradient-to-br from-amber-300 to-yellow-600",
-    borderColor: "border-amber-200/50",
+    borderGradient: "from-white via-amber-200 to-white",
     hoverBorder: "group-hover:border-amber-300",
     textAccent: "text-amber-600",
     chipGradient: "from-amber-200 via-amber-100 to-yellow-100",
@@ -51,8 +53,9 @@ const topicConfigs = [
     icon: Link,
     gradient: "from-orange-500 via-red-500 to-pink-600",
     bgGradient: "from-orange-50 to-pink-50",
+    glow: "from-orange-200 via-orange-200 to-transparent",
     iconBg: "bg-gradient-to-br from-orange-500 to-pink-600",
-    borderColor: "border-orange-200/50",
+    borderGradient: "from-white via-red-200 to-white",
     hoverBorder: "group-hover:border-orange-300",
     textAccent: "text-orange-600",
     chipGradient: "from-orange-200 via-orange-100 to-pink-100",
@@ -67,8 +70,9 @@ const topicConfigs = [
     icon: Network,
     gradient: "from-purple-500 via-violet-600 to-indigo-600",
     bgGradient: "from-purple-50 to-indigo-50",
+    glow: "from-purple-200 via-purple-200 to-transparent",
     iconBg: "bg-gradient-to-br from-purple-500 to-indigo-600",
-    borderColor: "border-purple-200/50",
+    borderGradient: "from-white via-violet-200 to-white",
     hoverBorder: "group-hover:border-purple-300",
     textAccent: "text-purple-600",
     chipGradient: "from-purple-200 via-purple-150 to-indigo-150",
@@ -83,8 +87,9 @@ const topicConfigs = [
     icon: GitBranch,
     gradient: "from-fuchsia-500 via-pink-600 to-rose-600",
     bgGradient: "from-fuchsia-50 to-rose-50",
+    glow: "from-fuchsia-200 via-pink-200 to-transparent",
     iconBg: "bg-gradient-to-br from-fuchsia-500 to-rose-600",
-    borderColor: "border-fuchsia-200/50",
+    borderGradient: "from-white via-pink-200 to-white",
     hoverBorder: "group-hover:border-fuchsia-300",
     textAccent: "text-fuchsia-600",
     chipGradient: "from-fuchsia-200 via-pink-100 to-rose-100",
@@ -105,7 +110,7 @@ export const Topics = () => {
   }));
 
   const handleTopicClick = (topic) => {
-    // Allow navigation for active topics (sorting and array)
+    // Allow navigation for active topics (sorting, array, linked-list)
     if (
       topic.id === "sorting" ||
       topic.id === "array" ||
@@ -153,7 +158,8 @@ export const Topics = () => {
           {topics.map((topic, index) => {
             const isActive =
               topic.id === "sorting" ||
-              topic.id === "array" ||  topic.id === "linked-list" ;
+              topic.id === "array" ||
+              topic.id === "linked-list";
 
             return (
               <motion.div
@@ -168,97 +174,98 @@ export const Topics = () => {
                   isActive ? "cursor-pointer" : "cursor-not-allowed"
                 }`}
               >
-                <motion.div
-                  whileHover={isActive ? { y: -8, scale: 1.02 } : {}}
-                  transition={{ duration: 0.12, ease: "easeOut" }}
-                  className={`relative h-full rounded-3xl p-8 transition-all duration-150 ${
-                    isActive
-                      ? `bg-gradient-to-br ${topic.bgGradient} border-2 ${topic.borderColor} ${topic.hoverBorder} shadow-xl group-hover:shadow-2xl`
-                      : `bg-gradient-to-br ${topic.bgGradient} border-2 ${topic.borderColor} shadow-xl opacity-95`
-                  }`}
+                {/* Gradient Border Wrapper (subtle dark gradient top-right) */}
+                <div
+                  className={`relative rounded-3xl p-[2px] bg-gradient-to-br ${topic.borderGradient}`}
                 >
-                  {/* Premium gradient overlay */}
-                  {isActive && (
-                    <div
-                      className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${topic.gradient} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-150`}
-                    />
-                  )}
+                  {/* Actual Card */}
+                  <motion.div
+                    whileHover={isActive ? { y: -8, scale: 1.02 } : {}}
+                    transition={{ duration: 0.12, ease: "easeOut" }}
+                    className={`relative h-full rounded-3xl p-8 bg-gradient-to-br ${topic.bgGradient} shadow-xl group-hover:shadow-2xl overflow-hidden`}
+                  >
+                   {/* Light Glow (under content) */}
+                     <div className="absolute -top-14 -right-14 w-52 h-52 rounded-full pointer-events-none z-5">
+                      <div
+                        className={`w-full h-full bg-gradient-radial bg-gradient-to-bl ${topic.glow} blur-lg`}
+                        style={{
+                          background: `radial-gradient(circle at top right, var(--tw-gradient-stops))`,
+                        }}
+                      />
+                    </div>
+                    {/* Premium gradient overlay (very subtle color wash on hover) */}
+                    {isActive && (
+                      <div
+                        className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${topic.gradient} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-150`}
+                      />
+                    )}
 
-                  <div className="relative z-10">
-                    {/* Top section */}
-                    <div className="flex items-start justify-between mb-6">
-                      {/* Icon */}
-                      <motion.div
-                        whileHover={isActive ? { rotate: 5, scale: 1.1 } : {}}
-                        transition={{ duration: 0.12 }}
-                        className={`p-2 rounded-sm shadow-lg ${topic.iconBg}`}
-                      >
-                        <topic.icon className="w-7 h-7 text-white" />
-                      </motion.div>
-                    
-                      {/* Badge or Arrow */}
-                      {isActive ? (
+                    <div className="relative z-10">
+                      {/* Top section */}
+                      <div className="flex items-start justify-between mb-6">
+                        {/* Icon */}
                         <motion.div
-                          whileHover={{ x: 4 }}
+                          whileHover={isActive ? { rotate: 5, scale: 1.1 } : {}}
                           transition={{ duration: 0.12 }}
-                          className="p-2 rounded-xl bg-white/60 backdrop-blur-sm shadow-md"
+                          className={`p-2 rounded-sm shadow-lg ${topic.iconBg}`}
                         >
-                          <ChevronRight
-                            className={`w-5 h-5 ${topic.textAccent} transition-transform group-hover:translate-x-1`}
-                          />
+                          <topic.icon className="w-7 h-7 text-white" />
                         </motion.div>
-                      ) : (
-                        <span className="px-3 py-1.5 text-xs font-bold rounded-full bg-gray-800 text-white shadow-md">
-                          Coming Soon
+
+                        {/* Badge or Arrow */}
+                        {!isActive && (
+                          <span className="px-3 py-1.5 text-xs font-bold rounded-full bg-gray-800 text-white shadow-md relative z-30">
+                            Coming Soon
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Title */}
+                      <div className="flex items-center gap-3 mb-3">
+                        <h3 className="text-2xl font-bold transition-colors text-gray-900">
+                          {topic.title}
+                        </h3>
+                      </div>
+
+                      {/* Description */}
+                      <p className="text-sm mb-6 leading-relaxed text-gray-700">
+                        {topic.description}
+                      </p>
+
+                      {/* Algorithm count chip */}
+                      <div className="flex items-center gap-2 mb-6">
+                        <span
+                          className={`relative inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-center border transition-transform duration-150 overflow-hidden bg-gradient-to-r ${topic.chipGradient} ${topic.chipText} border-white shadow-[0_8px_20px_rgba(15,23,42,0.06)]`}
+                        >
+                          {/* top highlight to emulate the glossy pill */}
+                          <span className="pointer-events-none absolute -top-2 left-0 w-[120%] h-6 rounded-full bg-white/40 blur-md opacity-20 transform rotate-6" />
+                          <BarChart3 className="w-3.5 h-3.5" />
+                          <span className="whitespace-nowrap">
+                            {topic.algorithmCount} algorithms
+                          </span>
                         </span>
-                      )}
-                    </div>
+                      </div>
 
-                    {/* Title */}
-                    <div className="flex items-center gap-3 mb-3">
-                      <h3 className="text-2xl font-bold transition-colors text-gray-900">
-                        {topic.title}
-                      </h3>
-                    </div>
-
-                    {/* Description */}
-                    <p className="text-sm mb-6 leading-relaxed text-gray-700">
-                      {topic.description}
-                    </p>
-
-                    {/* Algorithm count chip */}
-                    <div className="flex items-center gap-2 mb-6">
-                      <span
-                        className={`relative inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-center border transition-transform duration-150 overflow-hidden bg-gradient-to-r ${topic.chipGradient} ${topic.chipText} border-white shadow-[0_8px_20px_rgba(15,23,42,0.06)]`}
-                      >
-                        {/* top highlight to emulate the glossy pill */}
-                        <span className="pointer-events-none absolute -top-2 left-0 w-[120%] h-6 rounded-full bg-white/40 blur-md opacity-20 transform rotate-6" />
-                        <BarChart3 className="w-3.5 h-3.5" />
-                        <span className="whitespace-nowrap">
-                          {topic.algorithmCount} algorithms
+                      {/* Footer */}
+                      <div className="pt-5 border-t border-gray-900/10">
+                        <span
+                          className={`text-sm font-semibold ${
+                            topic.textAccent
+                          } ${isActive ? "group-hover:underline" : ""}`}
+                        >
+                          {isActive ? "Click to explore →" : "Stay tuned 🚧"}
                         </span>
-                      </span>
+                      </div>
                     </div>
 
-                    {/* Footer */}
-                    <div className="pt-5 border-t border-gray-900/10">
-                      <span
-                        className={`text-sm font-semibold ${topic.textAccent} ${
-                          isActive ? "group-hover:underline" : ""
-                        }`}
-                      >
-                        {isActive ? "Click to explore →" : "Stay tuned 🚧"}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Shine effect on hover */}
-                  {isActive && (
-                    <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
-                      <div className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-600 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12" />
-                    </div>
-                  )}
-                </motion.div>
+                    {/* Shine effect on hover */}
+                    {isActive && (
+                      <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
+                        <div className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-600 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12" />
+                      </div>
+                    )}
+                  </motion.div>
+                </div>
               </motion.div>
             );
           })}

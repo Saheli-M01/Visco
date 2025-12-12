@@ -75,7 +75,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative h-[calc(100vh-4rem)] flex items-center justify-center overflow-hidden px-4 bg-gradient-to-br from-indigo-50 via-white to-rose-50">
+    <section className="relative h-[calc(100vh-4rem)] xl:h-[calc(100vh-16rem)] flex items-center justify-center overflow-hidden px-4 bg-gradient-to-br from-indigo-50 via-white to-rose-50">
       {/* Interactive cursor follower */}
       <div
         className="hidden md:block pointer-events-none fixed w-96 h-96 rounded-full bg-gradient-radial from-purple-300/20 to-transparent blur-3xl transition-all duration-300 ease-out"
@@ -235,15 +235,7 @@ export default function Hero() {
           {/* Right Animation */}
           <div className="hidden md:flex items-center justify-center h-full">
             {/* dotLottie animation - bottom-right decorative element (conditional render) */}
-            {DotLottieComponent && (
-              <div className="absolute right-0 top-0 w-64 h-64 pointer-events-none opacity-30">
-                <DotLottieComponent
-                  src="https://lottie.host/707cbaee-0e0c-4da9-8b7a-b72f9071523f/ecWszJnQTn.lottie"
-                  loop
-                  autoplay
-                />
-              </div>
-            )}
+
             {DotLottieComponent && (
               <div className="w-full h-full max-h-[70vh] relative flex items-center justify-center">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-3xl blur-3xl animate-pulse" />
@@ -253,6 +245,15 @@ export default function Hero() {
                   autoplay
                   className="relative z-10 w-full h-full object-contain drop-shadow-2xl"
                 />
+                {DotLottieComponent && (
+                  <div className="absolute right-[-5%] top-[-15%] w-64 h-64 pointer-events-none opacity-30">
+                    <DotLottieComponent
+                      src="https://lottie.host/707cbaee-0e0c-4da9-8b7a-b72f9071523f/ecWszJnQTn.lottie"
+                      loop
+                      autoplay
+                    />
+                  </div>
+                )}
                 {/* Bottom-left decorative animation */}
                 {DotLottieComponent && (
                   <div className="absolute left-0 bottom-[-5%] w-48 h-48 pointer-events-none opacity-30">
@@ -260,7 +261,6 @@ export default function Hero() {
                       src="https://lottie.host/3ae7b92c-6104-46e2-b3ba-2a14f532dd0b/LvAiz4JqUc.lottie"
                       loop
                       autoplay
-                      
                     />
                   </div>
                 )}

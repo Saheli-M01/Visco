@@ -5,7 +5,7 @@ import LinkedListDetails from "./LinkedListDetails";
 import LinkedListVisualization from "./LinkedListVisualization";
 import { categories } from "../../../data/categories";
 import { getAlgorithm } from "../../algorithms/algorithmFactory";
-import VisualizerHeader from "../algorithm-visualizer-components/VisualizerHeader";
+import VisualizerHeader from "../algorithm-visualizer-components/VisualizerDetailsHeader";
 import ConfirmModal from "../Modal";
 
 const theme = createTheme({});

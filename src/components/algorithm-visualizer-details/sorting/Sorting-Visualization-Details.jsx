@@ -5,7 +5,7 @@ import AlgorithmDetails from "./SortingDetails";
 import AlgorithmVisualization from "./SortingVisualization";
 import { categories } from "../../../data/categories";
 import { getAlgorithm, parseArray } from "../../algorithms/algorithmFactory";
-import VisualizerHeader from "../algorithm-visualizer-components/VisualizerHeader";
+import VisualizerHeader from "../algorithm-visualizer-components/VisualizerDetailsHeader";
 import ConfirmModal from "../Modal";
 
 // Custom MUI theme for glassmorphic design
@@ -751,7 +751,7 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
       <AnimatePresence>
         <div className="fixed inset-0 z-50">
           {/* Full-screen modal content */}
-          <div className="relative h-full w-full backdrop-blur-sm bg-gray-100 flex flex-col border">
+          <div className="relative h-full w-full backdrop-blur-md bg-gray-100 flex flex-col border">
            
             {/* Header */}
             <VisualizerHeader

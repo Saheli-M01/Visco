@@ -9,7 +9,63 @@ export const howItWorks = [
 	"- If it's 2: swap arr[mid] with arr[high], then decrement high (expands 2-region at the end; do NOT increment mid because the new arr[mid] is from the unsorted segment).",
 	"Repeat until mid > high, at which point the invariant implies the whole array is partitioned as 0s, 1s, then 2s.",
 ];
+// Example array used for walkthrough
+export const exampleArray = [2, 0, 2, 1, 1, 0];
+export function generateExampleSteps(arr = exampleArray) {
+	const a = [...arr];
+	let low = 0, mid = 0, high = a.length - 1;
+	const passes = [];
+	let passNumber = 1;
 
+	const pushPass = (swapText, swappedIdxs) => {
+		passes.push({
+			passNumber: passNumber++,
+			steps: [
+				{
+					array: [...a],
+					swapped: swappedIdxs,
+					swapText,
+					sorted: [],
+				},
+			],
+			sorted: [],
+		});
+	};
+
+	while (mid <= high) {
+		if (a[mid] === 0) {
+			const prevLow = low, prevMid = mid;
+			[a[low], a[mid]] = [a[mid], a[low]];
+			pushPass(`Swap 0 up: swap index ${prevLow} and ${prevMid}`,[prevLow, prevMid]);
+			low++; mid++;
+		} else if (a[mid] === 1) {
+			const prevMid = mid;
+			pushPass(`Keep 1 in middle: move mid from ${prevMid} → ${prevMid + 1}`,[prevMid]);
+			mid++;
+		} else { // a[mid] === 2
+			const prevMid = mid, prevHigh = high;
+			[a[mid], a[high]] = [a[high], a[mid]];
+			pushPass(`Swap 2 down: swap index ${prevMid} and ${prevHigh}`,[prevMid, prevHigh]);
+			high--;
+		}
+	}
+
+	// Final sorted state block
+	passes.push({
+		passNumber: passNumber,
+		steps: [
+			{
+				array: [...a],
+				swapped: [],
+				swapText: 'Sorted ✓',
+				sorted: a.map((_, idx) => idx),
+			},
+		],
+		sorted: a.map((_, idx) => idx),
+	});
+
+	return passes;
+}
 export const timeComplexity = {
 	best: "O(n)",
 	average: "O(n)",

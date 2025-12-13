@@ -17,6 +17,61 @@ export const timeComplexity = {
 
 export const spaceComplexity = "O(1)";
 
+// Example array and walkthrough steps for visualization
+export const exampleArray = [1, 8, 6, 2, 5, 4];
+
+export const generateExampleSteps = () => {
+  const heights = [...exampleArray];
+  let left = 0;
+  let right = heights.length - 1;
+  let maxArea = 0;
+  const passes = [];
+  let passNumber = 1;
+
+  const record = (note) => {
+    const width = right - left;
+    const h = Math.min(heights[left], heights[right]);
+    const area = width * h;
+    maxArea = Math.max(maxArea, area);
+    passes.push({
+      passNumber: passNumber++,
+      steps: [
+        {
+          array: [...heights],
+          swapped: [left, right],
+          swapText: `${note} | width=${width}, height=${h}, area=${area}, max=${maxArea}`,
+          sorted: [],
+        },
+      ],
+      sorted: [],
+    });
+  };
+
+  while (left < right) {
+    record(`Pointers L=${left} (${heights[left]}) R=${right} (${heights[right]})`);
+    if (heights[left] < heights[right]) {
+      left++;
+    } else {
+      right--;
+    }
+  }
+
+  passes.push({
+    passNumber: passNumber,
+    steps: [
+      {
+        array: [...heights],
+        swapped: [],
+        swapText: `Max area found = ${maxArea}`,
+        sorted: [],
+      },
+    ],
+    sorted: [],
+  });
+
+  return passes;
+};
+
 
 
 const codes = {

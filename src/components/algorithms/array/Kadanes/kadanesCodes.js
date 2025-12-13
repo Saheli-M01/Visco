@@ -15,6 +15,83 @@ export const timeComplexity = {
 
 export const spaceComplexity = "O(1)";
 
+// Example array and walkthrough steps for visualization
+export const exampleArray = [-2, -3, 4, -1, -2, 1, 5, -3];
+
+export const generateExampleSteps = () => {
+	const arr = [...exampleArray];
+	const steps = [];
+	let maxEndingHere = arr[0];
+	let maxSoFar = arr[0];
+	let start = 0, end = 0, s = 0;
+
+	// Pass 1: initialize
+	steps.push({
+		passNumber: 1,
+		steps: [
+			{
+				array: [...arr],
+				swapped: [0],
+				swapText: `init: maxEndingHere=${arr[0]}, maxSoFar=${arr[0]}`,
+				sorted: [],
+			},
+		],
+		sorted: [],
+	});
+
+	let pass = 2;
+	for (let i = 1; i < arr.length; i++) {
+		const takeAlone = arr[i];
+		const extend = maxEndingHere + arr[i];
+		if (takeAlone > extend) {
+			maxEndingHere = takeAlone;
+			s = i;
+		} else {
+			maxEndingHere = extend;
+		}
+		if (maxEndingHere > maxSoFar) {
+			maxSoFar = maxEndingHere;
+			start = s;
+			end = i;
+		}
+		// Create a pass block highlighting current index and current best subarray window
+		const swapped = [i];
+		const sorted = [];
+		steps.push({
+			passNumber: pass++,
+			steps: [
+				{
+					array: [...arr],
+					swapped,
+					swapText: `i=${i}: maxEndingHere=${maxEndingHere}, maxSoFar=${maxSoFar} (window ${start}-${end})`,
+					sorted,
+				},
+			],
+			sorted,
+		});
+	}
+
+	// Final pass: mark the best window indices as sorted/confirmed
+	steps.push({
+		passNumber: pass,
+		steps: [
+			{
+				array: [...arr],
+				swapped: [],
+				swapText: `Best subarray sum=${maxSoFar}, window=${start}-${end}`,
+				sorted: Array.from({ length: arr.length }, (_, idx) => (idx >= start && idx <= end ? idx : null)).filter(
+					(v) => v !== null
+				),
+			},
+		],
+		sorted: Array.from({ length: arr.length }, (_, idx) => (idx >= start && idx <= end ? idx : null)).filter(
+			(v) => v !== null
+		),
+	});
+
+	return steps;
+};
+
 
 const codes = {
 	javascript: `// Kadane's Algorithm - JavaScript (runnable)

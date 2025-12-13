@@ -120,9 +120,9 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
 
   return (
     <div className="mx-auto px-3 py-2 flex gap-3 flex-col">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-stretch">
         {/* Left Column: Overview + Implementation */}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 h-full">
           {/* Algorithm Overview */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -171,7 +171,7 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.25 }}
-              className="backdrop-blur-sm bg-white border border-white/30 rounded-2xl p-3 shadow-xl flex flex-col flex-1"
+              className="backdrop-blur-sm bg-white border border-white/30 rounded-2xl p-3 shadow-xl flex flex-col flex-1 min-h-0"
             >
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
                 <div className="flex items-center gap-2 sm:gap-3">
@@ -200,7 +200,7 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
               </div>
 
               <div className="relative flex flex-col flex-1 min-h-0">
-                <div className="flex flex-1 bg-gray-900 rounded-lg overflow-hidden">
+                <div className="flex flex-1 bg-gray-900 rounded-lg overflow-hidden max-h-[520px]">
                   <pre className="text-gray-100 text-[0.9rem] overflow-auto custom-scrollbar flex-1 w-full whitespace-pre-wrap font-mono px-3 py-2">
                     <code>
                       {loadingCode && !loadedCodes[algorithm.name]
@@ -233,7 +233,7 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
         </div>
 
         {/* Right Column: How It Works + Example */}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 h-full">
           {/* How It Works */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}

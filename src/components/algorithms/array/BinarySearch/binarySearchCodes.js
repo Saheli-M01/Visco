@@ -13,6 +13,41 @@ export const timeComplexity = {
 
 export const spaceComplexity = "O(1)";
 
+// Example array and step generator for search visualization
+export const exampleArray = [1, 3, 5, 7, 9];
+export const exampleTarget = 7;
+
+export const generateExampleSteps = (target = exampleTarget) => {
+  const arr = [...exampleArray];
+  const passes = [];
+  let low = 0;
+  let high = arr.length - 1;
+  let pass = 1;
+
+  while (low <= high) {
+    const mid = Math.floor((low + high) / 2);
+    const step = {
+      array: [...arr],
+      swapped: [low, mid, high],
+      swapText: `low=${low}, mid=${mid}, high=${high} → compare ${arr[mid]} with target ${target}`,
+      sorted: [],
+    };
+
+    passes.push({
+      passNumber: pass,
+      steps: [step],
+      sorted: [],
+    });
+
+    if (arr[mid] === target) break;
+    if (arr[mid] < target) low = mid + 1;
+    else high = mid - 1;
+    pass += 1;
+  }
+
+  return passes;
+};
+
 const codes = {
   javascript: `// Binary Search - JavaScript (runnable)
 function binarySearch(arr, target) {

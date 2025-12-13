@@ -16,6 +16,92 @@ export const timeComplexity = {
 
 export const spaceComplexity = "O(1)";
 
+// Example array and walkthrough steps for visualization (n/3 variant)
+export const exampleArray = [1, 2, 2, 3, 2, 1, 1, 3];
+
+export const generateExampleSteps = () => {
+    const nums = [...exampleArray];
+    const passes = [];
+    let passNumber = 1;
+
+    // First pass: find candidates
+    let candidate1 = null,
+        candidate2 = null,
+        count1 = 0,
+        count2 = 0;
+
+    nums.forEach((num, idx) => {
+        if (candidate1 === num) {
+            count1++;
+        } else if (candidate2 === num) {
+            count2++;
+        } else if (count1 === 0) {
+            candidate1 = num;
+            count1 = 1;
+        } else if (count2 === 0) {
+            candidate2 = num;
+            count2 = 1;
+        } else {
+            count1--;
+            count2--;
+        }
+
+        passes.push({
+            passNumber: passNumber++,
+            steps: [
+                {
+                    array: [...nums],
+                    swapped: [idx],
+                    swapText: `i=${idx}, num=${num}, c1=${candidate1 ?? '-'}(${count1}), c2=${candidate2 ?? '-'}(${count2})`,
+                    sorted: [],
+                },
+            ],
+            sorted: [],
+        });
+    });
+
+    // Second pass: verify counts
+    count1 = 0;
+    count2 = 0;
+    nums.forEach((num) => {
+        if (num === candidate1) count1++;
+        if (num === candidate2) count2++;
+    });
+
+    passes.push({
+        passNumber: passNumber++,
+        steps: [
+            {
+                array: [...nums],
+                swapped: [],
+                swapText: `Verify counts → c1=${candidate1} freq=${count1}, c2=${candidate2} freq=${count2}`,
+                sorted: [],
+            },
+        ],
+        sorted: [],
+    });
+
+    const threshold = Math.floor(nums.length / 3);
+    const result = [];
+    if (count1 > threshold) result.push(candidate1);
+    if (candidate2 !== candidate1 && count2 > threshold) result.push(candidate2);
+
+    passes.push({
+        passNumber: passNumber,
+        steps: [
+            {
+                array: [...nums],
+                swapped: [],
+                swapText: `Result > n/3 → [${result.join(', ')}]`,
+                sorted: [],
+            },
+        ],
+        sorted: [],
+    });
+
+    return passes;
+};
+
 const codes = {
   javascript: `
 function majorityElement(nums) {

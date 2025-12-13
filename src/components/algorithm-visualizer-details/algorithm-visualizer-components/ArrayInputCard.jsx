@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import Select from "../../ui/select";
+
+import React, { useState, useEffect, useRef } from "react";
+
 
 const HISTORY_KEY = "visco_array_history_v1";
 
@@ -15,6 +16,8 @@ const ArrayInputCard = ({
   const [validationError, setValidationError] = useState("");
   const [currentArrayLength, setCurrentArrayLength] = useState(0);
   const [history, setHistory] = useState([]);
+  const [showHistoryDropdown, setShowHistoryDropdown] = useState(false);
+  const inputRef = useRef(null);
 
   // Load history from localStorage
   useEffect(() => {
@@ -175,41 +178,68 @@ const ArrayInputCard = ({
   
 
   return (
-    <div className="bg-white  rounded-xl p-2">
-      <h3 className="text-md font-semibold text-gray-900 mb-3">Input</h3>
-      <div className="space-y-3">
-        <div className="relative flex gap-1">
-          <textarea
-            value={arrayInput}
-            onChange={(e) => {
-              setArrayInput(e.target.value);
-              // hide popup as soon as user modifies the input
-              if (showValidationPopup) setShowValidationPopup(false);
-            }}
-            placeholder="Enter comma-separated numbers — Maximum 10 values"
-            className="w-full h-15 rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 resize-none focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-[0.75rem] px-2 py-1 transition-all duration-200"
-          />
-          {/* Target input for Binary Search */}
-          {(selectedAlgorithm?.name || "").toLowerCase().includes("binary") && (
-            <textarea
-              value={targetInput}
-              onChange={(e) => setTargetInput(e.target.value)}
-              placeholder="Target value to search"
-              className="w-[200px] rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 resize-none focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-[0.75rem] px-2 py-1 transition-all duration-200"
-            />
-          )}
-          <button
-            onClick={onGo}
-            disabled={currentDutchInvalid}
-            className={
-              ("px-4 py-2 rounded-lg transition-all shadow-md text-sm font-medium border ") +
-              (currentDutchInvalid
-                ? "bg-gray-300 text-gray-600 border-gray-300 cursor-not-allowed"
-                : "bg-gray-800 text-white hover:bg-gray-700 border-gray-600")
-            }
-          >
-            Go
-          </button>
+    <div className="bg-white rounded-xl px-2">
+      <div className="flex flex-col gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+          <h3 className="text-md font-semibold text-gray-900 sm:whitespace-nowrap">Input: </h3>
+          <div className="flex w-full items-start sm:items-center gap-2">
+            <div className="flex-1 relative">
+              <input
+                ref={inputRef}
+                type="text"
+                value={arrayInput}
+                onChange={(e) => {
+                  setArrayInput(e.target.value);
+                  if (showValidationPopup) setShowValidationPopup(false);
+                }}
+                onFocus={() => setShowHistoryDropdown(true)}
+                onBlur={() => setTimeout(() => setShowHistoryDropdown(false), 150)}
+                placeholder="Enter comma-separated numbers (Maximum 10 values)"
+                className="w-full h-10 rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-[0.85rem] px-3 transition-all duration-200"
+              />
+              {/* History dropdown */}
+              {showHistoryDropdown && history.length > 0 && (
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+                  {history.map((item, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => {
+                        setArrayInput(item);
+                        setShowHistoryDropdown(false);
+                        inputRef.current?.focus();
+                      }}
+                      className="w-full text-left px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 border-b border-gray-100 last:border-0 truncate"
+                      title={item}
+                    >
+                      {item}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            {/* Target input for Binary Search */}
+            {(selectedAlgorithm?.name || "").toLowerCase().includes("binary") && (
+              <input
+                type="text"
+                value={targetInput}
+                onChange={(e) => setTargetInput(e.target.value)}
+                placeholder="Target value"
+                className="w-40 h-10 rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-[0.85rem] px-3 transition-all duration-200"
+              />
+            )}
+            <button
+              onClick={onGo}
+              disabled={currentDutchInvalid}
+              className={
+                ("h-10 px-4 rounded-lg transition-all shadow-md text-sm font-medium border ") +
+                (currentDutchInvalid
+                  ? "bg-gray-300 text-gray-600 border-gray-300 cursor-not-allowed"
+                  : "bg-gray-800 text-white hover:bg-gray-700 border-gray-600")
+              }
+            >
+              Go
+            </button>
+          </div>
         </div>
         {/* Dutch Flag validation warning */}
         {isDutchAlgorithm && currentDutchInvalid && (
@@ -229,22 +259,6 @@ const ArrayInputCard = ({
                 ×
               </button>
             </div>
-          </div>
-        )}
-        
-        {/* history chips */}
-        {history && history.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-2">
-            {history.slice(0, 2).map((h, idx) => (
-              <button
-                key={h + idx}
-                onClick={() => setArrayInput(h)}
-                className="px-3 py-1 bg-gray-100 border border-gray-200 rounded-full text-sm text-gray-800 hover:bg-gray-200"
-                title={`Restore: ${h}`}
-              >
-                {h.length > 24 ? h.slice(0, 22) + "…" : h}
-              </button>
-            ))}
           </div>
         )}
       </div>

@@ -12,6 +12,53 @@ export const timeComplexity = {
 };
 
 export const spaceComplexity = "O(1)";
+
+// Example array and step generator for visualization
+export const exampleArray = [64, 25, 12, 22, 11];
+
+export const generateExampleSteps = () => {
+  const passes = [];
+  const a = [...exampleArray];
+  const n = a.length;
+
+  for (let i = 0; i < n - 1; i++) {
+    let minIdx = i;
+    const passSteps = [];
+
+    // Find index of smallest element in the unsorted portion
+    for (let j = i + 1; j < n; j++) {
+      if (a[j] < a[minIdx]) minIdx = j;
+    }
+
+    if (minIdx !== i) {
+      const first = a[i];
+      const second = a[minIdx];
+      [a[i], a[minIdx]] = [a[minIdx], a[i]];
+      passSteps.push({
+        array: [...a],
+        swapped: [i, minIdx],
+        swapText: `Swap ${first} with ${second}`,
+      });
+    } else {
+      passSteps.push({
+        array: [...a],
+        swapped: [],
+        swapText: "No swap",
+      });
+    }
+
+    passes.push({
+      passNumber: i + 1,
+      steps: passSteps,
+      finalArray: [...a],
+      swaps: minIdx === i ? 0 : 1,
+      sorted: Array.from({ length: i + 1 }, (_, idx) => idx),
+    });
+  }
+
+  return passes;
+};
+
 const codes = {
   javascript: `// Selection Sort - JavaScript (runnable)
 function selectionSort(arr) {

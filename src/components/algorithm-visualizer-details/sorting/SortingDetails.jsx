@@ -10,6 +10,11 @@ import {
   Podcast,
 } from "lucide-react";
 import BubbleSortComplexity from "../../algorithms/sorting/BubbleSort/BubbleSortComplexity";
+import SelectionSortComplexity from "../../algorithms/sorting/SelectionSort/SelectionSortComplexity";
+import InsertionSortComplexity from "../../algorithms/sorting/InsertionSort/InsertionSortComplexity";
+import MergeSortComplexity from "../../algorithms/sorting/MergeSort/MergeSortComplexity";
+import QuickSortComplexity from "../../algorithms/sorting/QuickSort/QuickSortComplexity";
+import HeapSortComplexity from "../../algorithms/sorting/HeapSort/HeapSortComplexity";
 
 // Dynamic code loaders (lazy import to keep bundle small)
 const codeLoaders = {
@@ -26,6 +31,17 @@ const codeLoaders = {
   "Heap Sort": () => import("../../algorithms/sorting/HeapSort/heapSortCodes"),
 };
 
+const complexityComponents = {
+  "Bubble Sort": BubbleSortComplexity,
+  "Selection Sort": SelectionSortComplexity,
+  "Insertion Sort": InsertionSortComplexity,
+  "Merge Sort": MergeSortComplexity,
+  "Quick Sort": QuickSortComplexity,
+  "Heap Sort": HeapSortComplexity,
+};
+
+
+
 const AlgorithmDetails = ({ algorithm, topic }) => {
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
@@ -39,6 +55,9 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
         return "text-gray-600 bg-gray-100/50";
     }
   };
+
+  const ComplexityComponent =
+    complexityComponents[algorithm.name] || BubbleSortComplexity;
 
   const [implLang, setImplLang] = useState("javascript");
   const [copied, setCopied] = useState(false);
@@ -101,9 +120,9 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
 
   return (
     <div className="mx-auto px-3 py-2 flex gap-3 flex-col">
-      <div className="grid grid-cols-1 lg:grid-cols-6 gap-3 ">
-        {/* Left: Overview + Implementation */}
-        <div className="lg:col-span-3 space-y-3 flex flex-col">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+        {/* Left Column: Overview + Implementation */}
+        <div className="flex flex-col gap-3">
           {/* Algorithm Overview */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -146,7 +165,7 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
             </p>
           </motion.div>
 
-          {/* Implementation (moved here) */}
+          {/* Implementation */}
           {codeLoaders[algorithm.name] && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -180,7 +199,7 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
                 </div>
               </div>
 
-              <div className="relative flex flex-col flex-1">
+              <div className="relative flex flex-col flex-1 min-h-0">
                 <div className="flex flex-1 bg-gray-900 rounded-lg overflow-hidden">
                   <pre className="text-gray-100 text-[0.9rem] overflow-auto custom-scrollbar flex-1 w-full whitespace-pre-wrap font-mono px-3 py-2">
                     <code>
@@ -213,9 +232,9 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
           )}
         </div>
 
-        {/* Right: How It Works + Complexities */}
-        <div className="lg:col-span-3 space-y-3">
-          {/* How It Works (moved here) */}
+        {/* Right Column: How It Works + Example */}
+        <div className="flex flex-col gap-3">
+          {/* How It Works */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -253,7 +272,7 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.15 }}
-            className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-3 sm:p-4 shadow-xl"
+            className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-3 sm:p-4 shadow-xl flex flex-col flex-1"
           >
             {/* Title and Initial Array on same row */}
             <div className="flex items-center gap-2 mb-3 flex-wrap">
@@ -269,21 +288,19 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
             </div>
 
             {/* Passes visualization */}
-            <div className="flex flex-wrap gap-4 max-h-96 overflow-y-auto">
+            <div className="flex flex-wrap gap-4 max-h-96 overflow-y-auto flex-1 min-h-0">
               {examplePasses.length > 0 ? (
                 <>
                   {examplePasses.map((pass, passIdx) => (
                     <div
                       key={passIdx}
-                      className="border-l-2 border-blue-300 pl-2 flex-1 min-w-max"
+                      className="border border-y rounded-md border-blue-300 px-1 py-2 min-w-max"
                     >
                       <div className="flex items-center gap-2 mb-1.5">
                         <h5 className="text-xs sm:text-sm font-bold text-blue-700">
                           Pass {pass.passNumber}:
                         </h5>
-                        <span className="text-xs font-medium text-gray-500">
-                          ({pass.swaps} swap{pass.swaps !== 1 ? "s" : ""})
-                        </span>
+                       
                       </div>
 
                       {/* Individual swap steps */}
@@ -366,6 +383,7 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
             </div>
           </motion.div>
 
+          {/* Time and Space Complexity */}
           <div className="flex gap-3">
             <div className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-3 shadow-xl w-full">
               <div className="flex items-center mb-2">
@@ -409,9 +427,8 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
             </div>
           </div>
         </div>
-        
       </div>
-      
+
       {/* Time Complexity Visualization Section */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -428,9 +445,8 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
         <p className="text-gray-600 text-sm sm:text-base mb-4">
           Interactive visualization of time complexity patterns
         </p>
-        <BubbleSortComplexity />
+        <ComplexityComponent />
       </motion.div>
-
     </div>
   );
 };

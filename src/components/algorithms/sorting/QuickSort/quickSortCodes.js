@@ -14,6 +14,59 @@ export const timeComplexity = {
 
 export const spaceComplexity = "O(log n) (recursive stack)";
 
+// Example array and step generator for visualization
+export const exampleArray = [8, 7, 6, 5, 4];
+
+export const generateExampleSteps = () => {
+  const passes = [];
+  let passNumber = 0;
+  const workArray = [...exampleArray];
+
+  const quickSortHelper = (left, right) => {
+    if (left >= right) return;
+
+    // Choose pivot (last element)
+    const pivot = workArray[right];
+    let i = left - 1;
+
+    // Partition
+    for (let j = left; j < right; j++) {
+      if (workArray[j] < pivot) {
+        i++;
+        [workArray[i], workArray[j]] = [workArray[j], workArray[i]];
+      }
+    }
+    
+    // Place pivot in correct position
+    i++;
+    [workArray[i], workArray[right]] = [workArray[right], workArray[i]];
+    const pivotIndex = i;
+
+    passNumber++;
+    const partitionIndices = Array.from({ length: right - left + 1 }, (_, idx) => left + idx);
+    passes.push({
+      passNumber,
+      steps: [
+        {
+          array: [...workArray],
+          swapped: [pivotIndex],
+          swapText: `Partition with pivot ${pivot} at index ${pivotIndex}`,
+        },
+      ],
+      finalArray: [...workArray],
+      swaps: 0,
+      sorted: [pivotIndex],
+    });
+
+    // Recursively sort left and right partitions
+    quickSortHelper(left, pivotIndex - 1);
+    quickSortHelper(pivotIndex + 1, right);
+  };
+
+  quickSortHelper(0, exampleArray.length - 1);
+  return passes;
+};
+
 const codes = {
   javascript: `// Quick Sort - JavaScript (runnable)
 function quickSort(arr) {

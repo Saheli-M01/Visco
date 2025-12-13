@@ -43,13 +43,10 @@ const AlgorithmVisualization = ({
   isExecuting,
 }) => {
   return (
-    <div className="h-screen w-screen bg-gradient-to-br from-white/60 to-white/40 backdrop-blur-sm custom-scrollbar overflow-y-auto">
+  <div className="h-screen w-screen bg-gradient-to-br from-white/60 to-white/40 backdrop-blur-sm custom-scrollbar overflow-y-auto">
 
-      {/* ===== Main Layout ===== */}
-      <div className="flex flex-col lg:flex-row h-[92vh] p-2 gap-4">
-        {/* ===== Left Column ===== */}
+      <div className="flex flex-col lg:flex-row-reverse h-[92vh] p-2 gap-4">
         <div className="flex flex-col w-full lg:w-[40vw] gap-4">
-          {/* Code Preview */}
           <div className="flex-1 bg-white border border-gray-300 rounded-xl shadow-sm px-3 pt-3 overflow-hidden">
             <CodePreview
               selectedLanguage={selectedLanguage}
@@ -61,7 +58,7 @@ const AlgorithmVisualization = ({
           </div>
 
           {/* Step History */}
-          <div className="flex-1 bg-white border border-gray-300 rounded-xl shadow-sm p-3 overflow-hidden">
+             <div className="flex-1 bg-white border border-gray-300 rounded-xl shadow-sm p-3 overflow-hidden">
             <StepHistory
               stepHistory={stepHistory}
               currentStepIndex={currentStepIndex}
@@ -80,7 +77,40 @@ const AlgorithmVisualization = ({
 
         {/* ===== Right Column ===== */}
         <div className="flex flex-col w-full lg:w-[60vw] gap-4">
-          {/* Array Display */}
+          {/* Row 1: Array Input */}
+          <div className="bg-white border border-gray-300 rounded-xl shadow-sm p-3">
+            <ArrayInputCard
+              key={arrayInputKey}
+              handleGo={handleGo}
+              selectedAlgorithm={selectedAlgorithm}
+              pivotStrategy={pivotStrategy}
+              setPivotStrategy={setPivotStrategy}
+            />
+          </div>
+
+          {/* Row 2: Controls */}
+          <div className="bg-white border border-gray-300 rounded-xl shadow-sm p-3">
+            <ControlsPanel
+              isAutomatic={isAutomatic}
+              setIsAutomatic={setIsAutomatic}
+              isPlaying={isPlaying}
+              handlePlay={handlePlay}
+              handlePause={handlePause}
+              handleReset={handleReset}
+              speed={speed}
+              setSpeed={setSpeed}
+              isVisualizationActive={isVisualizationActive}
+              currentStepIndex={currentStepIndex}
+              sortingSteps={sortingSteps}
+              handleFirstStep={handleFirstStep}
+              handleLastStep={handleLastStep}
+              handleStepBackward={handleStepBackward}
+              handleStepForward={handleStepForward}
+              isExecuting={isExecuting}
+            />
+          </div>
+
+          {/* Row 3: Display */}
           <div className="flex-1 bg-white border border-gray-300 rounded-xl shadow-sm p-3 backdrop-blur-md ">
             {!isVisualizationActive ? (
               <div className="bg-gray-900 text-white p-4 rounded-lg text-sm font-mono  overflow-y-auto custom-scrollbar shadow-inner border border-gray-700 h-full">
@@ -121,42 +151,6 @@ const AlgorithmVisualization = ({
                 ).some((line) => /temp/.test(line))}
               />
             )}
-          </div>
-
-          {/* Array Input + Controls */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Array Input */}
-            <div className="bg-white border border-gray-300 rounded-xl shadow-sm p-3">
-              <ArrayInputCard
-                key={arrayInputKey}
-                handleGo={handleGo}
-                selectedAlgorithm={selectedAlgorithm}
-                pivotStrategy={pivotStrategy}
-                setPivotStrategy={setPivotStrategy}
-              />
-            </div>
-
-            {/* Controls */}
-            <div className="bg-white border border-gray-300 rounded-xl shadow-sm p-3">
-              <ControlsPanel
-                isAutomatic={isAutomatic}
-                setIsAutomatic={setIsAutomatic}
-                isPlaying={isPlaying}
-                handlePlay={handlePlay}
-                handlePause={handlePause}
-                handleReset={handleReset}
-                speed={speed}
-                setSpeed={setSpeed}
-                isVisualizationActive={isVisualizationActive}
-                currentStepIndex={currentStepIndex}
-                sortingSteps={sortingSteps}
-                handleFirstStep={handleFirstStep}
-                handleLastStep={handleLastStep}
-                handleStepBackward={handleStepBackward}
-                handleStepForward={handleStepForward}
-                isExecuting={isExecuting}
-              />
-            </div>
           </div>
         </div>
       </div>

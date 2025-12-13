@@ -49,7 +49,7 @@ const ControlsPanel = ({
 
         {/* Inline controls area */}
         {isAutomatic ? (
-          <div className="flex items-center gap-3 flex-1 min-w-[260px] h-10">
+          <div className="flex items-center gap-3 flex-1 ml-7 min-w-[260px] h-10">
             <button
               onClick={isPlaying ? handlePause : handlePlay}
               disabled={!isVisualizationActive}
@@ -58,14 +58,14 @@ const ControlsPanel = ({
               {isPlaying ? (<Pause className="h-4 w-4" />) : (<Play className="h-4 w-4" />)}
             </button>
             <div className="flex items-center gap-2 flex-1 h-10">
-              <span className="text-sm font-medium text-gray-700">Speed</span>
+              <span className="text-sm font-medium text-gray-700 mr-3">Speed </span>
               <Slider
-                value={speed}
-                onChange={(_, newValue) => setSpeed(newValue)}
-                min={0}
+                value={(speed * 10) / 8}
+                onChange={(_, newValue) => setSpeed((8 * newValue) / 10)}
+                min={1}
                 max={10}
                 step={0.1}
-                marks={[{ value: 0, label: "0x" },{ value: 2, label: "2x" },{ value: 4, label: "4x" },{ value: 6, label: "6x" },{ value: 8, label: "8x" },{ value: 10, label: "10x" }]}
+                marks={[{ value: 1, label: "1x" },{ value: 3, label: "3x" },{ value: 5, label: "5x" },{ value: 7, label: "7x" },{ value: 9, label: "9x" },{ value: 10, label: "10x" }]}
                 size="small"
                 sx={{
                   color: "#374151",

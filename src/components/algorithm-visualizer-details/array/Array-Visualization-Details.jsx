@@ -5,7 +5,7 @@ import AlgorithmDetails from "./ArrayDetails";
 import AlgorithmVisualization from "./ArrayVisualization";
 import { categories } from "../../../data/categories";
 import { getAlgorithm, parseArray } from "../../algorithms/algorithmFactory";
-import VisualizerHeader from "../algorithm-visualizer-components/VisualizerHeader";
+import VisualizerHeader from "../algorithm-visualizer-components/VisualizerDetailsHeader";
 import ConfirmModal from "../Modal";
 
 const theme = createTheme({});

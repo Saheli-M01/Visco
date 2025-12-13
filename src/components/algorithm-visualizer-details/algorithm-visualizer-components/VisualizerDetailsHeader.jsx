@@ -12,7 +12,7 @@ const VisualizerHeader = ({
   onClose,
 }) => {
   return (
-    <div className="visualizer-header flex items-center justify-between px-4 py-1 border-b border-white/20 backdrop-blur-md bg-white shadow-lg h-12">
+    <div className="visualizer-header flex items-center justify-between px-4 py-1 border-b border-gray-200 backdrop-blur-sm bg-white shadow-md h-12">
       <div className="flex justify-center items-center gap-6">
         {/* Visualization / Details toggle buttons (replaces Tabs) */}
         <div className="flex bg-white/20 rounded-lg p-1 border border-gray-400/50 shadow-inner">

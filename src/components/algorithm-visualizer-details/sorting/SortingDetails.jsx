@@ -100,8 +100,8 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
   }, [algorithm.name]);
 
   return (
-    <div className="mx-auto px-3 py-2 ">
-      <div className="grid grid-cols-1 lg:grid-cols-6 gap-3">
+    <div className="mx-auto px-3 py-2 flex gap-3 flex-col">
+      <div className="grid grid-cols-1 lg:grid-cols-6 gap-3 ">
         {/* Left: Overview + Implementation */}
         <div className="lg:col-span-3 space-y-3 flex flex-col">
           {/* Algorithm Overview */}
@@ -269,13 +269,13 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
             </div>
 
             {/* Passes visualization */}
-            <div className="space-y-3 max-h-64 overflow-y-auto">
+            <div className="flex flex-wrap gap-4 max-h-96 overflow-y-auto">
               {examplePasses.length > 0 ? (
                 <>
                   {examplePasses.map((pass, passIdx) => (
                     <div
                       key={passIdx}
-                      className="border-l-2 border-blue-300 pl-2"
+                      className="border-l-2 border-blue-300 pl-2 flex-1 min-w-max"
                     >
                       <div className="flex items-center gap-2 mb-1.5">
                         <h5 className="text-xs sm:text-sm font-bold text-blue-700">
@@ -409,18 +409,19 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
             </div>
           </div>
         </div>
+        
       </div>
-
+      
       {/* Time Complexity Visualization Section */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.5 }}
-        className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-4 shadow-xl mt-8"
+        className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-4 shadow-xl"
       >
         <div className="flex items-center gap-3 mb-4">
           <Clock className="h-6 w-6 text-blue-600" />
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          <h2 className="text-xl sm:text-3xl font-bold text-gray-900">
             Time Complexity Analysis
           </h2>
         </div>
@@ -429,6 +430,7 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
         </p>
         <BubbleSortComplexity />
       </motion.div>
+
     </div>
   );
 };

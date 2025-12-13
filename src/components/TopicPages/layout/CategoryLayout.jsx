@@ -157,31 +157,6 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200">
       <Navigation />
 
-      {/* Mobile Top Bar */}
-      <div className="lg:hidden fixed top-16 left-0 right-0 bg-white/90 backdrop-blur-md border-b border-gray-200 z-40 px-4 py-3">
-        <div className="flex items-center justify-between mb-3"></div>
-
-        <div className="grid grid-cols-3 gap-2">
-          {sidebarItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeSection === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`flex flex-col items-center justify-center gap-1 px-2 py-3 rounded-lg transition-all ${
-                  isActive
-                    ? "bg-gray-900 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                <Icon className="h-4 w-4 flex-shrink-0" />
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
       <div className="flex">
         {/* Desktop Sidebar (collapsible) */}
         <motion.aside
@@ -260,14 +235,41 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
           }}
         >
           {/* Animated background grid */}
-          <div className="absolute inset-0 opacity-15">
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.24) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.32) 1px, transparent 1px)`,
-                backgroundSize: "3vw 3vw",
-              }}
-            />
+         
+                    {/* Animated background pattern - Code-inspired */}
+          <div className="absolute inset-0 opacity-[0.12] overflow-hidden">
+            <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="codePattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+                  {/* Curly braces */}
+                  <text x="10" y="30" fontSize="24" fill="currentColor" className="text-gray-900 font-mono">{`{`}</text>
+                  <text x="170" y="30" fontSize="24" fill="currentColor" className="text-gray-900 font-mono">{`}`}</text>
+                  
+                  {/* Angle brackets */}
+                  <text x="80" y="60" fontSize="20" fill="currentColor" className="text-gray-900 font-mono">{`< >`}</text>
+                  
+                  {/* Semicolons and dots */}
+                  <text x="40" y="90" fontSize="18" fill="currentColor" className="text-gray-900 font-mono">;</text>
+                  <text x="150" y="100" fontSize="18" fill="currentColor" className="text-gray-900 font-mono">;</text>
+                  
+                  {/* Forward slashes */}
+                  <text x="20" y="130" fontSize="20" fill="currentColor" className="text-gray-900 font-mono" opacity="0.5">//</text>
+                  
+                  {/* Parentheses */}
+                  <text x="120" y="150" fontSize="22" fill="currentColor" className="text-gray-900 font-mono">( )</text>
+                  
+                  {/* Square brackets */}
+                  <text x="60" y="180" fontSize="20" fill="currentColor" className="text-gray-900 font-mono">[ ]</text>
+                  
+                  {/* Equal signs */}
+                  <text x="140" y="190" fontSize="18" fill="currentColor" className="text-gray-900 font-mono">=</text>
+                  
+                  {/* Binary numbers */}
+                  <text x="100" y="120" fontSize="14" fill="currentColor" className="text-gray-900 font-mono" opacity="0.4">01</text>
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#codePattern)" />
+            </svg>
           </div>
 
           <div

@@ -120,7 +120,7 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
     useState(false);
   const [pendingLanguage, setPendingLanguage] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [speed, setSpeed] = useState(1.0); // Speed multiplier: 0.5x to 2x
+  const [speed, setSpeed] = useState(1); // Speed multiplier: 1x to 10x
   const [currentStep, setCurrentStep] = useState(0);
   const [totalSteps, setTotalSteps] = useState(0); // total steps (0 when no steps)
 
@@ -263,7 +263,7 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
     setCurrentStep(0);
     setCurrentStepIndex(0);
     setIsPlaying(false);
-    setSpeed(1.0);
+    setSpeed(1);
     setIsAutomatic(true);
     setPivotStrategy("last"); // Reset pivot strategy
     // reset child input by bumping key

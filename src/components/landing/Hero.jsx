@@ -75,7 +75,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative h-[calc(100vh-4rem)] xl:h-[calc(100vh-16rem)] flex items-center justify-center overflow-hidden px-4 bg-gradient-to-br from-indigo-50 via-white to-rose-50">
+    <section className="relative min-h-[calc(100vh-5rem)] lg:min-h-[75vh] xl:min-h-[70vh] flex items-center justify-center overflow-hidden px-4 py-8 bg-gradient-to-br from-indigo-50 via-white to-rose-50">
       {/* Interactive cursor follower */}
       <div
         className="hidden md:block pointer-events-none fixed w-96 h-96 rounded-full bg-gradient-radial from-purple-300/20 to-transparent blur-3xl transition-all duration-300 ease-out"

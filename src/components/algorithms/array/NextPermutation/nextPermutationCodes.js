@@ -16,42 +16,130 @@ export const timeComplexity = {
 
 export const spaceComplexity = "O(1)";
 
+// Example array and walkthrough steps for visualization
+export const exampleArray = [1, 3, 5, 4, 2];
+
+export const generateExampleSteps = () => {
+    const arr = [...exampleArray];
+    const steps = [];
+
+    // Find pivot (rightmost index where arr[i] < arr[i+1])
+    let pivot = -1;
+    for (let i = arr.length - 2; i >= 0; i--) {
+        if (arr[i] < arr[i + 1]) {
+            pivot = i;
+            break;
+        }
+    }
+
+    if (pivot === -1) {
+        steps.push({
+            array: [...arr],
+            swapped: [],
+            swapText: "array in descending order → reverse to smallest",
+            sorted: [],
+        });
+        steps.push({
+            array: [...arr].reverse(),
+            swapped: [],
+            swapText: "reversed array (smallest permutation)",
+            sorted: [],
+        });
+        return [
+            {
+                passNumber: 1,
+                steps,
+                sorted: [],
+            },
+        ];
+    }
+
+    // Step 1: identify pivot
+    steps.push({
+        array: [...arr],
+        swapped: [pivot],
+        swapText: `pivot at index ${pivot} (value ${arr[pivot]})`,
+        sorted: [],
+    });
+
+    // Step 2: find successor (rightmost element greater than pivot) and swap
+    let successor = pivot + 1;
+    for (let j = arr.length - 1; j > pivot; j--) {
+        if (arr[j] > arr[pivot]) {
+            successor = j;
+            break;
+        }
+    }
+    [arr[pivot], arr[successor]] = [arr[successor], arr[pivot]];
+    steps.push({
+        array: [...arr],
+        swapped: [pivot, successor],
+        swapText: `swap pivot with successor at index ${successor} (value ${arr[pivot]})`,
+        sorted: [],
+    });
+
+    // Step 3: reverse suffix after pivot
+    let left = pivot + 1;
+    let right = arr.length - 1;
+    while (left < right) {
+        [arr[left], arr[right]] = [arr[right], arr[left]];
+        left++;
+        right--;
+    }
+    steps.push({
+        array: [...arr],
+        swapped: [],
+        swapText: `reverse suffix after index ${pivot} to finalize next permutation`,
+        sorted: [],
+    });
+
+    return [
+        {
+            passNumber: 1,
+            steps,
+            sorted: [],
+        },
+    ];
+};
+
 
 
 const codes = {
 	javascript: `
 function nextPermutation(nums) {
+	const n = nums.length;
 	// Find the largest index i such that nums[i] < nums[i + 1]
 	let pivot = -1;
-	for (let i = nums.length - 2; i >= 0; i--) {
+	for (let i = n - 2; i >= 0; i--) {
 		if (nums[i] < nums[i + 1]) {
 			pivot = i;
 			break;
 		}
 	}
-	
+
 	// If no such index exists, reverse the entire array
 	if (pivot === -1) {
 		nums.reverse();
 		return nums;
 	}
-	
+
 	// Find the largest index j such that nums[j] > nums[pivot]
-	for(let i = n - 1; i > ind; i--) {
-		if(nums[i] > nums[ind]) {
-			[nums[i], nums[ind]] = [nums[ind], nums[i]];
+	for (let j = n - 1; j > pivot; j--) {
+		if (nums[j] > nums[pivot]) {
+			[nums[j], nums[pivot]] = [nums[pivot], nums[j]];
 			break;
 		}
 	}
-	
+
 	// Reverse the right half to get the next smallest permutation
-	let left = ind + 1, right = n - 1;
+	let left = pivot + 1;
+	let right = n - 1;
 	while (left < right) {
 		[nums[left], nums[right]] = [nums[right], nums[left]];
 		left++;
 		right--;
 	}
-	
+
 	return nums;
 }
 

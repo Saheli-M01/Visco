@@ -84,18 +84,18 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
   }, [algorithm.name]);
 
   return (
-    <div className="mx-auto px-3">
-      <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 sm:gap-6">
-        <div className="lg:col-span-3 space-y-4 sm:space-y-6">
+    <div className="mx-auto px-3 py-2">
+      <div className="grid grid-cols-1 lg:grid-cols-6 gap-3">
+        <div className="lg:col-span-3 space-y-3">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-4 sm:p-6 shadow-xl"
+            className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-3 sm:p-4 shadow-xl"
           >
-            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-2">
               <div className="flex-1 min-w-0">
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2 break-words">
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 break-words">
                   {algorithm.name}
                 </h3>
                 <p className="text-sm sm:text-base text-gray-700 font-medium">{topic.title}</p>
@@ -119,9 +119,9 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.25 }}
-              className="backdrop-blur-sm bg-white border border-white/30 rounded-2xl p-4 shadow-xl"
+              className="backdrop-blur-sm bg-white border border-white/30 rounded-2xl p-3 shadow-xl"
             >
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
                 <div className="flex items-center gap-2 sm:gap-3">
                   <Code className="h-4 w-4 sm:h-5 sm:w-5 text-gray-900" />
                   <h4 className="text-base sm:text-lg font-semibold text-gray-900">Implementation</h4>
@@ -137,7 +137,7 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
 
               <div className="relative">
                 <div className="flex flex-1 bg-gray-900 rounded-lg overflow-hidden">
-                  <pre className="text-gray-100 px-3 py-2 text-[0.9rem] overflow-auto custom-scrollbar flex-1 w-full whitespace-pre-wrap font-mono max-h-60 sm:max-h-72">
+                  <pre className="text-gray-100 text-[0.9rem] overflow-auto custom-scrollbar flex-1 w-full whitespace-pre-wrap font-mono max-h-48 sm:max-h-56 px-3 py-2">
                     <code>
                       {loadingCode && !loadedCodes[algorithm.name]
                         ? "Loading implementation..."
@@ -155,18 +155,18 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
           )}
         </div>
 
-        <div className="lg:col-span-3 space-y-4">
+        <div className="lg:col-span-3 space-y-3">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-4 sm:p-6 shadow-xl"
+            className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-3 sm:p-4 shadow-xl"
           >
-            <div className="flex items-center mb-3 sm:mb-4">
+            <div className="flex items-center mb-2">
               <BookOpen className="h-4 w-4 sm:h-5 sm:w-5 text-gray-900 mr-2" />
               <h4 className="text-lg sm:text-xl font-semibold text-gray-900">How It Works</h4>
             </div>
-            <ol className="space-y-2 sm:space-y-3">
+            <ol className="space-y-1.5 sm:space-y-2">
               {algoMeta.howItWorks.map((step, index) => (
                 <motion.li key={index} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3, delay: 0.2 + index * 0.1 }} className="flex items-start">
                   <span className="inline-flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 bg-white/30 text-gray-900 rounded-full text-xs sm:text-sm font-bold mr-2 sm:mr-3 mt-0.5 flex-shrink-0">{index + 1}</span>
@@ -177,8 +177,8 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
           </motion.div>
 
           <div className="flex gap-3">
-            <div className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-4 shadow-xl w-full">
-              <div className="flex items-center mb-2 sm:mb-3">
+            <div className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-3 shadow-xl w-full">
+              <div className="flex items-center mb-2">
                 <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 text-gray-900 mr-2" />
                 <h5 className="text-sm sm:text-base font-semibold text-gray-900">Time Complexity</h5>
               </div>
@@ -198,8 +198,8 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
               </div>
             </div>
 
-            <div className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-4 shadow-xl w-full">
-              <div className="flex items-center mb-2 sm:mb-3">
+            <div className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-3 shadow-xl w-full">
+              <div className="flex items-center mb-2">
                 <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 text-gray-900 mr-2" />
                 <h5 className="text-sm sm:text-base font-semibold text-gray-900">Space Complexity</h5>
               </div>

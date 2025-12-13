@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Clock, BarChart3, Code, Play, BookOpen } from "lucide-react";
+import {
+  Clock,
+  BarChart3,
+  Code,
+  Play,
+  BookOpen,
+  Zap,
+  Podcast,
+} from "lucide-react";
+import BubbleSortComplexity from "../../algorithms/sorting/BubbleSort/BubbleSortComplexity";
 
 // Dynamic code loaders (lazy import to keep bundle small)
 const codeLoaders = {
@@ -10,8 +19,10 @@ const codeLoaders = {
     import("../../algorithms/sorting/SelectionSort/selectionSortCodes"),
   "Insertion Sort": () =>
     import("../../algorithms/sorting/InsertionSort/insertionSortCodes"),
-  "Merge Sort": () => import("../../algorithms/sorting/MergeSort/mergeSortCodes"),
-  "Quick Sort": () => import("../../algorithms/sorting/QuickSort/quickSortCodes"),
+  "Merge Sort": () =>
+    import("../../algorithms/sorting/MergeSort/mergeSortCodes"),
+  "Quick Sort": () =>
+    import("../../algorithms/sorting/QuickSort/quickSortCodes"),
   "Heap Sort": () => import("../../algorithms/sorting/HeapSort/heapSortCodes"),
 };
 
@@ -39,6 +50,8 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
     timeComplexity: {},
     spaceComplexity: "",
   });
+  const [exampleArray, setExampleArray] = useState([]);
+  const [examplePasses, setExamplePasses] = useState([]);
 
   const copyCode = async (code) => {
     try {
@@ -71,6 +84,11 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
           timeComplexity: mod.timeComplexity || {},
           spaceComplexity: mod.spaceComplexity || "",
         });
+        // Load example data if available
+        if (mod.exampleArray && mod.generateExampleSteps) {
+          setExampleArray(mod.exampleArray);
+          setExamplePasses(mod.generateExampleSteps());
+        }
       })
       .catch((err) => console.error("Failed to load code module", err))
       .finally(() => {
@@ -82,10 +100,10 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
   }, [algorithm.name]);
 
   return (
-    <div className="mx-auto px-3 py-2">
+    <div className="mx-auto px-3 py-2 ">
       <div className="grid grid-cols-1 lg:grid-cols-6 gap-3">
         {/* Left: Overview + Implementation */}
-        <div className="lg:col-span-3 space-y-3">
+        <div className="lg:col-span-3 space-y-3 flex flex-col">
           {/* Algorithm Overview */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -95,9 +113,13 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
           >
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-2">
               <div className="flex-1 min-w-0">
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 break-words">
-                  {algorithm.name}
-                </h3>
+                <div className="flex gap-2 items-center">
+                  <Podcast className="h-5 w-5 sm:h-6 sm:w-6 text-rose-400 flex-shrink-0" />
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900 break-words leading-tight">
+                    {algorithm.name}
+                  </h3>
+                </div>
+
                 <p className="text-sm sm:text-base text-gray-700 font-medium">
                   {topic.title}
                 </p>
@@ -130,11 +152,11 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.25 }}
-              className="backdrop-blur-sm bg-white border border-white/30 rounded-2xl p-3 shadow-xl"
+              className="backdrop-blur-sm bg-white border border-white/30 rounded-2xl p-3 shadow-xl flex flex-col flex-1"
             >
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
                 <div className="flex items-center gap-2 sm:gap-3">
-                  <Code className="h-4 w-4 sm:h-5 sm:w-5 text-gray-900" />
+                  <Code className="h-4 w-4 sm:h-5 sm:w-5 text-orange-500" />
                   <h4 className="text-base sm:text-lg font-semibold text-gray-900">
                     Implementation
                   </h4>
@@ -158,9 +180,9 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
                 </div>
               </div>
 
-              <div className="relative">
+              <div className="relative flex flex-col flex-1">
                 <div className="flex flex-1 bg-gray-900 rounded-lg overflow-hidden">
-                  <pre className="text-gray-100 text-[0.9rem] overflow-auto custom-scrollbar flex-1 w-full whitespace-pre-wrap font-mono max-h-48 sm:max-h-56 px-3 py-2">
+                  <pre className="text-gray-100 text-[0.9rem] overflow-auto custom-scrollbar flex-1 w-full whitespace-pre-wrap font-mono px-3 py-2">
                     <code>
                       {loadingCode && !loadedCodes[algorithm.name]
                         ? "Loading implementation..."
@@ -201,7 +223,7 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
             className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-3 sm:p-4 shadow-xl"
           >
             <div className="flex items-center mb-2">
-              <BookOpen className="h-4 w-4 sm:h-5 sm:w-5 text-gray-900 mr-2" />
+              <BookOpen className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500 mr-2" />
               <h4 className="text-lg sm:text-xl font-semibold text-gray-900">
                 How It Works
               </h4>
@@ -226,10 +248,128 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
             </ol>
           </motion.div>
 
-           <div className="flex gap-3">
+          {/* Example Walkthrough */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-3 sm:p-4 shadow-xl"
+          >
+            {/* Title and Initial Array on same row */}
+            <div className="flex items-center gap-2 mb-3 flex-wrap">
+              <div className="flex items-center">
+                <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-600 mr-2" />
+                <h4 className="text-lg sm:text-xl font-semibold text-gray-900">
+                  Example:
+                </h4>
+              </div>
+              <p className="text-xs sm:text-sm font-medium text-gray-600">
+                [{exampleArray.join(", ")}]
+              </p>
+            </div>
+
+            {/* Passes visualization */}
+            <div className="space-y-3 max-h-64 overflow-y-auto">
+              {examplePasses.length > 0 ? (
+                <>
+                  {examplePasses.map((pass, passIdx) => (
+                    <div
+                      key={passIdx}
+                      className="border-l-2 border-blue-300 pl-2"
+                    >
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <h5 className="text-xs sm:text-sm font-bold text-blue-700">
+                          Pass {pass.passNumber}:
+                        </h5>
+                        <span className="text-xs font-medium text-gray-500">
+                          ({pass.swaps} swap{pass.swaps !== 1 ? "s" : ""})
+                        </span>
+                      </div>
+
+                      {/* Individual swap steps */}
+                      {pass.steps.map((step, stepIdx) => (
+                        <motion.div
+                          key={stepIdx}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{
+                            duration: 0.3,
+                            delay: passIdx * 0.1 + stepIdx * 0.05,
+                          }}
+                          className="flex items-center gap-1.5 mb-1.5 ml-1"
+                        >
+                          <span className="text-xs font-medium text-gray-600 min-w-20">
+                            {step.swapText}
+                          </span>
+                          <div className="flex gap-1">
+                            {step.array.map((num, idx) => {
+                              const isSorted = pass.sorted.includes(idx);
+                              const isSwapped = step.swapped.includes(idx);
+
+                              return (
+                                <motion.div
+                                  key={idx}
+                                  animate={
+                                    isSwapped ? { scale: [1, 1.15, 1] } : {}
+                                  }
+                                  transition={{ duration: 0.2 }}
+                                  className={`w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center rounded text-xs font-bold ${
+                                    isSorted
+                                      ? "bg-green-400 text-white"
+                                      : isSwapped
+                                      ? "bg-orange-400 text-white"
+                                      : "bg-gray-300 text-gray-900"
+                                  }`}
+                                >
+                                  {num}
+                                </motion.div>
+                              );
+                            })}
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  ))}
+
+                  {/* Final sorted state */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      duration: 0.3,
+                      delay: examplePasses.length * 0.1,
+                    }}
+                    className="flex items-center gap-2 flex-wrap"
+                  >
+                    <h5 className="text-xs sm:text-sm font-bold text-green-700">
+                      Sorted ✓:
+                    </h5>
+                    <div className="flex gap-1 flex-wrap">
+                      {examplePasses[examplePasses.length - 1]?.finalArray?.map(
+                        (num, idx) => (
+                          <div
+                            key={idx}
+                            className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded bg-green-400 text-white font-bold text-xs"
+                          >
+                            {num}
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </motion.div>
+                </>
+              ) : (
+                <p className="text-xs text-gray-500">
+                  No example available for this algorithm
+                </p>
+              )}
+            </div>
+          </motion.div>
+
+          <div className="flex gap-3">
             <div className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-3 shadow-xl w-full">
               <div className="flex items-center mb-2">
-                <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 text-gray-900 mr-2" />
+                <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-amber-500 mr-2" />
                 <h5 className="text-sm sm:text-base font-semibold text-gray-900">
                   Time Complexity
                 </h5>
@@ -258,7 +398,7 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
 
             <div className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-3 shadow-xl w-full">
               <div className="flex items-center mb-2">
-                <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 text-gray-900 mr-2" />
+                <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 text-fuchsia-500 mr-2" />
                 <h5 className="text-sm sm:text-base font-semibold text-gray-900">
                   Space Complexity
                 </h5>
@@ -270,6 +410,25 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
           </div>
         </div>
       </div>
+
+      {/* Time Complexity Visualization Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.5 }}
+        className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-4 shadow-xl mt-8"
+      >
+        <div className="flex items-center gap-3 mb-4">
+          <Clock className="h-6 w-6 text-blue-600" />
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+            Time Complexity Analysis
+          </h2>
+        </div>
+        <p className="text-gray-600 text-sm sm:text-base mb-4">
+          Interactive visualization of time complexity patterns
+        </p>
+        <BubbleSortComplexity />
+      </motion.div>
     </div>
   );
 };

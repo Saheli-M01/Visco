@@ -13,6 +13,46 @@ export const timeComplexity = {
 };
 
 export const spaceComplexity = "O(1)";
+
+// Example array and step generator for visualization
+export const exampleArray = [5, 33, 2, 51, 1];
+
+export const generateExampleSteps = () => {
+  const arr = [...exampleArray];
+  const passes = [];
+  const a = [...arr];
+  const n = a.length;
+  
+  for (let i = 0; i < n - 1; i++) {
+    const passSteps = [];
+    let swapCount = 0;
+
+    for (let j = 0; j < n - i - 1; j++) {
+      if (a[j] > a[j + 1]) {
+        const temp1 = a[j];
+        const temp2 = a[j + 1];
+        [a[j], a[j + 1]] = [a[j + 1], a[j]];
+        swapCount++;
+        passSteps.push({
+          array: [...a],
+          swapped: [j, j + 1],
+          swapText: `${temp1} and ${temp2} swap`
+        });
+      }
+    }
+
+    passes.push({
+      passNumber: i + 1,
+      steps: passSteps.length > 0 ? passSteps : [{ array: [...a], swapped: [], swapText: "No swaps" }],
+      finalArray: [...a],
+      swaps: swapCount,
+      sorted: Array.from({ length: i + 1 }, (_, idx) => n - 1 - idx)
+    });
+  }
+
+  return passes;
+};
+
 const codes = {
   javascript: `function bubbleSort(arr) {
   const a = [...arr];

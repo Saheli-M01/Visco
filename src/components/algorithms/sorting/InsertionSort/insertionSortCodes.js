@@ -13,6 +13,43 @@ export const timeComplexity = {
 };
 
 export const spaceComplexity = "O(1)";
+
+// Example array and step generator for visualization
+export const exampleArray = [12, 11, 13, 5, 6];
+
+export const generateExampleSteps = () => {
+  const a = [...exampleArray];
+  const passes = [];
+
+  for (let i = 1; i < a.length; i++) {
+    const key = a[i];
+    let j = i - 1;
+    let shifts = 0;
+
+    while (j >= 0 && a[j] > key) {
+      a[j + 1] = a[j];
+      j -= 1;
+      shifts += 1;
+    }
+    a[j + 1] = key;
+
+    passes.push({
+      passNumber: i,
+      steps: [
+        {
+          array: [...a],
+          swapped: [j + 1, i],
+          swapText: `Insert ${key}${shifts ? ` (shifted ${shifts})` : ""}`,
+        },
+      ],
+      finalArray: [...a],
+      swaps: shifts,
+      sorted: Array.from({ length: i + 1 }, (_, idx) => idx),
+    });
+  }
+
+  return passes;
+};
 const codes = {
   javascript: `// Insertion Sort - JavaScript (runnable)
 function insertionSort(arr) {

@@ -12,6 +12,82 @@ export const timeComplexity = {
 };
 
 export const spaceComplexity = "O(n)";
+
+// Example array and step generator for visualization
+export const exampleArray = [4, 1, 0, 3, 6];
+
+export const generateExampleSteps = () => {
+  const passes = [];
+  let passNumber = 0;
+  const workArray = [...exampleArray];
+
+  const mergeSortHelper = (left, right) => {
+    if (left >= right) return;
+    
+    if (right - left === 1) {
+      // Base case: two elements, merge if needed
+      if (workArray[left] > workArray[right]) {
+        [workArray[left], workArray[right]] = [workArray[right], workArray[left]];
+      }
+      passNumber++;
+      passes.push({
+        passNumber,
+        steps: [
+          {
+            array: [...workArray],
+            swapped: [left, right],
+            swapText: `Merge indices ${left}-${right}`,
+          },
+        ],
+        finalArray: [...workArray],
+        swaps: 0,
+        sorted: [left, right],
+      });
+      return;
+    }
+
+    const mid = Math.floor((left + right) / 2);
+    
+    // Recursively sort left and right halves
+    mergeSortHelper(left, mid);
+    mergeSortHelper(mid + 1, right);
+    
+    // Merge the two sorted halves
+    const leftPart = workArray.slice(left, mid + 1);
+    const rightPart = workArray.slice(mid + 1, right + 1);
+    
+    let i = 0, j = 0, k = left;
+    while (i < leftPart.length && j < rightPart.length) {
+      if (leftPart[i] <= rightPart[j]) {
+        workArray[k++] = leftPart[i++];
+      } else {
+        workArray[k++] = rightPart[j++];
+      }
+    }
+    while (i < leftPart.length) workArray[k++] = leftPart[i++];
+    while (j < rightPart.length) workArray[k++] = rightPart[j++];
+
+    passNumber++;
+    const mergedIndices = Array.from({ length: right - left + 1 }, (_, idx) => left + idx);
+    passes.push({
+      passNumber,
+      steps: [
+        {
+          array: [...workArray],
+          swapped: mergedIndices,
+          swapText: `Merge indices ${left}-${right}`,
+        },
+      ],
+      finalArray: [...workArray],
+      swaps: 0,
+      sorted: mergedIndices,
+    });
+  };
+
+  mergeSortHelper(0, exampleArray.length - 1);
+  return passes;
+};
+
 const codes = {
   javascript: `// Merge Sort - JavaScript (runnable)
 function mergeSort(arr) {

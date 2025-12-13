@@ -13,6 +13,75 @@ export const timeComplexity = {
 
 export const spaceComplexity = "O(1)";
 
+// Example array and step generator for visualization
+export const exampleArray = [12, 11, 13, 5, 6];
+
+export const generateExampleSteps = () => {
+  const passes = [];
+  let passNumber = 0;
+  const workArray = [...exampleArray];
+
+  const heapify = (n, i) => {
+    let largest = i;
+    const l = 2 * i + 1;
+    const r = 2 * i + 2;
+    
+    if (l < n && workArray[l] > workArray[largest]) largest = l;
+    if (r < n && workArray[r] > workArray[largest]) largest = r;
+    
+    if (largest !== i) {
+      [workArray[i], workArray[largest]] = [workArray[largest], workArray[i]];
+      
+      passNumber++;
+      passes.push({
+        passNumber,
+        steps: [
+          {
+            array: [...workArray],
+            swapped: [i, largest],
+            swapText: `Heapify: swap index ${i} and ${largest}`,
+          },
+        ],
+        finalArray: [...workArray],
+        swaps: 1,
+        sorted: [],
+      });
+      
+      heapify(n, largest);
+    }
+  };
+
+  const n = workArray.length;
+  
+  // Build max heap
+  for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+    heapify(n, i);
+  }
+
+  // Extract elements from heap one by one
+  for (let i = n - 1; i > 0; i--) {
+    [workArray[0], workArray[i]] = [workArray[i], workArray[0]];
+    
+    passNumber++;
+    passes.push({
+      passNumber,
+      steps: [
+        {
+          array: [...workArray],
+          swapped: [0, i],
+          swapText: `Extract max: swap root with index ${i}`,
+        },
+      ],
+      finalArray: [...workArray],
+      swaps: 1,
+      sorted: Array.from({ length: n - i }, (_, idx) => i + idx),
+    });
+    
+    heapify(i, 0);
+  }
+
+  return passes;
+};
 
 
 const codes = {

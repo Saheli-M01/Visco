@@ -47,7 +47,7 @@ const complexityComponents = {
   "Moore's Voting (Boyer-Moore)": MooresVotingComplexity,
 };
 
-const AlgorithmDetails = ({ algorithm, topic }) => {
+const ArrayDetails = ({ algorithm, topic }) => {
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
       case "Easy":
@@ -475,4 +475,4 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
   );
 };
 
-export default AlgorithmDetails;
+export default ArrayDetails;

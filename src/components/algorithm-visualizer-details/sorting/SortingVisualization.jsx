@@ -5,7 +5,7 @@ import SortingDisplay from "./SortingDisplay";
 import ControlsPanel from "../algorithm-visualizer-components/ControlsPanel";
 import ArrayInputCard from "../algorithm-visualizer-components/ArrayInputCard";
 
-const AlgorithmVisualization = ({
+const SortingVisualization = ({
   selectedLanguage,
   requestLanguageChange,
   getCodeLines,
@@ -158,4 +158,4 @@ const AlgorithmVisualization = ({
   );
 };
 
-export default AlgorithmVisualization;
+export default SortingVisualization;

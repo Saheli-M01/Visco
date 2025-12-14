@@ -42,7 +42,7 @@ const complexityComponents = {
 
 
 
-const AlgorithmDetails = ({ algorithm, topic }) => {
+const SortingDetails = ({ algorithm, topic }) => {
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
       case "Easy":
@@ -451,4 +451,4 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
   );
 };
 
-export default AlgorithmDetails;
+export default SortingDetails;

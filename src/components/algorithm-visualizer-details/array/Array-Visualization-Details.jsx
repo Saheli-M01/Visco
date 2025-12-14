@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import AlgorithmDetails from "./ArrayDetails";
-import AlgorithmVisualization from "./ArrayVisualization";
+import ArrayDetails from "./ArrayDetails";
+import ArrayVisualization from "./ArrayVisualization";
 import { categories } from "../../../data/categories";
 import { getAlgorithm, parseArray } from "../../algorithms/algorithmFactory";
 import VisualizerHeader from "../algorithm-visualizer-components/VisualizerDetailsHeader";
@@ -519,10 +519,10 @@ const FullScreenModalArray = ({ isOpen, onClose, algorithm, topic }) => {
             />
 
             <div className="flex-1 overflow-hidden">
-              {activeTab === 0 && <AlgorithmVisualization {...visualizationProps} />}
+              {activeTab === 0 && <ArrayVisualization {...visualizationProps} />}
               {activeTab === 1 && (
                 <div className="h-full py-2 overflow-y-auto custom-scrollbar">
-                  <AlgorithmDetails algorithm={selectedAlgorithm} topic={topic} hideVisualizationButton={true} />
+                  <ArrayDetails algorithm={selectedAlgorithm} topic={topic} hideVisualizationButton={true} />
                 </div>
               )}
             </div>

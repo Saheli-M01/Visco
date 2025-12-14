@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import AlgorithmDetails from "./SortingDetails";
-import AlgorithmVisualization from "./SortingVisualization";
+import SortingDetails from "./SortingDetails";
+import SortingVisualization from "./SortingVisualization";
 import { categories } from "../../../data/categories";
 import { getAlgorithm, parseArray } from "../../algorithms/algorithmFactory";
 import VisualizerHeader from "../algorithm-visualizer-components/VisualizerDetailsHeader";
@@ -772,13 +772,13 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
              <div className="flex-1 overflow-hidden">
               {/* Visualization Tab */}
               {activeTab === 0 && (
-                <AlgorithmVisualization {...visualizationProps} />
+                <SortingVisualization {...visualizationProps} />
               )}
 
               {/* Details Tab */}
               {activeTab === 1 && (
                  <div className="h-full py-2 overflow-y-auto">
-                  <AlgorithmDetails
+                  <SortingDetails
                     algorithm={selectedAlgorithm}
                     topic={topic}
                     hideVisualizationButton={true}

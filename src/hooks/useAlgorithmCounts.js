@@ -1,6 +1,23 @@
 import { useMemo } from 'react';
 import { categories } from '../data/categories.js';
 
+// Interactive algorithms list (should match the one in AlgorithmCard)
+const INTERACTIVE_ALGORITHMS = [
+  "Bubble Sort",
+  "Selection Sort",
+  "Insertion Sort",
+  "Merge Sort",
+  "Quick Sort",
+  "Heap Sort",
+  "Binary Search",
+  "Dutch Flag",
+  "Kadane's Algorithm",
+  "Next Permutation",
+  "Sliding Window / 2 pointers (Container With Most Water)",
+  "Moore's Voting (Boyer-Moore)",
+  "Singly Linked List - Creation",
+];
+
 /**
  * Custom hook to get algorithm counts for all categories
  * This automatically updates when categories data changes
@@ -32,6 +49,44 @@ export const useAlgorithmCounts = () => {
   }, []);
   
   return algorithmCounts;
+};
+
+/**
+ * Custom hook to get interactive algorithm counts for all categories
+ * Returns { available, total } for each category
+ */
+export const useInteractiveAlgorithmCounts = () => {
+  const counts = useMemo(() => {
+    const result = {};
+    
+    Object.entries(categories).forEach(([key, category]) => {
+      const algorithms = category.algorithms || [];
+      const total = algorithms.length;
+      const available = algorithms.filter(alg => 
+        INTERACTIVE_ALGORITHMS.includes(alg.name)
+      ).length;
+      
+      result[key] = { available, total };
+    });
+    
+    // Handle the mapping between route paths and data keys
+    const pathMapping = {
+      'sorting': 'sorting',
+      'array': 'array', 
+      'graph': 'graph',
+      'tree': 'tree',
+      'linked-list': 'linkedList' // Route uses hyphen, data uses camelCase
+    };
+    
+    const mappedResult = {};
+    Object.entries(pathMapping).forEach(([routePath, dataKey]) => {
+      mappedResult[routePath] = result[dataKey] || { available: 0, total: 0 };
+    });
+    
+    return mappedResult;
+  }, []);
+  
+  return counts;
 };
 
 /**

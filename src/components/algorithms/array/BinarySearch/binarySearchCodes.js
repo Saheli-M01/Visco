@@ -14,7 +14,7 @@ export const timeComplexity = {
 export const spaceComplexity = "O(1)";
 
 // Example array and step generator for search visualization
-export const exampleArray = [1, 3, 5, 7, 9];
+export const exampleArray = [1, 3, 5, 7, 9,10];
 export const exampleTarget = 7;
 
 export const generateExampleSteps = (target = exampleTarget) => {

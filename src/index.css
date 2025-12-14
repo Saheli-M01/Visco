@@ -276,73 +276,85 @@ section {
     background-color: hsl(var(--code-bg));
   }
 
+  /* Universal Scrollbar Styles - Apply to all elements */
+  * {
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: hsl(0 0% 40%) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: hsl(0 0% 25%);
+    border-radius: 999px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: hsl(0 0% 40%);
+  }
+
   /* Custom Scrollbar Styles */
   .custom-scrollbar {
     /* Use native thin scrollbar where supported and a custom thumb color derived
        from the design tokens so it adapts to light/dark themes. */
     scrollbar-width: thin; /* Firefox */
-    scrollbar-color: hsl(var(--foreground) / 0.22) transparent;
+    scrollbar-color: hsl(0, 0%, 40%) transparent;
   }
 
   /* WebKit/Blink (Chrome, Edge, Safari) */
   .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 4px;
+    height: 4px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
-    background: hsl(var(--card) / 0.03);
+    background: transparent;
     border-radius: 999px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: linear-gradient(
-      180deg,
-      hsl(var(--foreground) / 0.2),
-      hsl(var(--foreground) / 0.28)
-    );
+    background: hsl(0 0% 40%);
     border-radius: 999px;
     border: 1px solid transparent; /* keeps layout consistent */
     min-height: 24px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(
-      180deg,
-      hsl(var(--foreground) / 0.32),
-      hsl(var(--foreground) / 0.44)
-    );
+    background: hsl(0, 0%, 40%);
   }
 
   .custom-scrollbar::-webkit-scrollbar-corner {
     background: transparent;
   }
 
-  /* Global viewport scrollbar (thin) */
+  /* Global viewport scrollbar (thin and dark) */
   html,
   body {
     scrollbar-width: thin; /* Firefox */
-    scrollbar-color: hsl(var(--foreground) / 0.22) transparent;
+    scrollbar-color: hsl(0, 0%, 40%) transparent;
   }
 
   html::-webkit-scrollbar,
   body::-webkit-scrollbar {
-    width: 3px;
-    height: 3px;
+    width: 4px;
+    height: 4px;
   }
 
   html::-webkit-scrollbar-track,
   body::-webkit-scrollbar-track {
-    background: hsl(var(--card) / 0.03);
+    background: transparent;
   }
 
   html::-webkit-scrollbar-thumb,
   body::-webkit-scrollbar-thumb {
-    background: linear-gradient(
-      180deg,
-      hsl(var(--foreground) / 0.2),
-      hsl(var(--foreground) / 0.28)
-    );
+    background: hsl(0 0% 40%);
     border-radius: 999px;
     border: 1px solid transparent;
     min-height: 12px;
@@ -350,11 +362,7 @@ section {
 
   html::-webkit-scrollbar-thumb:hover,
   body::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(
-      180deg,
-      hsl(var(--foreground) / 0.32),
-      hsl(var(--foreground) / 0.44)
-    );
+    background: hsl(0 0% 40%);
   }
 
   html::-webkit-scrollbar-corner,

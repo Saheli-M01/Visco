@@ -9,7 +9,10 @@ import {
   BarChart3,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useAlgorithmCounts } from "../../hooks/useAlgorithmCounts.js";
+import {
+  useAlgorithmCounts,
+  useInteractiveAlgorithmCounts,
+} from "../../hooks/useAlgorithmCounts.js";
 
 // Static topic configuration (UI-related data)
 const topicConfigs = [
@@ -22,11 +25,11 @@ const topicConfigs = [
     glow: "from-sky-100 via-sky-200 to-transparent", // tuned to be visible on light BG
     iconBg: "bg-gradient-to-br from-sky-500 to-indigo-600",
     borderGradient: "from-white via-blue-200 to-white",
-    hoverBorder: "group-hover:border-blue-300",
+   
     textAccent: "text-blue-600",
-    chipGradient: "from-sky-200 via-blue-100 to-indigo-200",
-    chipBg: "bg-sky-200/80",
-    chipText: "text-blue-700",
+    chipGradient: "from-sky-400 via-blue-400 to-indigo-500",
+    chipBorderGradient: "from-sky-400 via-blue-300 to-indigo-400",
+    chipIconColor: "text-sky-500",
     description: "Visualize how data gets organized",
     path: "/sorting",
   },
@@ -39,11 +42,11 @@ const topicConfigs = [
     glow: "from-amber-100 via-amber-200 to-transparent",
     iconBg: "bg-gradient-to-br from-amber-300 to-yellow-600",
     borderGradient: "from-white via-amber-200 to-white",
-    hoverBorder: "group-hover:border-amber-300",
+   
     textAccent: "text-amber-600",
-    chipGradient: "from-amber-200 via-amber-100 to-yellow-100",
-    chipBg: "bg-amber-100/80",
-    chipText: "text-amber-700",
+    chipGradient: "from-amber-400 via-yellow-400 to-orange-500",
+    chipBorderGradient: "from-amber-400 via-yellow-300 to-orange-400",
+    chipIconColor: "text-amber-500",
     description: "Master array manipulation techniques",
     path: "/array",
   },
@@ -56,11 +59,11 @@ const topicConfigs = [
     glow: "from-orange-200 via-orange-200 to-transparent",
     iconBg: "bg-gradient-to-br from-orange-500 to-pink-600",
     borderGradient: "from-white via-red-200 to-white",
-    hoverBorder: "group-hover:border-orange-300",
+  
     textAccent: "text-orange-600",
-    chipGradient: "from-orange-200 via-orange-100 to-pink-100",
-    chipBg: "bg-orange-100/80",
-    chipText: "text-orange-700",
+    chipGradient: "from-orange-400 via-red-400 to-pink-500",
+    chipBorderGradient: "from-orange-400 via-red-300 to-pink-400",
+    chipIconColor: "text-orange-500",
     description: "Connect and manipulate node structures",
     path: "/linked-list",
   },
@@ -73,11 +76,11 @@ const topicConfigs = [
     glow: "from-purple-200 via-purple-200 to-transparent",
     iconBg: "bg-gradient-to-br from-purple-500 to-indigo-600",
     borderGradient: "from-white via-violet-200 to-white",
-    hoverBorder: "group-hover:border-purple-300",
+    
     textAccent: "text-purple-600",
-    chipGradient: "from-purple-200 via-purple-150 to-indigo-150",
-    chipBg: "bg-purple-100/80",
-    chipText: "text-purple-700",
+    chipGradient: "from-purple-400 via-violet-400 to-indigo-500",
+    chipBorderGradient: "from-purple-400 via-violet-300 to-indigo-400",
+    chipIconColor: "text-purple-500",
     description: "Navigate complex network structures",
     path: "/graph",
   },
@@ -90,11 +93,11 @@ const topicConfigs = [
     glow: "from-fuchsia-200 via-pink-200 to-transparent",
     iconBg: "bg-gradient-to-br from-fuchsia-500 to-rose-600",
     borderGradient: "from-white via-pink-200 to-white",
-    hoverBorder: "group-hover:border-fuchsia-300",
+
     textAccent: "text-fuchsia-600",
-    chipGradient: "from-fuchsia-200 via-pink-100 to-rose-100",
-    chipBg: "bg-fuchsia-100/80",
-    chipText: "text-fuchsia-700",
+    chipGradient: "from-fuchsia-400 via-pink-400 to-rose-500",
+    chipBorderGradient: "from-fuchsia-400 via-pink-300 to-rose-400",
+    chipIconColor: "text-fuchsia-500",
     description: "Explore hierarchical data structures",
     path: "/tree",
   },
@@ -103,10 +106,15 @@ const topicConfigs = [
 export const Topics = () => {
   const navigate = useNavigate();
   const algorithmCounts = useAlgorithmCounts();
+  const interactiveCounts = useInteractiveAlgorithmCounts();
 
   const topics = topicConfigs.map((config) => ({
     ...config,
     algorithmCount: algorithmCounts[config.id] || 0,
+    interactiveStats: interactiveCounts[config.id] || {
+      available: 0,
+      total: 0,
+    },
   }));
 
   const handleTopicClick = (topic) => {
@@ -184,8 +192,8 @@ export const Topics = () => {
                     transition={{ duration: 0.12, ease: "easeOut" }}
                     className={`relative h-full rounded-3xl p-8 bg-gradient-to-br ${topic.bgGradient} shadow-xl group-hover:shadow-2xl overflow-hidden`}
                   >
-                   {/* Light Glow (under content) */}
-                     <div className="absolute -top-14 -right-14 w-52 h-52 rounded-full pointer-events-none z-5">
+                    {/* Light Glow (under content) */}
+                    <div className="absolute -top-14 -right-14 w-52 h-52 rounded-full pointer-events-none z-5">
                       <div
                         className={`w-full h-full bg-gradient-radial bg-gradient-to-bl ${topic.glow} blur-lg`}
                         style={{
@@ -234,16 +242,21 @@ export const Topics = () => {
 
                       {/* Algorithm count chip */}
                       <div className="flex items-center gap-2 mb-6">
-                        <span
-                          className={`relative inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-center border transition-transform duration-150 overflow-hidden bg-gradient-to-r ${topic.chipGradient} ${topic.chipText} border-white shadow-[0_8px_20px_rgba(15,23,42,0.06)]`}
+                        {/* Gradient border wrapper */}
+                        <div
+                          className={`relative inline-flex p-[1.5px] rounded-full bg-gradient-to-br ${topic.chipBorderGradient} shadow-[0_8px_20px_rgba(15,23,42,0.15)]`}
                         >
-                          {/* top highlight to emulate the glossy pill */}
-                          <span className="pointer-events-none absolute -top-2 left-0 w-[120%] h-6 rounded-full bg-white/40 blur-md opacity-20 transform rotate-6" />
-                          <BarChart3 className="w-3.5 h-3.5" />
-                          <span className="whitespace-nowrap">
-                            {topic.algorithmCount} algorithms
+                          <span
+                            className={`relative inline-flex items-center gap-2 p-2 rounded-full text-sm font-semibold text-center transition-transform duration-150 overflow-hidden bg-white`}
+                          >
+                            <BarChart3 className={`w-3.5 h-3.5 ${topic.chipIconColor}`} />
+                            <span className={`whitespace-nowrap bg-gradient-to-r ${topic.chipGradient} bg-clip-text text-transparent`}>
+                              {topic.interactiveStats.available}/
+                              {topic.interactiveStats.total} algorithms
+                              available
+                            </span>
                           </span>
-                        </span>
+                        </div>
                       </div>
 
                       {/* Footer */}

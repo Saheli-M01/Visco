@@ -41,7 +41,8 @@ const complexityComponents = {
   "Next Permutation": NextPermutationComplexity,
   "Dutch Flag": DutchFlagComplexity,
   "Kadane's Algorithm": KadanesComplexity,
-  "Sliding Window / 2 pointers (Container With Most Water)": SlidingWindowComplexity,
+  "Sliding Window / 2 pointers (Container With Most Water)":
+    SlidingWindowComplexity,
   "Moore's Voting Algorithm": MooresVotingComplexity,
   "Moore's Voting (Boyer-Moore)": MooresVotingComplexity,
 };
@@ -127,15 +128,15 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
 
   return (
     <div className="mx-auto px-3 py-2 flex gap-3 flex-col">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-stretch">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:grid-rows-[auto] lg:items-start">
         {/* Left Column: Overview + Implementation */}
-        <div className="flex flex-col gap-3 h-full">
+        <div className="flex flex-col gap-3 lg:h-[800px]">
           {/* Algorithm Overview */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-3 sm:p-4 shadow-xl"
+            className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-3 sm:p-4 shadow-xl flex-shrink-0"
           >
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-2">
               <div className="flex-1 min-w-0">
@@ -177,7 +178,7 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.25 }}
-              className="backdrop-blur-sm bg-white border border-white/30 rounded-2xl p-3 shadow-xl flex flex-col flex-1 min-h-0"
+              className="backdrop-blur-sm bg-white border border-white/30 rounded-2xl p-3 shadow-xl flex flex-col flex-1 overflow-hidden"
             >
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
                 <div className="flex items-center gap-2 sm:gap-3">
@@ -205,8 +206,8 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
                 </div>
               </div>
 
-              <div className="relative flex flex-col flex-1 min-h-0">
-                <div className="flex flex-1 bg-gray-900 rounded-lg overflow-hidden max-h-[520px]">
+              <div className="relative flex flex-col flex-1 overflow-hidden">
+                <div className="flex flex-1 bg-gray-900 rounded-lg overflow-auto">
                   <pre className="text-gray-100 text-[0.9rem] overflow-auto custom-scrollbar flex-1 w-full whitespace-pre-wrap font-mono px-3 py-2">
                     <code>
                       {loadingCode && !loadedCodes[algorithm.name]
@@ -238,12 +239,12 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
           )}
         </div>
         {/* Right Column: How It Works + Example */}
-        <div className="flex flex-col gap-3 h-full">
+        <div className="flex flex-col gap-3 lg:h-[800px]">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-3 sm:p-4 shadow-xl"
+            className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-3 sm:p-4 shadow-xl flex-shrink-0 max-h-64 overflow-y-auto"
           >
             <div className="flex items-center mb-2">
               <BookOpen className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500 mr-2" />
@@ -276,7 +277,7 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.15 }}
-            className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-3 sm:p-4 shadow-xl flex flex-col flex-1"
+            className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-3 sm:p-4 shadow-xl flex flex-col flex-1 overflow-hidden"
           >
             {/* Title and Initial Array on same row */}
             <div className="flex items-center gap-2 mb-3 flex-wrap">
@@ -297,7 +298,7 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
             </div>
 
             {/* Passes visualization */}
-            <div className="flex flex-wrap gap-4 max-h-96 overflow-y-auto flex-1 min-h-0">
+            <div className="flex flex-wrap gap-4 overflow-y-auto ">
               {examplePasses.length > 0 ? (
                 algorithm.name === "Next Permutation" &&
                 examplePasses[0]?.steps ? (
@@ -324,7 +325,9 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
                             return (
                               <motion.div
                                 key={idx}
-                                animate={isSwapped ? { scale: [1, 1.15, 1] } : {}}
+                                animate={
+                                  isSwapped ? { scale: [1, 1.15, 1] } : {}
+                                }
                                 transition={{ duration: 0.2 }}
                                 className={`w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center rounded text-xs font-bold ${
                                   isSwapped
@@ -406,7 +409,7 @@ const AlgorithmDetails = ({ algorithm, topic }) => {
           </motion.div>
 
           {/* Time and Space Complexity */}
-          <div className="flex gap-3">
+          <div className="flex gap-3 flex-shrink-0">
             <div className="backdrop-blur-sm bg-white/90 border border-white/30 rounded-2xl p-3 shadow-xl w-full">
               <div className="flex items-center mb-2">
                 <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-amber-500 mr-2" />

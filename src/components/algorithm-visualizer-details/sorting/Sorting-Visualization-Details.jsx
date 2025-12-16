@@ -7,6 +7,7 @@ import { categories } from "../../../data/categories";
 import { getAlgorithm, parseArray } from "../../algorithms/algorithmFactory";
 import VisualizerHeader from "../algorithm-visualizer-components/VisualizerDetailsHeader";
 import ConfirmModal from "../Modal";
+import HelpGuideModal from "../algorithm-visualizer-components/HelpGuideModal";
 
 // Custom MUI theme for glassmorphic design
 const theme = createTheme({
@@ -112,6 +113,7 @@ const theme = createTheme({
 const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(algorithm);
+  const [showHelpGuide, setShowHelpGuide] = useState(false);
 
   // Visualization state
   // default to 'csharp' (matches CodePreview language list) instead of legacy 'c'
@@ -766,6 +768,7 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
                 handleRefresh();
                 if (onClose) onClose();
               }}
+              onHelpClick={() => setShowHelpGuide(true)}
             />
 
             {/* Tab Content */}
@@ -797,6 +800,10 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
         onConfirm={confirmLanguageChange}
         confirmLabel="Continue"
         cancelLabel="Cancel"
+      />
+      <HelpGuideModal
+        isOpen={showHelpGuide}
+        onClose={() => setShowHelpGuide(false)}
       />
     </ThemeProvider>
   );

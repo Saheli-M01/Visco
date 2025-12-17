@@ -131,6 +131,7 @@ export const Navigation = () => {
   const navItems = [
     { href: "#home", label: "Home" },
     { href: "#about", label: "About" },
+    { href: "#courses", label: "Courses" },
     // Topics dropdown will be rendered separately using the custom Select
   ];
 

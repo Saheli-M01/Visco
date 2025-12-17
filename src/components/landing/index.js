@@ -4,3 +4,4 @@ export { default as Hero } from './Hero';
 export { About } from './About';
 export { Topics } from './Topics';
 export { Footer } from './Footer';
+export { Courses } from './Courses';

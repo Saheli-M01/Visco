@@ -1,4 +1,4 @@
-import { Navigation, Hero, About, Topics, Footer } from "@/components/landing";
+import { Navigation, Hero, About, Topics, Courses, Footer } from "@/components/landing";
 
 const Index = () => {
   return (
@@ -13,6 +13,9 @@ const Index = () => {
         </section>
         <section id="topics">
           <Topics />
+        </section>
+        <section id="courses">
+          <Courses />
         </section>
       </main>
       <Footer />

@@ -10,6 +10,7 @@ import ArrayPage from "./components/TopicPages/ArrayPage";
 import GraphPage from "./components/TopicPages/GraphPage";
 import TreePage from "./components/TopicPages/TreePage";
 import LinkedListPage from "./components/TopicPages/LinkedListPage";
+import DSA from "./components/course/DSA";
 import SearchPage from "./components/SearchPage";
 import Loading from "./components/Loading";
 import { useEffect, useState } from "react";
@@ -41,6 +42,7 @@ function App() {
             <Route path="/graph" element={<GraphPage />} />
             <Route path="/tree" element={<TreePage />} />
             <Route path="/linked-list" element={<LinkedListPage />} />
+            <Route path="/dsa" element={<DSA />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

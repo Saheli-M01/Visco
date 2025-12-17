@@ -74,15 +74,63 @@ const HelpGuideModal = ({ isOpen, onClose }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-7xl min-w-[50vw] max-h-[85vh] flex flex-col overflow-hidden bg-gradient-to-br from-white via-slate-50 to-blue-50">
-        <DialogHeader className="relative pb-4">
-          <div className="flex items-center gap-3">
-            <div className={`p-2.5 rounded-xl bg-gradient-to-br ${step.color} shadow-lg`}>
-              <StepIcon className="h-6 w-6 text-white" />
+      <DialogContent className="max-w-7xl min-w-[60vw] max-h-[85vh] flex flex-col overflow-y-auto bg-gradient-to-br from-white via-slate-50 to-blue-50">
+        <DialogHeader className="relative pb-2">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className={`p-2.5 rounded-xl bg-gradient-to-br ${step.color} shadow-lg`}>
+                <StepIcon className="h-6 w-6 text-white" />
+              </div>
+              <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+                Sorting Visualization Guide
+              </DialogTitle>
             </div>
-            <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
-              Sorting Visualization Guide
-            </DialogTitle>
+
+            <div className="flex flex-wrap items-center gap-3 mr-4">
+              <div className="flex items-center gap-2">
+                <div className={`bg-gradient-to-r ${step.color} text-white text-xs font-bold px-2.5 py-1 rounded-full`}>
+                  {currentStep + 1}/{steps.length}
+                </div>
+                <span className="text-sm text-slate-600 font-medium">
+                  Step {currentStep + 1} of {steps.length}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handlePrev}
+                  disabled={currentStep === 0}
+                  className="h-10 w-10 flex items-center justify-center rounded-full border-2 border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm hover:shadow-md"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  <span className="sr-only">Previous step</span>
+                </button>
+
+                <div className="flex gap-2 px-2">
+                  {steps.map((s, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentStep(idx)}
+                      className={`transition-all rounded-full ${
+                        idx === currentStep 
+                          ? `w-8 h-3 bg-gradient-to-r ${step.color} shadow-md` 
+                          : "w-3 h-3 bg-slate-300 hover:bg-slate-400"
+                      }`}
+                      title={`Go to step ${idx + 1}`}
+                    />
+                  ))}
+                </div>
+
+                <button
+                  onClick={handleNext}
+                  disabled={currentStep === steps.length - 1}
+                  className={`h-10 w-10 flex items-center justify-center rounded-full bg-gradient-to-r ${step.color} text-white hover:shadow-lg disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-md`}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                  <span className="sr-only">Next step</span>
+                </button>
+              </div>
+            </div>
           </div>
         </DialogHeader>
 
@@ -94,10 +142,10 @@ const HelpGuideModal = ({ isOpen, onClose }) => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
-              className="flex gap-6 p-6"
+              className="flex flex-col gap-8 p-3"
             >
               {/* Left side - Instructions */}
-              <div className="flex-1">
+              <div className="w-full">
                 <div className={`${step.bgGradient} rounded-2xl p-6 shadow-md border border-slate-200/50`}>
                   <div className="flex items-center gap-3 mb-4">
                     <div className={`p-2 rounded-lg bg-gradient-to-br ${step.color}`}>
@@ -134,7 +182,7 @@ const HelpGuideModal = ({ isOpen, onClose }) => {
               </div>
 
               {/* Right side - Video Placeholder */}
-              <div className="w-[50%] flex flex-col gap-4">
+              <div className="w-full ">
                 {isMultipleVideos ? (
                   step.videoPlaceholder.map((video, idx) => (
                     <motion.div
@@ -185,53 +233,6 @@ const HelpGuideModal = ({ isOpen, onClose }) => {
               </div>
             </motion.div>
           </AnimatePresence>
-        </div>
-
-        {/* Navigation Footer */}
-        <div className="border-t border-slate-200 bg-white/50 backdrop-blur p-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className={`bg-gradient-to-r ${step.color} text-white text-xs font-bold px-2.5 py-1 rounded-full`}>
-              {currentStep + 1}/{steps.length}
-            </div>
-            <span className="text-sm text-slate-600 font-medium">
-              Step {currentStep + 1} of {steps.length}
-            </span>
-          </div>
-
-          <div className="flex gap-3 items-center">
-            <button
-              onClick={handlePrev}
-              disabled={currentStep === 0}
-              className="flex items-center gap-2 px-5 py-2.5 bg-white border-2 border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:border-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm hover:shadow-md font-semibold"
-            >
-              <ChevronLeft className="h-4 w-4" />
-              Previous
-            </button>
-
-            <div className="flex gap-2 px-3">
-              {steps.map((s, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setCurrentStep(idx)}
-                  className={`transition-all rounded-full ${
-                    idx === currentStep 
-                      ? `w-8 h-3 bg-gradient-to-r ${step.color} shadow-md` 
-                      : "w-3 h-3 bg-slate-300 hover:bg-slate-400"
-                  }`}
-                  title={`Go to step ${idx + 1}`}
-                />
-              ))}
-            </div>
-
-            <button
-              onClick={handleNext}
-              disabled={currentStep === steps.length - 1}
-              className={`flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r ${step.color} text-white rounded-xl hover:shadow-lg disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-md font-semibold`}
-            >
-              Next
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
         </div>
       </DialogContent>
     </Dialog>

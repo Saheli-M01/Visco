@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Play, Code, History, Sparkles } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Dialog,
   DialogContent,
@@ -16,6 +17,9 @@ const HelpGuideModal = ({ isOpen, onClose }) => {
       description:
         "Start by entering array values in the input field. You can enter multiple numbers separated by spaces or commas. Once you've entered the values, click the 'Go' button to begin the visualization. The array will then be displayed in the display panel below.",
       videoPlaceholder: "video_1_enter_array.mp4",
+      icon: Play,
+      color: "from-sky-400 to-cyan-500",
+      bgGradient: "bg-gradient-to-br from-emerald-50 to-cyan-50",
     },
     {
       title: "Step 2: Manual and Automatic Control",
@@ -28,23 +32,33 @@ const HelpGuideModal = ({ isOpen, onClose }) => {
         "video_2a_manual_control.mp4",
         "video_2b_auto_control.mp4",
       ],
+      icon: Sparkles,
+      color: "from-purple-400 to-pink-500",
+      bgGradient: "bg-gradient-to-br from-purple-50 to-pink-50",
     },
     {
       title: "Step 3: Check Code Preview",
       description:
         "The code preview panel shows the actual sorting algorithm code in your selected programming language. You can switch between different languages using the dropdown. The current line being executed is highlighted, allowing you to see exactly which part of the code is running at each step.",
       videoPlaceholder: "video_3_code_preview.mp4",
+      icon: Code,
+      color: "from-blue-400 to-indigo-500",
+      bgGradient: "bg-gradient-to-br from-blue-50 to-indigo-50",
     },
     {
       title: "Step 4: Check Step History",
       description:
         "The step history panel displays all the operations performed during the sorting process. Each step shows the array state, comparisons, and swaps. You can click on any previous step to jump to that point in the visualization, making it easy to review and understand the algorithm's behavior.",
       videoPlaceholder: "video_4_step_history.mp4",
+      icon: History,
+      color: "from-orange-400 to-rose-500",
+      bgGradient: "bg-gradient-to-br from-orange-50 to-rose-50",
     },
   ];
 
   const step = steps[currentStep];
   const isMultipleVideos = Array.isArray(step.videoPlaceholder);
+  const StepIcon = step.icon;
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
@@ -60,59 +74,100 @@ const HelpGuideModal = ({ isOpen, onClose }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-7xl min-w-[50vw] max-h-[85vh] flex flex-col">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">
-            Sorting Visualization Guide
-          </DialogTitle>
+      <DialogContent className="max-w-7xl min-w-[50vw] max-h-[85vh] flex flex-col overflow-hidden bg-gradient-to-br from-white via-slate-50 to-blue-50">
+        <DialogHeader className="relative pb-4">
+          <div className="flex items-center gap-3">
+            <div className={`p-2.5 rounded-xl bg-gradient-to-br ${step.color} shadow-lg`}>
+              <StepIcon className="h-6 w-6 text-white" />
+            </div>
+            <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+              Sorting Visualization Guide
+            </DialogTitle>
+          </div>
         </DialogHeader>
 
         <div className="flex-1 overflow-y-auto custom-scrollbar">
-          <div className="flex gap-6 p-6">
-            {/* Left side - Instructions */}
-            <div className="flex-1">
-              <h2 className="text-xl font-semibold mb-3 text-gray-800">
-                {step.title}
-              </h2>
-              <p className="text-gray-700 mb-4 leading-relaxed">
-                {step.description}
-              </p>
-
-              {step.details && (
-                <ul className="space-y-2 mb-4">
-                  {step.details.map((detail, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <span className="text-blue-500 font-bold mt-1">•</span>
-                      <span className="text-gray-700">{detail}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-
-            {/* Right side - Video Placeholder */}
-            <div className="w-[50%] flex flex-col gap-4">
-              {isMultipleVideos ? (
-                step.videoPlaceholder.map((video, idx) => (
-                  <div className="text-center" key={idx}>
-                    <div className="text-gray-400 text-xs font-mono mb-2">
-                      Video {idx + 1}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentStep}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
+              className="flex gap-6 p-6"
+            >
+              {/* Left side - Instructions */}
+              <div className="flex-1">
+                <div className={`${step.bgGradient} rounded-2xl p-6 shadow-md border border-slate-200/50`}>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className={`p-2 rounded-lg bg-gradient-to-br ${step.color}`}>
+                      <StepIcon className="h-5 w-5 text-white" />
                     </div>
-                    <video
-                      className="w-full h-full object-cover"
-                      controls
-                      controlsList="nodownload"
-                    >
-                      <source src={`/videos/${video}`} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
+                    <h2 className="text-xl font-bold text-slate-800">
+                      {step.title}
+                    </h2>
                   </div>
-                ))
-              ) : (
-               
-                  <div className="text-center">
-                    <div className="text-gray-400 text-xs font-mono mb-2">
-                      Video
+                  
+                  <p className="text-slate-700 mb-4 leading-relaxed">
+                    {step.description}
+                  </p>
+
+                  {step.details && (
+                    <ul className="space-y-3 mb-4">
+                      {step.details.map((detail, idx) => (
+                        <motion.li
+                          key={idx}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: idx * 0.1 }}
+                          className="flex items-start gap-3 bg-white/60 backdrop-blur p-3 rounded-lg border border-slate-200/50 shadow-sm"
+                        >
+                          <span className={`bg-gradient-to-br ${step.color} text-white font-bold rounded-full w-6 h-6 flex items-center justify-center text-xs mt-0.5 flex-shrink-0`}>
+                            {idx + 1}
+                          </span>
+                          <span className="text-slate-700 text-sm">{detail}</span>
+                        </motion.li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+
+              {/* Right side - Video Placeholder */}
+              <div className="w-[50%] flex flex-col gap-4">
+                {isMultipleVideos ? (
+                  step.videoPlaceholder.map((video, idx) => (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: idx * 0.15 }}
+                      className="rounded-xl overflow-hidden shadow-lg border-2 border-slate-200/60 bg-white"
+                    >
+                      <div className={`bg-gradient-to-r ${step.color} text-white text-xs font-semibold px-3 py-2 flex items-center gap-2`}>
+                        <Play className="h-3 w-3" />
+                        Video {idx + 1}
+                      </div>
+                      <video
+                        className="w-full h-full object-cover"
+                        controls
+                        controlsList="nodownload"
+                      >
+                        <source src={`/videos/${video}`} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    </motion.div>
+                  ))
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3 }}
+                    className="rounded-xl overflow-hidden shadow-lg border-2 border-slate-200/60 bg-white"
+                  >
+                    <div className={`bg-gradient-to-r ${step.color} text-white text-xs font-semibold px-3 py-2 flex items-center gap-2`}>
+                      <Play className="h-3 w-3" />
+                      Video Demo
                     </div>
                     <video
                       className="w-full h-full object-cover"
@@ -125,36 +180,43 @@ const HelpGuideModal = ({ isOpen, onClose }) => {
                       />
                       Your browser does not support the video tag.
                     </video>
-                  </div>
-             
-              )}
-            </div>
-          </div>
+                  </motion.div>
+                )}
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         {/* Navigation Footer */}
-        <div className="border-t border-gray-200 p-4 flex items-center justify-between">
-          <div className="text-sm text-gray-600">
-            Step {currentStep + 1} of {steps.length}
+        <div className="border-t border-slate-200 bg-white/50 backdrop-blur p-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className={`bg-gradient-to-r ${step.color} text-white text-xs font-bold px-2.5 py-1 rounded-full`}>
+              {currentStep + 1}/{steps.length}
+            </div>
+            <span className="text-sm text-slate-600 font-medium">
+              Step {currentStep + 1} of {steps.length}
+            </span>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-3 items-center">
             <button
               onClick={handlePrev}
               disabled={currentStep === 0}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center gap-2 px-5 py-2.5 bg-white border-2 border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:border-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm hover:shadow-md font-semibold"
             >
               <ChevronLeft className="h-4 w-4" />
               Previous
             </button>
 
-            <div className="flex gap-1">
-              {steps.map((_, idx) => (
+            <div className="flex gap-2 px-3">
+              {steps.map((s, idx) => (
                 <button
                   key={idx}
                   onClick={() => setCurrentStep(idx)}
-                  className={`w-2 h-2 rounded-full transition-colors ${
-                    idx === currentStep ? "bg-blue-500" : "bg-gray-300"
+                  className={`transition-all rounded-full ${
+                    idx === currentStep 
+                      ? `w-8 h-3 bg-gradient-to-r ${step.color} shadow-md` 
+                      : "w-3 h-3 bg-slate-300 hover:bg-slate-400"
                   }`}
                   title={`Go to step ${idx + 1}`}
                 />
@@ -164,7 +226,7 @@ const HelpGuideModal = ({ isOpen, onClose }) => {
             <button
               onClick={handleNext}
               disabled={currentStep === steps.length - 1}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className={`flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r ${step.color} text-white rounded-xl hover:shadow-lg disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-md font-semibold`}
             >
               Next
               <ChevronRight className="h-4 w-4" />

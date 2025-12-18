@@ -7,13 +7,14 @@ import { categories } from "../../../data/categories";
 import { getAlgorithm, parseArray } from "../../algorithms/algorithmFactory";
 import VisualizerHeader from "../algorithm-visualizer-components/VisualizerDetailsHeader";
 import ConfirmModal from "../Modal";
+import DraggableHelpButton from "../algorithm-visualizer-components/Help-Guide/DraggableHelpButton";
 
 const theme = createTheme({});
 
 const FullScreenModalArray = ({ isOpen, onClose, algorithm, topic }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(algorithm);
-
+  
   const [selectedLanguage, setSelectedLanguage] = useState("csharp");
   const [showLanguageChangeConfirm, setShowLanguageChangeConfirm] =
     useState(false);
@@ -527,6 +528,7 @@ const FullScreenModalArray = ({ isOpen, onClose, algorithm, topic }) => {
               )}
             </div>
           </div>
+           
         </div>
       </AnimatePresence>
       <ConfirmModal
@@ -537,6 +539,11 @@ const FullScreenModalArray = ({ isOpen, onClose, algorithm, topic }) => {
         onConfirm={confirmLanguageChange}
         confirmLabel="Continue"
         cancelLabel="Cancel"
+      />
+      {/* Floating Help Button - Only visible on Visualization tab */}
+      <DraggableHelpButton
+        activeTab={activeTab}
+        color="from-orange-400 to-red-400"
       />
     </ThemeProvider>
   );

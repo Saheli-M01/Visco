@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "../../ui/dialog";
+} from "../../../ui/dialog";
 
 const HelpGuideModal = ({ isOpen, onClose }) => {
   const [currentStep, setCurrentStep] = useState(0);

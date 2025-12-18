@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { HelpCircle } from "lucide-react";
 import SortingDetails from "./SortingDetails";
 import SortingVisualization from "./SortingVisualization";
 import { categories } from "../../../data/categories";
 import { getAlgorithm, parseArray } from "../../algorithms/algorithmFactory";
 import VisualizerHeader from "../algorithm-visualizer-components/VisualizerDetailsHeader";
 import ConfirmModal from "../Modal";
-import HelpGuideModal from "../algorithm-visualizer-components/HelpGuideModal";
+import DraggableHelpButton from "../algorithm-visualizer-components/Help-Guide/DraggableHelpButton";
 
 // Custom MUI theme for glassmorphic design
 const theme = createTheme({
@@ -114,7 +113,6 @@ const theme = createTheme({
 const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(algorithm);
-  const [showHelpGuide, setShowHelpGuide] = useState(false);
 
   // Visualization state
   // default to 'csharp' (matches CodePreview language list) instead of legacy 'c'
@@ -789,32 +787,10 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
             </div>
           </div>
 
-          {/* Floating Help Button - Only visible on Visualization tab */}
-          {activeTab === 0 && (
-            <motion.button
-              drag
-              dragConstraints={{
-                left: -window.innerWidth + 100,
-                right: 0,
-                top: -window.innerHeight + 100,
-                bottom: 0,
-              }}
-              dragElastic={0}
-              dragMomentum={false}
-              dragTransition={{
-                bounceStiffness: 0,
-                bounceDamping: 0,
-                power: 0,
-              }}
-              onClick={() => setShowHelpGuide(true)}
-              className="fixed bottom-8 right-8 z-50 flex items-center gap-2 p-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full shadow-2xl hover:shadow-blue-500/50 group cursor-move"
-              style={{ transition: "box-shadow 0.2s ease" }}
-              title="Open Help Guide (Draggable)"
-              whileDrag={{ scale: 1 }}
-            >
-              <HelpCircle className="h-6 w-6" />
-            </motion.button>
-          )}
+          <DraggableHelpButton 
+            activeTab={activeTab}
+            color="from-rose-400 to-fuchsia-400"
+          />
         </div>
       </AnimatePresence>
       <ConfirmModal
@@ -826,10 +802,7 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
         confirmLabel="Continue"
         cancelLabel="Cancel"
       />
-      <HelpGuideModal
-        isOpen={showHelpGuide}
-        onClose={() => setShowHelpGuide(false)}
-      />
+      
     </ThemeProvider>
   );
 };

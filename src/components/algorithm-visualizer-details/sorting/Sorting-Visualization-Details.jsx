@@ -7,6 +7,7 @@ import { categories } from "../../../data/categories";
 import { getAlgorithm, parseArray } from "../../algorithms/algorithmFactory";
 import VisualizerHeader from "../algorithm-visualizer-components/VisualizerDetailsHeader";
 import ConfirmModal from "../Modal";
+import DraggableHelpButton from "../algorithm-visualizer-components/Help-Guide/DraggableHelpButton";
 
 // Custom MUI theme for glassmorphic design
 const theme = createTheme({
@@ -752,7 +753,6 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
         <div className="fixed inset-0 z-50">
           {/* Full-screen modal content */}
           <div className="relative h-full w-full backdrop-blur-md bg-gray-100 flex flex-col border">
-           
             {/* Header */}
             <VisualizerHeader
               sortingAlgorithms={sortingAlgorithms}
@@ -767,9 +767,8 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
                 if (onClose) onClose();
               }}
             />
-
             {/* Tab Content */}
-             <div className="flex-1 overflow-hidden">
+            <div className="flex-1 overflow-hidden">
               {/* Visualization Tab */}
               {activeTab === 0 && (
                 <SortingVisualization {...visualizationProps} />
@@ -777,7 +776,7 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
 
               {/* Details Tab */}
               {activeTab === 1 && (
-                 <div className="h-full py-2 overflow-y-auto">
+                <div className="h-full py-2 overflow-y-auto">
                   <SortingDetails
                     algorithm={selectedAlgorithm}
                     topic={topic}
@@ -787,6 +786,11 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
               )}
             </div>
           </div>
+
+          <DraggableHelpButton 
+            activeTab={activeTab}
+            color="from-rose-400 to-fuchsia-400"
+          />
         </div>
       </AnimatePresence>
       <ConfirmModal
@@ -798,6 +802,7 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
         confirmLabel="Continue"
         cancelLabel="Cancel"
       />
+      
     </ThemeProvider>
   );
 };

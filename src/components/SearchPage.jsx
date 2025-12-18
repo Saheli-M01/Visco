@@ -51,21 +51,43 @@ const SearchPage = () => {
   }, [query]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-white via-sky-50 to-indigo-50 text-slate-900">
+      <div className="pointer-events-none absolute inset-0 opacity-70">
+        <motion.div
+          aria-hidden
+          className="absolute -left-16 top-6 h-72 w-72 rounded-full bg-gradient-to-br from-sky-300 via-indigo-200 to-rose-200 blur-3xl"
+          animate={{ y: [0, 30, 0], scale: [1, 1.05, 1] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          aria-hidden
+          className="absolute right-0 bottom-10 h-80 w-80 rounded-full bg-gradient-to-br from-emerald-200 via-cyan-200 to-blue-200 blur-3xl"
+          animate={{ y: [0, -25, 0], scale: [1, 1.08, 1] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
+
       <Navigation />
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="mb-4">
-          <button
-            onClick={() => navigate("/")}
-            className="inline-flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-gray-900"
-          >
-            <ChevronLeft className="w-5"/>
-            Back to home
-          </button>
-          <h2 className="text-2xl font-bold text-gray-900 text-center">
-            Search Results
-          </h2>
+      <div className="relative max-w-6xl mx-auto px-4 py-10">
+        <div className="mb-8 flex flex-col gap-4 rounded-2xl border border-slate-200/60 bg-white/70 p-6 shadow-xl backdrop-blur">
+        
+          <div className="flex items-center justify-between gap-4 flex-wrap">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => navigate("/")}
+                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:-translate-x-0.5 hover:border-slate-300 hover:bg-slate-50"
+              >
+                <ChevronLeft className="w-5" />
+                Back to home
+              </button>
+              <div className="h-10 w-px bg-slate-200/80" />
+              <h2 className="text-2xl font-semibold text-slate-900">
+                Search Results
+              </h2>
+            </div>
+
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -80,8 +102,8 @@ const SearchPage = () => {
               />
             ))
           ) : query ? (
-            <div className="col-span-full flex flex-col items-center justify-center py-12">
-              <div className="w-auto h-[50vh]">
+            <div className="col-span-full flex flex-col items-center justify-center gap-3 py-12 min-h-[60vh]">
+              <div className="w-auto h-[40vh] max-h-[320px] drop-shadow-2xl flex items-center justify-center">
                 <DotLottieReact
                   src="https://lottie.host/ac704642-0b9c-4379-a75e-6945a81d169b/RJdqSPDoMQ.lottie"
                   loop
@@ -89,11 +111,21 @@ const SearchPage = () => {
                   style={{ width: "100%", height: "100%" }}
                 />
               </div>
-              <p className="mt-6 text-gray-700 text-lg font-medium">
-                Not available
+              <p className="mt-2 text-slate-800 text-lg font-semibold text-center">
+                No algorithms found for “{query}”
+              </p>
+              <p className="text-slate-600 text-sm text-center">
+                Try a different keyword or explore popular topics.
               </p>
             </div>
-          ) : null}
+          ) : (
+            <div className="col-span-full flex flex-col items-center justify-center gap-4 rounded-2xl border border-slate-200/70 bg-white/80 p-10 text-center shadow-xl backdrop-blur min-h-[60vh]">
+              <p className="text-lg font-semibold text-slate-900">Start typing to uncover algorithms</p>
+              <p className="text-slate-600 text-sm">
+                Live results will appear here. Tip: search by topic like “sort” or “graph”.
+              </p>
+            </div>
+          )}
         </div>
       </div>
       <FullScreenModalSorting

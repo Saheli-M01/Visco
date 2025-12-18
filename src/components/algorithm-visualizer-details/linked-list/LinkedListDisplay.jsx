@@ -18,15 +18,15 @@ const LinkedListDisplay = ({
       <div className="bg-code-bg rounded-lg p-4 flex-1 flex items-center justify-center overflow-auto">
         <div className="flex flex-col items-center w-full">
           {/* Always show input string */}
-          <div className="w-full mb-3">
-            <div className="text-gray-300 text-sm font-mono">
+          <div className="w-full ">
+            <div className="flex text-gray-300 text-sm font-mono justify-center ">
               Input: {displayInputString ?? ""}
             </div>
           </div>
 
           {/* Algorithm-specific visualizers for linked-list */}
           {selectedAlgorithm?.name === "Singly Linked List - Creation" && (
-            <div className="w-full mt-4">
+            <div className="w-full">
               <SLLCreationVisualizer
                 steps={linkedListSteps}
                 currentStepIndex={currentStepIndex}

@@ -8,14 +8,53 @@ export const howItWorks = [
 ];
 
 export const timeComplexity = {
-  best: "append: O(1), traversal: O(n)",
-  average: "append: O(1), traversal: O(n)",
-  worst: "append: O(1), traversal: O(n)",
+  best: "append: O(1)",
+  average: "append: O(1)",
+  worst: "append: O(1)",
 };
 
 export const spaceComplexity = "O(n)";
 
+// Example data for visualization
+export const exampleArray = [1, 2, 3];
 
+export const generateExampleSteps = (target) => {
+  const steps = [];
+  const arr = [1, 2, 3];
+
+  const addrForIndex = (idx) => {
+    const base = 0xa0b000 + idx * 0x101;
+    return "0x" + base.toString(16).toUpperCase();
+  };
+
+  const nodes = [];
+
+  for (let i = 0; i < arr.length; i++) {
+    const addr = addrForIndex(i);
+    // append node
+    nodes.push({ value: arr[i], next: null, addr });
+    // update previous next to this addr
+    if (i > 0) {
+      nodes[i - 1] = { ...nodes[i - 1], next: addr };
+    }
+
+    // Snapshot with value/next/address for this step
+    steps.push({
+      passNumber: i + 1,
+      sorted: [],
+      steps: [
+        {
+          // Show value and memory address (next) for clarity
+          array: nodes.map((n) => `${n.value} (next: ${n.next ?? "null"})`),
+          swapped: [],
+          swapText: `Added ${arr[i]} (next pointers updated)`
+        }
+      ]
+    });
+  }
+
+  return steps;
+};
 
 const codes = {
   javascript: `// Singly Linked List - Creation (JavaScript)
@@ -96,41 +135,73 @@ if __name__ == '__main__':
 `,
 
   java: `// Singly Linked List - Creation (Java)
-import java.util.Arrays;
-import java.util.ArrayList;
 
+import java.util.ArrayList;
+import java.util.List;
+
+// Helper class (NO main method here)
 class Node {
     int value;
     Node next;
-    Node(int v) { value = v; next = null; }
+
+    Node(int v) {
+        value = v;
+        next = null;
+    }
 }
 
-class SinglyLinkedList {
-    Node head, tail;
-    SinglyLinkedList() { head = tail = null; }
+// Main class (Java starts from here)
+public class SinglyLinkedList {
+
+    Node head;
+    Node tail;
+
+    SinglyLinkedList() {
+        head = null;
+        tail = null;
+    }
+
+    // Add node at the end
     void append(int v) {
         Node node = new Node(v);
-        if (head == null) { head = tail = node; }
-        else { tail.next = node; tail = node; }
-    }
 
-    java.util.List<Integer> toList() {
-        ArrayList<Integer> out = new ArrayList<>();
-        Node cur = head;
-        while (cur != null) {
-            out.add(cur.value);
-            cur = cur.next;
+        if (head == null) {
+            // First node
+            head = tail = node;
+        } else {
+            // Link old tail to new node
+            tail.next = node;
+            // Move tail
+            tail = node;
         }
-        return out;
     }
 
+    // Convert linked list to normal list
+    List<Integer> toList() {
+        List<Integer> result = new ArrayList<>();
+        Node current = head;
+
+        while (current != null) {
+            result.add(current.value);
+            current = current.next;
+        }
+
+        return result;
+    }
+
+    // Program starts here
     public static void main(String[] args) {
-        SinglyLinkedList l = new SinglyLinkedList();
-        int[] vals = {1,2,3,4};
-        for (int v: vals) l.append(v);
-        System.out.println("List values: " + l.toList());
+        SinglyLinkedList list = new SinglyLinkedList();
+
+        int[] values = {1, 2, 3, 4};
+        for (int v : values) {
+            list.append(v);
+        }
+
+        System.out.println("List values: " + list.toList());
     }
 }
+
 `,
 
   'c#': `// Singly Linked List - Creation (C#)
@@ -199,10 +270,15 @@ class SinglyLinkedList
 #include <bits/stdc++.h>
 using namespace std;
 
-struct Node { int value; Node* next; Node(int v): value(v), next(nullptr) {} };
+struct Node { 
+    int value; 
+    Node* next; 
+    Node(int v): value(v), next(nullptr) {} 
+};
 
 struct SinglyLinkedList {
-    Node* head; Node* tail;
+    Node* head; 
+    Node* tail;
     SinglyLinkedList(): head(nullptr), tail(nullptr) {}
     void append(int v) {
         Node* node = new Node(v);
@@ -210,13 +286,23 @@ struct SinglyLinkedList {
         else { tail->next = node; tail = node; }
     }
     vector<int> to_vector() {
-        vector<int> out; Node* cur = head; while (cur) { out.push_back(cur->value); cur = cur->next; } return out;
+        vector<int> out; 
+        Node* cur = head; 
+        while (cur) { 
+            out.push_back(cur->value); 
+            cur = cur->next; 
+        } 
+        return out;
     }
 };
 
 int main() {
-    SinglyLinkedList l; int vals[] = {1,2,3,4}; for (int v: vals) l.append(v);
-    auto v = l.to_vector(); for (int x: v) cout << x << ' '; cout << "\n";
+    SinglyLinkedList l; 
+    int vals[] = {1,2,3,4}; 
+    for (int v: vals) l.append(v);
+    auto v = l.to_vector(); 
+    for (int x: v) cout << x << ' '; 
+    cout << " ";
     return 0;
 }
 `,

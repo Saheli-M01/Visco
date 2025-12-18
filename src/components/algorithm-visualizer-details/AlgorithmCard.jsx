@@ -84,7 +84,7 @@ const AlgorithmCard = ({ algorithm, index = 0, onClick }) => {
       </p>
 
       {/* Work in Progress chip for the specific Singly Linked List - Creation card */}
-      {algorithm.name === "Singly Linked List - Creation" && (
+      {algorithm.name === "" && (
         <div className="absolute bottom-3 right-3">
           <span className="inline-block px-3 py-1 text-xs font-semibold text-amber-800 bg-amber-100/90 border border-amber-200 rounded-full shadow-sm">
             Work in Progress

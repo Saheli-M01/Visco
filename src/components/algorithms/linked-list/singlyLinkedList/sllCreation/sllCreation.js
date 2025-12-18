@@ -7,7 +7,7 @@ export const sllCreation = {
     const steps = [];
 
     // keep original input text available on every step
-    const inputArray = Array.isArray(arr) ? [...arr] : [];
+   
     const input = Array.isArray(arr) ? arr.join(",") : String(arr || "");
 
     // Build linked list structure for visualization (nodes is internal representation)
@@ -17,11 +17,7 @@ export const sllCreation = {
     steps.push({
       array: [],
       input,
-      head: null,
-      tail: null,
       description: `Start function: createSLL(arr)`,
-      headNode: null,
-      tailNode: null,
       phase: "start",
       codeLine: 0,
     });
@@ -64,7 +60,7 @@ export const sllCreation = {
         headNode: head,
         tailNode: tail,
         phase: "return-empty",
-        codeLine: 2,
+        codeLine: 3,
       });
       return steps;
     }
@@ -79,7 +75,7 @@ export const sllCreation = {
       headNode: head,
       tailNode: tail,
       phase: "loop-start",
-      codeLine: 3,
+      codeLine: 4,
     });
 
     // Iterate through array and create nodes
@@ -101,7 +97,7 @@ export const sllCreation = {
         nodes: JSON.parse(JSON.stringify(nodes)),
         currentIndex: i,
         phase: "loop-iteration",
-        codeLine: 3,
+        codeLine: 4,
       });
 
       // Line 5: Create new node (show node being created)
@@ -125,98 +121,6 @@ export const sllCreation = {
       codeLine: 5,
     });
 
-    // CONSTRUCTOR EXECUTION STEPS START HERE
-
-    // Line 17: Enter Node class
-    steps.push({
-      array: nodes.map((n) => n.value),
-      input,
-      head: head,
-      tail: tail,
-      description: `Enter Node class`,
-      i,
-      currentValue: val,
-      newNode: { value: val, next: null },
-      headNode: head,
-      tailNode: tail,
-      nodes: JSON.parse(JSON.stringify(nodes)),
-      currentIndex: i,
-      phase: "constructor-class",
-      codeLine: 17,
-    });
-
-    // Line 20: Constructor function declaration
-    steps.push({
-      array: nodes.map((n) => n.value),
-      input,
-      head: head,
-      tail: tail,
-      description: `Constructor: constructor(${val})`,
-      i,
-      currentValue: val,
-      newNode: { value: val, next: null },
-      headNode: head,
-      tailNode: tail,
-      nodes: JSON.parse(JSON.stringify(nodes)),
-      currentIndex: i,
-      phase: "constructor-signature",
-      codeLine: 20,
-    });
-
-    // Line 21: Set this.value = value
-    steps.push({
-      array: nodes.map((n) => n.value),
-      input,
-      head: head,
-      tail: tail,
-      description: `Set: this.value = ${val}`,
-      i,
-      currentValue: val,
-      newNode: { value: val, next: null },
-      headNode: head,
-      tailNode: tail,
-      nodes: JSON.parse(JSON.stringify(nodes)),
-      currentIndex: i,
-      phase: "constructor-set-value",
-      codeLine: 21,
-    });
-
-    // Line 22: Set this.next = null
-    steps.push({
-      array: nodes.map((n) => n.value),
-      input,
-      head: head,
-      tail: tail,
-      description: `Set: this.next = null`,
-      i,
-      currentValue: val,
-      newNode: { value: val, next: null },
-      headNode: head,
-      tailNode: tail,
-      nodes: JSON.parse(JSON.stringify(nodes)),
-      currentIndex: i,
-      phase: "constructor-set-next",
-      codeLine: 22,
-    });
-
-    // Line 23: Exit constructor
-    steps.push({
-      array: nodes.map((n) => n.value),
-      input,
-      head: head,
-      tail: tail,
-      description: `Exit constructor, return Node(${val})`,
-      i,
-      currentValue: val,
-      newNode: { value: val, next: null },
-      headNode: head,
-      tailNode: tail,
-      nodes: JSON.parse(JSON.stringify(nodes)),
-      currentIndex: i,
-      phase: "constructor-exit",
-      codeLine: 23,
-    });
-
 
       // Line 6: Check if head is null
       steps.push({
@@ -233,13 +137,12 @@ export const sllCreation = {
         nodes: JSON.parse(JSON.stringify(nodes)),
         currentIndex: i,
         phase: "check-head",
-        codeLine: 5,
+        codeLine: 6,
       });
 
       if (head === null) {
-        // Line 7: First node - set both head and tail
+        // Line 7: First node - set head to newNode
         head = 0; // Store index for visualization
-        tail = 0;
         nodes.push({ value: val, next: null });
 
         steps.push({
@@ -247,16 +150,43 @@ export const sllCreation = {
           input,
           head: head,
           tail: tail,
-          description: `First node: head = tail = Node(${val})`,
+          description: `Set: head = newNode`,
           i,
           currentNode: 0,
           currentValue: val,
+          newNode: { value: val, next: null },
           headNode: head,
           tailNode: tail,
           nodes: JSON.parse(JSON.stringify(nodes)),
           currentIndex: i,
-          phase: "first-node",
-          codeLine: 6,
+          phase: "set-head",
+          codeLine: 7,
+          showHeadArrow: true,
+          headArrowTarget: 0,
+        });
+
+        // Line 8: Set tail to newNode
+        tail = 0;
+        steps.push({
+          array: nodes.map((n) => n.value),
+          input,
+          head: head,
+          tail: tail,
+          description: `Set: tail = newNode`,
+          i,
+          currentNode: 0,
+          currentValue: val,
+          newNode: { value: val, next: null },
+          headNode: head,
+          tailNode: tail,
+          nodes: JSON.parse(JSON.stringify(nodes)),
+          currentIndex: i,
+          phase: "set-tail",
+          codeLine: 8,
+          showHeadArrow: true,
+          headArrowTarget: 0,
+          showTailArrow: true,
+          tailArrowTarget: 0,
         });
       } else {
         // Line 8: Else block
@@ -274,7 +204,11 @@ export const sllCreation = {
           nodes: JSON.parse(JSON.stringify(nodes)),
           currentIndex: i,
           phase: "else-block",
-          codeLine: 7,
+          codeLine: 9,
+          showHeadArrow: true,
+          headArrowTarget: head,
+          showTailArrow: true,
+          tailArrowTarget: tail,
         });
 
         // Line 9: Link tail->next to new node
@@ -292,7 +226,11 @@ export const sllCreation = {
           nodes: JSON.parse(JSON.stringify(nodes)),
           currentIndex: i,
           phase: "link-tail",
-          codeLine: 8,
+          codeLine: 10,
+          showHeadArrow: true,
+          headArrowTarget: head,
+          showTailArrow: true,
+          tailArrowTarget: tail,
         });
 
         // Update the previous tail's next pointer and append new node
@@ -313,7 +251,11 @@ export const sllCreation = {
           nodes: JSON.parse(JSON.stringify(nodes)),
           currentIndex: i,
           phase: "node-linked",
-          codeLine: 9,
+          codeLine: 10,
+          showHeadArrow: true,
+          headArrowTarget: head,
+          showTailArrow: true,
+          tailArrowTarget: tail,
         });
 
         // Line 10: Update tail
@@ -331,7 +273,11 @@ export const sllCreation = {
           nodes: JSON.parse(JSON.stringify(nodes)),
           currentIndex: i,
           phase: "update-tail",
-          codeLine: 9,
+          codeLine: 11,
+          showHeadArrow: true,
+          headArrowTarget: head,
+          showTailArrow: true,
+          tailArrowTarget: tail,
         });
       }
 
@@ -349,7 +295,7 @@ export const sllCreation = {
         nodes: JSON.parse(JSON.stringify(nodes)),
         currentIndex: i,
         phase: "close-block",
-        codeLine: 10,
+        codeLine: 13,
       });
     }
 

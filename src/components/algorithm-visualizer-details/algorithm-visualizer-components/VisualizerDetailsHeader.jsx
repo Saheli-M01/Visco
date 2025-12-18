@@ -50,13 +50,15 @@ const VisualizerHeader = ({
           <RefreshCw className="h-4 w-4" />
         </button>
 
-        <button
-          onClick={onHelpClick}
-          className="p-1 rounded-md bg-blue-400/20 backdrop-blur-sm bg-white/20 border border-white/30 transition-all text-blue-500 hover:text-blue-600"
-          title="Help Guide"
-        >
-          <HelpCircle className="h-4 w-4" />
-        </button>
+        {onHelpClick && (
+          <button
+            onClick={onHelpClick}
+            className="p-1 rounded-md bg-blue-400/20 backdrop-blur-sm bg-white/20 border border-white/30 transition-all text-blue-500 hover:text-blue-600"
+            title="Help Guide"
+          >
+            <HelpCircle className="h-4 w-4" />
+          </button>
+        )}
       </div>
       {/* Algorithm name */}
       <div className="ml-2 text-[1.3rem]  font-semibold text-gray-800 truncate">

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { HelpCircle } from "lucide-react";
 import SortingDetails from "./SortingDetails";
 import SortingVisualization from "./SortingVisualization";
 import { categories } from "../../../data/categories";
@@ -754,7 +755,6 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
         <div className="fixed inset-0 z-50">
           {/* Full-screen modal content */}
           <div className="relative h-full w-full backdrop-blur-md bg-gray-100 flex flex-col border">
-           
             {/* Header */}
             <VisualizerHeader
               sortingAlgorithms={sortingAlgorithms}
@@ -768,11 +768,9 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
                 handleRefresh();
                 if (onClose) onClose();
               }}
-              onHelpClick={() => setShowHelpGuide(true)}
             />
-
             {/* Tab Content */}
-             <div className="flex-1 overflow-hidden">
+            <div className="flex-1 overflow-hidden">
               {/* Visualization Tab */}
               {activeTab === 0 && (
                 <SortingVisualization {...visualizationProps} />
@@ -780,7 +778,7 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
 
               {/* Details Tab */}
               {activeTab === 1 && (
-                 <div className="h-full py-2 overflow-y-auto">
+                <div className="h-full py-2 overflow-y-auto">
                   <SortingDetails
                     algorithm={selectedAlgorithm}
                     topic={topic}
@@ -790,6 +788,33 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
               )}
             </div>
           </div>
+
+          {/* Floating Help Button - Only visible on Visualization tab */}
+          {activeTab === 0 && (
+            <motion.button
+              drag
+              dragConstraints={{
+                left: -window.innerWidth + 100,
+                right: 0,
+                top: -window.innerHeight + 100,
+                bottom: 0,
+              }}
+              dragElastic={0}
+              dragMomentum={false}
+              dragTransition={{
+                bounceStiffness: 0,
+                bounceDamping: 0,
+                power: 0,
+              }}
+              onClick={() => setShowHelpGuide(true)}
+              className="fixed bottom-8 right-8 z-50 flex items-center gap-2 p-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full shadow-2xl hover:shadow-blue-500/50 group cursor-move"
+              style={{ transition: "box-shadow 0.2s ease" }}
+              title="Open Help Guide (Draggable)"
+              whileDrag={{ scale: 1 }}
+            >
+              <HelpCircle className="h-6 w-6" />
+            </motion.button>
+          )}
         </div>
       </AnimatePresence>
       <ConfirmModal

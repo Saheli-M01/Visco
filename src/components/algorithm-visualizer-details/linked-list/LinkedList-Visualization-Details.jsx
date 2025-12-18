@@ -7,6 +7,7 @@ import { categories } from "../../../data/categories";
 import { getAlgorithm } from "../../algorithms/algorithmFactory";
 import VisualizerHeader from "../algorithm-visualizer-components/VisualizerDetailsHeader";
 import ConfirmModal from "../Modal";
+import DraggableHelpButton from "../algorithm-visualizer-components/Help-Guide/DraggableHelpButton";
 
 const theme = createTheme({});
 
@@ -15,7 +16,8 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(algorithm);
 
   const [selectedLanguage, setSelectedLanguage] = useState("javascript");
-  const [showLanguageChangeConfirm, setShowLanguageChangeConfirm] = useState(false);
+  const [showLanguageChangeConfirm, setShowLanguageChangeConfirm] =
+    useState(false);
   const [pendingLanguage, setPendingLanguage] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [speed, setSpeed] = useState(1.0);
@@ -79,12 +81,18 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
       const firstStep = linkedListSteps[0];
       setCurrentList([...firstStep.array]);
       setcomparingIndices(firstStep.comparing || []);
-      setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
+      setCurrentCodeLine(
+        firstStep.codeLine !== undefined ? firstStep.codeLine : -1
+      );
     }
   };
 
   const handleStepForward = () => {
-    if (!isVisualizationActive || currentStepIndex >= linkedListSteps.length - 1) return;
+    if (
+      !isVisualizationActive ||
+      currentStepIndex >= linkedListSteps.length - 1
+    )
+      return;
 
     const nextIndex = currentStepIndex + 1;
     const step = linkedListSteps[nextIndex];
@@ -133,10 +141,15 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
     setCurrentStep(0);
     setCurrentList([...firstStep.array]);
     setcomparingIndices(firstStep.comparing || []);
-    setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
+    setCurrentCodeLine(
+      firstStep.codeLine !== undefined ? firstStep.codeLine : -1
+    );
   };
 
-  const progress = linkedListSteps.length > 0 ? ((currentStepIndex + 1) / linkedListSteps.length) * 100 : 0;
+  const progress =
+    linkedListSteps.length > 0
+      ? ((currentStepIndex + 1) / linkedListSteps.length) * 100
+      : 0;
 
   const handleRefresh = () => {
     handlePause();
@@ -193,7 +206,11 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
       handlePause();
 
       const algorithm = getAlgorithm(selectedAlgorithm?.name);
-      const steps = algorithm.generateSteps([...originalList], selectedLanguage, operationValue);
+      const steps = algorithm.generateSteps(
+        [...originalList],
+        selectedLanguage,
+        operationValue
+      );
 
       setLinkedListSteps(steps);
       setTotalSteps(steps.length);
@@ -208,12 +225,14 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
 
       setCurrentStepIndex(0);
       setCurrentStep(0);
-        if (steps.length > 0) {
-          const firstStep = steps[0];
-          setCurrentList([...firstStep.array]);
-          setcomparingIndices(firstStep.comparing || []);
-          setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
-        }
+      if (steps.length > 0) {
+        const firstStep = steps[0];
+        setCurrentList([...firstStep.array]);
+        setcomparingIndices(firstStep.comparing || []);
+        setCurrentCodeLine(
+          firstStep.codeLine !== undefined ? firstStep.codeLine : -1
+        );
+      }
 
       if (wasPlaying) {
         setTimeout(() => {
@@ -244,7 +263,9 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
           if (step) {
             setCurrentList([...step.array]);
             setcomparingIndices(step.comparing || []);
-            setCurrentCodeLine(step.codeLine !== undefined ? step.codeLine : -1);
+            setCurrentCodeLine(
+              step.codeLine !== undefined ? step.codeLine : -1
+            );
             setCurrentStep(nextIndex);
           }
           return nextIndex;
@@ -259,24 +280,33 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
     }
   }, [speed, isExecuting, isPlaying, linkedListSteps.length]);
 
-  const [showAlgorithmChangeConfirm, setShowAlgorithmChangeConfirm] = useState(false);
+  const [showAlgorithmChangeConfirm, setShowAlgorithmChangeConfirm] =
+    useState(false);
   const [pendingAlgorithm, setPendingAlgorithm] = useState(null);
 
   const requestAlgorithmChange = (event) => {
     const algorithmName = event?.target ? event.target.value : event;
     if (!isVisualizationActive) {
-      const newAlgorithm = linkedListAlgorithms.find((algo) => algo.name === algorithmName);
+      const newAlgorithm = linkedListAlgorithms.find(
+        (algo) => algo.name === algorithmName
+      );
       setSelectedAlgorithm(newAlgorithm);
       return;
     }
 
     if (activeTab === 1) {
-      const newAlgorithm = linkedListAlgorithms.find((algo) => algo.name === algorithmName);
+      const newAlgorithm = linkedListAlgorithms.find(
+        (algo) => algo.name === algorithmName
+      );
       setSelectedAlgorithm(newAlgorithm);
 
       if (originalList && originalList.length > 0) {
         const algorithm = getAlgorithm(newAlgorithm?.name);
-        const steps = algorithm.generateSteps([...originalList], selectedLanguage, operationValue);
+        const steps = algorithm.generateSteps(
+          [...originalList],
+          selectedLanguage,
+          operationValue
+        );
         setLinkedListSteps(steps);
         setTotalSteps(steps.length);
         setStepHistory(
@@ -293,7 +323,9 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
           const firstStep = steps[0];
           setCurrentList([...firstStep.array]);
           setcomparingIndices(firstStep.comparing || []);
-          setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
+          setCurrentCodeLine(
+            firstStep.codeLine !== undefined ? firstStep.codeLine : -1
+          );
         }
       }
 
@@ -307,12 +339,18 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
 
   const confirmAlgorithmChange = () => {
     if (pendingAlgorithm) {
-      const newAlgorithm = linkedListAlgorithms.find((algo) => algo.name === pendingAlgorithm);
+      const newAlgorithm = linkedListAlgorithms.find(
+        (algo) => algo.name === pendingAlgorithm
+      );
       setSelectedAlgorithm(newAlgorithm);
 
       if (originalList && originalList.length > 0) {
         const algorithm = getAlgorithm(newAlgorithm?.name);
-        const steps = algorithm.generateSteps([...originalList], selectedLanguage, operationValue);
+        const steps = algorithm.generateSteps(
+          [...originalList],
+          selectedLanguage,
+          operationValue
+        );
         setLinkedListSteps(steps);
         setTotalSteps(steps.length);
         setStepHistory(
@@ -329,7 +367,9 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
           const firstStep = steps[0];
           setCurrentList([...firstStep.array]);
           setcomparingIndices(firstStep.comparing || []);
-          setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
+          setCurrentCodeLine(
+            firstStep.codeLine !== undefined ? firstStep.codeLine : -1
+          );
         }
       }
     }
@@ -348,7 +388,11 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
     setOriginalList([...parsedList]);
     setOperationValue(maybeOperationValue);
     const algorithm = getAlgorithm(selectedAlgorithm?.name);
-    const steps = algorithm.generateSteps(parsedList, selectedLanguage, maybeOperationValue);
+    const steps = algorithm.generateSteps(
+      parsedList,
+      selectedLanguage,
+      maybeOperationValue
+    );
     setLinkedListSteps(steps);
     setCurrentStepIndex(0);
     setCurrentStep(0);
@@ -359,7 +403,9 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
       const firstStep = steps[0];
       setCurrentList([...firstStep.array]);
       setcomparingIndices(firstStep.comparing || []);
-      setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
+      setCurrentCodeLine(
+        firstStep.codeLine !== undefined ? firstStep.codeLine : -1
+      );
     }
 
     setStepHistory(
@@ -382,7 +428,11 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
       setSelectedLanguage(newLang);
       if (originalList && originalList.length > 0) {
         const algorithm = getAlgorithm(selectedAlgorithm?.name);
-        const steps = algorithm.generateSteps([...originalList], newLang, operationValue);
+        const steps = algorithm.generateSteps(
+          [...originalList],
+          newLang,
+          operationValue
+        );
         setLinkedListSteps(steps);
         setTotalSteps(steps.length);
         setStepHistory(
@@ -399,7 +449,9 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
           const firstStep = steps[0];
           setCurrentList([...firstStep.array]);
           setcomparingIndices(firstStep.comparing || []);
-          setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
+          setCurrentCodeLine(
+            firstStep.codeLine !== undefined ? firstStep.codeLine : -1
+          );
         }
       }
       return;
@@ -409,7 +461,11 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
       setSelectedLanguage(newLang);
       if (originalList && originalList.length > 0) {
         const algorithm = getAlgorithm(selectedAlgorithm?.name);
-        const steps = algorithm.generateSteps([...originalList], newLang, operationValue);
+        const steps = algorithm.generateSteps(
+          [...originalList],
+          newLang,
+          operationValue
+        );
         setLinkedListSteps(steps);
         setTotalSteps(steps.length);
         setStepHistory(
@@ -426,7 +482,9 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
           const firstStep = steps[0];
           setCurrentList([...firstStep.array]);
           setcomparingIndices(firstStep.comparing || []);
-          setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
+          setCurrentCodeLine(
+            firstStep.codeLine !== undefined ? firstStep.codeLine : -1
+          );
         }
       }
       return;
@@ -441,7 +499,11 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
       setSelectedLanguage(pendingLanguage);
       if (originalList && originalList.length > 0) {
         const algorithm = getAlgorithm(selectedAlgorithm?.name);
-        const steps = algorithm.generateSteps([...originalList], pendingLanguage, operationValue);
+        const steps = algorithm.generateSteps(
+          [...originalList],
+          pendingLanguage,
+          operationValue
+        );
         setLinkedListSteps(steps);
         setTotalSteps(steps.length);
         setStepHistory(
@@ -458,7 +520,9 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
           const firstStep = steps[0];
           setCurrentList([...firstStep.array]);
           setcomparingIndices(firstStep.comparing || []);
-          setCurrentCodeLine(firstStep.codeLine !== undefined ? firstStep.codeLine : -1);
+          setCurrentCodeLine(
+            firstStep.codeLine !== undefined ? firstStep.codeLine : -1
+          );
         }
       }
     }
@@ -535,14 +599,21 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
             />
 
             <div className="flex-1 overflow-hidden">
-              {activeTab === 0 && <LinkedListVisualization {...visualizationProps} />}
+              {activeTab === 0 && (
+                <LinkedListVisualization {...visualizationProps} />
+              )}
               {activeTab === 1 && (
                 <div className="h-full py-2 overflow-y-auto custom-scrollbar">
-                  <LinkedListDetails algorithm={selectedAlgorithm} topic={topic} hideVisualizationButton={true} />
+                  <LinkedListDetails
+                    algorithm={selectedAlgorithm}
+                    topic={topic}
+                    hideVisualizationButton={true}
+                  />
                 </div>
               )}
             </div>
           </div>
+         
         </div>
       </AnimatePresence>
       <ConfirmModal
@@ -553,6 +624,11 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
         onConfirm={confirmLanguageChange}
         confirmLabel="Continue"
         cancelLabel="Cancel"
+      />
+      {/* Floating Help Button - Only visible on Visualization tab */}
+      <DraggableHelpButton
+        activeTab={activeTab}
+        color="from-lime-400 to-green-400"
       />
     </ThemeProvider>
   );

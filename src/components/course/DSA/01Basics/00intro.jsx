@@ -6,7 +6,7 @@ export const Intro = () => {
     <section id="intro" className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm space-y-8">
       <div>
         <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
-          Welcome to C++ Land 🚀
+          Introduction
         </h2>
         <p className="text-lg text-gray-700">
           Short. Clear. No scary stuff. Let's build your foundation.
@@ -217,33 +217,7 @@ export const Intro = () => {
         </ul>
       </div>
 
-      {/* What's next */}
-      <div className="rounded-2xl bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 p-6">
-        <h3 className="text-2xl font-bold text-green-900 mb-3">🎬 What Comes Next</h3>
-        <p className="text-base text-green-900 mb-3">
-          You've got the basics. Now comes the fun part: <span className="font-semibold">Arrays</span>.
-        </p>
-        <p className="text-base text-green-800 mb-4">
-          Arrays are just rows of labeled boxes. Learn to search them, sort them, and scan them efficiently. That's where DSA shines.
-        </p>
-        <ol className="space-y-1 text-base text-green-900">
-          <li><span className="font-semibold">1. Arrays & Strings</span> — The foundation.</li>
-          <li><span className="font-semibold">2. Linked Lists</span> — Different box arrangement.</li>
-          <li><span className="font-semibold">3. Stacks & Queues</span> — Specialized boxes.</li>
-          <li><span className="font-semibold">4. Trees & Graphs</span> — Boxes with connections.</li>
-          <li><span className="font-semibold">5. Sorting & Searching</span> — Key techniques.</li>
-        </ol>
-      </div>
-
-      {/* Lottie suggestions summary */}
-      <div className="rounded-lg bg-gray-100 border border-gray-300 p-4 text-xs text-gray-700 space-y-2">
-        <p className="font-semibold text-gray-900">🎨 Lottie Animation Ideas:</p>
-        <ul className="list-disc pl-5 space-y-1">
-          <li><span className="font-semibold">Compilation process:</span> Code text → Spinning gears → Binary</li>
-          <li><span className="font-semibold">Memory shelf:</span> Boxes sliding into place with indices</li>
-          <li><span className="font-semibold">Input/Output:</span> Arrow flowing in (cin), arrow flowing out (cout)</li>
-          <li><span className="font-semibold">Arrays concept:</span> Multiple boxes lining up side by side</li>
-        </ul>
-      </div>    </section>
+    
+  </section>
   );
 };

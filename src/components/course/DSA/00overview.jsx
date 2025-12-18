@@ -1,10 +1,14 @@
 import { BookOpen, Layers, Activity } from "lucide-react";
-
+import { IconInfoCircle } from '@tabler/icons-react';
 export const Overview = () => {
   return (
     <section id="overview" className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm space-y-6">
       <div className="flex items-center justify-between gap-3">
+        <div className="flex gap-3 items-center">
+             <IconInfoCircle  className="w-6 h-6 text-rose-400"/>
         <h2 className="text-xl md:text-2xl font-bold text-gray-900">Overview</h2>
+        </div>
+     
         <span className="text-sm text-gray-500">Start here to see what's inside</span>
       </div>
 

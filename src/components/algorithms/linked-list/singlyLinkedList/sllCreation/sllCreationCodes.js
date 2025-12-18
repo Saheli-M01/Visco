@@ -8,14 +8,37 @@ export const howItWorks = [
 ];
 
 export const timeComplexity = {
-  best: "append: O(1), traversal: O(n)",
-  average: "append: O(1), traversal: O(n)",
-  worst: "append: O(1), traversal: O(n)",
+  best: "append: O(1)",
+  average: "append: O(1)",
+  worst: "append: O(1)",
 };
 
 export const spaceComplexity = "O(n)";
 
+// Example data for visualization
+export const exampleArray = [1, 2, 3, 4, 5];
 
+export const generateExampleSteps = (target) => {
+  const steps = [];
+  const arr = [1, 2, 3, 4, 5];
+  
+  // Simulate the creation process step by step
+  for (let i = 0; i < arr.length; i++) {
+    steps.push({
+      passNumber: i + 1,
+      sorted: [],
+      steps: [
+        {
+          array: arr.slice(0, i + 1),
+          swapped: [i],
+          swapText: `Added ${arr[i]}`
+        }
+      ]
+    });
+  }
+  
+  return steps;
+};
 
 const codes = {
   javascript: `// Singly Linked List - Creation (JavaScript)
@@ -199,10 +222,15 @@ class SinglyLinkedList
 #include <bits/stdc++.h>
 using namespace std;
 
-struct Node { int value; Node* next; Node(int v): value(v), next(nullptr) {} };
+struct Node { 
+    int value; 
+    Node* next; 
+    Node(int v): value(v), next(nullptr) {} 
+};
 
 struct SinglyLinkedList {
-    Node* head; Node* tail;
+    Node* head; 
+    Node* tail;
     SinglyLinkedList(): head(nullptr), tail(nullptr) {}
     void append(int v) {
         Node* node = new Node(v);
@@ -210,13 +238,23 @@ struct SinglyLinkedList {
         else { tail->next = node; tail = node; }
     }
     vector<int> to_vector() {
-        vector<int> out; Node* cur = head; while (cur) { out.push_back(cur->value); cur = cur->next; } return out;
+        vector<int> out; 
+        Node* cur = head; 
+        while (cur) { 
+            out.push_back(cur->value); 
+            cur = cur->next; 
+        } 
+        return out;
     }
 };
 
 int main() {
-    SinglyLinkedList l; int vals[] = {1,2,3,4}; for (int v: vals) l.append(v);
-    auto v = l.to_vector(); for (int x: v) cout << x << ' '; cout << "\n";
+    SinglyLinkedList l; 
+    int vals[] = {1,2,3,4}; 
+    for (int v: vals) l.append(v);
+    auto v = l.to_vector(); 
+    for (int x: v) cout << x << ' '; 
+    cout << " ";
     return 0;
 }
 `,

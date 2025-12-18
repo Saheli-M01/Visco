@@ -72,7 +72,7 @@ const ArrayVisualization = ({
           </div>
         </div>
 
-        <div className="flex flex-col w-full lg:w-[60vw] gap-4">
+        <div className="flex flex-col w-full lg:w-[60vw] gap-2">
           <div className="bg-white border border-gray-300 rounded-xl shadow-sm p-3">
             <ArrayInputCard
               key={arrayInputKey}

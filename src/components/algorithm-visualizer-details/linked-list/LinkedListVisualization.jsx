@@ -86,7 +86,7 @@ const LinkedListVisualization = ({
           </div>
         </div>
 
-        <div className="flex flex-col w-full lg:w-[60vw] gap-4">
+        <div className="flex flex-col w-full lg:w-[60vw] gap-2">
           {/* Row 1: Array Input */}
           <div className="bg-white border border-gray-300 rounded-xl shadow-sm p-3">
             <ArrayInputCard

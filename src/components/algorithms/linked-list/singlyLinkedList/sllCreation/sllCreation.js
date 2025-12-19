@@ -281,22 +281,7 @@ export const sllCreation = {
         });
       }
 
-      // Line 11: Close else/if block
-      steps.push({
-        array: nodes.map((n) => n.value),
-        input,
-        head: head,
-        tail: tail,
-        description: `Close if-else block for iteration ${i}`,
-        i,
-        currentValue: val,
-        headNode: head,
-        tailNode: tail,
-        nodes: JSON.parse(JSON.stringify(nodes)),
-        currentIndex: i,
-        phase: "close-block",
-        codeLine: -1,
-      });
+      
     }
 
     // Line 12: Close loop
@@ -311,7 +296,7 @@ export const sllCreation = {
       tailNode: tail,
       nodes: JSON.parse(JSON.stringify(nodes)),
       phase: "loop-exit",
-      codeLine: 11,
+      codeLine: 13,
     });
 
     // Line 13: Return head
@@ -325,7 +310,7 @@ export const sllCreation = {
       tailNode: tail,
       nodes: JSON.parse(JSON.stringify(nodes)),
       phase: "return-head",
-      codeLine: 12,
+      codeLine: 14,
     });
 
     // Line 14: Function end
@@ -339,7 +324,7 @@ export const sllCreation = {
       tailNode: tail,
       nodes: JSON.parse(JSON.stringify(nodes)),
       phase: "completed",
-      codeLine: 13,
+      codeLine: -1,
     });
 
     return steps;

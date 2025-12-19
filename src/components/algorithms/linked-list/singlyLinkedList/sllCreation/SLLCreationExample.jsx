@@ -34,23 +34,23 @@ const SLLCreationExample = ({ examplePasses }) => {
               {step.array.length === 1 ? (
                 <div className="flex gap-1 items-center">
                   <div className="flex flex-col items-center">
-                    <span className="text-[10px] font-bold text-emerald-600 mb-0.5">head</span>
+                    <span className="text-[12px] font-bold text-emerald-600 mb-0.5">head</span>
                     <span className="text-emerald-600 text-lg leading-none">↓</span>
                   </div>
                   <div className="flex flex-col items-center">
-                    <span className="text-[10px] font-bold text-fuchsia-600 mb-0.5">tail</span>
+                    <span className="text-[12px] font-bold text-fuchsia-600 mb-0.5">tail</span>
                     <span className="text-fuchsia-600 text-lg leading-none">↓</span>
                   </div>
                 </div>
               ) : (
                 <>
                   <div className="flex flex-col items-center">
-                    <span className="text-[10px] font-bold text-emerald-600 mb-0.5">head</span>
+                    <span className="text-[12px] font-bold text-emerald-600 mb-0.5">head</span>
                     <span className="text-emerald-600 text-lg leading-none">↓</span>
                   </div>
                   <div className="flex-1" />
                   <div className="flex flex-col items-center mr-20">
-                    <span className="text-[10px] font-bold text-fuchsia-600 mb-0.5">tail</span>
+                    <span className="text-[12px] font-bold text-fuchsia-600 mb-0.5">tail</span>
                     <span className="text-fuchsia-600 text-lg leading-none">↓</span>
                   </div>
                 </>
@@ -75,13 +75,13 @@ const SLLCreationExample = ({ examplePasses }) => {
                     <motion.div
                       animate={isSwapped ? { scale: [1, 1.08, 1] } : {}}
                       transition={{ duration: 0.18 }}
-                      className="flex items-center overflow-hidden rounded-md border border-teal-600/40 shadow-sm"
+                      className="flex items-stretch overflow-hidden rounded-md border border-gray-600 shadow-sm"
                     >
-                      <div className="p-1 text-xs sm:text-sm font-bold bg-teal-500 text-white">
+                      <div className="p-1 text-xs sm:text-sm font-bold bg-teal-500 text-white flex flex-col justify-center">
                         <div>{val}</div>
-                        <div className="mt-0.5 text-[10px] sm:text-[11px] font-mono opacity-90">{addr}</div>
+                        <div className="mt-0.5 text-[12px] sm:text-[11px] font-medium opacity-90 text-gray-700">{addr}</div>
                       </div>
-                      <span className="p-1 text-[10px] sm:text-xs bg-amber-300 text-gray-800 border-l border-teal-700">
+                      <span className="p-1 text-[12px] sm:text-xs bg-amber-300 text-gray-800 border-l border-teal-700 flex items-center justify-center">
                         next: {nextDisp}
                       </span>
                     </motion.div>

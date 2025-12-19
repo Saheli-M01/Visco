@@ -6,7 +6,6 @@ export const howItWorks = [
   "For head insertion: link new node to current head and update head",
   "For tail insertion: link current tail to new node and update tail",
   "For middle/kth insertion: traverse to position, link new node between nodes",
-  "Maximum 9 nodes allowed in the list",
 ];
 
 export const timeComplexity = {

@@ -2,6 +2,7 @@ import React from "react";
 
 import SLLCreationVisualizer from "../../algorithms/linked-list/singlyLinkedList/sllCreation/SLLCreationVisualizer";
 import SLLTraversalVisualizer from "../../algorithms/linked-list/singlyLinkedList/sllTraversal/SLLTraversalVisualizer";
+import SLLInsertionVisualizer from "../../algorithms/linked-list/singlyLinkedList/sllInsertion/SLLInsertionVisualizer";
 
 const LinkedListDisplay = ({
   currentList = [],
@@ -14,7 +15,9 @@ const LinkedListDisplay = ({
 }) => {
   const currentStep = linkedListSteps[currentStepIndex] || {};
   const showInput =
-    displayInputString && selectedAlgorithm?.name !== "Singly Linked List - Traversal";
+    displayInputString && 
+    selectedAlgorithm?.name !== "Singly Linked List - Traversal" &&
+    selectedAlgorithm?.name !== "Singly Linked List - Insertion";
 
   return (
     <div className="flex flex-col h-full bg-gray-900 rounded-lg overflow-y-auto">
@@ -42,6 +45,15 @@ const LinkedListDisplay = ({
           {selectedAlgorithm?.name === "Singly Linked List - Traversal" && (
             <div className="w-full">
               <SLLTraversalVisualizer
+                steps={linkedListSteps}
+                currentStepIndex={currentStepIndex}
+                currentList={currentList}
+              />
+            </div>
+          )}
+          {selectedAlgorithm?.name === "Singly Linked List - Insertion" && (
+            <div className="w-full">
+              <SLLInsertionVisualizer
                 steps={linkedListSteps}
                 currentStepIndex={currentStepIndex}
                 currentList={currentList}

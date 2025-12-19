@@ -13,20 +13,29 @@ import SLLCreationComplexity from "../../algorithms/linked-list/singlyLinkedList
 import SLLCreationExample from "../../algorithms/linked-list/singlyLinkedList/sllCreation/SLLCreationExample";
 import SLLTraversalComplexity from "../../algorithms/linked-list/singlyLinkedList/sllTraversal/SLLTraversalComplexity";
 import SLLTraversalExample from "../../algorithms/linked-list/singlyLinkedList/sllTraversal/SLLTraversalExample";
-
+import SLLInsertionComplexity from "../../algorithms/linked-list/singlyLinkedList/sllInsertion/SLLInsertionComplexity";
+import SLLInsertionExample from "../../algorithms/linked-list/singlyLinkedList/sllInsertion/SLLInsertionExample";
 
 // Dynamic code loaders (lazy import to keep bundle small)
 const codeLoaders = {
   "Singly Linked List - Creation": () =>
-    import("../../algorithms/linked-list/singlyLinkedList/sllCreation/sllCreationCodes"),
+    import(
+      "../../algorithms/linked-list/singlyLinkedList/sllCreation/sllCreationCodes"
+    ),
   "Singly Linked List - Traversal": () =>
-    import("../../algorithms/linked-list/singlyLinkedList/sllTraversal/sllTraversalCodes"),
+    import(
+      "../../algorithms/linked-list/singlyLinkedList/sllTraversal/sllTraversalCodes"
+    ),
+  "Singly Linked List - Insertion": () => import(
+      "../../algorithms/linked-list/singlyLinkedList/sllInsertion/sllInsertionCodes"
+    ),
 };
 
 // Map algorithm names to their complexity components when available
 const complexityComponents = {
   "Singly Linked List - Creation": SLLCreationComplexity,
   "Singly Linked List - Traversal": SLLTraversalComplexity,
+  "Singly Linked List - Insertion": SLLInsertionComplexity,
 };
 
 const LinkedListDetails = ({ algorithm, topic }) => {
@@ -129,21 +138,27 @@ const LinkedListDetails = ({ algorithm, topic }) => {
                     {algorithm.name}
                   </h3>
                 </div>
-
-                
               </div>
               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-                <span className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium ${getDifficultyColor(algorithm.difficulty)}`}>
+                <span
+                  className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium ${getDifficultyColor(
+                    algorithm.difficulty
+                  )}`}
+                >
                   {algorithm.difficulty}
                 </span>
                 <div className="flex items-center text-gray-600 bg-white/30 px-2 sm:px-3 py-1 rounded-full">
                   <Clock className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-                  <span className="font-mono text-xs sm:text-sm">{algorithm.complexity}</span>
+                  <span className="font-mono text-xs sm:text-sm">
+                    {algorithm.complexity}
+                  </span>
                 </div>
               </div>
             </div>
 
-            <p className="text-sm sm:text-base text-gray-700 leading-relaxed font-medium">{algoMeta.description}</p>
+            <p className="text-sm sm:text-base text-gray-700 leading-relaxed font-medium">
+              {algoMeta.description}
+            </p>
           </motion.div>
 
           {/* Implementation */}
@@ -279,6 +294,8 @@ const LinkedListDetails = ({ algorithm, topic }) => {
                   <SLLCreationExample examplePasses={examplePasses} />
                 ) : algorithm.name === "Singly Linked List - Traversal" ? (
                   <SLLTraversalExample examplePasses={examplePasses} />
+                ) : algorithm.name === "Singly Linked List - Insertion" ? (
+                  <SLLInsertionExample examplePasses={examplePasses} />
                 ) : algorithm.name === "Next Permutation" &&
                   examplePasses[0]?.steps ? (
                   examplePasses[0].steps.map((step, stepIdx) => (

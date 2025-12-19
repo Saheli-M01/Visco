@@ -27,10 +27,11 @@ const SnakeTurnArrow = () => {
   );
 };
 
-const TraversalNodeDisplay = ({
+const InsertionNodeDisplay = ({
   value,
   next,
   address,
+  isNewNode = false,
   isCurrentNode = false,
   showArrow = false,
   arrowDirection = "right",
@@ -43,20 +44,84 @@ const TraversalNodeDisplay = ({
       {showSnakeTurn && <SnakeTurnArrow />}
 
       {/* Node card */}
-      <div className={`flex flex-col items-center rounded-lg p-1 shadow-md border ${isCurrentNode ? "bg-gradient-to-b from-green-300 to-green-500 border-green-800" : "bg-gradient-to-b from-teal-300 to-teal-500 border-lime-800"}`}>
+      <div
+        className={`flex flex-col items-center rounded-lg p-1 shadow-md border ${
+          isNewNode
+            ? "bg-gradient-to-b from-yellow-300 to-yellow-500 border-yellow-800"
+            : isCurrentNode
+            ? "bg-gradient-to-b from-green-300 to-green-500 border-green-800"
+            : "bg-gradient-to-b from-teal-300 to-teal-500 border-lime-800"
+        }`}
+      >
         <div className={`text-xs font-semibold mb-1.5 text-green-900`}>
-          {isCurrentNode ? "current" : "node"}
+          {isNewNode ? "newNode" : isCurrentNode ? "current" : "node"}
         </div>
 
         <div className="flex gap-2">
-          <div className={`flex flex-col items-center justify-center rounded p-1 px-2 border ${isCurrentNode ? "bg-green-500 text-white border-green-800" : "bg-lime-400 text-gray-900 border-green-800"}`}>
-            <div className={`text-xs font-semibold ${isCurrentNode ? "text-white" : "text-lime-900"}`}>value</div>
-            <div className={`text-sm font-bold ${isCurrentNode ? "text-white" : "text-gray-800"}`}>{value}</div>
-            <div className={`mt-0.5 text-[10px] font-mono ${isCurrentNode ? "text-white" : "text-gray-900"}`}>{address}</div>
+          <div
+            className={`flex flex-col items-center justify-center rounded p-1 px-2 border ${
+              isNewNode
+                ? "bg-yellow-400 text-gray-900 border-yellow-800"
+                : isCurrentNode
+                ? "bg-green-500 text-white border-green-800"
+                : "bg-lime-400 text-gray-900 border-green-800"
+            }`}
+          >
+            <div
+              className={`text-xs font-semibold ${
+                isNewNode
+                  ? "text-yellow-900"
+                  : isCurrentNode
+                  ? "text-white"
+                  : "text-lime-900"
+              }`}
+            >
+              value
+            </div>
+            <div
+              className={`text-sm font-bold ${
+                isNewNode
+                  ? "text-gray-800"
+                  : isCurrentNode
+                  ? "text-white"
+                  : "text-gray-800"
+              }`}
+            >
+              {value}
+            </div>
+            <div
+              className={`mt-0.5 text-[10px] font-mono ${
+                isNewNode
+                  ? "text-gray-900"
+                  : isCurrentNode
+                  ? "text-white"
+                  : "text-gray-900"
+              }`}
+            >
+              {address}
+            </div>
           </div>
 
-          <div className={`relative flex flex-col items-center justify-center rounded p-1 px-2 border ${isCurrentNode ? "bg-green-300 text-gray-700 border-green-800" : "bg-amber-300 text-gray-700 border-amber-800"}`}>
-            <div className={`text-xs font-semibold ${isCurrentNode ? "text-green-900" : "text-amber-900"}`}>next</div>
+          <div
+            className={`relative flex flex-col items-center justify-center rounded p-1 px-2 border ${
+              isNewNode
+                ? "bg-orange-300 text-gray-700 border-orange-800"
+                : isCurrentNode
+                ? "bg-green-300 text-gray-700 border-green-800"
+                : "bg-amber-300 text-gray-700 border-amber-800"
+            }`}
+          >
+            <div
+              className={`text-xs font-semibold ${
+                isNewNode
+                  ? "text-orange-900"
+                  : isCurrentNode
+                  ? "text-green-900"
+                  : "text-amber-900"
+              }`}
+            >
+              next
+            </div>
             <div className="text-[12px]">
               {next === null || next === undefined ? "null" : next}
             </div>
@@ -75,41 +140,41 @@ const TraversalNodeDisplay = ({
   );
 };
 
-const TraversalVisualizer = ({
+const SLLInsertionVisualizer = ({
   steps = [],
   currentStepIndex = 0,
   currentList = [],
 }) => {
   const step = steps[currentStepIndex] || {};
+  const preLinkPhases = new Set([
+    "create-new-node",
+    "create-current",
+    "insert-position-tail",
+    "insert-position-head",
+    "insert-position-middle",
+    "insert-position-kth",
+    "tail-while-check",
+    "tail-move-current",
+    "tail-while-exit",
+    "traverse-to-position",
+    "navigate-to-position",
+  ]);
+  const isPreLinkPhase = preLinkPhases.has(step.phase);
 
-  // Collect visited values up to the current step (inclusive)
-  const resolveCurrentCardValueForStep = (idx) => {
-    const s = steps[idx] || {};
+  // Compute persisted head/tail
+  let headVal = undefined;
+  if (step.head !== undefined) headVal = step.head;
+  if (headVal === undefined) {
+    const persisted = findPersistedValue(steps, currentStepIndex, ["head"]);
+    if (persisted !== null && persisted !== undefined) headVal = persisted;
+  }
 
-    // resolve current index/value for that step
-    let curVal = s.current;
-    if (curVal === undefined) {
-      const persisted = findPersistedValue(steps, idx, ["current", "currentIndex"]);
-      if (persisted !== null && persisted !== undefined) curVal = persisted;
-    }
-    if (curVal === undefined || curVal === null) return null;
-
-    // map index to node value if possible
-    if (typeof curVal === "number") {
-      if (s.nodes && s.nodes[curVal] !== undefined) {
-        const node = s.nodes[curVal];
-        return node?.value ?? node;
-      }
-      if (currentList && currentList[curVal] !== undefined) return currentList[curVal];
-    }
-
-    return curVal;
-  };
-
-  const visitedValues = steps
-    .slice(0, currentStepIndex + 1)
-    .flatMap((s, idx) => (s?.phase === "visit-node" ? [resolveCurrentCardValueForStep(idx)] : []))
-    .filter((v) => v !== null && v !== undefined);
+  let tailVal = undefined;
+  if (step.tail !== undefined) tailVal = step.tail;
+  if (tailVal === undefined) {
+    const persisted = findPersistedValue(steps, currentStepIndex, ["tail"]);
+    if (persisted !== null && persisted !== undefined) tailVal = persisted;
+  }
 
   // Compute persisted current pointer
   let currentVal = undefined;
@@ -119,36 +184,17 @@ const TraversalVisualizer = ({
     if (persisted !== null && persisted !== undefined) currentVal = persisted;
   }
 
-  const displayCurrentVal = currentVal === undefined || currentVal === null ? null : currentVal;
-
-  const currentCardValue = (() => {
-    if (displayCurrentVal === null) return null;
-    if (
-      typeof displayCurrentVal === "number" &&
-      currentList &&
-      currentList[displayCurrentVal] !== undefined
-    )
-      return currentList[displayCurrentVal];
-    return displayCurrentVal;
-  })();
-
-  // Compute persisted head/tail
-  let headVal = undefined;
-  if (step.head !== undefined) headVal = step.head;
-  if (headVal === undefined) {
-    const persisted = findPersistedValue(steps, currentStepIndex, ["head"]);
-    if (persisted !== null && persisted !== undefined) headVal = persisted;
-  }
-  
-  let tailVal = undefined;
-  if (step.tail !== undefined) tailVal = step.tail;
-  if (tailVal === undefined) {
-    const persisted = findPersistedValue(steps, currentStepIndex, ["tail"]);
-    if (persisted !== null && persisted !== undefined) tailVal = persisted;
-  }
-
   const displayHeadVal = headVal === undefined || headVal === null ? null : headVal;
   const displayTailVal = tailVal === undefined || tailVal === null ? null : tailVal;
+  let displayCurrentVal = currentVal === undefined || currentVal === null ? null : currentVal;
+  // Fallback: for tail pre-link step, show current at head even if missing
+  if (
+    displayCurrentVal === null &&
+    (step.phase === "insert-position-tail" || step.phase === "create-current") &&
+    displayHeadVal !== null
+  ) {
+    displayCurrentVal = displayHeadVal;
+  }
 
   const headCardValue = (() => {
     if (displayHeadVal === null) return null;
@@ -164,10 +210,17 @@ const TraversalVisualizer = ({
     return displayTailVal;
   })();
 
+  const currentCardValue = (() => {
+    if (displayCurrentVal === null) return null;
+    if (typeof displayCurrentVal === "number" && currentList && currentList[displayCurrentVal] !== undefined)
+      return currentList[displayCurrentVal];
+    return displayCurrentVal;
+  })();
+
   return (
     <div className="p-3">
       <div className="mb-3 flex flex-col items-center gap-3">
-        {/* First row: head, current, tail */}
+        {/* First row: head, current (if exists), tail */}
         <div className="flex items-center justify-center gap-3">
           <VariableCard
             label="head"
@@ -190,21 +243,48 @@ const TraversalVisualizer = ({
 
         {/* Second row: Nodes - serpentine layout */}
         {(() => {
-          if (!step.nodes || step.nodes.length === 0) return null;
+          if (!step.nodes || step.nodes.length === 0) {
+            // Show new node if exists
+            if (step.newNode) {
+              return (
+                <div className="bg-blue-100 border border-blue-400 rounded-xl px-10 py-3">
+                  <motion.div
+                    animate={{ scale: [1, 1.1, 1] }}
+                    transition={{ duration: 0.4, repeat: Infinity }}
+                  >
+                    <InsertionNodeDisplay
+                      value={step.newNode.value}
+                      next="null"
+                      address="0xNEW"
+                      isNewNode={true}
+                      showArrow={false}
+                    />
+                  </motion.div>
+                </div>
+              );
+            }
+            return null;
+          }
 
           const addrForIndex = (idx) => {
-            const base = 0xA0B00 + (idx * 0x101);
+            const base = 0xA0B00 + idx * 0x101;
             return "0x" + base.toString(16).toUpperCase();
           };
 
           const displayNodes = [];
           step.nodes.forEach((node, idx) => {
+            const shouldLinkNext = isPreLinkPhase
+              ? idx < step.nodes.length - 2 // avoid linking to preview new node in pre-link phases
+              : idx < step.nodes.length - 1;
+
             displayNodes.push({
               value: node.value ?? node,
-              next: idx < step.nodes.length - 1 ? addrForIndex(idx + 1) : "null",
+              next: shouldLinkNext ? addrForIndex(idx + 1) : "null",
               i: idx,
               addr: addrForIndex(idx),
               isLinked: true,
+              isNewNode:
+                step.newNode && step.newNode.value === (node.value ?? node) && idx === step.nodes.length - 1,
             });
           });
 
@@ -229,12 +309,14 @@ const TraversalVisualizer = ({
                       const isLastInFirstRow = isFirstRow && node.i === 4;
                       const isFirstOfRow = colIdx === 0;
                       const isCurrentNode = node.i === displayCurrentVal;
+                      const isNewNode = node.isNewNode;
 
                       // Show horizontal arrow if linked and next node in same row
                       const nextNodeIdx = node.i + 1;
                       const nextNodeInSameRow = Math.floor(nextNodeIdx / 5) === rowIdx;
-                      const isNotLastNode = node.i < displayNodes.length - 1;
-                      const showHorizontalArrow = node.isLinked && nextNodeInSameRow && isNotLastNode;
+                      const maxLinkedIndex = isPreLinkPhase ? displayNodes.length - 2 : displayNodes.length - 1;
+                      const isNotLastLinkedNode = node.i < maxLinkedIndex;
+                      const showHorizontalArrow = node.isLinked && nextNodeInSameRow && isNotLastLinkedNode;
                       const showDownArrow = isLastInFirstRow && displayNodes.length > 5;
 
                       // Show snake turn arrow for first node of row 2+ (the 5->6 transition)
@@ -248,14 +330,15 @@ const TraversalVisualizer = ({
                         <div key={`node-${node.i}`} className="relative">
                           {showSnakeTurn && <SnakeTurnArrow />}
                           <motion.div
-                            animate={isCurrentNode ? { scale: [1, 1.1, 1] } : {}}
+                            animate={isCurrentNode || isNewNode ? { scale: [1, 1.1, 1] } : {}}
                             transition={{ duration: 0.4 }}
                           >
-                            <TraversalNodeDisplay
+                            <InsertionNodeDisplay
                               value={node.value}
                               next={node.next}
                               address={node.addr}
                               isCurrentNode={isCurrentNode}
+                              isNewNode={isNewNode}
                               showArrow={showHorizontalArrow}
                               arrowDirection="right"
                               showDownArrow={showDownArrow}
@@ -268,13 +351,6 @@ const TraversalVisualizer = ({
                   </div>
                 );
               })}
-
-              {/* Show visited values inline (persist after first visit) */}
-              {visitedValues.length > 0 && (
-                <div className="text-sm font-semibold text-yellow-900">
-                  Visited: {visitedValues.join(", ")}
-                </div>
-              )}
             </div>
           );
         })()}
@@ -283,4 +359,4 @@ const TraversalVisualizer = ({
   );
 };
 
-export default TraversalVisualizer;
+export default SLLInsertionVisualizer;

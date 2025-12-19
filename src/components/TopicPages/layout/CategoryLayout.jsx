@@ -227,7 +227,7 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
               ? "from-sky-50 to-blue-50"
               : category?.id === "linkedList"
               ? "from-orange-50 to-red-50"
-              :""
+              : ""
           }`}
           style={{
             marginLeft: isMobile ? 0 : collapsed ? 72 : 256,
@@ -235,37 +235,120 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
           }}
         >
           {/* Animated background grid */}
-         
-                    {/* Animated background pattern - Code-inspired */}
-          <div className="absolute inset-0 opacity-[0.12] overflow-hidden">
+
+          {/* Animated background pattern - Code-inspired */}
+          <div className="absolute inset-0 opacity-[0.08] overflow-hidden">
             <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
               <defs>
-                <pattern id="codePattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+                <pattern
+                  id="codePattern"
+                  x="0"
+                  y="0"
+                  width="200"
+                  height="200"
+                  patternUnits="userSpaceOnUse"
+                >
                   {/* Curly braces */}
-                  <text x="10" y="30" fontSize="24" fill="currentColor" className="text-gray-900 font-mono">{`{`}</text>
-                  <text x="170" y="30" fontSize="24" fill="currentColor" className="text-gray-900 font-mono">{`}`}</text>
-                  
+                  <text
+                    x="10"
+                    y="30"
+                    fontSize="24"
+                    fill="currentColor"
+                    className="text-gray-900 font-mono"
+                  >{`{`}</text>
+                  <text
+                    x="170"
+                    y="30"
+                    fontSize="24"
+                    fill="currentColor"
+                    className="text-gray-900 font-mono"
+                  >{`}`}</text>
+
                   {/* Angle brackets */}
-                  <text x="80" y="60" fontSize="20" fill="currentColor" className="text-gray-900 font-mono">{`< >`}</text>
-                  
+                  <text
+                    x="80"
+                    y="60"
+                    fontSize="20"
+                    fill="currentColor"
+                    className="text-gray-900 font-mono"
+                  >{`< >`}</text>
+
                   {/* Semicolons and dots */}
-                  <text x="40" y="90" fontSize="18" fill="currentColor" className="text-gray-900 font-mono">;</text>
-                  <text x="150" y="100" fontSize="18" fill="currentColor" className="text-gray-900 font-mono">;</text>
-                  
+                  <text
+                    x="40"
+                    y="90"
+                    fontSize="18"
+                    fill="currentColor"
+                    className="text-gray-900 font-mono"
+                  >
+                    ;
+                  </text>
+                  <text
+                    x="150"
+                    y="100"
+                    fontSize="18"
+                    fill="currentColor"
+                    className="text-gray-900 font-mono"
+                  >
+                    ;
+                  </text>
+
                   {/* Forward slashes */}
-                  <text x="20" y="130" fontSize="20" fill="currentColor" className="text-gray-900 font-mono" opacity="0.5">//</text>
-                  
+                  <text
+                    x="20"
+                    y="130"
+                    fontSize="20"
+                    fill="currentColor"
+                    className="text-gray-900 font-mono"
+                    opacity="0.5"
+                  >
+                    //
+                  </text>
+
                   {/* Parentheses */}
-                  <text x="120" y="150" fontSize="22" fill="currentColor" className="text-gray-900 font-mono">( )</text>
-                  
+                  <text
+                    x="120"
+                    y="150"
+                    fontSize="22"
+                    fill="currentColor"
+                    className="text-gray-900 font-mono"
+                  >
+                    ( )
+                  </text>
+
                   {/* Square brackets */}
-                  <text x="60" y="180" fontSize="20" fill="currentColor" className="text-gray-900 font-mono">[ ]</text>
-                  
+                  <text
+                    x="60"
+                    y="180"
+                    fontSize="20"
+                    fill="currentColor"
+                    className="text-gray-900 font-mono"
+                  >
+                    [ ]
+                  </text>
+
                   {/* Equal signs */}
-                  <text x="140" y="190" fontSize="18" fill="currentColor" className="text-gray-900 font-mono">=</text>
-                  
+                  <text
+                    x="140"
+                    y="190"
+                    fontSize="18"
+                    fill="currentColor"
+                    className="text-gray-900 font-mono"
+                  >
+                    =
+                  </text>
+
                   {/* Binary numbers */}
-                  <text x="100" y="120" fontSize="14" fill="currentColor" className="text-gray-900 font-mono" opacity="0.4">01</text>
+                  <text
+                    x="100"
+                    y="120"
+                    fontSize="14"
+                    fill="currentColor"
+                    className="text-gray-900 font-mono"
+                    opacity="0.4"
+                  >
+                    01
+                  </text>
                 </pattern>
               </defs>
               <rect width="100%" height="100%" fill="url(#codePattern)" />

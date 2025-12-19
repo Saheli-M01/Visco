@@ -11,7 +11,7 @@ import { nextPermutation } from "./array/NextPermutation/nextPermutation.js";
 import { slidingWindow } from "./array/SlidingWindow/slidingWindow.js";
 import { mooresVoting } from "./array/MooresVoting/mooresVoting.js";
 import { sllCreation } from "./linked-list/singlyLinkedList/sllCreation/sllCreation.js";
-
+import { sllTraversal } from "./linked-list/singlyLinkedList/sllTraversal/sllTraversal.js";
 
 // Algorithm factory to get the appropriate algorithm implementation
 export const getAlgorithm = (algorithmName) => {
@@ -67,8 +67,8 @@ export const getAlgorithm = (algorithmName) => {
     "boyer-moore": mooresVoting,
     "Singly Linked List - Creation": sllCreation,
     "singly linked list - creation": sllCreation,
-    // "Singly Linked List - Traversal": singlyLinkedList,
-    // "singly linked list - traversal": singlyLinkedList,
+    "Singly Linked List - Traversal": sllTraversal,
+    "singly linked list - traversal": sllTraversal,
     // "Singly Linked List - Insertion": singlyLinkedList,
     // "singly linked list - insertion": singlyLinkedList,
     // "Singly Linked List - Deletion": singlyLinkedList,

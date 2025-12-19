@@ -16,6 +16,7 @@ const INTERACTIVE_ALGORITHMS = [
   "Sliding Window / 2 pointers (Container With Most Water)",
   "Moore's Voting (Boyer-Moore)",
   "Singly Linked List - Creation",
+  "Singly Linked List - Traversal",
 ];
 
 /**

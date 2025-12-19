@@ -7,6 +7,21 @@ export const sllInsertion = {
     const steps = [];
     const input = Array.isArray(arr) ? arr.join(",") : String(arr || "");
 
+    const reorderNodes = (nodesArr, headIdx) => {
+      if (headIdx === null || headIdx === undefined) {
+        return JSON.parse(JSON.stringify(nodesArr));
+      }
+      const ordered = [];
+      const seen = new Set();
+      let curr = headIdx;
+      while (curr !== null && curr !== undefined && !seen.has(curr) && nodesArr[curr]) {
+        ordered.push({ ...nodesArr[curr] });
+        seen.add(curr);
+        curr = nodesArr[curr].next;
+      }
+      return JSON.parse(JSON.stringify(ordered));
+    };
+
     // Parse operation value: { position: 'head'|'tail'|'middle'|'kth', value: number, kthPosition?: number }
     const operation = operationValue || { position: "tail", value: 1 };
     const { position, value: insertValue, kthPosition } = operation;
@@ -51,6 +66,9 @@ export const sllInsertion = {
 
     // Create new node
     const newNode = { value: insertValue, next: null };
+    const previewNodesForCreate = position === "head"
+      ? [{ ...newNode }, ...nodes]
+      : [...nodes, { ...newNode }];
     steps.push({
       array: nodes.map((n) => n.value),
       input,
@@ -59,7 +77,7 @@ export const sllInsertion = {
       newNode: { ...newNode },
       description: `Create new node with value = ${insertValue}`,
       // Preview the newly created node in the visualization without mutating the actual list yet
-      nodes: JSON.parse(JSON.stringify([...nodes, { ...newNode }])),
+      nodes: JSON.parse(JSON.stringify(previewNodesForCreate)),
       phase: "create-new-node",
       codeLine: 1,
     });
@@ -75,16 +93,17 @@ export const sllInsertion = {
         newNode: { ...newNode },
         description: `Inserting at HEAD position`,
         // Persist preview of new node throughout pre-link phases
-        nodes: JSON.parse(JSON.stringify([...nodes, { ...newNode }])),
+        nodes: JSON.parse(JSON.stringify([{ ...newNode }, ...nodes])),
         phase: "insert-position-head",
         codeLine: 2,
       });
 
-      // Link new node to current head
+      // Link new node to current head (preview first, then commit)
       newNode.next = initialHead;
       const newNodeIndex = nodes.length;
-      nodes.push(newNode);
 
+      // Preview the linking with newNode shown at the front pointing to old head
+      const previewLinkNodes = [{ ...newNode }, ...reorderNodes(nodes, initialHead)];
       steps.push({
         array: nodes.map((n) => n.value),
         input,
@@ -92,10 +111,13 @@ export const sllInsertion = {
         tail: initialTail,
         newNode: { ...newNode },
         description: `Link newNode.next = head`,
-        nodes: JSON.parse(JSON.stringify(nodes)),
+        nodes: JSON.parse(JSON.stringify(previewLinkNodes)),
         phase: "link-to-head",
         codeLine: 3,
       });
+
+      // Commit the new node into the nodes array so subsequent steps operate on the real list
+      nodes.push({ ...newNode });
 
       // Update head
       const newHead = newNodeIndex;
@@ -105,7 +127,7 @@ export const sllInsertion = {
         head: newHead,
         tail: initialTail !== null ? initialTail : newHead,
         description: `Update head = newNode`,
-        nodes: JSON.parse(JSON.stringify(nodes)),
+        nodes: reorderNodes(nodes, newHead),
         phase: "update-head",
         codeLine: 4,
       });
@@ -116,7 +138,7 @@ export const sllInsertion = {
         head: newHead,
         tail: initialTail !== null ? initialTail : newHead,
         description: `Insertion at head complete`,
-        nodes: JSON.parse(JSON.stringify(nodes)),
+        nodes: reorderNodes(nodes, newHead),
         phase: "insert-complete",
         codeLine: -1,
       });

@@ -273,18 +273,32 @@ const SLLInsertionVisualizer = ({
 
           const displayNodes = [];
           step.nodes.forEach((node, idx) => {
-            const shouldLinkNext = isPreLinkPhase
-              ? idx < step.nodes.length - 2 // avoid linking to preview new node in pre-link phases
-              : idx < step.nodes.length - 1;
+            let shouldLinkNext = idx < step.nodes.length - 1;
+            if (isPreLinkPhase) {
+              // Avoid linking to preview node when it's at the end
+              if (idx >= step.nodes.length - 2) shouldLinkNext = false;
+              // Avoid linking from preview node when it's at the front for head flow
+              const headPreviewPhase =
+                step.phase === "create-new-node" || step.phase === "insert-position-head";
+              if (headPreviewPhase && idx === 0 && step.newNode) shouldLinkNext = false;
+            }
+
+            const nodeValue = node.value ?? node;
+            const isPreviewNewNodeAtFront =
+              step.newNode &&
+              (step.phase === "create-new-node" || step.phase === "insert-position-head") &&
+              idx === 0 &&
+              step.newNode.value === nodeValue;
+            const isPreviewNewNodeAtEnd =
+              step.newNode && idx === step.nodes.length - 1 && step.newNode.value === nodeValue;
 
             displayNodes.push({
-              value: node.value ?? node,
+              value: nodeValue,
               next: shouldLinkNext ? addrForIndex(idx + 1) : "null",
               i: idx,
               addr: addrForIndex(idx),
               isLinked: true,
-              isNewNode:
-                step.newNode && step.newNode.value === (node.value ?? node) && idx === step.nodes.length - 1,
+              isNewNode: Boolean(isPreviewNewNodeAtFront || isPreviewNewNodeAtEnd),
             });
           });
 
@@ -314,9 +328,7 @@ const SLLInsertionVisualizer = ({
                       // Show horizontal arrow if linked and next node in same row
                       const nextNodeIdx = node.i + 1;
                       const nextNodeInSameRow = Math.floor(nextNodeIdx / 5) === rowIdx;
-                      const maxLinkedIndex = isPreLinkPhase ? displayNodes.length - 2 : displayNodes.length - 1;
-                      const isNotLastLinkedNode = node.i < maxLinkedIndex;
-                      const showHorizontalArrow = node.isLinked && nextNodeInSameRow && isNotLastLinkedNode;
+                      const showHorizontalArrow = nextNodeInSameRow && node.next !== "null";
                       const showDownArrow = isLastInFirstRow && displayNodes.length > 5;
 
                       // Show snake turn arrow for first node of row 2+ (the 5->6 transition)

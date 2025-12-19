@@ -37,6 +37,7 @@ const InsertionNodeDisplay = ({
   arrowDirection = "right",
   showDownArrow = false,
   showSnakeTurn = false,
+  pulseNext = false,
 }) => {
   return (
     <div className="relative flex items-center">
@@ -122,7 +123,7 @@ const InsertionNodeDisplay = ({
             >
               next
             </div>
-            <div className="text-[12px]">
+            <div className={`text-[12px] ${pulseNext ? "animate-pulse" : ""}`}>
               {next === null || next === undefined ? "null" : next}
             </div>
 
@@ -158,6 +159,8 @@ const SLLInsertionVisualizer = ({
     "tail-while-exit",
     "traverse-to-position",
     "navigate-to-position",
+    "traverse-for-check",
+    "traverse-move-current",
   ]);
   const isPreLinkPhase = preLinkPhases.has(step.phase);
 
@@ -217,16 +220,36 @@ const SLLInsertionVisualizer = ({
     return displayCurrentVal;
   })();
 
+  // Compute persisted loop index `i` (used for kth traversal)
+  let iVal = undefined;
+  if (step.i !== undefined) iVal = step.i;
+  if (iVal === undefined) {
+    const persisted = findPersistedValue(steps, currentStepIndex, ["i"]);
+    if (persisted !== null && persisted !== undefined) iVal = persisted;
+  }
+  const displayIVal = iVal === undefined || iVal === null ? null : iVal;
+  // Only show `i` during explicit for-loop phases
+  const forLoopPhases = new Set(["traverse-for-check", "traverse-move-current"]);
+  const showI = displayIVal !== null && forLoopPhases.has(step.phase);
+
   return (
     <div className="p-3">
       <div className="mb-3 flex flex-col items-center gap-3">
         {/* First row: head, current (if exists), tail */}
         <div className="flex items-center justify-center gap-3">
+          {showI && (
+            <VariableCard
+              label="i"
+              value={displayIVal}
+              bgColor="bg-amber-200"
+            />
+          )}
           <VariableCard
             label="head"
             value={headCardValue === null ? "null" : headCardValue}
             bgColor="bg-emerald-300"
           />
+         
           {displayCurrentVal !== null && (
             <VariableCard
               label="current"
@@ -272,8 +295,42 @@ const SLLInsertionVisualizer = ({
           };
 
           const displayNodes = [];
+          // Precompute current.next address for link-new-node phase so we
+          // can update the existing preview node's `next` instead of
+          // appending a separate preview node.
+          let linkNewNodeCurrentNextAddr = null;
+          if (step.phase === "link-new-node" && step.newNode) {
+            const currentIdx =
+              step.current !== undefined && typeof step.current === "number"
+                ? step.current
+                : null;
+            if (
+              currentIdx !== null &&
+              step.nodes &&
+              Array.isArray(step.nodes) &&
+              currentIdx >= 0 &&
+              currentIdx < step.nodes.length
+            ) {
+              if (currentIdx < step.nodes.length - 1) {
+                // will convert to address inside loop
+                linkNewNodeCurrentNextAddr = currentIdx + 1;
+              } else {
+                linkNewNodeCurrentNextAddr = null;
+              }
+            }
+          }
+
           step.nodes.forEach((node, idx) => {
             let shouldLinkNext = idx < step.nodes.length - 1;
+            // During the explicit `link-new-node` snapshot the generator
+            // typically appends the new node to the end of `nodes` as a
+            // preview. We should not draw the arrow from the previous last
+            // node to that preview; the actual link is shown in the
+            // subsequent `update-link` step. Avoid linking the second-last
+            // node to the last (preview) node here.
+            if (step.phase === "link-new-node" && step.newNode && idx === step.nodes.length - 2) {
+              shouldLinkNext = false;
+            }
             if (isPreLinkPhase) {
               // Avoid linking to preview node when it's at the end
               if (idx >= step.nodes.length - 2) shouldLinkNext = false;
@@ -292,13 +349,29 @@ const SLLInsertionVisualizer = ({
             const isPreviewNewNodeAtEnd =
               step.newNode && idx === step.nodes.length - 1 && step.newNode.value === nodeValue;
 
+            // Default next address for this display node
+            let nextAddr = shouldLinkNext ? addrForIndex(idx + 1) : "null";
+            let pulseNext = false;
+
+            // If this node is the preview newNode at the end during the
+            // `link-new-node` phase, update its `next` to current.next and
+            // pulse that value instead of appending a separate preview node.
+            if (isPreviewNewNodeAtEnd && step.phase === "link-new-node" && linkNewNodeCurrentNextAddr !== null) {
+              nextAddr = addrForIndex(linkNewNodeCurrentNextAddr);
+              pulseNext = true;
+            } else if (isPreviewNewNodeAtEnd && step.phase === "link-new-node" && linkNewNodeCurrentNextAddr === null) {
+              nextAddr = "null";
+              pulseNext = true;
+            }
+
             displayNodes.push({
               value: nodeValue,
-              next: shouldLinkNext ? addrForIndex(idx + 1) : "null",
+              next: nextAddr,
               i: idx,
               addr: addrForIndex(idx),
               isLinked: true,
               isNewNode: Boolean(isPreviewNewNodeAtFront || isPreviewNewNodeAtEnd),
+              pulseNext,
             });
           });
 
@@ -355,6 +428,7 @@ const SLLInsertionVisualizer = ({
                               arrowDirection="right"
                               showDownArrow={showDownArrow}
                               showSnakeTurn={false}
+                              pulseNext={node.pulseNext}
                             />
                           </motion.div>
                         </div>

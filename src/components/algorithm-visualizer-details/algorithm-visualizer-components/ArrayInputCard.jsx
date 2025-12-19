@@ -297,7 +297,6 @@ const ArrayInputCard = ({
                 options={[
                   { value: "head", label: "Head" },
                   { value: "tail", label: "Tail" },
-                  { value: "middle", label: "Middle" },
                   { value: "kth", label: "Kth Position" }
                 ]}
                 className="w-32 h-10"

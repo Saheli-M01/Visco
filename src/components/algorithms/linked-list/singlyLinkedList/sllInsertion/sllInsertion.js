@@ -242,100 +242,6 @@ export const sllInsertion = {
         phase: "insert-complete",
         codeLine: -1,
       });
-    } else if (position === "middle") {
-      // Insert at middle
-      const middlePos = Math.floor(arr.length / 2);
-      
-      steps.push({
-        array: nodes.map((n) => n.value),
-        input,
-        head: initialHead,
-        tail: initialTail,
-        newNode: { ...newNode },
-        description: `Inserting at MIDDLE position (index ${middlePos})`,
-        nodes: JSON.parse(JSON.stringify([...nodes, { ...newNode }])),
-        phase: "insert-position-middle",
-        codeLine: 8,
-      });
-
-      if (middlePos === 0) {
-        // Same as head insertion
-        newNode.next = initialHead;
-        const newNodeIndex = nodes.length;
-        nodes.push(newNode);
-
-        steps.push({
-          array: nodes.map((n) => n.value),
-          input,
-          head: newNodeIndex,
-          tail: initialTail !== null ? initialTail : newNodeIndex,
-          description: `Middle is at head, insert at head`,
-          nodes: JSON.parse(JSON.stringify(nodes)),
-          phase: "insert-complete",
-          codeLine: -1,
-        });
-      } else {
-        // Traverse to position before middle
-        let current = initialHead;
-        for (let i = 0; i < middlePos - 1; i++) {
-          current = nodes[current].next;
-        }
-
-        steps.push({
-          array: nodes.map((n) => n.value),
-          input,
-          head: initialHead,
-          tail: initialTail,
-          current,
-          newNode: { ...newNode },
-          description: `Navigate to node before middle (index ${middlePos - 1})`,
-          nodes: JSON.parse(JSON.stringify([...nodes, { ...newNode }])),
-          phase: "navigate-to-position",
-          codeLine: 9,
-        });
-
-        // Link new node
-        newNode.next = nodes[current].next;
-        const newNodeIndex = nodes.length;
-        nodes.push(newNode);
-
-        steps.push({
-          array: nodes.map((n) => n.value),
-          input,
-          head: initialHead,
-          tail: initialTail,
-          current,
-          newNode: { ...newNode },
-          description: `Link newNode.next = current.next`,
-          nodes: JSON.parse(JSON.stringify(nodes)),
-          phase: "link-new-node",
-          codeLine: 10,
-        });
-
-        nodes[current].next = newNodeIndex;
-
-        steps.push({
-          array: nodes.map((n) => n.value),
-          input,
-          head: initialHead,
-          tail: initialTail,
-          description: `Link current.next = newNode`,
-          nodes: JSON.parse(JSON.stringify(nodes)),
-          phase: "update-link",
-          codeLine: 11,
-        });
-
-        steps.push({
-          array: nodes.map((n) => n.value),
-          input,
-          head: initialHead,
-          tail: initialTail,
-          description: `Insertion at middle complete`,
-          nodes: JSON.parse(JSON.stringify(nodes)),
-          phase: "insert-complete",
-          codeLine: -1,
-        });
-      }
     } else if (position === "kth" && kthPosition !== undefined) {
       // Insert at kth position
       const k = parseInt(kthPosition);
@@ -355,17 +261,6 @@ export const sllInsertion = {
         return steps;
       }
 
-      steps.push({
-        array: nodes.map((n) => n.value),
-        input,
-        head: initialHead,
-        tail: initialTail,
-        newNode: { ...newNode },
-        description: `Inserting at position ${k}`,
-        nodes: JSON.parse(JSON.stringify([...nodes, { ...newNode }])),
-        phase: "insert-position-kth",
-        codeLine: 12,
-      });
 
       if (k === 0) {
         // Insert at head
@@ -386,22 +281,6 @@ export const sllInsertion = {
       } else {
         // Traverse to position k-1
         let current = initialHead;
-        for (let i = 0; i < k - 1; i++) {
-          current = nodes[current].next;
-          steps.push({
-            array: nodes.map((n) => n.value),
-            input,
-            head: initialHead,
-            tail: initialTail,
-            current,
-            newNode: { ...newNode },
-            description: `Traverse to position ${i + 1}`,
-            nodes: JSON.parse(JSON.stringify([...nodes, { ...newNode }])),
-            phase: "traverse-to-position",
-            codeLine: 13,
-          });
-        }
-
         steps.push({
           array: nodes.map((n) => n.value),
           input,
@@ -409,11 +288,43 @@ export const sllInsertion = {
           tail: initialTail,
           current,
           newNode: { ...newNode },
-          description: `Reached position ${k - 1}, ready to insert`,
+          description: `Current = head`,
           nodes: JSON.parse(JSON.stringify([...nodes, { ...newNode }])),
-          phase: "navigate-to-position",
-          codeLine: 14,
+          phase: "create-current",
+          codeLine: 15,
         });
+        for (let i = 0; i < k - 1; i++) {
+          // Show for-loop iteration/check before advancing
+          steps.push({
+            array: nodes.map((n) => n.value),
+            input,
+            head: initialHead,
+            tail: initialTail,
+            current,
+            i,
+            newNode: { ...newNode },
+            description: `for-loop check: i = ${i}, continue while i < ${k - 1}`,
+            nodes: JSON.parse(JSON.stringify([...nodes, { ...newNode }])),
+            phase: "traverse-for-check",
+            codeLine: 16,
+          });
+
+          // Advance current = current.next
+          current = nodes[current].next;
+          steps.push({
+            array: nodes.map((n) => n.value),
+            input,
+            head: initialHead,
+            tail: initialTail,
+            current,
+            i: i + 1,
+            newNode: { ...newNode },
+            description: `current = current.next (moved to index ${current})`,
+            nodes: JSON.parse(JSON.stringify([...nodes, { ...newNode }])),
+            phase: "traverse-move-current",
+            codeLine: 17,
+          });
+        }
 
         // Link new node
         newNode.next = nodes[current].next;
@@ -430,7 +341,7 @@ export const sllInsertion = {
           description: `Link newNode.next = current.next`,
           nodes: JSON.parse(JSON.stringify(nodes)),
           phase: "link-new-node",
-          codeLine: 15,
+          codeLine: 19,
         });
 
         nodes[current].next = newNodeIndex;

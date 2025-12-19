@@ -295,7 +295,7 @@ export const sllCreation = {
         nodes: JSON.parse(JSON.stringify(nodes)),
         currentIndex: i,
         phase: "close-block",
-        codeLine: 13,
+        codeLine: -1,
       });
     }
 

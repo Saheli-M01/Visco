@@ -15,7 +15,7 @@ const LinkedListDisplay = ({
 
   return (
     <div className="flex flex-col h-full bg-gray-900 rounded-lg overflow-hidden">
-      <div className="bg-code-bg rounded-lg p-4 flex-1 flex items-center justify-center overflow-auto">
+      <div className="bg-code-bg rounded-lg p-2 flex-1 flex items-center justify-center overflow-auto">
         <div className="flex flex-col items-center w-full">
           {/* Always show input string */}
           <div className="w-full ">

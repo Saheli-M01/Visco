@@ -57,8 +57,8 @@ const LinkedListVisualization = ({
 
   return (
     <div className="h-screen w-screen bg-gradient-to-br from-white/60 to-white/40 backdrop-blur-sm custom-scrollbar overflow-y-auto">
-      <div className="flex flex-col lg:flex-row-reverse h-[92vh] p-2 gap-4">
-        <div className="flex flex-col w-full lg:w-[40vw] gap-4">
+      <div className="flex flex-col lg:flex-row-reverse h-[92vh] p-2 gap-2">
+        <div className="flex flex-col w-full lg:w-[35vw] gap-4">
           <div className="flex-1 bg-white border border-gray-300 rounded-xl shadow-sm px-3 pt-3 overflow-hidden">
             <CodePreview
               selectedLanguage={selectedLanguage}
@@ -86,9 +86,9 @@ const LinkedListVisualization = ({
           </div>
         </div>
 
-        <div className="flex flex-col w-full lg:w-[60vw] gap-2">
+        <div className="flex flex-col w-full lg:w-[65vw] gap-2">
           {/* Row 1: Array Input */}
-          <div className="bg-white border border-gray-300 rounded-xl shadow-sm p-3">
+          <div className="bg-white border border-gray-300 rounded-xl shadow-sm px-3 py-2">
             <ArrayInputCard
               key={linkedListInputKey}
               handleGo={handleGoWrapper}
@@ -97,7 +97,7 @@ const LinkedListVisualization = ({
           </div>
 
           {/* Row 2: Controls */}
-          <div className="bg-white border border-gray-300 rounded-xl shadow-sm p-3">
+          <div className="bg-white border border-gray-300 rounded-xl shadow-sm px-3 py-2">
             <ControlsPanel
               isAutomatic={isAutomatic}
               setIsAutomatic={setIsAutomatic}

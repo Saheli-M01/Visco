@@ -251,7 +251,7 @@ const CreationVisualizer = ({
             }
 
             return (
-              <div className=" bg-amber-100 border border-amber-400 rounded-xl px-5 py-3 flex flex-col items-start gap-6">
+              <div className=" bg-blue-100 border border-amber-400 rounded-xl px-5 py-3 flex flex-col items-start gap-6">
                 {rows.map((row, rowIdx) => {
                   return (
                     <div

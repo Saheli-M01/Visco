@@ -43,6 +43,7 @@ const AlgorithmCard = ({ algorithm, index = 0, onClick }) => {
     "Sliding Window / 2 pointers (Container With Most Water)",
     "Moore's Voting (Boyer-Moore)",
     "Singly Linked List - Creation",
+    "Singly Linked List - Traversal",
   
   ];
   const isInteractive = interactive.includes(algorithm.name);

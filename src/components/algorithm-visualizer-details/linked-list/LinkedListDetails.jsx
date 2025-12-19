@@ -11,16 +11,22 @@ import {
 } from "lucide-react";
 import SLLCreationComplexity from "../../algorithms/linked-list/singlyLinkedList/sllCreation/SLLCreationComplexity";
 import SLLCreationExample from "../../algorithms/linked-list/singlyLinkedList/sllCreation/SLLCreationExample";
+import SLLTraversalComplexity from "../../algorithms/linked-list/singlyLinkedList/sllTraversal/SLLTraversalComplexity";
+import SLLTraversalExample from "../../algorithms/linked-list/singlyLinkedList/sllTraversal/SLLTraversalExample";
+
 
 // Dynamic code loaders (lazy import to keep bundle small)
 const codeLoaders = {
   "Singly Linked List - Creation": () =>
     import("../../algorithms/linked-list/singlyLinkedList/sllCreation/sllCreationCodes"),
+  "Singly Linked List - Traversal": () =>
+    import("../../algorithms/linked-list/singlyLinkedList/sllTraversal/sllTraversalCodes"),
 };
 
 // Map algorithm names to their complexity components when available
 const complexityComponents = {
   "Singly Linked List - Creation": SLLCreationComplexity,
+  "Singly Linked List - Traversal": SLLTraversalComplexity,
 };
 
 const LinkedListDetails = ({ algorithm, topic }) => {
@@ -271,6 +277,8 @@ const LinkedListDetails = ({ algorithm, topic }) => {
               {examplePasses.length > 0 ? (
                 algorithm.name === "Singly Linked List - Creation" ? (
                   <SLLCreationExample examplePasses={examplePasses} />
+                ) : algorithm.name === "Singly Linked List - Traversal" ? (
+                  <SLLTraversalExample examplePasses={examplePasses} />
                 ) : algorithm.name === "Next Permutation" &&
                   examplePasses[0]?.steps ? (
                   examplePasses[0].steps.map((step, stepIdx) => (

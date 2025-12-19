@@ -58,6 +58,8 @@ const ArrayInputCard = ({
     // Check if it's an insertion algorithm
     const normalizedAlgoName = (selectedAlgorithm?.name || "").toLowerCase();
     const isInsertion = normalizedAlgoName.includes("insertion");
+    const isLinked = normalizedAlgoName.includes("linked");
+    const isLinkedInsertion = isInsertion && isLinked;
     const maxAllowed = isInsertion ? 9 : 10;
     
     if (parts.length > maxAllowed) return { error: `Maximum ${maxAllowed} numbers allowed` };
@@ -146,6 +148,8 @@ const ArrayInputCard = ({
     let targetValue = null;
     const isBinary = normalizedAlgoName.includes("binary search") || normalizedAlgoName.includes("binarysearch") || normalizedAlgoName.includes("binary");
     const isInsertion = normalizedAlgoName.includes("insertion");
+    const isLinked = normalizedAlgoName.includes("linked");
+    const isLinkedInsertion = isInsertion && isLinked;
     
     if (isBinary) {
       if (targetInput == null || targetInput === "") {
@@ -188,18 +192,36 @@ const ArrayInputCard = ({
       
       // Validate kth position if needed
       if (insertPosition === "kth") {
+        // For linked-list insertion at kth position we require at least 2 nodes
+        if (isLinkedInsertion && res.value.length < 2) {
+          setValidationError("Linked list insertion at kth position requires at least 2 elements in the list");
+          setShowValidationPopup(true);
+          return;
+        }
         if (kthPosition === "" || kthPosition == null) {
           setValidationError("Please enter the position for insertion");
           setShowValidationPopup(true);
           return;
         }
-        const kthNum = parseInt(kthPosition);
-        if (Number.isNaN(kthNum) || kthNum < 0 || kthNum > res.value.length) {
-          setValidationError(`Position must be between 0 and ${res.value.length}`);
-          setShowValidationPopup(true);
-          return;
+        const kthNum = parseInt(kthPosition, 10);
+        if (isLinkedInsertion) {
+          const minPos = 1;
+          const maxPos = Math.max(1, res.value.length - 2);
+          if (Number.isNaN(kthNum) || kthNum < minPos || kthNum > maxPos) {
+            setValidationError(`Position must be between ${minPos} and ${maxPos} (position 0 is head, position ${res.value.length} is tail)`);
+            setShowValidationPopup(true);
+            return;
+          }
+        } else {
+          const minPos = 0;
+          const maxPos = res.value.length;
+          if (Number.isNaN(kthNum) || kthNum < minPos || kthNum > maxPos) {
+            setValidationError(`Position must be between ${minPos} and ${maxPos}`);
+            setShowValidationPopup(true);
+            return;
+          }
         }
-        
+
         targetValue = {
           position: "kth",
           value: insertNum,
@@ -240,6 +262,22 @@ const ArrayInputCard = ({
   // Determine if this is an insertion algorithm
   const normalizedAlgoName = (selectedAlgorithm?.name || "").toLowerCase();
   const isInsertionAlgo = normalizedAlgoName.includes("insertion");
+  const isLinkedInsertionAlgo = isInsertionAlgo && normalizedAlgoName.includes("linked");
+  
+  // Calculate valid kth position range for placeholder
+  const getKthPositionPlaceholder = () => {
+    if (!isInsertionAlgo || insertPosition !== "kth") return "Position";
+    if (isLinkedInsertionAlgo) {
+      const minPos = 1;
+      const maxPos = Math.max(1, currentArrayLength - 2);
+      if (currentArrayLength < 2) {
+        return "Need ≥2 elements";
+      }
+      return `Pos ${minPos}-${maxPos}`;
+    } else {
+      return `Pos 0-${currentArrayLength}`;
+    }
+  };
 
   return (
     <div className="bg-white rounded-xl px-2">
@@ -320,7 +358,7 @@ const ArrayInputCard = ({
                 type="text"
                 value={kthPosition}
                 onChange={(e) => setKthPosition(e.target.value)}
-                placeholder="Position"
+                placeholder={getKthPositionPlaceholder()}
                 className="w-28 h-10 rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-[0.85rem] px-3 transition-all duration-200"
               />
             )}
@@ -403,12 +441,33 @@ const ArrayInputCard = ({
             }
             let op = null;
             if (pendingInsertPosition === "kth") {
-              const kthNum = parseInt(kthPosition);
-              if (Number.isNaN(kthNum) || kthNum < 0 || kthNum > res.value.length) {
-                setValidationError(`Position must be between 0 and ${res.value.length}`);
+              const isLinked = normalizedAlgoName.includes("linked");
+              const isLinkedInsertion = isLinked && normalizedAlgoName.includes("insertion");
+              if (isLinkedInsertion && res.value.length < 2) {
+                setValidationError("Linked list insertion at kth position requires at least 2 elements in the list");
                 setShowValidationPopup(true);
                 setInsertPosition(prevPos);
                 return;
+              }
+              const kthNum = parseInt(kthPosition, 10);
+              if (isLinkedInsertion) {
+                const minPos = 1;
+                const maxPos = Math.max(1, res.value.length - 2);
+                if (Number.isNaN(kthNum) || kthNum < minPos || kthNum > maxPos) {
+                  setValidationError(`Position must be between ${minPos} and ${maxPos} (position 0 is head, position ${res.value.length} is tail)`);
+                  setShowValidationPopup(true);
+                  setInsertPosition(prevPos);
+                  return;
+                }
+              } else {
+                const minPos = 0;
+                const maxPos = res.value.length;
+                if (Number.isNaN(kthNum) || kthNum < minPos || kthNum > maxPos) {
+                  setValidationError(`Position must be between ${minPos} and ${maxPos}`);
+                  setShowValidationPopup(true);
+                  setInsertPosition(prevPos);
+                  return;
+                }
               }
               op = { position: "kth", value: insertNum, kthPosition: kthNum };
             } else {

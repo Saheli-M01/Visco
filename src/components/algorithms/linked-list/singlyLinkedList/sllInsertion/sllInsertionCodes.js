@@ -18,7 +18,7 @@ export const timeComplexity = {
 export const spaceComplexity = "O(1)";
 
 // Example data for visualization
-export const exampleArray = [1, 2, 4];
+export const exampleArray = [1];
 
 export const generateExampleSteps = (target) => {
   const steps = [];
@@ -30,9 +30,8 @@ export const generateExampleSteps = (target) => {
 
   // Step 1: Initial list [1, 2, 4]
   let nodes = [
-    { value: 1, next: addrForIndex(1), addr: addrForIndex(0) },
-    { value: 2, next: addrForIndex(2), addr: addrForIndex(1) },
-    { value: 4, next: null, addr: addrForIndex(2) }
+
+    { value: 1, next: null, addr: addrForIndex(0) }
   ];
 
   steps.push({
@@ -41,38 +40,14 @@ export const generateExampleSteps = (target) => {
     steps: [{
       array: nodes.map((n) => `${n.value} (next: ${n.next ?? "null"})`),
       swapped: [],
-      swapText: "Original list: 1 → 2 → 4"
+      swapText: "Original list: 1 "
     }]
   });
 
-  // Step 2: Insert 3 at position 2 (between 2 and 4)
-  const newAddr = addrForIndex(3);
+  // Step 2: Insert 2 at head
   nodes = [
-    { value: 1, next: addrForIndex(1), addr: addrForIndex(0) },
-    { value: 2, next: newAddr, addr: addrForIndex(1) },
-    { value: 3, next: addrForIndex(2), addr: newAddr },
-    { value: 4, next: null, addr: addrForIndex(2) }
-  ];
-
-  steps.push({
-    passNumber: "Insert at Position 2",
-    sorted: [],
-    steps: [{
-      array: nodes.map((n) => `${n.value} (next: ${n.next ?? "null"})`),
-      swapped: [],
-      newNode: 2,
-      swapText: "Inserted 3 at position 2"
-    }]
-  });
-
-  // Step 3: Insert 0 at head
-  const headAddr = addrForIndex(4);
-  nodes = [
-    { value: 0, next: addrForIndex(0), addr: headAddr },
-    { value: 1, next: addrForIndex(1), addr: addrForIndex(0) },
-    { value: 2, next: newAddr, addr: addrForIndex(1) },
-    { value: 3, next: addrForIndex(2), addr: newAddr },
-    { value: 4, next: null, addr: addrForIndex(2) }
+    { value: 2, next: addrForIndex(1), addr: addrForIndex(0) },
+    { value: 1, next: null, addr: addrForIndex(1) }
   ];
 
   steps.push({
@@ -81,20 +56,17 @@ export const generateExampleSteps = (target) => {
     steps: [{
       array: nodes.map((n) => `${n.value} (next: ${n.next ?? "null"})`),
       swapped: [],
-      newNode: 0,
-      swapText: "Inserted 0 at head"
+      // point to the actual new node object so visualizer can detect by reference
+      newNode: nodes[0],
+      swapText: "Inserted 2 at head"
     }]
   });
 
-  // Step 4: Insert 5 at tail
-  const tailAddr = addrForIndex(5);
+  // Step 3: Insert 3 at tail -> list becomes 2 -> 1 -> 3
   nodes = [
-    { value: 0, next: addrForIndex(0), addr: headAddr },
-    { value: 1, next: addrForIndex(1), addr: addrForIndex(0) },
-    { value: 2, next: newAddr, addr: addrForIndex(1) },
-    { value: 3, next: addrForIndex(2), addr: newAddr },
-    { value: 4, next: tailAddr, addr: addrForIndex(2) },
-    { value: 5, next: null, addr: tailAddr }
+    { value: 2, next: addrForIndex(1), addr: addrForIndex(0) },
+    { value: 1, next: addrForIndex(2), addr: addrForIndex(1) },
+    { value: 3, next: null, addr: addrForIndex(2) }
   ];
 
   steps.push({
@@ -103,8 +75,26 @@ export const generateExampleSteps = (target) => {
     steps: [{
       array: nodes.map((n) => `${n.value} (next: ${n.next ?? "null"})`),
       swapped: [],
-      newNode: 5,
-      swapText: "Inserted 5 at tail"
+      newNode: nodes[2],
+      swapText: "Inserted 3 at tail"
+    }]
+  });
+
+  // Step 4: Insert 4 at position 1 -> list becomes 2 -> 4 -> 1 -> 3
+  nodes = [
+    { value: 1, next: addrForIndex(1), addr: addrForIndex(0) },
+    { value: 4, next: addrForIndex(2), addr: addrForIndex(1) },
+    { value: 2, next: null, addr: addrForIndex(3) }
+  ];
+
+  steps.push({
+    passNumber: "Insert at Position 1",
+    sorted: [],
+    steps: [{
+      array: nodes.map((n) => `${n.value} (next: ${n.next ?? "null"})`),
+      swapped: [],
+      newNode: nodes[1],
+      swapText: "Inserted 4 at position 1. Original LL: 1-> 2"
     }]
   });
 

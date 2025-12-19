@@ -351,10 +351,12 @@ export const sllInsertion = {
           input,
           head: initialHead,
           tail: k === arr.length ? newNodeIndex : initialTail,
+          current,
+          newNode: { ...newNode },
           description: `Link current.next = newNode`,
-          nodes: JSON.parse(JSON.stringify(nodes)),
-          phase: "update-link",
-          codeLine: 16,
+          nodes: reorderNodes(nodes, initialHead),
+          phase: "current-update",
+          codeLine: 20,
         });
 
         steps.push({
@@ -363,7 +365,7 @@ export const sllInsertion = {
           head: initialHead,
           tail: k === arr.length ? newNodeIndex : initialTail,
           description: `Insertion at position ${k} complete`,
-          nodes: JSON.parse(JSON.stringify(nodes)),
+          nodes: reorderNodes(nodes, initialHead),
           phase: "insert-complete",
           codeLine: -1,
         });

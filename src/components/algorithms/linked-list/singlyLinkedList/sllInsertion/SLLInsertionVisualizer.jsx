@@ -320,48 +320,108 @@ const SLLInsertionVisualizer = ({
             }
           }
 
-          step.nodes.forEach((node, idx) => {
-            let shouldLinkNext = idx < step.nodes.length - 1;
-            // During the explicit `link-new-node` snapshot the generator
-            // typically appends the new node to the end of `nodes` as a
-            // preview. We should not draw the arrow from the previous last
-            // node to that preview; the actual link is shown in the
-            // subsequent `update-link` step. Avoid linking the second-last
-            // node to the last (preview) node here.
-            if (step.phase === "link-new-node" && step.newNode && idx === step.nodes.length - 2) {
-              shouldLinkNext = false;
-            }
-            if (isPreLinkPhase) {
-              // Avoid linking to preview node when it's at the end
-              if (idx >= step.nodes.length - 2) shouldLinkNext = false;
-              // Avoid linking from preview node when it's at the front for head flow
-              const headPreviewPhase =
-                step.phase === "create-new-node" || step.phase === "insert-position-head";
-              if (headPreviewPhase && idx === 0 && step.newNode) shouldLinkNext = false;
-            }
+          // Identify the index of the preview/new node in the nodes array
+          // Prefer reference-equality, fall back to structural match on value+next
+          let newNodeIndex = null;
+          if (step.newNode && Array.isArray(step.nodes)) {
+            const isSameNode = (n, newN) => {
+              if (n === newN) return true;
+              if (!n || !newN) return false;
+              if (typeof n === "object" && typeof newN === "object") {
+                const sameValue = n.value === newN.value;
+                const sameNext = n.next === newN.next || (n.next === undefined && newN.next === undefined);
+                return sameValue && sameNext;
+              }
+              return false;
+            };
 
+            const found = step.nodes.findIndex((n) => isSameNode(n, step.newNode));
+            newNodeIndex = found >= 0 ? found : null;
+          }
+
+          step.nodes.forEach((node, idx) => {
             const nodeValue = node.value ?? node;
+            // Identify preview/new node by index/reference when possible to avoid
+            // matching by value (which causes duplicates when values repeat).
             const isPreviewNewNodeAtFront =
               step.newNode &&
               (step.phase === "create-new-node" || step.phase === "insert-position-head") &&
-              idx === 0 &&
-              step.newNode.value === nodeValue;
+              newNodeIndex !== null &&
+              idx === newNodeIndex;
             const isPreviewNewNodeAtEnd =
-              step.newNode && idx === step.nodes.length - 1 && step.newNode.value === nodeValue;
+              step.newNode && newNodeIndex !== null && idx === newNodeIndex && idx === step.nodes.length - 1;
+            // In current-update phase, newNode is in its proper position (reordered), identify it by index/reference
+            const isNewNodeInPosition = step.newNode && step.phase === "current-update" && newNodeIndex !== null && idx === newNodeIndex;
 
-            // Default next address for this display node
-            let nextAddr = shouldLinkNext ? addrForIndex(idx + 1) : "null";
+            // Determine next address: use node's actual next pointer, but handle preview newNode
+            let nextAddr = "null";
             let pulseNext = false;
-
-            // If this node is the preview newNode at the end during the
-            // `link-new-node` phase, update its `next` to current.next and
-            // pulse that value instead of appending a separate preview node.
-            if (isPreviewNewNodeAtEnd && step.phase === "link-new-node" && linkNewNodeCurrentNextAddr !== null) {
-              nextAddr = addrForIndex(linkNewNodeCurrentNextAddr);
-              pulseNext = true;
-            } else if (isPreviewNewNodeAtEnd && step.phase === "link-new-node" && linkNewNodeCurrentNextAddr === null) {
+            
+            // If this is the preview newNode at the end during link-new-node phase,
+            // show its next as current.next (which was set in the algorithm)
+            if (isPreviewNewNodeAtEnd && step.phase === "link-new-node") {
+              if (linkNewNodeCurrentNextAddr !== null) {
+                nextAddr = addrForIndex(linkNewNodeCurrentNextAddr);
+                pulseNext = true;
+              } else {
+                nextAddr = "null";
+                pulseNext = true;
+              }
+            }
+            // If node.next is explicitly null, use null (don't calculate based on array position)
+            else if (node.next === null) {
+              // During pre-link phases, if this is the last original node and newNode is appended,
+              // we still want to show null (not link to preview newNode)
               nextAddr = "null";
-              pulseNext = true;
+            }
+            // If node has a next pointer (not null), use it (but check if it points to preview newNode)
+            else if (node.next !== undefined) {
+              // node.next is an index
+              if (typeof node.next === 'number') {
+                // During pre-link phases, if next points to the preview newNode at the end,
+                // don't show that link yet (it will be shown in the link phase)
+                if (isPreLinkPhase && isPreviewNewNodeAtEnd && node.next === step.nodes.length - 1) {
+                  // This node's next points to the preview newNode, don't show that link yet
+                  // During create-new-node, original nodes shouldn't point to newNode yet
+                  // So if it's pointing to the last index (newNode), show null instead
+                  nextAddr = "null";
+                } else {
+                  // Use the actual next pointer
+                  nextAddr = addrForIndex(node.next);
+                }
+              } else {
+                // node.next is already an address string
+                nextAddr = node.next;
+              }
+            }
+            // Fallback: calculate next based on array position (only if node.next is undefined)
+            else {
+              let shouldLinkNext = idx < step.nodes.length - 1;
+              
+              // During link-new-node phase, don't link second-last node to preview newNode
+              if (step.phase === "link-new-node" && step.newNode && idx === step.nodes.length - 2) {
+                shouldLinkNext = false;
+              }
+              // During pre-link phases, prevent linking TO the preview newNode
+              if (isPreLinkPhase) {
+                // Check if there's a preview newNode at the end
+                const hasPreviewNewNodeAtEnd = step.newNode && 
+                  step.nodes.length > 0 && 
+                  step.nodes[step.nodes.length - 1]?.value === step.newNode.value;
+                
+                if (hasPreviewNewNodeAtEnd && idx === step.nodes.length - 2) {
+                  // Node before preview newNode, don't link to it during create-new-node phase
+                  shouldLinkNext = false;
+                }
+                // Avoid linking from preview node when it's at the front for head flow
+                const headPreviewPhase =
+                  step.phase === "create-new-node" || step.phase === "insert-position-head";
+                if (headPreviewPhase && idx === 0 && step.newNode && isPreviewNewNodeAtFront) {
+                  shouldLinkNext = false;
+                }
+              }
+              
+              nextAddr = shouldLinkNext ? addrForIndex(idx + 1) : "null";
             }
 
             displayNodes.push({
@@ -370,7 +430,7 @@ const SLLInsertionVisualizer = ({
               i: idx,
               addr: addrForIndex(idx),
               isLinked: true,
-              isNewNode: Boolean(isPreviewNewNodeAtFront || isPreviewNewNodeAtEnd),
+              isNewNode: Boolean(isPreviewNewNodeAtFront || isPreviewNewNodeAtEnd || isNewNodeInPosition),
               pulseNext,
             });
           });

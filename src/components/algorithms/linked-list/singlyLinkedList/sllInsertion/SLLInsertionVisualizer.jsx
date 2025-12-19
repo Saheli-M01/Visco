@@ -461,8 +461,14 @@ const SLLInsertionVisualizer = ({
                       // Show horizontal arrow if linked and next node in same row
                       const nextNodeIdx = node.i + 1;
                       const nextNodeInSameRow = Math.floor(nextNodeIdx / 5) === rowIdx;
-                      const showHorizontalArrow = nextNodeInSameRow && node.next !== "null";
-                      const showDownArrow = isLastInFirstRow && displayNodes.length > 5;
+                      // Do not render arrows for the preview `newNode` during the
+                      // actual linking phase; we only want to show the next address
+                      // text (pulse) but not the visual connector to nowhere.
+                      const suppressArrowsForPreviewNewNode =
+                        step.phase === "link-new-node" && isNewNode;
+                      const showHorizontalArrow =
+                        nextNodeInSameRow && node.next !== "null" && !suppressArrowsForPreviewNewNode;
+                      const showDownArrow = isLastInFirstRow && displayNodes.length > 5 && !suppressArrowsForPreviewNewNode;
 
                       // Show snake turn arrow for first node of row 2+ (the 5->6 transition)
                       const showSnakeTurn =

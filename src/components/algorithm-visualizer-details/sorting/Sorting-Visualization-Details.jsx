@@ -4,7 +4,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import SortingDetails from "./SortingDetails";
 import SortingVisualization from "./SortingVisualization";
 import { categories } from "../../../data/categories";
-import { getAlgorithm, parseArray } from "../../algorithms/algorithmFactory";
+import { getAlgorithm, parseArray } from "../../../hooks/algorithmFactory";
 import VisualizerHeader from "../algorithm-visualizer-components/VisualizerDetailsHeader";
 import ConfirmModal from "../Modal";
 import DraggableHelpButton from "../algorithm-visualizer-components/Help-Guide/DraggableHelpButton";

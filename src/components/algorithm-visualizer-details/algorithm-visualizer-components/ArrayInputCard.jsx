@@ -1,5 +1,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
+import Select from "../../ui/select";
+import ConfirmModal from "../Modal";
 
 
 const HISTORY_KEY = "visco_array_history_v1";
@@ -9,6 +11,7 @@ const ArrayInputCard = ({
   selectedAlgorithm,
   pivotStrategy,
   setPivotStrategy,
+  isVisualizationActive = false,
 }) => {
   const [arrayInput, setArrayInput] = useState("");
   const [targetInput, setTargetInput] = useState("");
@@ -18,6 +21,15 @@ const ArrayInputCard = ({
   const [history, setHistory] = useState([]);
   const [showHistoryDropdown, setShowHistoryDropdown] = useState(false);
   const inputRef = useRef(null);
+  
+  // Insertion-specific states
+  const [insertPosition, setInsertPosition] = useState("tail");
+  const [insertValue, setInsertValue] = useState("");
+  const [kthPosition, setKthPosition] = useState("");
+
+  // Position change confirmation modal state
+  const [showPositionChangeConfirm, setShowPositionChangeConfirm] = useState(false);
+  const [pendingInsertPosition, setPendingInsertPosition] = useState(null);
 
   // Load history from localStorage
   useEffect(() => {
@@ -42,7 +54,15 @@ const ArrayInputCard = ({
       .map((s) => s.trim())
       .filter(Boolean);
     if (parts.length === 0) return { error: "Array cannot be empty" };
-    if (parts.length > 10) return { error: "Maximum 10 numbers allowed" };
+    
+    // Check if it's an insertion algorithm
+    const normalizedAlgoName = (selectedAlgorithm?.name || "").toLowerCase();
+    const isInsertion = normalizedAlgoName.includes("insertion");
+    const isLinked = normalizedAlgoName.includes("linked");
+    const isLinkedInsertion = isInsertion && isLinked;
+    const maxAllowed = isInsertion ? 9 : 10;
+    
+    if (parts.length > maxAllowed) return { error: `Maximum ${maxAllowed} numbers allowed` };
     const nums = [];
     for (let p of parts) {
       const n = Number(p);
@@ -50,7 +70,6 @@ const ArrayInputCard = ({
       nums.push(n);
     }
     // Additional validation for Dutch Flag: only allow 0,1,2
-    const normalizedAlgoName = (selectedAlgorithm?.name || "").toLowerCase();
     const isDutch = normalizedAlgoName.includes("dutch");
     if (isDutch) {
       for (let i = 0; i < nums.length; i++) {
@@ -128,6 +147,10 @@ const ArrayInputCard = ({
     const normalizedAlgoName = (selectedAlgorithm?.name || "").toLowerCase();
     let targetValue = null;
     const isBinary = normalizedAlgoName.includes("binary search") || normalizedAlgoName.includes("binarysearch") || normalizedAlgoName.includes("binary");
+    const isInsertion = normalizedAlgoName.includes("insertion");
+    const isLinked = normalizedAlgoName.includes("linked");
+    const isLinkedInsertion = isInsertion && isLinked;
+    
     if (isBinary) {
       if (targetInput == null || targetInput === "") {
         setValidationError("Please enter a target value for Binary Search");
@@ -151,6 +174,66 @@ const ArrayInputCard = ({
         }
       }
     }
+    
+    // Handle insertion-specific validation and operation value
+    if (isInsertion) {
+      // Validate insert value
+      if (insertValue === "" || insertValue == null) {
+        setValidationError("Please enter a value to insert");
+        setShowValidationPopup(true);
+        return;
+      }
+      const insertNum = Number(insertValue);
+      if (Number.isNaN(insertNum)) {
+        setValidationError(`Invalid insert value: ${insertValue}`);
+        setShowValidationPopup(true);
+        return;
+      }
+      
+      // Validate kth position if needed
+      if (insertPosition === "kth") {
+        // For linked-list insertion at kth position we require at least 2 nodes
+        if (isLinkedInsertion && res.value.length < 2) {
+          setValidationError("Linked list insertion at kth position requires at least 2 elements in the list");
+          setShowValidationPopup(true);
+          return;
+        }
+        if (kthPosition === "" || kthPosition == null) {
+          setValidationError("Please enter the position for insertion");
+          setShowValidationPopup(true);
+          return;
+        }
+        const kthNum = parseInt(kthPosition, 10);
+        if (isLinkedInsertion) {
+          const minPos = 1;
+          const maxPos = Math.max(1, res.value.length - 2);
+          if (Number.isNaN(kthNum) || kthNum < minPos || kthNum > maxPos) {
+            setValidationError(`Position must be between ${minPos} and ${maxPos} (position 0 is head, position ${res.value.length} is tail)`);
+            setShowValidationPopup(true);
+            return;
+          }
+        } else {
+          const minPos = 0;
+          const maxPos = res.value.length;
+          if (Number.isNaN(kthNum) || kthNum < minPos || kthNum > maxPos) {
+            setValidationError(`Position must be between ${minPos} and ${maxPos}`);
+            setShowValidationPopup(true);
+            return;
+          }
+        }
+
+        targetValue = {
+          position: "kth",
+          value: insertNum,
+          kthPosition: kthNum
+        };
+      } else {
+        targetValue = {
+          position: insertPosition,
+          value: insertNum
+        };
+      }
+    }
 
     // call parent with parsed array and optional target
     // debug: log values passed to parent
@@ -158,7 +241,7 @@ const ArrayInputCard = ({
       // eslint-disable-next-line no-console
       console.debug("ArrayInputCard.onGo", { parsedArray: res.value, targetValue });
     } catch (e) {}
-    handleGo(res.value, targetValue);
+    handleGo(res.value, targetValue, arrayInput);
     // Save to history (keep most recent first, dedupe)
     try {
       const trimmed = arrayInput.trim();
@@ -176,6 +259,25 @@ const ArrayInputCard = ({
   };
 
   
+  // Determine if this is an insertion algorithm
+  const normalizedAlgoName = (selectedAlgorithm?.name || "").toLowerCase();
+  const isInsertionAlgo = normalizedAlgoName.includes("insertion");
+  const isLinkedInsertionAlgo = isInsertionAlgo && normalizedAlgoName.includes("linked");
+  
+  // Calculate valid kth position range for placeholder
+  const getKthPositionPlaceholder = () => {
+    if (!isInsertionAlgo || insertPosition !== "kth") return "Position";
+    if (isLinkedInsertionAlgo) {
+      const minPos = 1;
+      const maxPos = Math.max(1, currentArrayLength - 2);
+      if (currentArrayLength < 2) {
+        return "Need ≥2 elements";
+      }
+      return `Pos ${minPos}-${maxPos}`;
+    } else {
+      return `Pos 0-${currentArrayLength}`;
+    }
+  };
 
   return (
     <div className="bg-white rounded-xl px-2">
@@ -194,8 +296,8 @@ const ArrayInputCard = ({
                 }}
                 onFocus={() => setShowHistoryDropdown(true)}
                 onBlur={() => setTimeout(() => setShowHistoryDropdown(false), 150)}
-                placeholder="Enter comma-separated numbers (Maximum 10 values)"
-                className="w-full h-10 rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-[0.85rem] px-3 transition-all duration-200"
+                placeholder={isInsertionAlgo ? "Enter comma-separated numbers (Maximum 9 values)" : "Enter comma-separated numbers (Maximum 10 values)"}
+                className="w-full h-10 rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-[0.7rem] px-3 transition-all duration-200"
               />
               {/* History dropdown */}
               {showHistoryDropdown && history.length > 0 && (
@@ -217,6 +319,49 @@ const ArrayInputCard = ({
                 </div>
               )}
             </div>
+            {/* Insertion position dropdown */}
+            {isInsertionAlgo && (
+              <Select
+                value={insertPosition}
+                onChange={(val) => {
+                  if (isVisualizationActive) {
+                    // warn that changing position will restart
+                    setPendingInsertPosition(val);
+                    setShowPositionChangeConfirm(true);
+                  } else {
+                    setInsertPosition(val);
+                  }
+                }}
+                options={[
+                  { value: "head", label: "Head" },
+                  { value: "tail", label: "Tail" },
+                  { value: "kth", label: "Kth Position" }
+                ]}
+                className="w-32 h-10"
+                color="#6366f1"
+                compact={false}
+              />
+            )}
+            {/* Insert value input */}
+            {isInsertionAlgo && (
+              <input
+                type="text"
+                value={insertValue}
+                onChange={(e) => setInsertValue(e.target.value)}
+                placeholder="Value"
+                className="w-28 h-10 rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-[0.85rem] px-3 transition-all duration-200"
+              />
+            )}
+            {/* Kth position input (only for kth option) */}
+            {isInsertionAlgo && insertPosition === "kth" && (
+              <input
+                type="text"
+                value={kthPosition}
+                onChange={(e) => setKthPosition(e.target.value)}
+                placeholder={getKthPositionPlaceholder()}
+                className="w-28 h-10 rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-[0.85rem] px-3 transition-all duration-200"
+              />
+            )}
             {/* Target input for Binary Search */}
             {(selectedAlgorithm?.name || "").toLowerCase().includes("binary") && (
               <input
@@ -262,6 +407,82 @@ const ArrayInputCard = ({
           </div>
         )}
       </div>
+      {/* Confirm restart modal when changing insertion dropdown mid-visualization */}
+      <ConfirmModal
+        isOpen={showPositionChangeConfirm}
+        title="Restart visualization?"
+        message="Changing the insertion position will restart the visualization from the beginning. Continue?"
+        onCancel={() => {
+          setShowPositionChangeConfirm(false);
+          setPendingInsertPosition(null);
+        }}
+        onConfirm={() => {
+          setShowPositionChangeConfirm(false);
+          if (pendingInsertPosition) {
+            // apply new position and restart by invoking onGo with current inputs
+            const prevPos = insertPosition;
+            setInsertPosition(pendingInsertPosition);
+            setPendingInsertPosition(null);
+            // Re-run with current array and inputs
+            const res = validateAndParse(arrayInput);
+            if (res.error) {
+              setValidationError(res.error);
+              setShowValidationPopup(true);
+              // revert position if invalid input
+              setInsertPosition(prevPos);
+              return;
+            }
+            const insertNum = Number(insertValue);
+            if (Number.isNaN(insertNum)) {
+              setValidationError(`Invalid insert value: ${insertValue}`);
+              setShowValidationPopup(true);
+              setInsertPosition(prevPos);
+              return;
+            }
+            let op = null;
+            if (pendingInsertPosition === "kth") {
+              const isLinked = normalizedAlgoName.includes("linked");
+              const isLinkedInsertion = isLinked && normalizedAlgoName.includes("insertion");
+              if (isLinkedInsertion && res.value.length < 2) {
+                setValidationError("Linked list insertion at kth position requires at least 2 elements in the list");
+                setShowValidationPopup(true);
+                setInsertPosition(prevPos);
+                return;
+              }
+              const kthNum = parseInt(kthPosition, 10);
+              if (isLinkedInsertion) {
+                const minPos = 1;
+                const maxPos = Math.max(1, res.value.length - 2);
+                if (Number.isNaN(kthNum) || kthNum < minPos || kthNum > maxPos) {
+                  setValidationError(`Position must be between ${minPos} and ${maxPos} (position 0 is head, position ${res.value.length} is tail)`);
+                  setShowValidationPopup(true);
+                  setInsertPosition(prevPos);
+                  return;
+                }
+              } else {
+                const minPos = 0;
+                const maxPos = res.value.length;
+                if (Number.isNaN(kthNum) || kthNum < minPos || kthNum > maxPos) {
+                  setValidationError(`Position must be between ${minPos} and ${maxPos}`);
+                  setShowValidationPopup(true);
+                  setInsertPosition(prevPos);
+                  return;
+                }
+              }
+              op = { position: "kth", value: insertNum, kthPosition: kthNum };
+            } else {
+              op = { position: pendingInsertPosition || insertPosition, value: insertNum };
+            }
+            try {
+              // eslint-disable-next-line no-console
+              console.debug("ArrayInputCard.restartOnPositionChange", { parsedArray: res.value, op });
+            } catch (e) {}
+            handleGo(res.value, op, arrayInput);
+          }
+        }}
+        confirmLabel="Restart"
+        cancelLabel="Cancel"
+      />
     </div>
   );
 };

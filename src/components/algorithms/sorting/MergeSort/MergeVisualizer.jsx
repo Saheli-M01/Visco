@@ -236,7 +236,7 @@ export default function MergeVisualizer({
   }
 
   return (
-    <div className="w-full px-8 flex flex-col">
+    <div className="w-full px-4 flex flex-col">
       {/* Call stack frames (merge recursion) - ABOVE array */}
       {showCallUI && (
         <div className="flex justify-center items-end gap-3 mb-3">

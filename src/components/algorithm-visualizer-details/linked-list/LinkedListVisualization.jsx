@@ -93,6 +93,7 @@ const LinkedListVisualization = ({
               key={linkedListInputKey}
               handleGo={handleGoWrapper}
               selectedAlgorithm={selectedAlgorithm}
+              isVisualizationActive={isVisualizationActive}
             />
           </div>
 

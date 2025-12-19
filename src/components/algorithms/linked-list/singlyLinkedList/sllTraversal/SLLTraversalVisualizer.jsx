@@ -233,7 +233,8 @@ const TraversalVisualizer = ({
                       // Show horizontal arrow if linked and next node in same row
                       const nextNodeIdx = node.i + 1;
                       const nextNodeInSameRow = Math.floor(nextNodeIdx / 5) === rowIdx;
-                      const showHorizontalArrow = node.isLinked && nextNodeInSameRow;
+                      const isNotLastNode = node.i < displayNodes.length - 1;
+                      const showHorizontalArrow = node.isLinked && nextNodeInSameRow && isNotLastNode;
                       const showDownArrow = isLastInFirstRow && displayNodes.length > 5;
 
                       // Show snake turn arrow for first node of row 2+ (the 5->6 transition)

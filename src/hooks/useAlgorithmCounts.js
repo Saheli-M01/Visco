@@ -17,6 +17,7 @@ const INTERACTIVE_ALGORITHMS = [
   "Moore's Voting (Boyer-Moore)",
   "Singly Linked List - Creation",
   "Singly Linked List - Traversal",
+  "Singly Linked List - Insertion",
 ];
 
 /**

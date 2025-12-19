@@ -44,6 +44,7 @@ const AlgorithmCard = ({ algorithm, index = 0, onClick }) => {
     "Moore's Voting (Boyer-Moore)",
     "Singly Linked List - Creation",
     "Singly Linked List - Traversal",
+    "Singly Linked List - Insertion",
   
   ];
   const isInteractive = interactive.includes(algorithm.name);

@@ -1,17 +1,18 @@
-import { bubbleSort } from "./sorting/BubbleSort/bubbleSort.js";
-import { selectionSort } from "./sorting/SelectionSort/selectionSort.js";
-import { insertionSort } from "./sorting/InsertionSort/insertionSort.js";
-import { mergeSort } from "./sorting/MergeSort/mergeSort.js";
-import { quickSort } from "./sorting/QuickSort/quickSort.js";
-import { heapSort } from "./sorting/HeapSort/heapSort.js";
-import { binarySearch } from "./array/BinarySearch/binarySearch.js";
-import { dutchFlag } from "./array/Dutch/dutchFlag.js";
-import { kadane } from "./array/Kadanes/kadanes";
-import { nextPermutation } from "./array/NextPermutation/nextPermutation.js";
-import { slidingWindow } from "./array/SlidingWindow/slidingWindow.js";
-import { mooresVoting } from "./array/MooresVoting/mooresVoting.js";
-import { sllCreation } from "./linked-list/singlyLinkedList/sllCreation/sllCreation.js";
-import { sllTraversal } from "./linked-list/singlyLinkedList/sllTraversal/sllTraversal.js";
+import { bubbleSort } from "../components/algorithms/sorting/BubbleSort/bubbleSort.js";
+import { selectionSort } from "../components/algorithms/sorting/SelectionSort/selectionSort.js";
+import { insertionSort } from "../components/algorithms/sorting/InsertionSort/insertionSort.js";
+import { mergeSort } from "../components/algorithms/sorting/MergeSort/mergeSort.js";
+import { quickSort } from "../components/algorithms/sorting/QuickSort/quickSort.js";
+import { heapSort } from "../components/algorithms/sorting/HeapSort/heapSort.js";
+import { binarySearch } from "../components/algorithms/array/BinarySearch/binarySearch.js";
+import { dutchFlag } from "../components/algorithms/array/Dutch/dutchFlag.js";
+import { kadane } from "../components/algorithms/array/Kadanes/kadanes.js";
+import { nextPermutation } from "../components/algorithms/array/NextPermutation/nextPermutation.js";
+import { slidingWindow } from "../components/algorithms/array/SlidingWindow/slidingWindow.js";
+import { mooresVoting } from "../components/algorithms/array/MooresVoting/mooresVoting.js";
+import { sllCreation } from "../components/algorithms/linked-list/singlyLinkedList/sllCreation/sllCreation.js";
+import { sllTraversal } from "../components/algorithms/linked-list/singlyLinkedList/sllTraversal/sllTraversal.js";
+import { sllInsertion } from "../components/algorithms/linked-list/singlyLinkedList/sllInsertion/sllInsertion.js";
 
 // Algorithm factory to get the appropriate algorithm implementation
 export const getAlgorithm = (algorithmName) => {
@@ -69,8 +70,8 @@ export const getAlgorithm = (algorithmName) => {
     "singly linked list - creation": sllCreation,
     "Singly Linked List - Traversal": sllTraversal,
     "singly linked list - traversal": sllTraversal,
-    // "Singly Linked List - Insertion": singlyLinkedList,
-    // "singly linked list - insertion": singlyLinkedList,
+    "Singly Linked List - Insertion": sllInsertion,
+    "singly linked list - insertion": sllInsertion,
     // "Singly Linked List - Deletion": singlyLinkedList,
     // "singly linked list - deletion": singlyLinkedList,
     // "Doubly Linked List - Creation": singlyLinkedList, // Placeholder

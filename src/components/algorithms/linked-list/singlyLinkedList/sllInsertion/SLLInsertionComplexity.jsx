@@ -137,38 +137,6 @@ export default function SLLInsertionComplexity() {
         </ResponsiveContainer>
       </motion.div>
 
-      <motion.div
-        variants={itemVariants}
-        className="backdrop-blur-sm bg-gradient-to-br from-blue-900/90 to-purple-900/90 border border-blue-400/30 rounded-2xl px-4 py-3 shadow-xl"
-      >
-        <h4 className="text-md font-bold text-white mb-2">Position-Based Complexity</h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-200">
-          <div className="bg-white/10 rounded-lg p-2">
-            <div className="font-semibold text-green-400">Insert at Head: O(1)</div>
-            <div className="text-xs text-gray-300 mt-1">
-              Direct pointer update, no traversal needed
-            </div>
-          </div>
-          <div className="bg-white/10 rounded-lg p-2">
-            <div className="font-semibold text-red-400">Insert at Tail: O(n)</div>
-            <div className="text-xs text-gray-300 mt-1">
-              Must traverse entire list to reach end
-            </div>
-          </div>
-          <div className="bg-white/10 rounded-lg p-2">
-            <div className="font-semibold text-yellow-400">Insert at Middle: O(n/2)</div>
-            <div className="text-xs text-gray-300 mt-1">
-              Traverse to middle position, average case
-            </div>
-          </div>
-          <div className="bg-white/10 rounded-lg p-2">
-            <div className="font-semibold text-orange-400">Insert at Kth: O(k)</div>
-            <div className="text-xs text-gray-300 mt-1">
-              Traverse k nodes, worst case O(n)
-            </div>
-          </div>
-        </div>
-      </motion.div>
     </motion.div>
   );
 }

@@ -32,6 +32,7 @@ const LinkedListVisualization = ({
   handlePlay,
   handlePause,
   handleReset,
+  handleRefresh,
   speed,
   setSpeed,
   handleFirstStep,
@@ -94,6 +95,7 @@ const LinkedListVisualization = ({
               handleGo={handleGoWrapper}
               selectedAlgorithm={selectedAlgorithm}
               isVisualizationActive={isVisualizationActive}
+              handleRefresh={handleRefresh}
             />
           </div>
 

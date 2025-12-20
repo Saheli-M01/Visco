@@ -12,6 +12,7 @@ const ArrayInputCard = ({
   pivotStrategy,
   setPivotStrategy,
   isVisualizationActive = false,
+  handleRefresh,
 }) => {
   const [arrayInput, setArrayInput] = useState("");
   const [targetInput, setTargetInput] = useState("");
@@ -457,90 +458,19 @@ const ArrayInputCard = ({
           setPendingInsertPosition(null);
         }}
         onConfirm={() => {
-          setShowPositionChangeConfirm(false);
-          if (pendingInsertPosition) {
-            // apply new position and restart by invoking onGo with current inputs
-            const prevPos = insertPosition;
-            setInsertPosition(pendingInsertPosition);
+          // Apply the pending position, close modal and trigger a full reset via parent's handleRefresh
+          try {
+            if (pendingInsertPosition) {
+              setInsertPosition(pendingInsertPosition);
+            }
             setPendingInsertPosition(null);
-            // Re-run with current array and inputs
-            const res = validateAndParse(arrayInput);
-            if (res.error) {
-              setValidationError(res.error);
-              setShowValidationPopup(true);
-              // revert position if invalid input
-              setInsertPosition(prevPos);
-              return;
+            setShowPositionChangeConfirm(false);
+            if (typeof handleRefresh === "function") {
+              handleRefresh();
             }
-            const insertNum = Number(insertValue);
-            if (Number.isNaN(insertNum)) {
-              setValidationError(`Invalid insert value: ${insertValue}`);
-              setShowValidationPopup(true);
-              setInsertPosition(prevPos);
-              return;
-            }
-            let op = null;
-            if (pendingInsertPosition === "kth") {
-              const isLinked = normalizedAlgoName.includes("linked");
-              const isLinkedInsertion = isLinked && normalizedAlgoName.includes("insertion");
-              if (isLinkedInsertion && res.value.length < 2) {
-                setValidationError("Linked list insertion at kth position requires at least 2 elements in the list");
-                setShowValidationPopup(true);
-                setInsertPosition(prevPos);
-                return;
-              }
-              const kthNum = parseInt(kthPosition, 10);
-              if (isLinkedInsertion) {
-                const minPos = 1;
-                const maxPos = Math.max(1, res.value.length - 2);
-                if (Number.isNaN(kthNum) || kthNum < minPos || kthNum > maxPos) {
-                  setValidationError(`Position must be between ${minPos} and ${maxPos} (position 0 is head, position ${res.value.length} is tail)`);
-                  setShowValidationPopup(true);
-                  setInsertPosition(prevPos);
-                  return;
-                }
-              } else {
-                const minPos = 0;
-                const maxPos = res.value.length;
-                if (Number.isNaN(kthNum) || kthNum < minPos || kthNum > maxPos) {
-                  setValidationError(`Position must be between ${minPos} and ${maxPos}`);
-                  setShowValidationPopup(true);
-                  setInsertPosition(prevPos);
-                  return;
-                }
-              }
-              op = { position: "kth", value: insertNum, kthPosition: kthNum };
-            } else {
-              if (pendingInsertPosition === "before") {
-                if (insertBeforeValue === "" || insertBeforeValue == null) {
-                  setValidationError("Please enter the value before which to insert");
-                  setShowValidationPopup(true);
-                  setInsertPosition(prevPos);
-                  return;
-                }
-                const beforeNum = Number(insertBeforeValue);
-                if (Number.isNaN(beforeNum)) {
-                  setValidationError(`Invalid 'before' value: ${insertBeforeValue}`);
-                  setShowValidationPopup(true);
-                  setInsertPosition(prevPos);
-                  return;
-                }
-                if (!res.value.includes(beforeNum)) {
-                  setValidationError(`Value ${beforeNum} not found in the input array`);
-                  setShowValidationPopup(true);
-                  setInsertPosition(prevPos);
-                  return;
-                }
-                op = { position: "before", value: insertNum, beforeValue: beforeNum };
-              } else {
-                op = { position: pendingInsertPosition || insertPosition, value: insertNum };
-              }
-            }
-            try {
-              // eslint-disable-next-line no-console
-              console.debug("ArrayInputCard.restartOnPositionChange", { parsedArray: res.value, op });
-            } catch (e) {}
-            handleGo(res.value, op, arrayInput);
+          } catch (e) {
+            setPendingInsertPosition(null);
+            setShowPositionChangeConfirm(false);
           }
         }}
         confirmLabel="Restart"

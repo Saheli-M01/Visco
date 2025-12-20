@@ -570,6 +570,7 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
     handlePlay,
     handlePause,
     handleReset,
+    handleRefresh,
     speed,
     setSpeed,
     handleFirstStep,

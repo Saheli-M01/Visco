@@ -3,7 +3,7 @@ import { AnimatePresence } from "framer-motion";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import SortingDetails from "./SortingDetails";
 import SortingVisualization from "./SortingVisualization";
-import { categories } from "../../../data/categories";
+import { categories } from "../../../hooks/categories";
 import { getAlgorithm, parseArray } from "../../../hooks/algorithmFactory";
 import VisualizerHeader from "../algorithm-visualizer-components/VisualizerDetailsHeader";
 import ConfirmModal from "../Modal";

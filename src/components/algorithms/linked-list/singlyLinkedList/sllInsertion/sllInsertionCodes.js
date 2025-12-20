@@ -61,7 +61,7 @@ export const generateExampleSteps = (target) => {
     }]
   });
 
-  // Step 3: Insert 3 at tail -> list becomes 2 -> 1 -> 3
+  // Step 3: Insert 3 at tail -> list becomes  1 -> 3
   nodes = [
     { value: 2, next: addrForIndex(1), addr: addrForIndex(0) },
     { value: 1, next: addrForIndex(2), addr: addrForIndex(1) },

@@ -1,6 +1,6 @@
 import React from "react";
 import CategoryLayout from "@/components/TopicPages/layout/CategoryLayout";
-import { categories } from "@/data/categories";
+import { categories } from "@/hooks/categories";
 
 const SortingPage = () => {
   const sortingCategory = categories.sorting;

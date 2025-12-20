@@ -16,6 +16,9 @@ const SLLInsertionExample = ({ examplePasses }) => {
             {pass.steps[0].swapText}
           </span>
         )}
+        {pass.steps && pass.steps[0] && pass.steps[0].swapText && pass.steps[0].swapText.toLowerCase().includes('before') && (
+          <span className="text-xs italic text-gray-500"> &nbsp;— inserts a new node before the target value</span>
+        )}
       </div>
 
       {pass.steps.map((step, stepIdx) => (
@@ -90,13 +93,14 @@ const SLLInsertionExample = ({ examplePasses }) => {
                           {addr}
                         </div>
                       </div>
-                      <span
-                        className={`p-1 text-[12px] sm:text-xs text-gray-800 border-l flex items-center justify-center ${
+                      <div
+                        className={`p-1 text-[12px] sm:text-xs text-gray-800 border-l flex flex-col items-center justify-center ${
                           isNewNode ? "bg-yellow-200 border-yellow-600" : "bg-amber-300 border-teal-700"
                         }`}
                       >
-                        next: {nextDisp}
-                      </span>
+                       <span> next</span>
+                       <span>{nextDisp}</span>
+                      </div>
                     </motion.div>
                     {idx < step.array.length - 1 && (
                       <span className="flex items-center mx-1 text-gray-700">

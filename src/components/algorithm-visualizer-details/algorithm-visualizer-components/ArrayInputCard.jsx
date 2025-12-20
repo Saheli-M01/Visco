@@ -23,9 +23,10 @@ const ArrayInputCard = ({
   const inputRef = useRef(null);
   
   // Insertion-specific states
-  const [insertPosition, setInsertPosition] = useState("tail");
+  const [insertPosition, setInsertPosition] = useState("head");
   const [insertValue, setInsertValue] = useState("");
   const [kthPosition, setKthPosition] = useState("");
+  const [insertBeforeValue, setInsertBeforeValue] = useState("");
 
   // Position change confirmation modal state
   const [showPositionChangeConfirm, setShowPositionChangeConfirm] = useState(false);
@@ -227,6 +228,31 @@ const ArrayInputCard = ({
           value: insertNum,
           kthPosition: kthNum
         };
+      } else if (insertPosition === "before") {
+        // Validate 'before' value exists in the current input
+        if (insertBeforeValue === "" || insertBeforeValue == null) {
+          setValidationError("Please enter the value before which to insert");
+          setShowValidationPopup(true);
+          return;
+        }
+        const beforeNum = Number(insertBeforeValue);
+        if (Number.isNaN(beforeNum)) {
+          setValidationError(`Invalid 'before' value: ${insertBeforeValue}`);
+          setShowValidationPopup(true);
+          return;
+        }
+        // Ensure the 'before' value is present in the parsed array
+        if (!res.value.includes(beforeNum)) {
+          setValidationError(`Value ${beforeNum} not found in the input array`);
+          setShowValidationPopup(true);
+          return;
+        }
+
+        targetValue = {
+          position: "before",
+          value: insertNum,
+          beforeValue: beforeNum,
+        };
       } else {
         targetValue = {
           position: insertPosition,
@@ -330,12 +356,15 @@ const ArrayInputCard = ({
                     setShowPositionChangeConfirm(true);
                   } else {
                     setInsertPosition(val);
+                    if (typeof onDropdownChange === "function") onDropdownChange();
                   }
                 }}
                 options={[
                   { value: "head", label: "Head" },
                   { value: "tail", label: "Tail" },
-                  { value: "kth", label: "Kth Position" }
+                  { value: "before", label: "Before val X" },
+                  { value: "kth", label: "Kth Position" },
+              
                 ]}
                 className="w-32 h-10"
                 color="#6366f1"
@@ -352,6 +381,17 @@ const ArrayInputCard = ({
                 className="w-28 h-10 rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-[0.85rem] px-3 transition-all duration-200"
               />
             )}
+            {/* 'Before' input (only for before option) */}
+            {isInsertionAlgo && insertPosition === "before" && (
+              <input
+                type="text"
+                value={insertBeforeValue}
+                onChange={(e) => setInsertBeforeValue(e.target.value)}
+                placeholder="Before value"
+                className="w-28 h-10 rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-[0.85rem] px-3 transition-all duration-200"
+              />
+            )}
+
             {/* Kth position input (only for kth option) */}
             {isInsertionAlgo && insertPosition === "kth" && (
               <input
@@ -471,7 +511,30 @@ const ArrayInputCard = ({
               }
               op = { position: "kth", value: insertNum, kthPosition: kthNum };
             } else {
-              op = { position: pendingInsertPosition || insertPosition, value: insertNum };
+              if (pendingInsertPosition === "before") {
+                if (insertBeforeValue === "" || insertBeforeValue == null) {
+                  setValidationError("Please enter the value before which to insert");
+                  setShowValidationPopup(true);
+                  setInsertPosition(prevPos);
+                  return;
+                }
+                const beforeNum = Number(insertBeforeValue);
+                if (Number.isNaN(beforeNum)) {
+                  setValidationError(`Invalid 'before' value: ${insertBeforeValue}`);
+                  setShowValidationPopup(true);
+                  setInsertPosition(prevPos);
+                  return;
+                }
+                if (!res.value.includes(beforeNum)) {
+                  setValidationError(`Value ${beforeNum} not found in the input array`);
+                  setShowValidationPopup(true);
+                  setInsertPosition(prevPos);
+                  return;
+                }
+                op = { position: "before", value: insertNum, beforeValue: beforeNum };
+              } else {
+                op = { position: pendingInsertPosition || insertPosition, value: insertNum };
+              }
             }
             try {
               // eslint-disable-next-line no-console

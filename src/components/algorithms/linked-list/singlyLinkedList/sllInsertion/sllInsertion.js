@@ -27,9 +27,14 @@ export const sllInsertion = {
       return JSON.parse(JSON.stringify(ordered));
     };
 
-    // Parse operation value: { position: 'head'|'tail'|'middle'|'kth', value: number, kthPosition?: number }
+    // Parse operation value: { position: 'head'|'tail'|'middle'|'kth'|'before', value: number, kthPosition?: number, beforeValue?: number }
     const operation = operationValue || { position: "tail", value: 1 };
-    const { position, value: insertValue, kthPosition } = operation;
+    const {
+      position,
+      value: insertValue,
+      kthPosition,
+      beforeValue,
+    } = operation;
 
     // Build initial linked list
     let nodes = [];
@@ -163,7 +168,7 @@ export const sllInsertion = {
         description: `Current = head`,
         nodes: JSON.parse(JSON.stringify([...nodes, { ...newNode }])),
         phase: "create-current",
-        codeLine: 6,
+        codeLine: 7,
       });
       // Traverse to tail following while (current.next !== null)
       let traverseCurrent = initialHead;
@@ -181,8 +186,8 @@ export const sllInsertion = {
           newNode: { ...newNode },
           description: `while (current.next !== null)`,
           nodes: JSON.parse(JSON.stringify([...nodes, { ...newNode }])),
-          phase: "tail-while-check",
-          codeLine: 7,
+          phase: "while-check",
+          codeLine: 8,
         });
 
         // move current = current.next
@@ -196,8 +201,8 @@ export const sllInsertion = {
           newNode: { ...newNode },
           description: `current = current.next`,
           nodes: JSON.parse(JSON.stringify([...nodes, { ...newNode }])),
-          phase: "tail-move-current",
-          codeLine: 8,
+          phase: "move-current",
+          codeLine: 9,
         });
       }
 
@@ -211,8 +216,8 @@ export const sllInsertion = {
         newNode: { ...newNode },
         description: `current.next is null, stop`,
         nodes: JSON.parse(JSON.stringify([...nodes, { ...newNode }])),
-        phase: "tail-while-exit",
-        codeLine: 9,
+        phase: "while-exit",
+        codeLine: 10,
       });
 
       // Link tail.next = newNode
@@ -229,7 +234,7 @@ export const sllInsertion = {
         description: `Link current.next = newNode`,
         nodes: JSON.parse(JSON.stringify(nodes)),
         phase: "link-current-to-new",
-        codeLine: 10,
+        codeLine: 11,
       });
 
       // Update tail
@@ -241,7 +246,7 @@ export const sllInsertion = {
         description: `Update tail = newNode`,
         nodes: JSON.parse(JSON.stringify(nodes)),
         phase: "update-tail",
-        codeLine: 11,
+        codeLine: 12,
       });
 
       steps.push({
@@ -254,6 +259,153 @@ export const sllInsertion = {
         phase: "insert-complete",
         codeLine: -1,
       });
+    } else if (position === "before" && beforeValue !== undefined) {
+      // Insert before the first node matching beforeValue
+      const targetIndex = nodes.findIndex((n) => n.value === beforeValue);
+      if (targetIndex === -1) {
+        steps.push({
+          array: nodes.map((n) => n.value),
+          input,
+          head: initialHead,
+          tail: initialTail,
+          description: `Value ${beforeValue} not found in the list. Cannot insert before it.`,
+          nodes: JSON.parse(JSON.stringify(nodes)),
+          phase: "error-before-not-found",
+          codeLine: -1,
+        });
+        return steps;
+      }
+
+      // If target is head, insert at head (explicit link + head update steps)
+      if (targetIndex === 0) {
+        // Link newNode.next = head (preview)
+        newNode.next = initialHead;
+        const previewLinkNodes = [{ ...newNode }, ...reorderNodes(nodes, initialHead)];
+        steps.push({
+          array: nodes.map((n) => n.value),
+          input,
+          head: initialHead,
+          tail: initialTail,
+          newNode: { ...newNode },
+          description: `Target value at head; link newNode.next = head (preview)`,
+          nodes: JSON.parse(JSON.stringify(previewLinkNodes)),
+          phase: "link-new-node",
+          codeLine: 19,
+        });
+
+        // Commit the new node and update head
+        const newNodeIndex = nodes.length;
+        nodes.push(newNode);
+        steps.push({
+          array: nodes.map((n) => n.value),
+          input,
+          head: newNodeIndex,
+          tail: initialTail !== null ? initialTail : newNodeIndex,
+          description: `Update head = newNode`,
+          nodes: reorderNodes(nodes, newNodeIndex),
+          phase: "insert-complete",
+          codeLine: 20,
+        });
+      } else {
+        // Traverse to node just before targetIndex
+        let current = initialHead;
+        steps.push({
+          array: nodes.map((n) => n.value),
+          input,
+          head: initialHead,
+          tail: initialTail,
+          current,
+          newNode: { ...newNode },
+          description: `Current = head`,
+          nodes: JSON.parse(JSON.stringify([...nodes, { ...newNode }])),
+          phase: "create-current",
+          codeLine: 23,
+        });
+
+        // Traverse using while loop to match code lines (no for-loop / no `i`)
+        while (
+          current !== null &&
+          nodes[current]?.next !== null &&
+          nodes[nodes[current].next] &&
+          nodes[nodes[current].next].value !== beforeValue
+        ) {
+          // while condition check
+          steps.push({
+            array: nodes.map((n) => n.value),
+            input,
+            head: initialHead,
+            tail: initialTail,
+            current,
+            newNode: { ...newNode },
+            description: `while (current.next !== null && current.next.value !== ${beforeValue})`,
+            nodes: JSON.parse(JSON.stringify([...nodes, { ...newNode }])),
+            phase: "while-check",
+            codeLine: 24,
+          });
+
+          // Advance current = current.next
+          current = nodes[current].next;
+          steps.push({
+            array: nodes.map((n) => n.value),
+            input,
+            head: initialHead,
+            tail: initialTail,
+            current,
+            newNode: { ...newNode },
+            description: `current = current.next (moved to index ${current})`,
+            nodes: JSON.parse(JSON.stringify([...nodes, { ...newNode }])),
+            phase: "move-current",
+            codeLine: 25,
+          });
+        }
+
+        // Link new node before target
+        // Set newNode.next to point to the target (current.next)
+        newNode.next = nodes[current].next;
+        const newNodeIndex = nodes.length;
+
+        // Preview the linking: newNode.next points to target index
+        steps.push({
+          array: nodes.map((n) => n.value),
+          input,
+          head: initialHead,
+          tail: initialTail,
+          current,
+          newNode: { ...newNode },
+          description: `Link newNode.next = current.next (inserting before target)`,
+          nodes: JSON.parse(JSON.stringify([...nodes, { ...newNode }])),
+          phase: "link-new-node",
+          codeLine: 30,
+        });
+
+        // Commit the new node and then update the previous node's next to point to it
+        nodes.push(newNode);
+        nodes[current].next = newNodeIndex;
+
+        steps.push({
+          array: nodes.map((n) => n.value),
+          input,
+          head: initialHead,
+          tail: initialTail,
+          current,
+          newNode: { ...newNode },
+          description: `Link current.next = newNode`,
+          nodes: reorderNodes(nodes, initialHead),
+          phase: "current-update",
+          codeLine: 31,
+        });
+
+        steps.push({
+          array: nodes.map((n) => n.value),
+          input,
+          head: initialHead,
+          tail: initialTail,
+          description: `Insertion before value ${beforeValue} complete`,
+          nodes: reorderNodes(nodes, initialHead),
+          phase: "insert-complete",
+          codeLine: -1,
+        });
+      }
     } else if (position === "kth" && kthPosition !== undefined) {
       // Insert at kth position
       const k = parseInt(kthPosition);
@@ -302,7 +454,7 @@ export const sllInsertion = {
           description: `Current = head`,
           nodes: JSON.parse(JSON.stringify([...nodes, { ...newNode }])),
           phase: "create-current",
-          codeLine: 15,
+          codeLine: 35,
         });
         for (let i = 0; i < k - 1; i++) {
           // Show for-loop iteration/check before advancing
@@ -319,7 +471,7 @@ export const sllInsertion = {
             }`,
             nodes: JSON.parse(JSON.stringify([...nodes, { ...newNode }])),
             phase: "traverse-for-check",
-            codeLine: 16,
+            codeLine: 36,
           });
 
           // Advance current = current.next
@@ -335,7 +487,7 @@ export const sllInsertion = {
             description: `current = current.next (moved to index ${current})`,
             nodes: JSON.parse(JSON.stringify([...nodes, { ...newNode }])),
             phase: "traverse-move-current",
-            codeLine: 17,
+            codeLine: 37,
           });
         }
 
@@ -354,7 +506,7 @@ export const sllInsertion = {
           description: `Link newNode.next = current.next`,
           nodes: JSON.parse(JSON.stringify(nodes)),
           phase: "link-new-node",
-          codeLine: 19,
+          codeLine: 39,
         });
 
         nodes[current].next = newNodeIndex;
@@ -369,7 +521,7 @@ export const sllInsertion = {
           description: `Link current.next = newNode`,
           nodes: reorderNodes(nodes, initialHead),
           phase: "current-update",
-          codeLine: 20,
+          codeLine: 40,
         });
 
         steps.push({
@@ -391,135 +543,272 @@ export const sllInsertion = {
   getCodeLines: (language) => {
     const lines = {
       javascript: [
-        "function insertNode(head, value, position) {", //0
-        "  const newNode = new Node(value);", // 1
+        "function insertNode(head, value, position, beforeValue) {", //0
+        "  const newNode = new Node(value);", //1
+
         "  if (position === 'head') {", //2
-        "    newNode.next = head;", // 3
-        "    return newNode;", // 4
-        "  } else if (position === 'tail') {", //5
-        "    let current = head;", //6
-        "    while (current.next !== null) {", //7
-        "      current = current.next;", //8
-        "    }", //9
-        "    current.next = newNode;", // 10
-        "    tail = newNode;", //11
-        "    return head;", //12
-        "  } else {", //13
-        "    // Insert at specific position", //14
-        "    let current = head;", //15,
-        "    for (let i = 0; i < position - 1; i++) {", //16
-        "      current = current.next;", //17
-        "    }", //18
-        "    newNode.next = current.next;", //19
-        "    current.next = newNode;", //20
-        "    return head;", //21
-        "  }",
-        "}",
+        "    newNode.next = head;", //3
+        "    head = newNode;", //4   // ← explicit head update
+        "    return head;", //5
+
+        "  } else if (position === 'tail') {", //6
+        "    let current = head;", //7
+        "    while (current.next !== null) {", //8
+        "      current = current.next;", //9
+        "    }", //10
+        "    current.next = newNode;", //11
+        "    tail = newNode;", //12
+        "    return head;", //13
+
+        "  } else if (position === 'before') {", //14
+        "    // Insert before the first node with value == beforeValue", //15
+        "    if (!head)", //16
+        "      return head;", //17
+
+        "    if (head.value === beforeValue) {", //18
+        "      newNode.next = head;", //19
+        "      head = newNode;", //20
+        "      return head;", //21
+        "    }", //22
+
+        "    let current = head;", //23
+        "    while (current.next !== null && current.next.value !== beforeValue) {", //24
+        "      current = current.next;", //25
+        "    }", //26
+
+        "    if (current.next === null) {", //27
+        "      return head;", //28
+        "    }", //29
+
+        "    newNode.next = current.next;", //30
+        "    current.next = newNode;", //31
+        "    return head;", //32
+
+        "  } else {", //33
+        "    // Insert at specific position", //34
+        "    let current = head;", //35
+        "    for (let i = 0; i < position - 1; i++) {", //36
+        "      current = current.next;", //37
+        "    }", //38
+        "    newNode.next = current.next;", //39
+        "    current.next = newNode;", //40
+        "    return head;", //41
+        "  }", //42
+        "}", //43
       ],
       python: [
-        "def insert_node(head, value, position):", //0
-        "    new_node = Node(value)", // 1
-        "    if position == 'head':", // 2
-        "        new_node.next = head", //3
-        "        return new_node", //4
-        "    elif position == 'tail':", //5
+        "def insert_node(head, value, position, beforeValue=None):", //0
+        "    new_node = Node(value)", //1
 
-        "        current = head", //6
-        "        while current.next is not None:", //7
-        "            current = current.next", //8
-        "", //9
-        "        current.next = new_node", //10
-        "        tail = new_node", //1
-        "        return head", //12
-        "    else:", //13
-        "    # Insert at specific position", //14
-        "        current = head", //15
-        "        for i in range(position - 1):", //16
-        "            current = current.next", //17
-        "", //18
-        "        new_node.next = current.next", //19
-        "        current.next = new_node", //20
-        "        return head", //21
+        "    if position == 'head':", //2
+        "        new_node.next = head", //3
+        "        head = new_node", //4   # ← explicit head update
+        "        return head", //5
+
+        "    elif position == 'tail':", //6
+        "        current = head", //7
+        "        while current.next is not None:", //8
+        "            current = current.next", //9
+        "", //10
+        "        current.next = new_node", //11
+        "        tail = new_node", //12
+        "        return head", //13
+
+        "    elif position == 'before':", //14
+        "        # Insert before the first node with value == beforeValue", //15
+        "        if head is None:", //16
+        "            return head", //17
+
+        "        if head.value == beforeValue:", //18
+        "            new_node.next = head", //19
+        "            head = new_node", //20
+        "            return head", //21
+        "", //22
+
+        "        current = head", //23
+        "        while current.next is not None and current.next.value != beforeValue:", //24
+        "            current = current.next", //25
+        "", //26
+
+        "        if current.next is None:", //27
+        "            return head", //28
+        "", //29
+
+        "        new_node.next = current.next", //30
+        "        current.next = new_node", //31
+        "        return head", //32
+
+        "    else:", //33
+        "        # Insert at specific position", //34
+        "        current = head", //35
+        "        for i in range(position - 1):", //36
+        "            current = current.next", //37
+        "", //38
+        "        new_node.next = current.next", //39
+        "        current.next = new_node", //40
+        "        return head", //41
       ],
       java: [
-        "public Node insertNode(Node head, int value, String position) {", //0
-        "    Node newNode = new Node(value);", // 1
+        "public Node insertNode(Node head, int value, String position, int beforeValue) {", //0
+        "    Node newNode = new Node(value);", //1
+
         '    if (position.equals("head")) {', //2
         "        newNode.next = head;", //3
-        "        return newNode;", //4
-        '    } else if (position.equals("tail")) {', //5
-        "        Node current = head;", //6
-        "        while (current.next != null) {", //7
-        "            current = current.next;", //8
-        "        }", //9
-        "        current.next = newNode;", //10
-        "        tail = newNode;", //11
-        "        return head;", //12
-        "    } else {", //13
-        "    // Insert at specific position", //14
-        "        Node current = head;", //15
-        "        for (int i = 0; i < position - 1; i++) {", //16
-        "            current = current.next;", //17
-        "        }", //18
-        "        newNode.next = current.next;", //19
-        "        current.next = newNode;", //20
-        "        return head;", //21
-        "    }",
-        "}",
+        "        head = newNode;", //4   // ← explicit head update
+        "        return head;", //5
+
+        '    } else if (position.equals("tail")) {', //6
+        "        Node current = head;", //7
+        "        while (current.next != null) {", //8
+        "            current = current.next;", //9
+        "        }", //10
+        "        current.next = newNode;", //11
+        "        tail = newNode;", //12
+        "        return head;", //13
+
+        '    } else if (position.equals("before")) {', //14
+        "        // Insert before the first node with value == beforeValue", //15
+        "        if (head == null)", //16
+        "            return head;", //17
+
+        "        if (head.value == beforeValue) {", //18
+        "            newNode.next = head;", //19
+        "            head = newNode;", //20
+        "            return head;", //21
+        "        }", //22
+
+        "        Node current = head;", //23
+        "        while (current.next != null && current.next.value != beforeValue) {", //24
+        "            current = current.next;", //25
+        "        }", //26
+
+        "        if (current.next == null) {", //27
+        "            return head;", //28
+        "        }", //29
+
+        "        newNode.next = current.next;", //30
+        "        current.next = newNode;", //31
+        "        return head;", //32
+
+        "    } else {", //33
+        "        // Insert at specific position", //34
+        "        Node current = head;", //35
+        "        for (int i = 0; i < position - 1; i++) {", //36
+        "            current = current.next;", //37
+        "        }", //38
+        "        newNode.next = current.next;", //39
+        "        current.next = newNode;", //40
+        "        return head;", //41
+        "    }", //42
+        "}", //43
       ],
       cpp: [
-        "Node* insertNode(Node* head, int value, string position) {", //0
-        "    Node* newNode = new Node(value);", // 1
+        "Node* insertNode(Node* head, int value, string position, int beforeValue) {", //0
+        "    Node* newNode = new Node(value);", //1
+
         '    if (position == "head") {', //2
         "        newNode->next = head;", //3
-        "        return newNode;", // 4
-        '    } else if (position == "tail") {', //5
+        "        head = newNode;", //4  ← added line (explicit head update)
+        "        return head;", //5
+        '    } else if (position == "tail") {', //6
 
-        "        Node* current = head;", //6
-        "        while (current->next != nullptr) {", //7
-        "            current = current->next;", //8
-        "        }", //9
-        "        current->next = newNode;", //10
-        "        tail = newNode;", //11
-        "        return head;", //12
-        "    } else {", //13
-        "    // Insert at specific position", //14
-        "        Node* current = head;", //15
-        "        for (int i = 0; i < position - 1; i++) {", //16
-        "            current = current->next;", //17
-        "        }", //18
-        "        newNode->next = current->next;", //19
-        "        current->next = newNode;", //20
-        "        return head;", //21
-        "    }",
-        "}",
+        "        Node* current = head;", //7
+        "        while (current->next != nullptr) {", //8
+        "            current = current->next;", //9
+        "        }", //10
+        "        current->next = newNode;", //11
+        "        tail = newNode;", //12
+        "        return head;", //13
+
+        '    } else if (position == "before") {', //14
+        "        // Insert before the first node with value == beforeValue", //15
+        "        if (head == nullptr)", //16
+        "            return head;", //17
+
+        "        if (head->value == beforeValue) {", //18
+        "            newNode->next = head;", //19
+        "            head = newNode;", //20
+        "            return head;", //21
+        "        }", //22
+
+        "        Node* current = head;", //23
+        "        while (current->next != nullptr && current->next->value != beforeValue) {", //24
+        "            current = current->next;", //25
+        "        }", //26
+
+        "        if (current->next == nullptr) {", //27
+        "            return head;", //28
+        "        }", //29
+
+        "        newNode->next = current->next;", //30
+        "        current->next = newNode;", //31
+        "        return head;", //32
+
+        "    } else {", //33
+        "        // Insert at specific position", //34
+        "        Node* current = head;", //35
+        "        for (int i = 0; i < position - 1; i++) {", //36
+        "            current = current->next;", //37
+        "        }", //38
+        "        newNode->next = current->next;", //39
+        "        current->next = newNode;", //40
+        "        return head;", //41
+        "    }", //42
+        "}", //43
       ],
       csharp: [
-        "public Node InsertNode(Node head, int value, string position) {", //0
-        "    Node newNode = new Node(value);", // 1
+        "public Node InsertNode(Node head, int value, string position, int beforeValue) {", //0
+        "    Node newNode = new Node(value);", //1
+
         '    if (position == "head") {', //2
         "        newNode.next = head;", //3
-        "        return newNode;", //4
-        '    } else if (position == "tail") {', //5
+        "        head = newNode;", //4   // ← added explicit head update
+        "        return head;", //5
 
-        "        Node current = head;", //6
-        "        while (current.next != null) {", //7
-        "            current = current.next;", //8
-        "        }", //9
-        "        current.next = newNode;", //10
-        "        tail = newNode;", //11
-        "        return head;", //12
-        "    } else {", //13
-        "    // Insert at specific position", //14
-        "        Node current = head;", //15
-        "        for (int i = 0; i < position - 1; i++) {", //16
-        "            current = current.next;", //17
-        "        }", //18
-        "        newNode.next = current.next;", //19
-        "        current.next = newNode;", //20
-        "        return head;", //21
-        "    }",
-        "}",
+        '    } else if (position == "tail") {', //6
+        "        Node current = head;", //7
+        "        while (current.next != null) {", //8
+        "            current = current.next;", //9
+        "        }", //10
+        "        current.next = newNode;", //11
+        "        tail = newNode;", //12
+        "        return head;", //13
+
+        '    } else if (position == "before") {', //14
+        "        // Insert before the first node with value == beforeValue", //15
+        "        if (head == null)", //16
+        "            return head;", //17
+
+        "        if (head.value == beforeValue) {", //18
+        "            newNode.next = head;", //19
+        "            head = newNode;", //20
+        "            return head;", //21
+        "        }", //22
+
+        "        Node current = head;", //23
+        "        while (current.next != null && current.next.value != beforeValue) {", //24
+        "            current = current.next;", //25
+        "        }", //26
+
+        "        if (current.next == null) {", //27
+        "            return head;", //28
+        "        }", //29
+
+        "        newNode.next = current.next;", //30
+        "        current.next = newNode;", //31
+        "        return head;", //32
+
+        "    } else {", //33
+        "        // Insert at specific position", //34
+        "        Node current = head;", //35
+        "        for (int i = 0; i < position - 1; i++) {", //36
+        "            current = current.next;", //37
+        "        }", //38
+        "        newNode.next = current.next;", //39
+        "        current.next = newNode;", //40
+        "        return head;", //41
+        "    }", //42
+        "}", //43
       ],
     };
     return lines[language] || lines.javascript;

@@ -295,28 +295,26 @@ const SLLInsertionVisualizer = ({
           };
 
           const displayNodes = [];
-          // Precompute current.next address for link-new-node phase so we
-          // can update the existing preview node's `next` instead of
-          // appending a separate preview node.
+          // Precompute the address that the preview/new node's `next` points to
+          // during the `link-new-node` phase. Use the explicit `newNode.next`
+          // from the step (it may point to an existing node index), instead of
+          // guessing via current index + 1 which is incorrect for "insert before" flows.
           let linkNewNodeCurrentNextAddr = null;
           if (step.phase === "link-new-node" && step.newNode) {
-            const currentIdx =
-              step.current !== undefined && typeof step.current === "number"
-                ? step.current
+            const nextIdx =
+              step.newNode.next !== undefined && typeof step.newNode.next === "number"
+                ? step.newNode.next
                 : null;
             if (
-              currentIdx !== null &&
+              nextIdx !== null &&
               step.nodes &&
               Array.isArray(step.nodes) &&
-              currentIdx >= 0 &&
-              currentIdx < step.nodes.length
+              nextIdx >= 0 &&
+              nextIdx < step.nodes.length
             ) {
-              if (currentIdx < step.nodes.length - 1) {
-                // will convert to address inside loop
-                linkNewNodeCurrentNextAddr = currentIdx + 1;
-              } else {
-                linkNewNodeCurrentNextAddr = null;
-              }
+              linkNewNodeCurrentNextAddr = nextIdx;
+            } else {
+              linkNewNodeCurrentNextAddr = null;
             }
           }
 

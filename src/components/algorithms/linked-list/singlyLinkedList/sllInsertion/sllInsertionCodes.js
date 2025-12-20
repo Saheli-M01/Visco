@@ -1,11 +1,12 @@
 export const description =
-  "Singly linked list insertion: add a new node at a specified position (head, tail, middle, or kth position).";
+  "Singly linked list insertion: add a new node at a specified position (head, tail, middle, kth position) or before a specific value.";
 
 export const howItWorks = [
   "Create a new node with the given value",
   "For head insertion: link new node to current head and update head",
   "For tail insertion: link current tail to new node and update tail",
   "For middle/kth insertion: traverse to position, link new node between nodes",
+  "For insertion-before-value: traverse to the node whose next node has the target value (or handle if target is head), then insert the new node so it precedes the target",
 ];
 
 export const timeComplexity = {
@@ -97,6 +98,41 @@ export const generateExampleSteps = (target) => {
     }]
   });
 
+  // Step 5: Insert 9 before value 3 -> list becomes 1 -> 9 -> 4
+  // Start with a simple list to demonstrate insertion-before-X
+  nodes = [
+    { value: 1, next: addrForIndex(1), addr: addrForIndex(0) },
+    { value: 4, next: null, addr: addrForIndex(3) },
+  ];
+
+  steps.push({
+    passNumber: "Insert Before Value (example)",
+    sorted: [],
+    steps: [{
+      array: nodes.map((n) => `${n.value} (next: ${n.next ?? "null"})`),
+      swapped: [],
+      swapText: "Original list: 1 -> -> 4"
+    }]
+  });
+
+  // After insertion of 9 before value 3
+  nodes = [
+    { value: 1, next: addrForIndex(1), addr: addrForIndex(0) },   
+    { value: 9, next: addrForIndex(3), addr: addrForIndex(2) },  
+    { value: 4, next: null, addr: addrForIndex(4) },
+  ];
+
+  steps.push({
+    passNumber: "Inserted 9 Before 4",
+    sorted: [],
+    steps: [{
+      array: nodes.map((n) => `${n.value} (next: ${n.next ?? "null"})`),
+      swapped: [],
+      newNode: 2,
+      swapText: "Inserted 9 before value 4"
+    }]
+  });
+
   return steps;
 };
 
@@ -166,6 +202,40 @@ class SinglyLinkedList {
     this.size++;
   }
 
+  // Insert before a node with a specific target value
+  // Finds the first node whose value equals targetValue and inserts new node before it.
+  // If the target is the head, this becomes a head insertion.
+  insertBeforeValue(value, targetValue) {
+    if (!this.head) {
+      // empty list, just insert at head
+      this.insertAtHead(value);
+      return;
+    }
+
+    // If head is the target, insert at head
+    if (this.head.value === targetValue) {
+      this.insertAtHead(value);
+      return;
+    }
+
+    let prev = this.head;
+    let current = this.head.next;
+    while (current) {
+      if (current.value === targetValue) {
+        const newNode = new Node(value);
+        prev.next = newNode;
+        newNode.next = current;
+        this.size++;
+        return;
+      }
+      prev = current;
+      current = current.next;
+    }
+
+    // if target not found, throw or insert at tail depending on desired behaviour
+    throw new Error('Target value not found in the list');
+  }
+
   display() {
     let current = this.head;
     const values = [];
@@ -189,6 +259,10 @@ list.display(); // 1 -> 2 -> 3 -> 4
 
 list.insertAtHead(0);
 list.display(); // 0 -> 1 -> 2 -> 3 -> 4
+
+  // Example: insert 9 before value 3
+  list.insertBeforeValue(9, 3);
+  list.display(); // 0 -> 1 -> 2 -> 9 -> 3 -> 4
 `,
 
   python: `# Singly Linked List - Insertion (Python)

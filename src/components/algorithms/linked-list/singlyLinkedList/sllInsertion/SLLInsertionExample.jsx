@@ -16,6 +16,9 @@ const SLLInsertionExample = ({ examplePasses }) => {
             {pass.steps[0].swapText}
           </span>
         )}
+        {pass.steps && pass.steps[0] && pass.steps[0].swapText && pass.steps[0].swapText.toLowerCase().includes('before') && (
+          <span className="text-xs italic text-gray-500"> &nbsp;— inserts a new node before the target value</span>
+        )}
       </div>
 
       {pass.steps.map((step, stepIdx) => (

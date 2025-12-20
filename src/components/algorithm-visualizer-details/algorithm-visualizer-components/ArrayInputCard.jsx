@@ -332,10 +332,12 @@ const ArrayInputCard = ({
                   {history.map((item, idx) => (
                     <button
                       key={idx}
-                      onClick={() => {
+                      onMouseDown={(e) => {
+                        e.preventDefault();
                         setArrayInput(item);
                         setShowHistoryDropdown(false);
-                        inputRef.current?.focus();
+                        // refocus input after selection
+                        setTimeout(() => inputRef.current?.focus(), 0);
                       }}
                       className="w-full text-left px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 border-b border-gray-100 last:border-0 truncate"
                       title={item}

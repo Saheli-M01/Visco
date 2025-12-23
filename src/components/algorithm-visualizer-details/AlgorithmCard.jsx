@@ -45,6 +45,7 @@ const AlgorithmCard = ({ algorithm, index = 0, onClick }) => {
     "Singly Linked List - Creation",
     "Singly Linked List - Traversal",
     "Singly Linked List - Insertion",
+    "Singly Linked List - Deletion"
   
   ];
   const isInteractive = interactive.includes(algorithm.name);

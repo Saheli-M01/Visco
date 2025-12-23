@@ -13,6 +13,7 @@ import { mooresVoting } from "../components/algorithms/array/MooresVoting/moores
 import { sllCreation } from "../components/algorithms/linked-list/singlyLinkedList/sllCreation/sllCreation.js";
 import { sllTraversal } from "../components/algorithms/linked-list/singlyLinkedList/sllTraversal/sllTraversal.js";
 import { sllInsertion } from "../components/algorithms/linked-list/singlyLinkedList/sllInsertion/sllInsertion.js";
+import { sllDeletion } from "../components/algorithms/linked-list/singlyLinkedList/sllDeletion/sllDeletion.js";
 
 // Algorithm factory to get the appropriate algorithm implementation
 export const getAlgorithm = (algorithmName) => {
@@ -72,8 +73,8 @@ export const getAlgorithm = (algorithmName) => {
     "singly linked list - traversal": sllTraversal,
     "Singly Linked List - Insertion": sllInsertion,
     "singly linked list - insertion": sllInsertion,
-    // "Singly Linked List - Deletion": singlyLinkedList,
-    // "singly linked list - deletion": singlyLinkedList,
+    "Singly Linked List - Deletion": sllDeletion,
+    "singly linked list - deletion": sllDeletion,
     // "Doubly Linked List - Creation": singlyLinkedList, // Placeholder
     // "doubly linked list - creation": singlyLinkedList,
     // "Doubly Linked List - Traversal": singlyLinkedList, // Placeholder
@@ -90,8 +91,6 @@ export const getAlgorithm = (algorithmName) => {
     // "circular linked list - insertion": singlyLinkedList,
     // "Circular Linked List - Deletion": singlyLinkedList, // Placeholder
     // "circular linked list - deletion": singlyLinkedList,
-    // "linked list": singlyLinkedList,
-    // linkedlist: singlyLinkedList,
   };
 
   const normalizedName = algorithmName?.toLowerCase().replace(/\s+/g, "");

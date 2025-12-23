@@ -18,6 +18,7 @@ const INTERACTIVE_ALGORITHMS = [
   "Singly Linked List - Creation",
   "Singly Linked List - Traversal",
   "Singly Linked List - Insertion",
+  "Singly Linked List - Deletion"
 ];
 
 /**

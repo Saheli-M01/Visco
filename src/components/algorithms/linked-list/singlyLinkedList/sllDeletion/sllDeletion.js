@@ -95,9 +95,48 @@ export const sllDeletion = {
         codeLine: 1,
       });
 
-      // Commit deletion: new head is old head.next
-      const newHead = nodes[initialHead].next;
-      // Rebuild nodes array to remove the first element
+      // Step: temp = head (keep reference to old head)
+      steps.push({
+        array: nodes.map((n) => n.value),
+        input,
+        head: initialHead,
+        tail: initialTail,
+        temp: initialHead,
+        description: `temp = head`,
+        nodes: JSON.parse(JSON.stringify(nodes)),
+        phase: "set-temp",
+        codeLine: 2,
+      });
+
+      // Step: head = head.next (advance head pointer)
+      const advancedHead = nodes[initialHead].next;
+      steps.push({
+        array: nodes.map((n) => n.value),
+        input,
+        head: advancedHead,
+        tail: initialTail,
+        temp: initialHead,
+        description: `head = head.next`,
+        nodes: JSON.parse(JSON.stringify(nodes)),
+        phase: "advance-head",
+        codeLine: 3,
+      });
+
+      // Step: clear temp (simulate delete/free)
+      steps.push({
+        array: nodes.map((n) => n.value),
+        input,
+        head: advancedHead,
+        tail: initialTail,
+        temp: null,
+        description: `temp = null (deleted old head)`,
+        nodes: JSON.parse(JSON.stringify(nodes)),
+        phase: "clear-temp",
+        codeLine: 4,
+      });
+
+      // Commit deletion: rebuild nodes array without the deleted node
+      const newHead = advancedHead;
       const newNodes = nodes.slice();
       newNodes.splice(deleteIdx, 1);
       // Reindex next pointers
@@ -420,54 +459,150 @@ export const sllDeletion = {
   },
 
   getCodeLines: (language) => {
-    const lines = {
-      javascript: [
-        "function deleteNode(head, position, beforeValue) {", //0
-        "  if (!head) return null;", //1
-        "  if (position === 'head') {", //2
-        "    return head.next;", //3
-        "  } else if (position === 'tail') {", //4
-        "    let current = head;", //5
-        "    while (current.next !== null && current.next.next !== null) {", //6
-        "      current = current.next;", //7
-        "    }", //8
-        "    current.next = null;", //9
-        "    return head;", //10
-        "  } else if (position === 'before') {", //11
-        "    // delete the node before the first node with value == beforeValue", //12
-        "    if (!head) return head;", //13
-        "    if (head.value === beforeValue) return head;", //14
-        "    let current = head;", //15
-        "    while (current.next !== null && current.next.value !== beforeValue) {", //16
-        "      current = current.next;", //17
-        "    }", //18
-        "    if (current.next === null) return head;", //19
-        "    // delete current (node before target) requires tracking prev; simplified here", //20
-        "  } else {", //21
-        "    // delete at specific kth position (0-based)", //22
-        "    // implementation depends on caller", //23
-        "  }", //24
-        "}", //25
-      ],
-      python: [
-        "def delete_node(head, position, beforeValue=None):", //0
-        "    if not head: return None", //1
-        "    if position == 'head':", //2
-        "        return head.next", //3
-        "    elif position == 'tail':", //4
-        "        current = head", //5
-        "        while current.next is not None and current.next.next is not None:", //6
-        "            current = current.next", //7
-        "        current.next = None", //8
-        "        return head", //9
-        "    elif position == 'before':", //10
-        "        # delete node before the first node with value == beforeValue", //11
-        "        return head", //12
-        "    else:", //13
-        "        # delete at specific kth position (0-based)", //14
-        "        return head", //15
-      ],
-    };
+ const lines = {
+  javascript: [
+    "const deleteNode = (head, position, beforeValue) => {", //0
+    "  if (!head) return null;", //1
+    "  if (position === 'head') {", //2
+    "    let temp = head;", //3
+    "    head = head.next;", //4
+    "    temp = null;", //5
+    "    return head;", //6
+    "  } else if (position === 'tail') {", //7
+    "    let current = head;", //8
+    "    while (current.next !== null && current.next.next !== null) {", //9
+    "      current = current.next;", //10
+    "    }", //11
+    "    current.next = null;", //12
+    "    return head;", //13
+    "  } else if (position === 'before') {", //14
+    "    if (!head) return head;", //15
+    "    if (head.value === beforeValue) return head;", //16
+    "    let current = head;", //17
+    "    while (current.next !== null && current.next.value !== beforeValue) {", //18
+    "      current = current.next;", //19
+    "    }", //20
+    "    if (current.next === null) return head;", //21
+    "  } else {", //22
+    "    // delete at specific kth position", //23
+    "  }", //24
+    "}", //25
+  ],
+
+  python: [
+    "def delete_node(head, position, beforeValue=None):", //0
+    "    if not head: return None", //1
+    "    if position == 'head':", //2
+    "        temp = head", //3
+    "        head = head.next", //4
+    "        temp = None", //5
+    "        return head", //6
+    "    elif position == 'tail':", //7
+    "        current = head", //8
+    "        while current.next is not None and current.next.next is not None:", //9
+    "            current = current.next", //10
+    "        current.next = None", //11
+    "        return head", //12
+    "    elif position == 'before':", //13
+    "        if not head: return head", //14
+    "        if head.value == beforeValue: return head", //15
+    "        current = head", //16
+    "        while current.next is not None and current.next.value != beforeValue:", //17
+    "            current = current.next", //18
+    "        if current.next is None: return head", //19
+    "    else:", //20
+    "        # delete at specific kth position", //21
+    "        pass", //22
+  ],
+
+  cpp: [
+    "Node* deleteNode(Node* head, string position, int beforeValue) {", //0
+    "    if (head == nullptr) return nullptr;", //1
+    "    if (position == \"head\") {", //2
+    "        Node* temp = head;", //3
+    "        head = head->next;", //4
+    "        delete temp;", //5
+    "        return head;", //6
+    "    } else if (position == \"tail\") {", //7
+    "        Node* current = head;", //8
+    "        while (current->next != nullptr && current->next->next != nullptr) {", //9
+    "            current = current->next;", //10
+    "        }", //11
+    "        current->next = nullptr;", //12
+    "        return head;", //13
+    "    } else if (position == \"before\") {", //14
+    "        if (head == nullptr) return head;", //15
+    "        if (head->value == beforeValue) return head;", //16
+    "        Node* current = head;", //17
+    "        while (current->next != nullptr && current->next->value != beforeValue) {", //18
+    "            current = current->next;", //19
+    "        }", //20
+    "        if (current->next == nullptr) return head;", //21
+    "    } else {", //22
+    "        // delete at specific kth position", //23
+    "    }", //24
+    "}", //25
+  ],
+
+  csharp: [
+    "Node DeleteNode(Node head, string position, int beforeValue) {", //0
+    "    if (head == null) return null;", //1
+    "    if (position == \"head\") {", //2
+    "        Node temp = head;", //3
+    "        head = head.Next;", //4
+    "        temp = null;", //5
+    "        return head;", //6
+    "    } else if (position == \"tail\") {", //7
+    "        Node current = head;", //8
+    "        while (current.Next != null && current.Next.Next != null) {", //9
+    "            current = current.Next;", //10
+    "        }", //11
+    "        current.Next = null;", //12
+    "        return head;", //13
+    "    } else if (position == \"before\") {", //14
+    "        if (head == null) return head;", //15
+    "        if (head.Value == beforeValue) return head;", //16
+    "        Node current = head;", //17
+    "        while (current.Next != null && current.Next.Value != beforeValue) {", //18
+    "            current = current.Next;", //19
+    "        }", //20
+    "        if (current.Next == null) return head;", //21
+    "    } else {", //22
+    "        // delete at specific kth position", //23
+    "    }", //24
+    "}", //25
+  ],
+
+  java: [
+    "Node deleteNode(Node head, String position, int beforeValue) {", //0
+    "    if (head == null) return null;", //1
+    "    if (position.equals(\"head\")) {", //2
+    "        Node temp = head;", //3
+    "        head = head.next;", //4
+    "        temp = null;", //5
+    "        return head;", //6
+    "    } else if (position.equals(\"tail\")) {", //7
+    "        Node current = head;", //8
+    "        while (current.next != null && current.next.next != null) {", //9
+    "            current = current.next;", //10
+    "        }", //11
+    "        current.next = null;", //12
+    "        return head;", //13
+    "    } else if (position.equals(\"before\")) {", //14
+    "        if (head == null) return head;", //15
+    "        if (head.value == beforeValue) return head;", //16
+    "        Node current = head;", //17
+    "        while (current.next != null && current.next.value != beforeValue) {", //18
+    "            current = current.next;", //19
+    "        }", //20
+    "        if (current.next == null) return head;", //21
+    "    } else {", //22
+    "        // delete at specific kth position", //23
+    "    }", //24
+    "}", //25
+  ],
+};
+
     return lines[language] || lines.javascript;
   },
 };

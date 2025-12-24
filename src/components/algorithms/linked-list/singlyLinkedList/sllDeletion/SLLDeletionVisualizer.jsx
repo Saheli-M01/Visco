@@ -38,9 +38,10 @@ const InsertionNodeDisplay = ({
   showDownArrow = false,
   showSnakeTurn = false,
   pulseNext = false,
+  isDeleted = false,
 }) => {
   return (
-    <div className="relative flex items-center">
+    <div className={`relative flex items-center ${isDeleted ? "opacity-30" : "opacity-100"}`}>
       {/* Snake turn arrow for 5->6 transition */}
       {showSnakeTurn && <SnakeTurnArrow />}
 
@@ -175,6 +176,14 @@ const SLLDeletionVisualizer = ({
     if (persisted !== null && persisted !== undefined) headVal = persisted;
   }
 
+  // Compute persisted temp pointer (for delete flows)
+  let tempVal = undefined;
+  if (step.temp !== undefined) tempVal = step.temp;
+  if (tempVal === undefined) {
+    const persistedTemp = findPersistedValue(steps, currentStepIndex, ["temp"]);
+    if (persistedTemp !== null && persistedTemp !== undefined) tempVal = persistedTemp;
+  }
+
   let tailVal = undefined;
   if (step.tail !== undefined) tailVal = step.tail;
   if (tailVal === undefined) {
@@ -191,6 +200,7 @@ const SLLDeletionVisualizer = ({
   }
 
   const displayHeadVal = headVal === undefined || headVal === null ? null : headVal;
+  const displayTempVal = tempVal === undefined || tempVal === null ? null : tempVal;
   const displayTailVal = tailVal === undefined || tailVal === null ? null : tailVal;
   let displayCurrentVal = currentVal === undefined || currentVal === null ? null : currentVal;
   // Fallback: for tail pre-link step, show current at head even if missing
@@ -207,6 +217,13 @@ const SLLDeletionVisualizer = ({
     if (typeof displayHeadVal === "number" && currentList && currentList[displayHeadVal] !== undefined)
       return currentList[displayHeadVal];
     return displayHeadVal;
+  })();
+
+  const tempCardValue = (() => {
+    if (displayTempVal === null) return null;
+    if (typeof displayTempVal === "number" && currentList && currentList[displayTempVal] !== undefined)
+      return currentList[displayTempVal];
+    return displayTempVal;
   })();
 
   const tailCardValue = (() => {
@@ -247,6 +264,13 @@ const SLLDeletionVisualizer = ({
               bgColor="bg-amber-200"
             />
           )}
+          {displayTempVal !== null && (
+            <VariableCard
+              label="temp"
+              value={tempCardValue === null ? "null" : tempCardValue}
+              bgColor="bg-yellow-200"
+            />
+          )}
           <VariableCard
             label="head"
             value={headCardValue === null ? "null" : headCardValue}
@@ -284,6 +308,7 @@ const SLLDeletionVisualizer = ({
                       address="0xDEL"
                       isNewNode={true}
                       showArrow={false}
+                      isDeleted={Boolean(step.deleteNode)}
                     />
                   </motion.div>
                 </div>

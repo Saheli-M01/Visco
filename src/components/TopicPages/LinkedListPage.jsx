@@ -1,6 +1,6 @@
 import React from "react";
 import CategoryLayout from "@/components/TopicPages/layout/CategoryLayout";
-import { categories } from "@/hooks/categories";
+import { categories } from "@/data/categories";
 
 const LinkedListPage = () => {
   const linkedListCategory = categories.linkedList;

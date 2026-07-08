@@ -23,7 +23,7 @@ const ArrayInputCard = ({
   const [showHistoryDropdown, setShowHistoryDropdown] = useState(false);
   const inputRef = useRef(null);
   
-  // Insertion-specific states
+  // Operation-specific states (used for insertion OR deletion)
   const [insertPosition, setInsertPosition] = useState("head");
   const [insertValue, setInsertValue] = useState("");
   const [kthPosition, setKthPosition] = useState("");
@@ -60,9 +60,10 @@ const ArrayInputCard = ({
     // Check if it's an insertion algorithm
     const normalizedAlgoName = (selectedAlgorithm?.name || "").toLowerCase();
     const isInsertion = normalizedAlgoName.includes("insertion");
+    const isDeletion = normalizedAlgoName.includes("deletion");
     const isLinked = normalizedAlgoName.includes("linked");
     const isLinkedInsertion = isInsertion && isLinked;
-    const maxAllowed = isInsertion ? 9 : 10;
+    const maxAllowed = (isInsertion || isDeletion) ? 9 : 10;
     
     if (parts.length > maxAllowed) return { error: `Maximum ${maxAllowed} numbers allowed` };
     const nums = [];
@@ -150,8 +151,10 @@ const ArrayInputCard = ({
     let targetValue = null;
     const isBinary = normalizedAlgoName.includes("binary search") || normalizedAlgoName.includes("binarysearch") || normalizedAlgoName.includes("binary");
     const isInsertion = normalizedAlgoName.includes("insertion");
+    const isDeletion = normalizedAlgoName.includes("deletion");
     const isLinked = normalizedAlgoName.includes("linked");
     const isLinkedInsertion = isInsertion && isLinked;
+    const isLinkedDeletion = isDeletion && isLinked;
     
     if (isBinary) {
       if (targetInput == null || targetInput === "") {
@@ -262,6 +265,55 @@ const ArrayInputCard = ({
       }
     }
 
+    // Handle deletion-specific validation and operation value
+    if (isDeletion) {
+      // For deletion we don't need an insertValue; only kth or before may require inputs
+      if (insertPosition === "kth") {
+        if (kthPosition === "" || kthPosition == null) {
+          setValidationError("Please enter the position for deletion");
+          setShowValidationPopup(true);
+          return;
+        }
+        const kthNum = parseInt(kthPosition, 10);
+        const minPos = 0;
+        const maxPos = Math.max(0, res.value.length - 1);
+        if (Number.isNaN(kthNum) || kthNum < minPos || kthNum > maxPos) {
+          setValidationError(`Position must be between ${minPos} and ${maxPos}`);
+          setShowValidationPopup(true);
+          return;
+        }
+        targetValue = {
+          position: "kth",
+          kthPosition: kthNum,
+        };
+      } else if (insertPosition === "before") {
+        if (insertBeforeValue === "" || insertBeforeValue == null) {
+          setValidationError("Please enter the value before which to delete");
+          setShowValidationPopup(true);
+          return;
+        }
+        const beforeNum = Number(insertBeforeValue);
+        if (Number.isNaN(beforeNum)) {
+          setValidationError(`Invalid 'before' value: ${insertBeforeValue}`);
+          setShowValidationPopup(true);
+          return;
+        }
+        if (!res.value.includes(beforeNum)) {
+          setValidationError(`Value ${beforeNum} not found in the input array`);
+          setShowValidationPopup(true);
+          return;
+        }
+
+        targetValue = {
+          position: "before",
+          beforeValue: beforeNum,
+        };
+      } else {
+        // head or tail
+        targetValue = { position: insertPosition };
+      }
+    }
+
     // call parent with parsed array and optional target
     // debug: log values passed to parent
     try {
@@ -289,12 +341,15 @@ const ArrayInputCard = ({
   // Determine if this is an insertion algorithm
   const normalizedAlgoName = (selectedAlgorithm?.name || "").toLowerCase();
   const isInsertionAlgo = normalizedAlgoName.includes("insertion");
+  const isDeletionAlgo = normalizedAlgoName.includes("deletion");
   const isLinkedInsertionAlgo = isInsertionAlgo && normalizedAlgoName.includes("linked");
+  const isLinkedDeletionAlgo = isDeletionAlgo && normalizedAlgoName.includes("linked");
   
   // Calculate valid kth position range for placeholder
   const getKthPositionPlaceholder = () => {
-    if (!isInsertionAlgo || insertPosition !== "kth") return "Position";
-    if (isLinkedInsertionAlgo) {
+    if (!(isInsertionAlgo || isDeletionAlgo) || insertPosition !== "kth") return "Position";
+    // when working with linked-list operations the allowed kth range may exclude head/tail depending on flow
+    if (isLinkedInsertionAlgo || isLinkedDeletionAlgo) {
       const minPos = 1;
       const maxPos = Math.max(1, currentArrayLength - 2);
       if (currentArrayLength < 2) {
@@ -323,7 +378,7 @@ const ArrayInputCard = ({
                 }}
                 onFocus={() => setShowHistoryDropdown(true)}
                 onBlur={() => setTimeout(() => setShowHistoryDropdown(false), 150)}
-                placeholder={isInsertionAlgo ? "Enter comma-separated numbers (Maximum 9 values)" : "Enter comma-separated numbers (Maximum 10 values)"}
+                placeholder={(isInsertionAlgo || isDeletionAlgo) ? "Enter comma-separated numbers (Maximum 9 values)" : "Enter comma-separated numbers (Maximum 10 values)"}
                 className="w-full h-10 rounded-lg backdrop-blur-sm bg-white/30 border-2 border-gray-500/50 text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500/50 shadow-inner text-[0.7rem] px-3 transition-all duration-200"
               />
               {/* History dropdown */}
@@ -349,7 +404,7 @@ const ArrayInputCard = ({
               )}
             </div>
             {/* Insertion position dropdown */}
-            {isInsertionAlgo && (
+            {(isInsertionAlgo || isDeletionAlgo) && (
               <Select
                 value={insertPosition}
                 onChange={(val) => {
@@ -385,7 +440,7 @@ const ArrayInputCard = ({
               />
             )}
             {/* 'Before' input (only for before option) */}
-            {isInsertionAlgo && insertPosition === "before" && (
+            {(isInsertionAlgo || isDeletionAlgo) && insertPosition === "before" && (
               <input
                 type="text"
                 value={insertBeforeValue}
@@ -396,7 +451,7 @@ const ArrayInputCard = ({
             )}
 
             {/* Kth position input (only for kth option) */}
-            {isInsertionAlgo && insertPosition === "kth" && (
+            {(isInsertionAlgo || isDeletionAlgo) && insertPosition === "kth" && (
               <input
                 type="text"
                 value={kthPosition}

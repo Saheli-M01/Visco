@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { categories } from './categories.js';
+import { categories } from '../data/categories.js';
 
 // Interactive algorithms list (should match the one in AlgorithmCard)
 const INTERACTIVE_ALGORITHMS = [
@@ -18,6 +18,7 @@ const INTERACTIVE_ALGORITHMS = [
   "Singly Linked List - Creation",
   "Singly Linked List - Traversal",
   "Singly Linked List - Insertion",
+  "Singly Linked List - Deletion"
 ];
 
 /**

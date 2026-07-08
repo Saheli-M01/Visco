@@ -3,6 +3,7 @@ import React from "react";
 import SLLCreationVisualizer from "../../algorithms/linked-list/singlyLinkedList/sllCreation/SLLCreationVisualizer";
 import SLLTraversalVisualizer from "../../algorithms/linked-list/singlyLinkedList/sllTraversal/SLLTraversalVisualizer";
 import SLLInsertionVisualizer from "../../algorithms/linked-list/singlyLinkedList/sllInsertion/SLLInsertionVisualizer";
+import SLLDeletionVisualizer from "../../algorithms/linked-list/singlyLinkedList/sllDeletion/SLLDeletionVisualizer";
 
 const LinkedListDisplay = ({
   currentList = [],
@@ -17,7 +18,8 @@ const LinkedListDisplay = ({
   const showInput =
     displayInputString && 
     selectedAlgorithm?.name !== "Singly Linked List - Traversal" &&
-    selectedAlgorithm?.name !== "Singly Linked List - Insertion";
+    selectedAlgorithm?.name !== "Singly Linked List - Insertion" &&
+    selectedAlgorithm?.name !== "Singly Linked List - Deletion";
 
   return (
     <div className="flex flex-col h-full bg-gray-900 rounded-lg overflow-y-auto">
@@ -54,6 +56,15 @@ const LinkedListDisplay = ({
           {selectedAlgorithm?.name === "Singly Linked List - Insertion" && (
             <div className="w-full">
               <SLLInsertionVisualizer
+                steps={linkedListSteps}
+                currentStepIndex={currentStepIndex}
+                currentList={currentList}
+              />
+            </div>
+          )}
+          {selectedAlgorithm?.name === "Singly Linked List - Deletion" && (
+            <div className="w-full">
+              <SLLDeletionVisualizer
                 steps={linkedListSteps}
                 currentStepIndex={currentStepIndex}
                 currentList={currentList}

@@ -15,6 +15,8 @@ import SLLTraversalComplexity from "../../algorithms/linked-list/singlyLinkedLis
 import SLLTraversalExample from "../../algorithms/linked-list/singlyLinkedList/sllTraversal/SLLTraversalExample";
 import SLLInsertionComplexity from "../../algorithms/linked-list/singlyLinkedList/sllInsertion/SLLInsertionComplexity";
 import SLLInsertionExample from "../../algorithms/linked-list/singlyLinkedList/sllInsertion/SLLInsertionExample";
+import SLLDeletionExample from "../../algorithms/linked-list/singlyLinkedList/sllDeletion/SLLDeletionExample";
+import SLLDeletionComplexity from "../../algorithms/linked-list/singlyLinkedList/sllDeletion/SLLDeletionComplexity";
 
 // Dynamic code loaders (lazy import to keep bundle small)
 const codeLoaders = {
@@ -26,8 +28,13 @@ const codeLoaders = {
     import(
       "../../algorithms/linked-list/singlyLinkedList/sllTraversal/sllTraversalCodes"
     ),
-  "Singly Linked List - Insertion": () => import(
+  "Singly Linked List - Insertion": () =>
+    import(
       "../../algorithms/linked-list/singlyLinkedList/sllInsertion/sllInsertionCodes"
+    ),
+  "Singly Linked List - Deletion": () =>
+    import(
+      "../../algorithms/linked-list/singlyLinkedList/sllDeletion/sllDeletionCodes"
     ),
 };
 
@@ -36,6 +43,7 @@ const complexityComponents = {
   "Singly Linked List - Creation": SLLCreationComplexity,
   "Singly Linked List - Traversal": SLLTraversalComplexity,
   "Singly Linked List - Insertion": SLLInsertionComplexity,
+  "Singly Linked List - Deletion": SLLDeletionComplexity,
 };
 
 const LinkedListDetails = ({ algorithm, topic }) => {

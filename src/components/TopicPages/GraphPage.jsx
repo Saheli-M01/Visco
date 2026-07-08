@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import CategoryLayout from "@/components/TopicPages/layout/CategoryLayout";
-import { categories } from "@/hooks/categories";
+import { categories } from "@/data/categories";
 
 const GraphPage = () => {
   const graphCategory = categories.graph;

@@ -13,6 +13,33 @@ export const pythonNotes = [
         id: "tokens",
         title: "Tokens",
         component: "Tokens",
+        children: [
+            {
+                id: "identifiers",
+                title: "Identifiers"
+            },
+            {
+                id: "keywords",
+                title: "Keywords"
+            },
+
+            {
+                id: "literals",
+                title: "Literals"
+            },
+            {
+                id: "operators",
+                title: "Operators"
+            },
+            {
+                id: "delimiters",
+                title: "Delimiters"
+            },
+            {
+                id: "comments",
+                title: "Comments"
+            }
+        ]
     },
     {
         id: "variables",
@@ -23,6 +50,16 @@ export const pythonNotes = [
         id: "data-types",
         title: "Data Types",
         component: "DataTypes",
+        children: [
+            {
+                id: "type-interactions",
+                title: "Type Interactions",
+            },
+            {
+                id: "type-casting",
+                title: "Type Casting",
+            },
+        ]
     },
     {
         id: "increment-decrement",

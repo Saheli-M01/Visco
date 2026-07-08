@@ -42,7 +42,7 @@ const Introduction = () => {
   ];
 
   return (
-    <section id="programming-language" className="scroll-mt-20 space-y-6">
+    <section id="introduction" className="scroll-mt-20 space-y-6">
       {/* Header banner */}
       <div className="rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 p-6 shadow-lg">
         <h1 className="text-3xl font-extrabold text-white flex items-center gap-3">

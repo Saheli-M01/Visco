@@ -29,7 +29,9 @@ const Question = ({ number, title, level, prompt, code, answer }) => (
     {code && <CodeBlock code={code} />}
     <div className="flex items-start gap-2 bg-sky-50 dark:bg-sky-950/20 border border-sky-100 dark:border-sky-900/40 rounded-lg p-3">
       <Lightbulb className="w-4 h-4 text-sky-500 shrink-0 mt-0.5" />
-      <div className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{answer}</div>
+      <div className="flex-1 min-w-0 text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+        {answer}
+      </div>
     </div>
   </div>
 );

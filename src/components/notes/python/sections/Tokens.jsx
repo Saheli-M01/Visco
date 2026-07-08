@@ -110,7 +110,7 @@ const Tokens = () => {
     [<strong>3. Literals</strong>, "Fixed values like numbers or raw text words.", <code>5, "Hello"</code>],
     [<strong>4. Operators</strong>, "Math and comparison symbols to calculate values.", <code>+, &gt;, ==</code>],
     [<strong>5. Delimiters</strong>, "Punctuation marks that separate code groupings.", <code>( ), [ ], :</code>],
-    [<strong>6. Whitespace</strong>, "Spaces, tabs, and layout markers that form blocks.", "Spaces for indenting"],
+    [<strong>6. Comments</strong>, "Notes written in the code for explanation. Ignored by Python.", <code># This is a comment</code>],
   ];
 
   return (
@@ -139,7 +139,7 @@ const Tokens = () => {
         </h2>
 
         {/* Identifiers */}
-        <div className="rounded-xl border-2 border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm">
+        <div className="rounded-xl border-2 border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm" id="identifiers">
           <h3 className="text-lg font-bold text-sky-700 dark:text-sky-400 flex items-center gap-2">
             <Tag className="w-5 h-5" /> 1. Identifiers
           </h3>
@@ -172,7 +172,7 @@ const Tokens = () => {
         </div>
 
         {/* Keywords */}
-        <div className="rounded-xl border-2 border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm">
+        <div className="rounded-xl border-2 border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm" id="keywords">
           <h3 className="text-lg font-bold text-purple-700 dark:text-purple-400 flex items-center gap-2">
             <KeyRound className="w-5 h-5" /> 2. Keywords
           </h3>
@@ -196,7 +196,7 @@ const Tokens = () => {
         </div>
 
         {/* Literals */}
-        <div className="rounded-xl border-2 border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm">
+        <div className="rounded-xl border-2 border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm" id="literals">
           <h3 className="text-lg font-bold text-amber-700 dark:text-amber-400 flex items-center gap-2">
             <Hash className="w-5 h-5" /> 3. Literals
           </h3>
@@ -255,7 +255,7 @@ const Tokens = () => {
         </div>
 
         {/* Operators */}
-        <div className="rounded-xl border-2 border-pink-200 dark:border-pink-800 bg-pink-50 dark:bg-slate-800 p-5 space-y-4 shadow-sm">
+        <div className="rounded-xl border-2 border-pink-200 dark:border-pink-800 bg-pink-50 dark:bg-slate-800 p-5 space-y-4 shadow-sm" id="operators">
           <h3 className="text-lg font-bold text-pink-700 dark:text-pink-400 flex items-center gap-2">
             <Calculator className="w-5 h-5" /> 4. Operators (With Examples)
           </h3>
@@ -358,7 +358,7 @@ const Tokens = () => {
         </div>
 
         {/* Delimiters */}
-        <div className="rounded-xl border-2 border-teal-200 dark:border-teal-800 bg-teal-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
+        <div className="rounded-xl border-2 border-teal-200 dark:border-teal-800 bg-teal-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm" id="delimiters">
           <h3 className="text-lg font-bold text-teal-700 dark:text-teal-400 flex items-center gap-2">
             <ListTree className="w-5 h-5" /> 5. Delimiters or Separators
           </h3>
@@ -369,16 +369,41 @@ const Tokens = () => {
             <li><code>:</code> &rarr; Starts an aligned indented block of code: <code>if True:</code></li>
           </ul>
         </div>
-
-        {/* Whitespace */}
-        <div className="rounded-xl border-2 border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
+        {/* Comments */}
+        <div
+          className="rounded-xl border-2 border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm"
+          id="comments"
+        >
           <h3 className="text-lg font-bold text-indigo-700 dark:text-indigo-400 flex items-center gap-2">
-            <AlignLeft className="w-5 h-5" /> 6. Whitespace and Indentation
+            <AlignLeft className="w-5 h-5" /> 6. Comments
           </h3>
+
           <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
-            Python uses empty spaces structurally to group code blocks together. This is called <strong>Indentation</strong>.
+            <strong>Comments</strong> are notes written inside a Python program to make
+            the code easier to understand. Python ignores comments during execution, so
+            they do not affect the program's output.
           </p>
-          <CodeBlock code={`age = 20\n\nif age >= 18:\n    print("Eligible to drive!")\n    print("Eligible for election!")\n# These 4 leading spaces are structural and mandatory!`} />
+
+          <ul className="list-disc pl-6 space-y-2 text-slate-600 dark:text-slate-350">
+            <li>Used to explain the purpose of the code.</li>
+            <li>Helpful for debugging and future maintenance.</li>
+            <li>Ignored by the Python interpreter.</li>
+            <li>Single-line comments start with <code>#</code>.</li>
+            <li>Triple quotes (<code>'''</code> or <code>"""</code>) are often used for multi-line comments or documentation.</li>
+          </ul>
+
+          <CodeBlock
+            code={`# This is a single-line comment
+
+name = "Rahul"   # Store student's name
+
+"""
+This is a multi-line comment
+(or documentation string).
+"""
+
+print(name)`}
+          />
         </div>
 
         {/* Tokens Summary Reference Table */}

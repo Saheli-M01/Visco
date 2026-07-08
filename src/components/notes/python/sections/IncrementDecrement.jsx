@@ -49,11 +49,11 @@ const IncrementDecrement = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
           <div className="flex items-center gap-2 border border-emerald-100 dark:border-emerald-900/40 bg-white dark:bg-slate-700 p-3 rounded-lg text-sm text-slate-700 dark:text-slate-200">
             <Plus className="w-4 h-4 text-emerald-500 shrink-0" />
-            <span><code>count += 1</code> — increases by 1</span>
+            <span><code>count += 1</code> (increases by 1) </span>
           </div>
           <div className="flex items-center gap-2 border border-rose-100 dark:border-rose-900/40 bg-white dark:bg-slate-700 p-3 rounded-lg text-sm text-slate-700 dark:text-slate-200">
             <Minus className="w-4 h-4 text-rose-500 shrink-0" />
-            <span><code>count -= 1</code> — decreases by 1</span>
+            <span><code>count -= 1</code> (decreases by 1)</span>
           </div>
         </div>
       </div>

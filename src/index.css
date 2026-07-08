@@ -16,7 +16,8 @@ html {
 
 /* Add scroll margin to sections to account for sticky navbar */
 section {
-  scroll-margin-top: 5rem; /* 80px - navbar height + some padding */
+  scroll-margin-top: 5rem;
+  /* 80px - navbar height + some padding */
 }
 
 /* Visco Algorithm Visualizer Design System */
@@ -66,17 +67,13 @@ section {
     --radius: 0.75rem;
 
     /* Gradients */
-    --gradient-hero: linear-gradient(
-      135deg,
-      hsl(230 85% 60%),
-      hsl(270 85% 65%)
-    );
+    --gradient-hero: linear-gradient(135deg,
+        hsl(230 85% 60%),
+        hsl(270 85% 65%));
     --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(220 15% 98%));
-    --gradient-subtle: linear-gradient(
-      180deg,
-      hsl(220 25% 99%),
-      hsl(220 15% 95%)
-    );
+    --gradient-subtle: linear-gradient(180deg,
+        hsl(220 25% 99%),
+        hsl(220 15% 95%));
 
     /* Shadows */
     --shadow-card: 0 4px 12px -2px hsl(220 25% 15% / 0.08);
@@ -145,21 +142,15 @@ section {
     --code-bg: 225 15% 15%;
 
     /* Gradients */
-    --gradient-hero: linear-gradient(
-      135deg,
-      hsl(230 90% 70%),
-      hsl(270 90% 70%)
-    );
-    --gradient-card: linear-gradient(
-      145deg,
-      hsl(225 20% 14%),
-      hsl(225 15% 18%)
-    );
-    --gradient-subtle: linear-gradient(
-      180deg,
-      hsl(225 20% 10%),
-      hsl(225 15% 15%)
-    );
+    --gradient-hero: linear-gradient(135deg,
+        hsl(230 90% 70%),
+        hsl(270 90% 70%));
+    --gradient-card: linear-gradient(145deg,
+        hsl(225 20% 14%),
+        hsl(225 15% 18%));
+    --gradient-subtle: linear-gradient(180deg,
+        hsl(225 20% 10%),
+        hsl(225 15% 15%));
 
     /* Shadows */
     --shadow-card: 0 4px 12px -2px hsl(225 25% 5% / 0.4);
@@ -201,6 +192,7 @@ section {
 }
 
 @layer components {
+
   /* Hero Button Variant */
   .btn-hero {
     @apply bg-gradient-to-r from-primary to-secondary text-primary-foreground;
@@ -230,7 +222,7 @@ section {
   }
 
   /* Page-level subtle gradients for topic pages */
-  
+
   /* Animations */
   .animate-float {
     animation: float 6s ease-in-out infinite;
@@ -241,10 +233,12 @@ section {
   }
 
   @keyframes float {
+
     0%,
     100% {
       transform: translateY(0px);
     }
+
     50% {
       transform: translateY(-10px);
     }
@@ -254,6 +248,7 @@ section {
     0% {
       box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
     }
+
     100% {
       box-shadow: 0 0 40px hsl(var(--primary) / 0.6);
     }
@@ -261,11 +256,9 @@ section {
 
   /* Gradient Text */
   .gradient-text {
-    background: linear-gradient(
-      135deg,
-      hsl(var(--primary)),
-      hsl(var(--secondary))
-    );
+    background: linear-gradient(135deg,
+        hsl(var(--primary)),
+        hsl(var(--secondary)));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -278,7 +271,8 @@ section {
 
   /* Universal Scrollbar Styles - Apply to all elements */
   * {
-    scrollbar-width: thin; /* Firefox */
+    scrollbar-width: thin;
+    /* Firefox */
     scrollbar-color: hsl(0 0% 40%) transparent;
   }
 
@@ -304,7 +298,8 @@ section {
   .custom-scrollbar {
     /* Use native thin scrollbar where supported and a custom thumb color derived
        from the design tokens so it adapts to light/dark themes. */
-    scrollbar-width: thin; /* Firefox */
+    scrollbar-width: thin;
+    /* Firefox */
     scrollbar-color: hsl(0, 0%, 40%) transparent;
   }
 
@@ -322,7 +317,8 @@ section {
   .custom-scrollbar::-webkit-scrollbar-thumb {
     background: hsl(0 0% 40%);
     border-radius: 999px;
-    border: 1px solid transparent; /* keeps layout consistent */
+    border: 1px solid transparent;
+    /* keeps layout consistent */
     min-height: 24px;
   }
 
@@ -337,7 +333,8 @@ section {
   /* Global viewport scrollbar (thin and dark) */
   html,
   body {
-    scrollbar-width: thin; /* Firefox */
+    scrollbar-width: thin;
+    /* Firefox */
     scrollbar-color: hsl(0, 0%, 40%) transparent;
   }
 
@@ -379,9 +376,18 @@ section {
 
 /* Hide scrollbars but allow scrolling */
 .scrollbar-hidden {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
+
 .scrollbar-hidden::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Edge */
+  display: none;
+  /* Chrome, Safari, Edge */
+}
+
+.pdf-page-break {
+  page-break-before: always;
+  break-before: page;
 }

@@ -144,7 +144,7 @@ export default function Hero() {
                   className="text-gray-700 leading-relaxed font-medium"
                   style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)" }}
                 >
-                  — even if it starts as
+                  - even if it starts as
                 </span>
                 <span
                   className="font-mono font-bold"

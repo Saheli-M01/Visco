@@ -131,6 +131,7 @@ export const Navigation = () => {
   const navItems = [
     { href: "#home", label: "Home" },
     { href: "#about", label: "About" },
+    { href: "/notes", label: "Notes" }
     // Topics dropdown will be rendered separately using the custom Select
   ];
 
@@ -140,7 +141,7 @@ export const Navigation = () => {
     { value: "linked-list", label: "Linked List" },
     { value: "graph", label: "Graph (Coming soon)" },
     { value: "tree", label: "Tree (Coming soon)" },
-    
+
   ];
 
   const enabledTopics = new Set(["array", "sorting", "linked-list"]);
@@ -164,6 +165,11 @@ export const Navigation = () => {
   const handleNavClick = (e, href) => {
     e.preventDefault();
     closeMenu();
+
+    if (href.startsWith("/")) {
+      navigate(href);
+      return;
+    }
 
     const scrollToSection = () => {
       const targetId = href.replace("#", "");
@@ -264,7 +270,7 @@ export const Navigation = () => {
                 color="#1b1b1bff"
                 compact={true}
                 panelless={true}
-                 chevronSize={20}
+                chevronSize={20}
               />
             </div>
           </nav>
@@ -297,9 +303,8 @@ export const Navigation = () => {
                   {suggestions.map((s, idx) => (
                     <li
                       key={`${s.catId}-${s.alg.name}`}
-                      className={`px-3 py-2 text-sm cursor-pointer ${
-                        idx === activeIndex ? "bg-gray-100" : "hover:bg-gray-50"
-                      }`}
+                      className={`px-3 py-2 text-sm cursor-pointer ${idx === activeIndex ? "bg-gray-100" : "hover:bg-gray-50"
+                        }`}
                       onMouseEnter={() => setActiveIndex(idx)}
                       onClick={() => openFoundAlgorithm(s)}
                     >
@@ -366,9 +371,8 @@ export const Navigation = () => {
                 {suggestions.map((s, idx) => (
                   <li
                     key={`${s.catId}-${s.alg.name}-m`}
-                    className={`px-4 py-2 text-sm cursor-pointer ${
-                      idx === activeIndex ? "bg-gray-100" : "hover:bg-gray-50"
-                    }`}
+                    className={`px-4 py-2 text-sm cursor-pointer ${idx === activeIndex ? "bg-gray-100" : "hover:bg-gray-50"
+                      }`}
                     onClick={() => openFoundAlgorithm(s)}
                   >
                     <div className="font-medium text-gray-900">
@@ -405,11 +409,10 @@ export const Navigation = () => {
                         closeMenu();
                         navigate(`/${t.value}`);
                       }}
-                      className={`text-left px-2 py-2 rounded-md text-sm transition-colors ${
-                        enabled
+                      className={`text-left px-2 py-2 rounded-md text-sm transition-colors ${enabled
                           ? "text-gray-800 hover:bg-gray-50"
                           : "text-gray-400 cursor-not-allowed"
-                      }`}
+                        }`}
                     >
                       {t.label}
                     </button>

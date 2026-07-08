@@ -9,6 +9,7 @@ import TreePage from "./components/TopicPages/TreePage";
 import LinkedListPage from "./components/TopicPages/LinkedListPage";
 import SearchPage from "./components/SearchPage";
 import Loading from "./components/Loading";
+import NotesHome from "./components/notes/NotesHome";
 import { useEffect, useState } from "react";
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           <Route path="/graph" element={<GraphPage />} />
           <Route path="/tree" element={<TreePage />} />
           <Route path="/linked-list" element={<LinkedListPage />} />
+          <Route path="/notes" element={<NotesHome />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

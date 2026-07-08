@@ -387,7 +387,10 @@ section {
   /* Chrome, Safari, Edge */
 }
 
-.pdf-page-break {
+.html2pdf__page-break {
+  display: block;
+  height: 0;
+  overflow: hidden;
   page-break-before: always;
   break-before: page;
 }

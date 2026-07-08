@@ -10,6 +10,44 @@ const loadImage = (src) => {
   });
 };
 
+// Wait for the browser to fully paint the cloned element
+const waitForPaint = () =>
+  new Promise((resolve) =>
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => setTimeout(resolve, 300))
+    )
+  );
+
+/**
+ * Copy all *computed* styles from every node in `source` onto the
+ * corresponding node in `target`.  html2canvas sometimes misses
+ * Tailwind / CSS-variable-resolved styles, so we inline them.
+ */
+const inlineComputedStyles = (source, target) => {
+  const srcNodes = source.querySelectorAll("*");
+  const tgtNodes = target.querySelectorAll("*");
+
+  // Inline styles on the root element itself
+  const rootCS = getComputedStyle(source);
+  target.style.cssText = rootCS.cssText;
+  // Ensure the clone is visible and block-level
+  target.style.position = "absolute";
+  target.style.left = "0";
+  target.style.top = "0";
+  target.style.zIndex = "-9999";
+  target.style.overflow = "visible";
+  target.style.width = source.scrollWidth + "px";
+
+  for (let i = 0; i < srcNodes.length && i < tgtNodes.length; i++) {
+    try {
+      const cs = getComputedStyle(srcNodes[i]);
+      tgtNodes[i].style.cssText = cs.cssText;
+    } catch {
+      // skip non-element nodes
+    }
+  }
+};
+
 export const generatePdf = async ({ onStart, onEnd } = {}) => {
   const element = document.getElementById("notes-content");
 
@@ -20,45 +58,31 @@ export const generatePdf = async ({ onStart, onEnd } = {}) => {
 
   if (onStart) onStart();
 
-  const originalPosition = element.style.position;
-  element.style.position = "relative";
+  // ── 1. Clone the element and attach it to <body> ──────────────────
+  // This completely bypasses all parent overflow / flex / height constraints
+  // that prevent html2canvas from seeing the content.
+  const clone = element.cloneNode(true);
+  clone.id = "notes-content-pdf-clone";
 
-  // ── Strip spacing from page-break wrappers so new pages start from the top ──
-  const pageBreakEls = element.querySelectorAll(".pdf-page-break");
-  const savedStyles = [];
-
-  pageBreakEls.forEach((el) => {
-    // Save original inline styles
-    savedStyles.push({
-      el,
-      marginTop: el.style.marginTop,
-      paddingTop: el.style.paddingTop,
-    });
-    // Force zero spacing
-    el.style.marginTop = "0px";
-    el.style.paddingTop = "0px";
-  });
-
-  // Also strip the space-y-12 gap applied by the parent container
-  const spaceParent = element.querySelector(".space-y-12");
-  let savedGap = "";
+  // Remove any page-break spacing from the clone
+  const spaceParent = clone.querySelector(".space-y-12");
   if (spaceParent) {
-    savedGap = spaceParent.style.gap;
-    // Override the Tailwind space-y utility by switching to explicit gap: 0
-    // and removing the margin-based spacing
-    spaceParent.style.setProperty("--tw-space-y-reverse", "0");
-    pageBreakEls.forEach((el) => {
-      el.style.setProperty("margin-top", "0px", "important");
-    });
+    spaceParent.classList.remove("space-y-12");
+    spaceParent.classList.add("space-y-0");
   }
 
-  // Force browser reflow so html2canvas captures the updated layout
-  void element.offsetHeight;
+  // Inline all computed styles so html2canvas doesn't miss Tailwind classes
+  inlineComputedStyles(element, clone);
 
-  // Pre-load the logo image for watermark and footer
+  // Append to body — outside any overflow-hidden ancestor
+  document.body.appendChild(clone);
+
+  // Let the browser layout + paint the clone
+  await waitForPaint();
+
+  // ── 2. Load logo for watermark + footer ────────────────────────────
   const logoImg = await loadImage("/assets/vigyan-square.png");
 
-  // Create low-opacity watermark data URL using a temporary canvas
   let watermarkDataUrl = null;
   if (logoImg) {
     try {
@@ -76,19 +100,39 @@ export const generatePdf = async ({ onStart, onEnd } = {}) => {
     }
   }
 
+  // ── 3. html2pdf options ────────────────────────────────────────────
+  const cloneWidth = clone.scrollWidth;
+  const cloneHeight = clone.scrollHeight;
+
   const options = {
-    margin: [10, 5, 15, 5], // top, left, bottom, right in mm (increases bottom margin to 15mm)
+    margin: [10, 5, 15, 5],
     filename: "Python_Programming_Notes.pdf",
     image: { type: "jpeg", quality: 0.97 },
-    html2canvas: { scale: 1.2, useCORS: true, logging: false },
+    html2canvas: {
+      scale: 1.2,
+      useCORS: true,
+      logging: true,
+      scrollX: 0,
+      scrollY: 0,
+      x: 0,
+      y: 0,
+      width: cloneWidth,
+      height: cloneHeight,
+      windowWidth: cloneWidth,
+      windowHeight: cloneHeight,
+    },
     jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-    pagebreak: { mode: ["css"] },
+    pagebreak: {
+      mode: ["css", "legacy"],
+      before: ".html2pdf__page-break",
+    },
   };
 
+  // ── 4. Generate PDF from the clone ─────────────────────────────────
   try {
     await html2pdf()
       .set(options)
-      .from(element)
+      .from(clone)
       .toPdf()
       .get("pdf")
       .then((pdf) => {
@@ -96,17 +140,15 @@ export const generatePdf = async ({ onStart, onEnd } = {}) => {
         const pageWidth = pdf.internal.pageSize.getWidth();
         const pageHeight = pdf.internal.pageSize.getHeight();
 
-        // Watermark dimensions
         const watermarkWidth = 75;
         const watermarkHeight = 75;
         const watermarkX = (pageWidth - watermarkWidth) / 2;
         const watermarkY = (pageHeight - watermarkHeight) / 2;
 
-        // Footer dimensions & setup
         const logoWidth = 4.2;
         const logoHeight = 4.2;
         const gap = 1.5;
-        const yPos = pageHeight - 9; // Centered in the 15mm bottom margin
+        const yPos = pageHeight - 9;
 
         pdf.setFont("helvetica", "normal");
         pdf.setFontSize(9);
@@ -122,7 +164,6 @@ export const generatePdf = async ({ onStart, onEnd } = {}) => {
         for (let i = 1; i <= totalPages; i++) {
           pdf.setPage(i);
 
-          // 1. Draw Watermark in the center of the page
           if (watermarkDataUrl) {
             pdf.addImage(
               watermarkDataUrl,
@@ -134,8 +175,6 @@ export const generatePdf = async ({ onStart, onEnd } = {}) => {
             );
           }
 
-          // 2. Draw Footer Elements in the bottom margin (white space)
-          // Draw small logo
           if (logoImg) {
             pdf.addImage(
               logoImg,
@@ -147,13 +186,11 @@ export const generatePdf = async ({ onStart, onEnd } = {}) => {
             );
           }
 
-          // Draw Text 1
-          pdf.setTextColor(100, 116, 139); // Slate-500 (#64748b)
+          pdf.setTextColor(100, 116, 139);
           const text1X = startX + logoWidth + gap;
           pdf.text(text1, text1X, yPos);
 
-          // Draw Text 2 (hyperlink)
-          pdf.setTextColor(79, 70, 229); // Indigo-600 (#4f46e5)
+          pdf.setTextColor(79, 70, 229);
           const text2X = text1X + width1;
           pdf.textWithLink(text2, text2X, yPos, {
             url: "https://sahelimondal.in",
@@ -161,19 +198,13 @@ export const generatePdf = async ({ onStart, onEnd } = {}) => {
         }
       })
       .save();
+  } catch (err) {
+    console.error("PDF generation failed:", err);
   } finally {
-    // ── Restore all original styles ──
-    element.style.position = originalPosition;
-
-    savedStyles.forEach(({ el, marginTop, paddingTop }) => {
-      el.style.marginTop = marginTop;
-      el.style.paddingTop = paddingTop;
-    });
-
-    if (spaceParent) {
-      spaceParent.style.gap = savedGap;
+    // ── 5. Clean up the clone ──────────────────────────────────────
+    if (clone.parentNode) {
+      clone.parentNode.removeChild(clone);
     }
-
     if (onEnd) onEnd();
   }
 };

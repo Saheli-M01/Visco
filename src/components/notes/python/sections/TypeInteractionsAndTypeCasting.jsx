@@ -65,7 +65,7 @@ const TypeInteractions = () => {
       <div id="type-interactions" className="space-y-4 pt-4 border-t">{/* Header banner */}
         <div className="rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-500 p-6 shadow-lg" >
           <h1 className="text-3xl font-extrabold text-white flex items-center gap-3">
-            <Shuffle className="w-8 h-8" /> 5A. Type Interactions & Operations
+            <Shuffle className="w-8 h-8" /> Type Interactions & Operations
           </h1>
           <p className="text-cyan-50 mt-1 text-sm">
             What happens when different data types meet an operator.
@@ -190,7 +190,7 @@ const TypeInteractions = () => {
       <div className="space-y-4 pt-4 border-t" id="type-casting">
         <div className="rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-500 p-6 shadow-lg">
           <h2 className="text-2xl font-extrabold text-white flex items-center gap-3">
-            <Wand2 className="w-7 h-7" /> 5B. Type Casting (Type Conversion)
+            <Wand2 className="w-7 h-7" /> Type Casting (Type Conversion)
           </h2>
         </div>
 

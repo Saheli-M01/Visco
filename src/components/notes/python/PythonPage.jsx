@@ -8,19 +8,47 @@ import TypeInteractions from "./sections/TypeInteractionsAndTypeCasting";
 import IncrementDecrement from "./sections/IncrementDecrement";
 import StringConcatenation from "./sections/StringConcatenation";
 import PracticeQuestions1 from "./sections/PracticeQuestions1";
+import Conditionals from "./sections/Conditionals";
+import MatchCase from "./sections/MatchCase";
+import PracticeQuestions2 from "./sections/PracticeQuestions2";
+import TakingInputs from "./sections/TakingInputs";
+import Functions from "./sections/Functions";
+import TuplesSetsDict from "./sections/TuplesSetsDict";
+
+const PageBreak = () => <div className="html2pdf__page-break" />;
 
 const PythonPage = () => {
   return (
     <div className="space-y-12">
       <Introduction />
-      <div className="pdf-page-break"><Interpreter /></div>
-      <div className="pdf-page-break"><Tokens /></div>
-      <div className="pdf-page-break"><Variables /></div>
-      <div className="pdf-page-break"><DataTypes /></div>
-      <div className="pdf-page-break"><TypeInteractions /></div>
-      <div className="pdf-page-break"><IncrementDecrement /></div>
-      <div className="pdf-page-break"><StringConcatenation /></div>
-      <div className="pdf-page-break"><PracticeQuestions1 /></div>
+      <PageBreak />
+      <Interpreter />
+      <PageBreak />
+      <Tokens />
+      <PageBreak />
+      <Variables />
+      <PageBreak />
+      <DataTypes />
+      <PageBreak />
+      <TypeInteractions />
+      <PageBreak />
+      <IncrementDecrement />
+      <PageBreak />
+      <StringConcatenation />
+      <PageBreak />
+      <PracticeQuestions1 />
+      <PageBreak />
+      <Conditionals />
+      <PageBreak />
+      <MatchCase />
+      <PageBreak />
+      <PracticeQuestions2 />
+      <PageBreak />
+      <TakingInputs />
+      <PageBreak />
+      <Functions />
+      <PageBreak />
+      <TuplesSetsDict />
     </div>
   );
 };

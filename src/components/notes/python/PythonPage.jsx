@@ -4,11 +4,11 @@ import Interpreter from "./sections/Interpreter";
 import Tokens from "./sections/Tokens";
 import Variables from "./sections/Variables";
 import DataTypes from "./sections/DataTypes";
-import TypeInteractions from "./sections/TypeInteractions";
-import KeyTakeaways from "./sections/KeyTakeaways";
+import TypeInteractions from "./sections/TypeInteractionsAndTypeCasting";
+
 import IncrementDecrement from "./sections/IncrementDecrement";
 import StringConcatenation from "./sections/StringConcatenation";
-import PracticeQuestions from "./sections/PracticeQuestions";
+import PracticeQuestions1 from "./sections/PracticeQuestions1";
 
 const PythonPage = () => {
   return (
@@ -19,10 +19,10 @@ const PythonPage = () => {
       <Variables />
       <DataTypes />
       <TypeInteractions />
-      <KeyTakeaways />
+
       <IncrementDecrement />
       <StringConcatenation />
-      <PracticeQuestions />
+      <PracticeQuestions1 />
     </div>
   );
 };

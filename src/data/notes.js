@@ -5,7 +5,7 @@ export const pythonNotes = [
         component: "Introduction",
     },
     {
-        id: "interpreter",
+        id: "interpreter-compiler",
         title: "Interpreter vs Compiler",
         component: "Interpreter",
     },
@@ -25,8 +25,19 @@ export const pythonNotes = [
         component: "DataTypes",
     },
     {
-        id: "operators",
-        title: "Operators",
-        component: "Operators",
+        id: "increment-decrement",
+        title: "Increment Decrement",
+        component: "IncrementDecrement",
     },
+    {
+        id: "string-concatenation",
+        title: "String Concatenation",
+        component: "StringConcatenation"
+    },
+    {
+        id: "practice-questions-1",
+        title: "Practice Questions",
+        component: "PracticeQuestions"
+    }
+
 ];

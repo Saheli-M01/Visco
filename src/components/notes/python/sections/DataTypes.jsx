@@ -1,42 +1,59 @@
 import React from "react";
 import NoteTable from "../../shared/NoteTable";
+import { Boxes, Type, Hash, ToggleLeft, ListOrdered, Scale } from "lucide-react";
 
 const DataTypes = () => {
   const tableHeaders = ["Category", "Type Name", "Simple Examples"];
   const tableRows = [
     [
-      <strong>Text Type</strong>,
+      <strong className="inline-flex items-center gap-1.5">
+        <Type className="w-4 h-4 text-sky-500" /> Text Type
+      </strong>,
       <code>str</code>,
       <code>"Pixel", "Coding"</code>,
     ],
     [
-      <strong>Numeric Types</strong>,
+      <strong className="inline-flex items-center gap-1.5">
+        <Hash className="w-4 h-4 text-purple-500" /> Numeric Types
+      </strong>,
       <code>int, float, complex</code>,
       <code>42, 3.14, 5 + 2j</code>,
     ],
     [
-      <strong>Boolean Type</strong>,
+      <strong className="inline-flex items-center gap-1.5">
+        <ToggleLeft className="w-4 h-4 text-emerald-500" /> Boolean Type
+      </strong>,
       <code>bool</code>,
       <code>True, False</code>,
     ],
     [
-      <strong>Sequence Types</strong>,
+      <strong className="inline-flex items-center gap-1.5">
+        <ListOrdered className="w-4 h-4 text-amber-500" /> Sequence Types
+      </strong>,
       <code>list, tuple, range</code>,
       <code>[1, 2, 3], (10, 20)</code>,
     ],
   ];
 
   return (
-    <section id="data-types" className="scroll-mt-20 space-y-4">
-      <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100 border-b pb-2">
-        5. Data Types
-      </h1>
+    <section id="data-types" className="scroll-mt-20 space-y-6">
+      {/* Header banner */}
+      <div className="rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 p-6 shadow-lg">
+        <h1 className="text-3xl font-extrabold text-white flex items-center gap-3">
+          <Boxes className="w-8 h-8" /> Data Types
+        </h1>
+        <p className="text-purple-50 mt-1 text-sm">
+          Every value in Python belongs to one of these families.
+        </p>
+      </div>
 
-      <NoteTable headers={tableHeaders} rows={tableRows} />
+      <div className="rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-5 shadow-sm">
+        <NoteTable headers={tableHeaders} rows={tableRows} />
+      </div>
 
-      <div className="space-y-3">
-        <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">
-          Integer vs. Whole Numbers
+      <div className="rounded-xl border-2 border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm">
+        <h3 className="text-lg font-bold text-amber-700 dark:text-amber-400 flex items-center gap-2">
+          <Scale className="w-5 h-5" /> Integer vs. Whole Numbers
         </h3>
         <ul className="list-disc pl-6 space-y-1.5 text-slate-600 dark:text-slate-350 leading-relaxed">
           <li>

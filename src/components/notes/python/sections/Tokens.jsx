@@ -1,6 +1,20 @@
 import React from "react";
 import CodeBlock from "../../shared/CodeBlock";
 import NoteTable from "../../shared/NoteTable";
+import {
+  Puzzle,
+  Tag,
+  KeyRound,
+  Hash,
+  Calculator,
+  Equal,
+  Scale,
+  ListTree,
+  AlignLeft,
+  ListChecks,
+  CheckCircle2,
+  XCircle,
+} from "lucide-react";
 
 const Tokens = () => {
   const literalHeaders = ["Category", "Literal Type", "Description", "Quick Examples"];
@@ -101,27 +115,35 @@ const Tokens = () => {
 
   return (
     <section id="tokens" className="scroll-mt-20 space-y-6">
-      <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100 border-b pb-2">
-        3. Tokens: The Building Blocks of Code
-      </h1>
+      {/* Header banner */}
+      <div className="rounded-2xl bg-gradient-to-r from-emerald-500 to-cyan-500 p-6 shadow-lg">
+        <h1 className="text-3xl font-extrabold text-white flex items-center gap-3">
+          <Puzzle className="w-8 h-8" /> Tokens: The Building Blocks of Code
+        </h1>
+        <p className="text-emerald-50 mt-1 text-sm">
+          Every Python program is made of these six little pieces.
+        </p>
+      </div>
 
-      <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
-        Just like English sentences are built out of words, a Python program is
-        built out of <strong>Tokens</strong>. A token is the smallest individual
-        puzzle piece of code that the computer can recognize.
-      </p>
+      <div className="rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-5 shadow-sm">
+        <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+          Just like English sentences are built out of words, a Python program is
+          built out of <strong>Tokens</strong>. A token is the smallest individual
+          puzzle piece of code that the computer can recognize.
+        </p>
+      </div>
 
-      <div className="space-y-4">
-        <h2 className="text-xl font-semibold text-emerald-600 dark:text-emerald-400">
-          The 6 Types of Tokens
+      <div className="space-y-5">
+        <h2 className="text-xl font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-2">
+          <ListChecks className="w-5 h-5" /> The 6 Types of Tokens
         </h2>
 
         {/* Identifiers */}
-        <div className="space-y-2">
-          <h3 className="text-lg font-medium text-slate-700 dark:text-slate-200">
-            1. Identifiers
+        <div className="rounded-xl border-2 border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm">
+          <h3 className="text-lg font-bold text-sky-700 dark:text-sky-400 flex items-center gap-2">
+            <Tag className="w-5 h-5" /> 1. Identifiers
           </h3>
-          <p className="text-slate-655 text-slate-600 dark:text-slate-350 leading-relaxed">
+          <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
             - Identifiers are the custom names you make up. <br />
             - That means identifiers is the name given to any component of python
             program. Identifiers are the names used to identify variables, functions,
@@ -142,7 +164,7 @@ const Tokens = () => {
             <code>age</code>, <code>student_name</code>, <code>marks1</code>, <code>_total</code>
           </div>
           <div className="pt-2 text-sm">
-            <span className="bg-rose-50 dark:bg-rose-950/30 text-rose-750 text-rose-700 dark:text-rose-400 px-2.5 py-1 rounded-md font-semibold mr-2 border border-rose-100 dark:border-rose-900/30">
+            <span className="bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-400 px-2.5 py-1 rounded-md font-semibold mr-2 border border-rose-100 dark:border-rose-900/30">
               Invalid Examples:
             </span>
             <code>1age</code> (starts with digit), <code>student-name</code> (hyphen), <code>my name</code> (space), <code>if</code> (keyword)
@@ -150,9 +172,9 @@ const Tokens = () => {
         </div>
 
         {/* Keywords */}
-        <div className="space-y-2 pt-2">
-          <h3 className="text-lg font-medium text-slate-700 dark:text-slate-200">
-            2. Keywords
+        <div className="rounded-xl border-2 border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm">
+          <h3 className="text-lg font-bold text-purple-700 dark:text-purple-400 flex items-center gap-2">
+            <KeyRound className="w-5 h-5" /> 2. Keywords
           </h3>
           <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
             Keywords are words reserved by Python for its system logic. You aren't
@@ -162,19 +184,21 @@ const Tokens = () => {
             Common Keywords: <code>if</code>, <code>else</code>, <code>for</code>, <code>while</code>, <code>import</code>, <code>True</code>, <code>False</code>, <code>None</code>
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="border border-rose-100 dark:border-rose-950/30 bg-rose-50/20 dark:bg-rose-950/10 p-3 rounded-lg text-sm text-rose-700 dark:text-rose-400">
-              <span className="font-bold">❌ Invalid:</span> <code>if = 10</code> (SyntaxError)
+            <div className="flex items-center gap-2 border border-rose-100 dark:border-rose-950/30 bg-rose-50/20 dark:bg-rose-950/10 p-3 rounded-lg text-sm text-rose-700 dark:text-rose-400">
+              <XCircle className="w-4 h-4 shrink-0" />
+              <span><span className="font-bold">Invalid:</span> <code>if = 10</code> (SyntaxError)</span>
             </div>
-            <div className="border border-emerald-100 dark:border-emerald-950/30 bg-emerald-50/20 dark:bg-emerald-950/10 p-3 rounded-lg text-sm text-emerald-700 dark:text-emerald-400">
-              <span className="font-bold">✅ Valid:</span> <code>age = 10</code>
+            <div className="flex items-center gap-2 border border-emerald-100 dark:border-emerald-950/30 bg-emerald-50/20 dark:bg-emerald-950/10 p-3 rounded-lg text-sm text-emerald-700 dark:text-emerald-400">
+              <CheckCircle2 className="w-4 h-4 shrink-0" />
+              <span><span className="font-bold">Valid:</span> <code>age = 10</code></span>
             </div>
           </div>
         </div>
 
         {/* Literals */}
-        <div className="space-y-2 pt-2">
-          <h3 className="text-lg font-medium text-slate-700 dark:text-slate-200">
-            3. Literals
+        <div className="rounded-xl border-2 border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm">
+          <h3 className="text-lg font-bold text-amber-700 dark:text-amber-400 flex items-center gap-2">
+            <Hash className="w-5 h-5" /> 3. Literals
           </h3>
           <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
             <strong>Literals</strong> are constant values specified directly in code.
@@ -186,7 +210,7 @@ const Tokens = () => {
 
           <div className="space-y-3">
             <h4 className="text-base font-semibold text-slate-800 dark:text-slate-200">Types of Literals in Python</h4>
-            <div className="pl-4 border-l-2 border-slate-200 dark:border-slate-700 space-y-4">
+            <div className="pl-4 border-l-2 border-amber-200 dark:border-amber-800 space-y-4">
               <div>
                 <h5 className="font-semibold text-slate-750 dark:text-slate-200">Numeric Literals</h5>
                 <ul className="list-disc pl-5 space-y-1 text-sm text-slate-600 dark:text-slate-350">
@@ -226,42 +250,50 @@ const Tokens = () => {
 
           <h4 className="text-base font-semibold text-slate-800 dark:text-slate-200 pt-2">Quick Reference Table</h4>
           <NoteTable headers={literalHeaders} rows={literalRows} />
-          
+
           <CodeBlock code={`# Complete Example Using All Literal Types\nage = 15 # Integer literal\nheight = 5.8 # Float literal\ncomplex_num = 2 + 3j # Complex literal\nname = "Amit" # String literal\nis_student = True # Boolean literal\nempty_value = None # Special literal\n\nprint(age, height, name, is_student, empty_value)\n# Output: 15 5.8 Amit True None`} />
         </div>
 
         {/* Operators */}
-        <div className="space-y-4 pt-2">
-          <h3 className="text-xl font-semibold text-slate-850 text-emerald-600 dark:text-emerald-400">
-            4. Operators (With Examples)
+        <div className="rounded-xl border-2 border-pink-200 dark:border-pink-800 bg-pink-50 dark:bg-slate-800 p-5 space-y-4 shadow-sm">
+          <h3 className="text-lg font-bold text-pink-700 dark:text-pink-400 flex items-center gap-2">
+            <Calculator className="w-5 h-5" /> 4. Operators (With Examples)
           </h3>
-          
+
           <div className="space-y-2">
-            <h4 className="text-base font-semibold text-slate-800 dark:text-slate-200">A. Arithmetic Operators</h4>
+            <h4 className="text-base font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <Calculator className="w-4 h-4" /> A. Arithmetic Operators
+            </h4>
             <NoteTable headers={arithHeaders} rows={arithRows} />
           </div>
 
           <div className="space-y-2">
-            <h4 className="text-base font-semibold text-slate-800 dark:text-slate-200">B. Assignment Operators</h4>
+            <h4 className="text-base font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <Equal className="w-4 h-4" /> B. Assignment Operators
+            </h4>
             <NoteTable headers={assignHeaders} rows={assignRows} />
           </div>
 
           <div className="space-y-2">
-            <h4 className="text-base font-semibold text-slate-800 dark:text-slate-200">C. Comparison Operators</h4>
-            <p className="text-slate-650 text-sm text-slate-600 dark:text-slate-400">
+            <h4 className="text-base font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <Scale className="w-4 h-4" /> C. Comparison Operators
+            </h4>
+            <p className="text-sm text-slate-600 dark:text-slate-400">
               These compare elements and return <code>True</code> or <code>False</code>. *(Pretend <code>x = 10</code> and <code>y = 5</code>)*
             </p>
             <NoteTable headers={compHeaders} rows={compRows} />
           </div>
 
           <div className="space-y-4">
-            <h4 className="text-base font-semibold text-slate-800 dark:text-slate-200">D. Logical Operators & Truth Charts</h4>
+            <h4 className="text-base font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <ListTree className="w-4 h-4" /> D. Logical Operators & Truth Charts
+            </h4>
             <NoteTable headers={logicalHeaders} rows={logicalRows} />
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 pt-2">
               {/* AND */}
               <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30">
-                <div className="bg-indigo-650 bg-slate-100 dark:bg-slate-800 text-center py-2 font-bold text-slate-700 dark:text-slate-200 text-sm border-b">
+                <div className="bg-slate-100 dark:bg-slate-800 text-center py-2 font-bold text-slate-700 dark:text-slate-200 text-sm border-b">
                   The "and" Operator
                 </div>
                 <table className="w-full text-center text-xs divide-y">
@@ -273,7 +305,7 @@ const Tokens = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y text-slate-600 dark:text-slate-400">
-                    <tr><td className="py-2">True</td><td className="py-2">True</td><td className="py-2 font-bold text-emerald-500">True 🎉</td></tr>
+                    <tr><td className="py-2">True</td><td className="py-2">True</td><td className="py-2 font-bold text-emerald-500"><span className="inline-flex items-center gap-1 justify-center"><CheckCircle2 className="w-3.5 h-3.5" /> True</span></td></tr>
                     <tr><td className="py-2">True</td><td className="py-2">False</td><td className="py-2 font-medium">False</td></tr>
                     <tr><td className="py-2">False</td><td className="py-2">True</td><td className="py-2 font-medium">False</td></tr>
                     <tr><td className="py-2">False</td><td className="py-2">False</td><td className="py-2 font-medium">False</td></tr>
@@ -295,9 +327,9 @@ const Tokens = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y text-slate-600 dark:text-slate-400">
-                    <tr><td className="py-2">True</td><td className="py-2">True</td><td className="py-2 font-bold text-emerald-500">True 🎉</td></tr>
-                    <tr><td className="py-2">True</td><td className="py-2">False</td><td className="py-2 font-bold text-emerald-500">True 🎉</td></tr>
-                    <tr><td className="py-2">False</td><td className="py-2">True</td><td className="py-2 font-bold text-emerald-500">True 🎉</td></tr>
+                    <tr><td className="py-2">True</td><td className="py-2">True</td><td className="py-2 font-bold text-emerald-500"><span className="inline-flex items-center gap-1 justify-center"><CheckCircle2 className="w-3.5 h-3.5" /> True</span></td></tr>
+                    <tr><td className="py-2">True</td><td className="py-2">False</td><td className="py-2 font-bold text-emerald-500"><span className="inline-flex items-center gap-1 justify-center"><CheckCircle2 className="w-3.5 h-3.5" /> True</span></td></tr>
+                    <tr><td className="py-2">False</td><td className="py-2">True</td><td className="py-2 font-bold text-emerald-500"><span className="inline-flex items-center gap-1 justify-center"><CheckCircle2 className="w-3.5 h-3.5" /> True</span></td></tr>
                     <tr><td className="py-2">False</td><td className="py-2">False</td><td className="py-2 font-medium">False</td></tr>
                   </tbody>
                 </table>
@@ -317,7 +349,7 @@ const Tokens = () => {
                   </thead>
                   <tbody className="divide-y text-slate-600 dark:text-slate-400">
                     <tr><td className="py-2">True</td><td className="py-2 font-medium">False</td></tr>
-                    <tr><td className="py-2">False</td><td className="py-2 font-bold text-emerald-500">True 🎉</td></tr>
+                    <tr><td className="py-2">False</td><td className="py-2 font-bold text-emerald-500"><span className="inline-flex items-center gap-1 justify-center"><CheckCircle2 className="w-3.5 h-3.5" /> True</span></td></tr>
                   </tbody>
                 </table>
               </div>
@@ -326,9 +358,9 @@ const Tokens = () => {
         </div>
 
         {/* Delimiters */}
-        <div className="space-y-2 pt-2">
-          <h3 className="text-lg font-medium text-slate-700 dark:text-slate-200">
-            5. Delimiters or Separators
+        <div className="rounded-xl border-2 border-teal-200 dark:border-teal-800 bg-teal-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
+          <h3 className="text-lg font-bold text-teal-700 dark:text-teal-400 flex items-center gap-2">
+            <ListTree className="w-5 h-5" /> 5. Delimiters or Separators
           </h3>
           <ul className="list-disc pl-6 space-y-1.5 text-slate-600 dark:text-slate-350 leading-relaxed">
             <li><code>( )</code> &rarr; Used for prints or math groups: <code>print("Hello")</code></li>
@@ -339,9 +371,9 @@ const Tokens = () => {
         </div>
 
         {/* Whitespace */}
-        <div className="space-y-2 pt-2">
-          <h3 className="text-lg font-medium text-slate-700 dark:text-slate-200">
-            6. Whitespace and Indentation
+        <div className="rounded-xl border-2 border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
+          <h3 className="text-lg font-bold text-indigo-700 dark:text-indigo-400 flex items-center gap-2">
+            <AlignLeft className="w-5 h-5" /> 6. Whitespace and Indentation
           </h3>
           <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
             Python uses empty spaces structurally to group code blocks together. This is called <strong>Indentation</strong>.
@@ -350,8 +382,10 @@ const Tokens = () => {
         </div>
 
         {/* Tokens Summary Reference Table */}
-        <div className="space-y-2 pt-2">
-          <h4 className="text-base font-semibold text-slate-800 dark:text-slate-200">Tokens Summary Reference Table</h4>
+        <div className="rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
+          <h4 className="text-base font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+            <ListChecks className="w-4 h-4" /> Tokens Summary Reference Table
+          </h4>
           <NoteTable headers={summaryHeaders} rows={summaryRows} />
         </div>
       </div>

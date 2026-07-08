@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import categories from "@/hooks/categories";
+import categories from "@/data/categories";
 import { ChevronLeft, BarChart3 } from "lucide-react";
 import { Navigation } from "@/components/landing";
 import { useLocation } from "react-router-dom";

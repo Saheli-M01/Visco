@@ -7,10 +7,23 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
+
+# Build output
 dist
 dist-ssr
+
+# Environment variables
+*.env
+*.env.local
+*.env.*.local
 *.local
+
+# Lockfiles (using npm — ignore others)
+bun.lockb
+yarn.lock
+pnpm-lock.yaml
 
 # Editor directories and files
 .vscode/*

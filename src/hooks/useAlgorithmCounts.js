@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { categories } from './categories.js';
+import { categories } from '../data/categories.js';
 
 // Interactive algorithms list (should match the one in AlgorithmCard)
 const INTERACTIVE_ALGORITHMS = [

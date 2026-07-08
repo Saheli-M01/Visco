@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Menu, X, Search } from "lucide-react";
 import Select from "../ui/select";
-import { categories } from "@/hooks/categories";
+import { categories } from "@/data/categories";
 
 export const Navigation = () => {
   const [open, setOpen] = useState(false);

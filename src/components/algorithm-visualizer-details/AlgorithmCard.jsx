@@ -45,8 +45,8 @@ const AlgorithmCard = ({ algorithm, index = 0, onClick }) => {
     "Singly Linked List - Creation",
     "Singly Linked List - Traversal",
     "Singly Linked List - Insertion",
-    "Singly Linked List - Deletion"
-  
+    // "Singly Linked List - Deletion"
+
   ];
   const isInteractive = interactive.includes(algorithm.name);
 
@@ -56,9 +56,8 @@ const AlgorithmCard = ({ algorithm, index = 0, onClick }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.05 * index }}
       onClick={() => isInteractive && onClick && onClick(algorithm)}
-      className={`relative backdrop-blur-sm ${getCardBackground(algorithm.difficulty)} rounded-xl px-4 sm:px-6 py-4 sm:py-6 shadow-md border transition-all group ${
-        isInteractive ? "hover:shadow-lg hover:scale-[1.01] cursor-pointer" : "opacity-60 cursor-default"
-      }`}
+      className={`relative backdrop-blur-sm ${getCardBackground(algorithm.difficulty)} rounded-xl px-4 sm:px-6 py-4 sm:py-6 shadow-md border transition-all group ${isInteractive ? "hover:shadow-lg hover:scale-[1.01] cursor-pointer" : "opacity-60 cursor-default"
+        }`}
     >
       <div className="flex items-center justify-between mb-3">
         <h3 className={`text-base sm:text-lg font-semibold text-gray-900 transition-colors ${isInteractive ? "group-hover:text-gray-700" : "text-gray-600"}`}>

@@ -19,47 +19,47 @@ import Tuples from "./sections/Tuples";
 import Sets from "./sections/Sets";
 import Dictionaries from "./sections/Dictionaries";
 
-const PageBreak = () => <div className="html2pdf__page-break" />;
+
 
 const PythonPage = () => {
   return (
     <div className="space-y-12">
       <Introduction />
-      <PageBreak />
+
       <Interpreter />
-      <PageBreak />
+
       <Tokens />
-      <PageBreak />
+
       <Variables />
-      <PageBreak />
+
       <DataTypes />
-      <PageBreak />
+
       <TypeInteractions />
-      <PageBreak />
+
       <IncrementDecrement />
-      <PageBreak />
+
       <StringConcatenation />
-      <PageBreak />
+
       <PracticeQuestions1 />
-      <PageBreak />
+
       <Conditionals />
-      <PageBreak />
+
       <MatchCase />
-      <PageBreak />
+
       <PracticeQuestions2 />
-      <PageBreak />
+
       <TakingInputs />
-      <PageBreak />
+
       <Loops />
-      <PageBreak />
+
       <Functions />
-      <PageBreak />
+
       <Lists />
-      <PageBreak />
+
       <Tuples />
-      <PageBreak />
+
       <Sets />
-      <PageBreak />
+
       <Dictionaries />
     </div>
   );

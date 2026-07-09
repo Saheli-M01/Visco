@@ -26,8 +26,8 @@ const docs = [
         ring: "from-amber-300/70 to-orange-400/70",
         path: "/docs/javascript",
         icon: FileCode2,
-        status: "coming-soon",
-        topics: ["Variables", "Functions", "DOM", "Async/Await", "ES6+"],
+        status: "available",
+        topics: ["Variables", "Data Types", "Functions", "DOM", "ES6+"],
     },
 ];
 

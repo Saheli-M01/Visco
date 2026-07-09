@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { pythonNotes } from "@/data/notes";
-
 import { useNavigate } from "react-router-dom";
 import {
   BookOpen,
@@ -10,21 +8,25 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-const NotesSidebar = ({ isOpen, setIsOpen }) => {
+const NotesSidebar = ({ isOpen, setIsOpen, config }) => {
+  const { title, notes, themeColor = "indigo" } = config;
+  
   const [activeSection, setActiveSection] = useState(
-    pythonNotes[0]?.id || ""
+    notes[0]?.id || ""
   );
 
   const [expandedMenus, setExpandedMenus] = useState({
     tokens: true, // default expanded
   });
   const navigate = useNavigate();
+  
   const toggleMenu = (menu) => {
     setExpandedMenus((prev) => ({
       ...prev,
       [menu]: !prev[menu],
     }));
   };
+  
   const handleScrollToSection = (e, id) => {
     e.preventDefault();
     const container = document.getElementById("notes-scroll-container");
@@ -54,8 +56,8 @@ const NotesSidebar = ({ isOpen, setIsOpen }) => {
       const containerTop = container.scrollTop;
       const triggerPoint = containerTop + 100;
 
-      for (let i = 0; i < pythonNotes.length; i++) {
-        const section = pythonNotes[i];
+      for (let i = 0; i < notes.length; i++) {
+        const section = notes[i];
         const element = document.getElementById(section.id);
         if (element) {
           const elementTop = element.offsetTop;
@@ -70,7 +72,23 @@ const NotesSidebar = ({ isOpen, setIsOpen }) => {
     handleScroll();
     container.addEventListener("scroll", handleScroll);
     return () => container.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [notes, activeSection]);
+
+  // Theme color classes
+  const themeClasses = {
+    indigo: {
+      icon: "text-indigo-600",
+      active: "bg-indigo-50 text-indigo-700 border-indigo-600",
+      hover: "hover:text-indigo-600"
+    },
+    amber: {
+      icon: "text-amber-600",
+      active: "bg-amber-50 text-amber-700 border-amber-600",
+      hover: "hover:text-amber-600"
+    }
+  };
+
+  const theme = themeClasses[themeColor] || themeClasses.indigo;
 
   return (
     <>
@@ -84,8 +102,9 @@ const NotesSidebar = ({ isOpen, setIsOpen }) => {
 
       {/* Sidebar Container */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-72 border-r border-slate-200 bg-white p-6 overflow-y-auto transition-transform duration-300 ease-in-out md:static md:block md:translate-x-0 ${isOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`fixed inset-y-0 left-0 z-50 w-72 border-r border-slate-200 bg-white p-6 overflow-y-auto transition-transform duration-300 ease-in-out md:static md:block md:translate-x-0 ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         {/* Back Button (Desktop) & Close Button (Mobile) */}
         <div className="flex items-center justify-between mb-6">
@@ -107,25 +126,26 @@ const NotesSidebar = ({ isOpen, setIsOpen }) => {
           </button>
         </div>
 
-        <div className="flex items-center gap-2 mb-6 text-indigo-600">
+        <div className={`flex items-center gap-2 mb-6 ${theme.icon}`}>
           <BookOpen className="h-5 w-5" />
           <h2 className="text-lg font-bold text-slate-800">
-            Python Notes
+            {title}
           </h2>
         </div>
 
         <nav>
           <ul className="space-y-1">
-            {pythonNotes.map((item) => {
+            {notes.map((item) => {
               const isActive = activeSection === item.id;
 
               return (
                 <li key={item.id}>
                   <div
-                    className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition ${isActive
-                      ? "bg-indigo-50 text-indigo-700 border-l-4 border-indigo-600"
-                      : "text-slate-650 hover:bg-slate-50 hover:text-slate-900 border-l-4 border-transparent"
-                      }`}
+                    className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition ${
+                      isActive
+                        ? `${theme.active} border-l-4`
+                        : `text-slate-650 hover:bg-slate-50 hover:text-slate-900 border-l-4 border-transparent`
+                    }`}
                   >
                     <a
                       href={`#${item.id}`}
@@ -156,7 +176,7 @@ const NotesSidebar = ({ isOpen, setIsOpen }) => {
                           <a
                             href={`#${child.id}`}
                             onClick={(e) => handleScrollToSection(e, child.id)}
-                            className="block rounded-md px-2 py-1.5 text-sm text-slate-600 hover:bg-slate-100 hover:text-indigo-600"
+                            className={`block rounded-md px-2 py-1.5 text-sm text-slate-600 hover:bg-slate-100 ${theme.hover}`}
                           >
                             • {child.title}
                           </a>

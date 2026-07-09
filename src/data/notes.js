@@ -310,3 +310,86 @@ export const pythonNotes = [
     },
 
 ];
+
+export const jsNotes = [
+    {
+        id: "introduction",
+        title: "Introduction",
+        component: "Introduction",
+    },
+    {
+        id: "variables",
+        title: "Variables",
+        component: "Variables",
+    },
+    {
+        id: "data-types",
+        title: "Data Types",
+        component: "DataTypes",
+        children: [
+            {
+                id: "primitive",
+                title: "Primitive Data Types",
+
+            },
+            {
+                id: "non-primitive",
+                title: "Non-primitive Data Types",
+
+            },
+        ]
+    },
+    {
+        id: "string-ops",
+        title: "String Concatenation & Template Literals",
+        component: "StringOps",
+        children: [
+            { id: "template-literals", title: "Template Literals" },
+            { id: "escape-chars", title: "Escape Characters" },
+        ]
+    },
+    {
+        id: "operators",
+        title: "Operators",
+        component: "Operators",
+        children: [
+            { id: "arithmetic", title: "Arithmetic" },
+            { id: "assignment", title: "Assignment" },
+            { id: "comparison", title: "Comparison" },
+            { id: "logical", title: "Logical" },
+            { id: "nullish-coalescing", title: "Nullish Coalescing (??)" },
+            { id: "optional-chaining", title: "Optional Chaining (?.)" },
+            { id: "ternary", title: "Ternary" },
+            { id: "typeof-instanceof", title: "typeof & instanceof" },
+            { id: "precedence", title: "Precedence" },
+        ]
+    },
+    {
+        id: "loops",
+        title: "Loops",
+        component: "Loops",
+        children: [
+            { id: "for-loop", title: "for Loop" },
+            { id: "while-loop", title: "while Loop" },
+            { id: "do-while-loop", title: "do...while Loop" },
+            { id: "for-of-loop", title: "for...of Loop" },
+            { id: "for-in-loop", title: "for...in Loop" },
+            { id: "break-continue", title: "break & continue" },
+            { id: "nested-loops", title: "Nested Loops" },
+            { id: "loop-patterns", title: "Common Patterns" },
+        ]
+    },
+    {
+        id: "error-handling",
+        title: "Error Handling",
+        component: "ErrorHandling",
+        children: [
+            { id: "error-types", title: "Error Types" },
+            { id: "try-catch", title: "try...catch" },
+            { id: "finally", title: "finally" },
+            { id: "throw", title: "throw Statement" },
+            { id: "error-object", title: "Error Object" },
+            { id: "practical-errors", title: "Practical Examples" },
+        ]
+    }
+];

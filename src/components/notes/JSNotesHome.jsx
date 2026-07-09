@@ -3,10 +3,20 @@ import NotesSidebar from "./NoteSidebar";
 import NotesContent from "./NotesContent";
 import { Menu, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { jsNotes } from "@/data/notes";
+import JSPage from "./js/JSPage";
 
-const NotesHome = () => {
+const JSNotesHome = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const navigate = useNavigate();
+
+    const config = {
+        title: "JavaScript Notes",
+        pageTitle: "JavaScript Programming Reference Notes",
+        notes: jsNotes,
+        PageComponent: JSPage,
+        themeColor: "amber"
+    };
 
     return (
         <div className="flex flex-col h-screen bg-slate-50">
@@ -20,7 +30,7 @@ const NotesHome = () => {
                     >
                         <Menu className="h-6 w-6" />
                     </button>
-                    <span className="font-bold text-slate-800 text-base">Python Notes</span>
+                    <span className="font-bold text-slate-800 text-base">{config.title}</span>
                 </div>
                 <button
                     onClick={() => navigate("/docs")}
@@ -32,11 +42,15 @@ const NotesHome = () => {
             </header>
 
             <div className="flex flex-1 overflow-hidden">
-                <NotesSidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
-                <NotesContent />
+                <NotesSidebar 
+                    isOpen={isSidebarOpen} 
+                    setIsOpen={setIsSidebarOpen}
+                    config={config}
+                />
+                <NotesContent config={config} />
             </div>
         </div>
     );
 };
 
-export default NotesHome;
+export default JSNotesHome;

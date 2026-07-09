@@ -90,11 +90,11 @@ const NotesSidebar = ({ isOpen, setIsOpen }) => {
         {/* Back Button (Desktop) & Close Button (Mobile) */}
         <div className="flex items-center justify-between mb-6">
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/docs")}
             className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition font-medium text-sm"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to Home
+            Back to Docs
           </button>
 
           {/* Close button for mobile screen */}

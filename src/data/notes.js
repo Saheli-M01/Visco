@@ -111,6 +111,41 @@ export const pythonNotes = [
         ]
     },
     {
+        id: "range",
+        title: "Loops & Range",
+        component: "Loops",
+        children: [
+            {
+                id: "range-syntax",
+                title: "range() Syntax",
+            },
+            {
+                id: "for-loop",
+                title: "For Loop",
+            },
+            {
+                id: "for-nested",
+                title: "Nested Loops",
+            },
+            {
+                id: "while-loop",
+                title: "While Loop",
+            },
+            {
+                id: "loop-control",
+                title: "break, continue & pass",
+            },
+            {
+                id: "loop-practical",
+                title: "Practical Examples",
+            },
+            {
+                id: "for-vs-while",
+                title: "For vs While",
+            },
+        ]
+    },
+    {
         id: "functions",
         title: "Functions",
         component: "Functions",
@@ -154,9 +189,48 @@ export const pythonNotes = [
         ]
     },
     {
+        id: "lists",
+        title: "Lists",
+        component: "Lists",
+        children: [
+            {
+                id: "creating-lists",
+                title: "Creating Lists",
+            },
+            {
+                id: "list-access",
+                title: "Accessing & Slicing",
+            },
+            {
+                id: "list-modify",
+                title: "Modifying Lists",
+            },
+            {
+                id: "list-add",
+                title: "Adding Elements",
+            },
+            {
+                id: "list-remove",
+                title: "Removing Elements",
+            },
+            {
+                id: "list-sort",
+                title: "Sorting & Searching",
+            },
+            {
+                id: "list-comprehension",
+                title: "List Comprehension",
+            },
+            {
+                id: "list-methods",
+                title: "Common Methods",
+            },
+        ]
+    },
+    {
         id: "tuples",
-        title: "Tuples, Sets & Dictionaries",
-        component: "TuplesSetsDict",
+        title: "Tuples",
+        component: "Tuples",
         children: [
             {
                 id: "creating-tuples",
@@ -167,20 +241,50 @@ export const pythonNotes = [
                 title: "Accessing & Slicing",
             },
             {
+                id: "tuple-immutable",
+                title: "Immutability",
+            },
+            {
                 id: "tuple-unpacking",
                 title: "Tuple Unpacking",
             },
+        ]
+    },
+    {
+        id: "sets",
+        title: "Sets",
+        component: "Sets",
+        children: [
             {
-                id: "sets",
-                title: "Sets",
+                id: "creating-sets",
+                title: "Creating Sets",
+            },
+            {
+                id: "set-modify",
+                title: "Adding & Removing",
             },
             {
                 id: "set-operations",
                 title: "Set Operations",
             },
             {
-                id: "dictionaries",
-                title: "Dictionaries",
+                id: "set-practical",
+                title: "Practical Example",
+            },
+        ]
+    },
+    {
+        id: "dictionaries",
+        title: "Dictionaries",
+        component: "Dictionaries",
+        children: [
+            {
+                id: "creating-dict",
+                title: "Creating Dictionaries",
+            },
+            {
+                id: "dict-access",
+                title: "Accessing Values",
             },
             {
                 id: "dict-modify",
@@ -193,6 +297,14 @@ export const pythonNotes = [
             {
                 id: "nested-dict",
                 title: "Nested Dictionaries",
+            },
+            {
+                id: "dict-methods",
+                title: "Common Methods",
+            },
+            {
+                id: "dict-practical",
+                title: "Practical Example",
             },
         ]
     },

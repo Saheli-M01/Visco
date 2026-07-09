@@ -12,8 +12,12 @@ import Conditionals from "./sections/Conditionals";
 import MatchCase from "./sections/MatchCase";
 import PracticeQuestions2 from "./sections/PracticeQuestions2";
 import TakingInputs from "./sections/TakingInputs";
+import Loops from "./sections/Loops";
 import Functions from "./sections/Functions";
-import TuplesSetsDict from "./sections/TuplesSetsDict";
+import Lists from "./sections/Lists";
+import Tuples from "./sections/Tuples";
+import Sets from "./sections/Sets";
+import Dictionaries from "./sections/Dictionaries";
 
 const PageBreak = () => <div className="html2pdf__page-break" />;
 
@@ -46,9 +50,17 @@ const PythonPage = () => {
       <PageBreak />
       <TakingInputs />
       <PageBreak />
+      <Loops />
+      <PageBreak />
       <Functions />
       <PageBreak />
-      <TuplesSetsDict />
+      <Lists />
+      <PageBreak />
+      <Tuples />
+      <PageBreak />
+      <Sets />
+      <PageBreak />
+      <Dictionaries />
     </div>
   );
 };

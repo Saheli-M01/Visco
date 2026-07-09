@@ -131,7 +131,7 @@ export const Navigation = () => {
   const navItems = [
     { href: "#home", label: "Home" },
     { href: "#about", label: "About" },
-    { href: "/notes", label: "Notes" }
+    { href: "/docs", label: "Docs" }
     // Topics dropdown will be rendered separately using the custom Select
   ];
 
@@ -410,8 +410,8 @@ export const Navigation = () => {
                         navigate(`/${t.value}`);
                       }}
                       className={`text-left px-2 py-2 rounded-md text-sm transition-colors ${enabled
-                          ? "text-gray-800 hover:bg-gray-50"
-                          : "text-gray-400 cursor-not-allowed"
+                        ? "text-gray-800 hover:bg-gray-50"
+                        : "text-gray-400 cursor-not-allowed"
                         }`}
                     >
                       {t.label}

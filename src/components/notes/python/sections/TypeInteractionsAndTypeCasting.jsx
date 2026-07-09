@@ -60,6 +60,26 @@ const TypeInteractions = () => {
     [<strong>bool</strong>, <code>+</code>, <strong>bool</strong>, <code>True + False</code>, <code>1</code>, " (int)"],
   ];
 
+  // Small reusable group-header banner used between the four type groups below.
+  // Classes are written out in full (not interpolated) so Tailwind's JIT scanner can detect them.
+  const groupHeaderStyles = {
+    emerald: "rounded-lg bg-emerald-100 dark:bg-emerald-900/30 px-4 py-2 border-l-4 border-emerald-500",
+    sky: "rounded-lg bg-sky-100 dark:bg-sky-900/30 px-4 py-2 border-l-4 border-sky-500",
+    purple: "rounded-lg bg-purple-100 dark:bg-purple-900/30 px-4 py-2 border-l-4 border-purple-500",
+    teal: "rounded-lg bg-teal-100 dark:bg-teal-900/30 px-4 py-2 border-l-4 border-teal-500",
+  };
+  const groupHeaderTextStyles = {
+    emerald: "text-sm font-bold text-emerald-700 dark:text-emerald-300 tracking-wide uppercase",
+    sky: "text-sm font-bold text-sky-700 dark:text-sky-300 tracking-wide uppercase",
+    purple: "text-sm font-bold text-purple-700 dark:text-purple-300 tracking-wide uppercase",
+    teal: "text-sm font-bold text-teal-700 dark:text-teal-300 tracking-wide uppercase",
+  };
+  const GroupHeader = ({ color, label }) => (
+    <div className={groupHeaderStyles[color]}>
+      <p className={groupHeaderTextStyles[color]}>{label}</p>
+    </div>
+  );
+
   return (
     <section className="scroll-mt-20 space-y-6">
       <div id="type-interactions" className="space-y-4 pt-4 border-t">{/* Header banner */}
@@ -76,55 +96,132 @@ const TypeInteractions = () => {
           <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
             In Python, different data types behave differently when you use operators like <code>+</code>, <code>*</code>, etc.
             Let's explore how <strong>int</strong>, <strong>float</strong>, <strong>str</strong>, and <strong>bool</strong>
-            interact with each other!
+            interact with each other, systematically, one combination at a time!
           </p>
         </div>
 
-        {/* Sections 1 to 10 */}
+        {/* All 16 combinations, grouped by left-hand type: int, float, str, bool */}
         <div className="space-y-4">
+
+          {/* ===================== GROUP: INT ===================== */}
+          <GroupHeader color="emerald" label="int + ___" />
+
           <div className="rounded-xl border-2 border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
             <h2 className="text-lg font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-2">
-              <Plus className="w-5 h-5" /> 1. Integer + Integer (int + int)
+              <Plus className="w-5 h-5" /> 1. int + int
             </h2>
             <CodeBlock code={`# Adding two integers\na = 10\nb = 5\nresult = a + b\nprint(result)\n# Output: 15 (int)\n\n# Multiplying integers\nresult2 = a * b\nprint(result2)\n# Output: 50 (int)`} />
             <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Result:</strong> Integer operations always give <code>int</code> results (except division)</p>
           </div>
 
-          <div className="rounded-xl border-2 border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
-            <h2 className="text-lg font-bold text-sky-700 dark:text-sky-400 flex items-center gap-2">
-              <ArrowLeftRight className="w-5 h-5" /> 2. Integer + Float (int + float)
+          <div className="rounded-xl border-2 border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
+            <h2 className="text-lg font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-2">
+              <ArrowLeftRight className="w-5 h-5" /> 2. int + float
             </h2>
             <CodeBlock code={`# Mixing integer and float\na = 10        # int\nb = 3.5       # float\nresult = a + b\nprint(result)\n# Output: 13.5 (float)\n\nresult2 = a * b\nprint(result2)\n# Output: 35.0 (float)`} />
             <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Result:</strong> When you mix int and float, Python converts the result to <code>float</code></p>
           </div>
 
-          <div className="rounded-xl border-2 border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
-            <h2 className="text-lg font-bold text-purple-700 dark:text-purple-400 flex items-center gap-2">
-              <Type className="w-5 h-5" /> 3. String + String (str + str)
+          <div className="rounded-xl border-2 border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
+            <h2 className="text-lg font-bold text-rose-700 dark:text-rose-400 flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5" /> 3. int + str — ERROR
             </h2>
-            <CodeBlock code={`# Concatenating strings\nfirst = "Hello"\nsecond = "World"\nresult = first + " " + second\nprint(result)\n# Output: Hello World (str)\n\n# Repeating strings\nword = "Python"\nresult2 = word * 3\nprint(result2)\n# Output: PythonPythonPython (str)`} />
-            <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Result:</strong> String <code>+</code> means concatenation (joining), <code>*</code> means repetition</p>
+            <CodeBlock code={`# This will cause an ERROR!\nage = 15\nlabel = " years old"\n# result = age + label  # TypeError: unsupported operand type(s)\n\n# Correct way: Convert int to str\nresult = str(age) + label\nprint(result)\n# Output: 15 years old (str)`} />
+            <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Important:</strong> You <strong>cannot</strong> directly add a number and a string. Use <code>str()</code> to convert!</p>
+          </div>
+
+          <div className="rounded-xl border-2 border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
+            <h2 className="text-lg font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-2">
+              <ToggleLeft className="w-5 h-5" /> 4. int + bool
+            </h2>
+            <CodeBlock code={`# Booleans act as numbers when mixed with int\na = 5\nb = True    # treated as 1\nresult = a + b\nprint(result)\n# Output: 6 (int)\n\nresult2 = a + False   # False treated as 0\nprint(result2)\n# Output: 5 (int)`} />
+            <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Result:</strong> Python treats <code>True</code> as <code>1</code> and <code>False</code> as <code>0</code>, so the result stays an <code>int</code></p>
+          </div>
+
+          {/* ===================== GROUP: FLOAT ===================== */}
+          <GroupHeader color="sky" label="float + ___" />
+
+          <div className="rounded-xl border-2 border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
+            <h2 className="text-lg font-bold text-sky-700 dark:text-sky-400 flex items-center gap-2">
+              <ArrowLeftRight className="w-5 h-5" /> 5. float + int
+            </h2>
+            <CodeBlock code={`# Mixing float and integer\na = 3.5       # float\nb = 2         # int\nresult = a + b\nprint(result)\n# Output: 5.5 (float)\n\nresult2 = a * b\nprint(result2)\n# Output: 7.0 (float)`} />
+            <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Result:</strong> Just like int + float, the <code>int</code> is converted to <code>float</code> and the result stays <code>float</code></p>
+          </div>
+
+          <div className="rounded-xl border-2 border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
+            <h2 className="text-lg font-bold text-sky-700 dark:text-sky-400 flex items-center gap-2">
+              <Plus className="w-5 h-5" /> 6. float + float
+            </h2>
+            <CodeBlock code={`# Float operations\na = 3.14\nb = 2.5\nresult = a + b\nprint(result)\n# Output: 5.64 (float)\n\nresult2 = a * b\nprint(result2)\n# Output: 7.85 (float)`} />
+            <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Result:</strong> Float operations always give <code>float</code> results</p>
           </div>
 
           <div className="rounded-xl border-2 border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
             <h2 className="text-lg font-bold text-rose-700 dark:text-rose-400 flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5" /> 4. String + Integer (str + int) - ERROR
+              <AlertTriangle className="w-5 h-5" /> 7. float + str — ERROR
+            </h2>
+            <CodeBlock code={`# This will cause an ERROR!\nprice = 9.99\nlabel = " dollars"\n# result = price + label  # TypeError\n\n# Correct way: Convert float to str\nresult = str(price) + label\nprint(result)\n# Output: 9.99 dollars (str)`} />
+            <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Important:</strong> Cannot directly add a float and a string. Convert using <code>str()</code></p>
+          </div>
+
+          <div className="rounded-xl border-2 border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
+            <h2 className="text-lg font-bold text-sky-700 dark:text-sky-400 flex items-center gap-2">
+              <ToggleLeft className="w-5 h-5" /> 8. float + bool
+            </h2>
+            <CodeBlock code={`# Boolean with float\na = True     # 1\nb = 3.5\nresult = a + b\nprint(result)\n# Output: 4.5 (float)  # True (1.0) + 3.5 = 4.5\n\nc = False    # 0\nresult2 = c + b\nprint(result2)\n# Output: 3.5 (float)  # False (0.0) + 3.5 = 3.5`} />
+            <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Result:</strong> Boolean converts to float (True=1.0, False=0.0) in float operations</p>
+          </div>
+
+          {/* ===================== GROUP: STR ===================== */}
+          <GroupHeader color="purple" label="str + ___" />
+
+          <div className="rounded-xl border-2 border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
+            <h2 className="text-lg font-bold text-rose-700 dark:text-rose-400 flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5" /> 9. str + int — ERROR
             </h2>
             <CodeBlock code={`# This will cause an ERROR!\nname = "Age: "\nage = 15\n# result = name + age  # TypeError: can only concatenate str to str\n\n# Correct way: Convert int to str\nresult = name + str(age)\nprint(result)\n# Output: Age: 15 (str)`} />
             <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Important:</strong> You <strong>cannot</strong> directly add strings and numbers. Use <code>str()</code> to convert!</p>
           </div>
 
+          <div className="rounded-xl border-2 border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
+            <h2 className="text-lg font-bold text-rose-700 dark:text-rose-400 flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5" /> 10. str + float — ERROR
+            </h2>
+            <CodeBlock code={`# This will cause an ERROR!\nlabel = "Price: "\nprice = 9.99\n# result = label + price  # TypeError\n\n# Correct way: Convert float to str\nresult = label + str(price)\nprint(result)\n# Output: Price: 9.99 (str)`} />
+            <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Important:</strong> Cannot directly add a string and a float. Convert using <code>str()</code></p>
+          </div>
+
           <div className="rounded-xl border-2 border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
             <h2 className="text-lg font-bold text-purple-700 dark:text-purple-400 flex items-center gap-2">
-              <XIcon className="w-5 h-5" /> 5. String * Integer (str * int)
+              <Type className="w-5 h-5" /> 11. str + str
             </h2>
-            <CodeBlock code={`# Repeating a string\nstar = "*"\nresult = star * 5\nprint(result)\n# Output: ***** (str)\n\nline = "-" * 20\nprint(line)\n# Output: -------------------- (str)`} />
-            <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Result:</strong> String multiplied by integer repeats the string that many times</p>
+            <CodeBlock code={`# Concatenating strings\nfirst = "Hello"\nsecond = "World"\nresult = first + " " + second\nprint(result)\n# Output: Hello World (str)\n\n# Repeating strings\nword = "Python"\nresult2 = word * 3\nprint(result2)\n# Output: PythonPythonPython (str)`} />
+            <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Result:</strong> String <code>+</code> means concatenation (joining)</p>
           </div>
+
+          <div className="rounded-xl border-2 border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
+            <h2 className="text-lg font-bold text-purple-700 dark:text-purple-400 flex items-center gap-2">
+              <XIcon className="w-5 h-5" /> 12. str * int — repetition
+            </h2>
+            <CodeBlock code={`# Multiplying a string by an integer REPEATS it\nresult = "hi" * 2\nprint(result)\n# Output: hihi (str)\n\n# Works the other way too (int * str)\nresult2 = 2 * "hi"\nprint(result2)\n# Output: hihi (str)\n\n# A few more examples\nprint("*" * 5)       # ***** (str)\nprint("-" * 20)      # -------------------- (str)\nprint("Python" * 3)  # PythonPythonPython (str)`} />
+            <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Result:</strong> <code>str * int</code> does not add — it <strong>repeats</strong> the string that many times, with no separator. This is different from <code>str + int</code>, which is an error.</p>
+          </div>
+
+          <div className="rounded-xl border-2 border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
+            <h2 className="text-lg font-bold text-rose-700 dark:text-rose-400 flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5" /> 13. str + bool — ERROR
+            </h2>
+            <CodeBlock code={`# This will cause an ERROR!\nmessage = "Status: "\nstatus = True\n# result = message + status  # TypeError\n\n# Correct way: Convert bool to str\nresult = message + str(status)\nprint(result)\n# Output: Status: True (str)`} />
+            <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Important:</strong> Cannot directly add a string and a boolean. Convert using <code>str()</code></p>
+          </div>
+
+          {/* ===================== GROUP: BOOL ===================== */}
+          <GroupHeader color="teal" label="bool + ___" />
 
           <div className="rounded-xl border-2 border-teal-200 dark:border-teal-800 bg-teal-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
             <h2 className="text-lg font-bold text-teal-700 dark:text-teal-400 flex items-center gap-2">
-              <ToggleLeft className="w-5 h-5" /> 6. Boolean + Integer (bool + int)
+              <ToggleLeft className="w-5 h-5" /> 14. bool + int
             </h2>
             <CodeBlock code={`# Boolean values act as numbers!\n# True = 1, False = 0\n\na = True\nb = 5\nresult = a + b\nprint(result)\n# Output: 6 (int)   # True is treated as 1\n\nc = False\nresult2 = c + b\nprint(result2)\n# Output: 5 (int)   # False is treated as 0\n\n# Multiplication\nresult3 = True * 10\nprint(result3)\n# Output: 10 (int)  # True (1) * 10 = 10`} />
             <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Result:</strong> In math operations, <code>True</code> = 1 and <code>False</code> = 0</p>
@@ -132,35 +229,28 @@ const TypeInteractions = () => {
 
           <div className="rounded-xl border-2 border-teal-200 dark:border-teal-800 bg-teal-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
             <h2 className="text-lg font-bold text-teal-700 dark:text-teal-400 flex items-center gap-2">
-              <ToggleLeft className="w-5 h-5" /> 7. Boolean + Boolean (bool + bool)
+              <ToggleLeft className="w-5 h-5" /> 15. bool + float
             </h2>
-            <CodeBlock code={`# Adding boolean values\na = True    # 1\nb = True    # 1\nresult = a + b\nprint(result)\n# Output: 2 (int)\n\nc = True    # 1\nd = False   # 0\nresult2 = c + d\nprint(result2)\n# Output: 1 (int)\n\nresult3 = False + False\nprint(result3)\n# Output: 0 (int)`} />
-            <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Result:</strong> Boolean addition converts to integer math (True=1, False=0)</p>
+            <CodeBlock code={`# Boolean with float\na = True     # 1\nb = 3.5\nresult = a + b\nprint(result)\n# Output: 4.5 (float)  # True (1.0) + 3.5 = 4.5\n\nc = False    # 0\nresult2 = c + b\nprint(result2)\n# Output: 3.5 (float)  # False (0.0) + 3.5 = 3.5`} />
+            <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Result:</strong> Same rule applies with floats — <code>True</code>/<code>False</code> become <code>1.0</code>/<code>0.0</code></p>
           </div>
 
           <div className="rounded-xl border-2 border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
             <h2 className="text-lg font-bold text-rose-700 dark:text-rose-400 flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5" /> 8. Boolean + String (bool + str) - ERROR
+              <AlertTriangle className="w-5 h-5" /> 16. bool + str — ERROR
             </h2>
-            <CodeBlock code={`# This will cause an ERROR!\nstatus = True\nmessage = "Status: "\n# result = message + status  # TypeError\n\n# Correct way: Convert bool to str\nresult = message + str(status)\nprint(result)\n# Output: Status: True (str)`} />
-            <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Important:</strong> Cannot directly add boolean and string. Convert using <code>str()</code></p>
-          </div>
-
-          <div className="rounded-xl border-2 border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
-            <h2 className="text-lg font-bold text-sky-700 dark:text-sky-400 flex items-center gap-2">
-              <Plus className="w-5 h-5" /> 9. Float + Float (float + float)
-            </h2>
-            <CodeBlock code={`# Float operations\na = 3.14\nb = 2.5\nresult = a + b\nprint(result)\n# Output: 5.64 (float)\n\nresult2 = a * b\nprint(result2)\n# Output: 7.85 (float)`} />
-            <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Result:</strong> Float operations always give <code>float</code> results</p>
+            <CodeBlock code={`# This will cause an ERROR!\nstatus = True\nmessage = "Status: "\n# result = status + message  # TypeError\n\n# Correct way: Convert bool to str\nresult = str(status) + message\nprint(result)\n# Output: TrueStatus:  (str)`} />
+            <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Important:</strong> Cannot directly add a boolean and a string. Convert using <code>str()</code></p>
           </div>
 
           <div className="rounded-xl border-2 border-teal-200 dark:border-teal-800 bg-teal-50 dark:bg-slate-800 p-5 space-y-2 shadow-sm">
             <h2 className="text-lg font-bold text-teal-700 dark:text-teal-400 flex items-center gap-2">
-              <ToggleLeft className="w-5 h-5" /> 10. Boolean + Float (bool + float)
+              <ToggleLeft className="w-5 h-5" /> 17. bool + bool
             </h2>
-            <CodeBlock code={`# Boolean with float\na = True     # 1\nb = 3.5\nresult = a + b\nprint(result)\n# Output: 4.5 (float)  # True (1.0) + 3.5 = 4.5\n\nc = False    # 0\nresult2 = c + b\nprint(result2)\n# Output: 3.5 (float)  # False (0.0) + 3.5 = 3.5`} />
-            <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Result:</strong> Boolean converts to float (True=1.0, False=0.0) in float operations</p>
+            <CodeBlock code={`# Adding boolean values\na = True    # 1\nb = True    # 1\nresult = a + b\nprint(result)\n# Output: 2 (int)\n\nc = True    # 1\nd = False   # 0\nresult2 = c + d\nprint(result2)\n# Output: 1 (int)\n\nresult3 = False + False\nprint(result3)\n# Output: 0 (int)`} />
+            <p className="text-sm text-slate-500 dark:text-slate-400"><strong>Result:</strong> Boolean addition converts to integer math (True=1, False=0) — note the result type becomes <code>int</code>, not <code>bool</code></p>
           </div>
+
         </div>
         {/* Complete Type Interactions Table */}
         <div className="space-y-3 pt-4 border-t">

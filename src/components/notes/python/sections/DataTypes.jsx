@@ -43,7 +43,7 @@ const DataTypes = () => {
           <Boxes className="w-8 h-8" /> Data Types
         </h1>
         <p className="text-purple-50 mt-1 text-sm">
-          Every value in Python belongs to one of these families.
+          A data type defines the kind of values a variable can store and the operations that can be performed on it. 
         </p>
       </div>
 

@@ -18,6 +18,7 @@ import Lists from "./sections/Lists";
 import Tuples from "./sections/Tuples";
 import Sets from "./sections/Sets";
 import Dictionaries from "./sections/Dictionaries";
+import ErrorHandling from "./sections/ErrorHandling";
 
 
 
@@ -61,6 +62,8 @@ const PythonPage = () => {
       <Sets />
 
       <Dictionaries />
+
+      <ErrorHandling />
     </div>
   );
 };

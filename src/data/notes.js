@@ -330,36 +330,46 @@ export const jsNotes = [
         id: "introduction",
         title: "Introduction",
         component: "Introduction",
+        children: [
+            { id: "intro-overview",    title: "Overview" },
+            { id: "intro-guide",       title: "About This Guide" },
+            { id: "intro-about",       title: "About JavaScript" },
+            { id: "intro-java",        title: "JavaScript and Java" },
+            { id: "intro-ecmascript", title: "ECMAScript" },
+            { id: "intro-tools",       title: "Tools" },
+            { id: "intro-next",        title: "What's Next" },
+        ]
     },
     {
         id: "variables",
-        title: "Variables",
+        title: "Grammar and Types",
         component: "Variables",
+        children: [
+            { id: "grammar-syntax",          title: "Basic Syntax and Comments" },
+            { id: "grammar-declarations",    title: "Declarations" },
+            { id: "grammar-scope",           title: "Variable Scope" },
+            { id: "grammar-hoisting",        title: "Variable Hoisting" },
+            { id: "grammar-data-structures", title: "Data Structures and Types" },
+            { id: "grammar-literals",        title: "Literals" },
+            { id: "grammar-naming",          title: "Identifier Naming Rules" },
+        ]
     },
     {
         id: "data-types",
         title: "Data Types",
         component: "DataTypes",
         children: [
-            {
-                id: "primitive",
-                title: "Primitive Data Types",
-
-            },
-            {
-                id: "non-primitive",
-                title: "Non-primitive Data Types",
-
-            },
+            { id: "primitive",     title: "Primitive Data Types" },
+            { id: "non-primitive", title: "Non-primitive Data Types" },
         ]
     },
     {
         id: "string-ops",
-        title: "String Concatenation & Template Literals",
+        title: "String Concatenation and Template Literals",
         component: "StringOps",
         children: [
             { id: "template-literals", title: "Template Literals" },
-            { id: "escape-chars", title: "Escape Characters" },
+            { id: "escape-chars",      title: "Escape Characters" },
         ]
     },
     {
@@ -367,43 +377,43 @@ export const jsNotes = [
         title: "Operators",
         component: "Operators",
         children: [
-            { id: "arithmetic", title: "Arithmetic" },
-            { id: "assignment", title: "Assignment" },
-            { id: "comparison", title: "Comparison" },
-            { id: "logical", title: "Logical" },
+            { id: "arithmetic",         title: "Arithmetic" },
+            { id: "assignment",         title: "Assignment" },
+            { id: "comparison",         title: "Comparison" },
+            { id: "logical",            title: "Logical" },
             { id: "nullish-coalescing", title: "Nullish Coalescing (??)" },
-            { id: "optional-chaining", title: "Optional Chaining (?.)" },
-            { id: "ternary", title: "Ternary" },
-            { id: "typeof-instanceof", title: "typeof & instanceof" },
-            { id: "precedence", title: "Precedence" },
-        ]
-    },
-    {
-        id: "loops",
-        title: "Loops",
-        component: "Loops",
-        children: [
-            { id: "for-loop", title: "for Loop" },
-            { id: "while-loop", title: "while Loop" },
-            { id: "do-while-loop", title: "do...while Loop" },
-            { id: "for-of-loop", title: "for...of Loop" },
-            { id: "for-in-loop", title: "for...in Loop" },
-            { id: "break-continue", title: "break & continue" },
-            { id: "nested-loops", title: "Nested Loops" },
-            { id: "loop-patterns", title: "Common Patterns" },
+            { id: "optional-chaining",  title: "Optional Chaining (?.)" },
+            { id: "ternary",            title: "Ternary" },
+            { id: "typeof-instanceof",  title: "typeof and instanceof" },
+            { id: "precedence",         title: "Precedence" },
         ]
     },
     {
         id: "error-handling",
-        title: "Error Handling",
+        title: "Control Flow and Error Handling",
         component: "ErrorHandling",
         children: [
-            { id: "error-types", title: "Error Types" },
-            { id: "try-catch", title: "try...catch" },
-            { id: "finally", title: "finally" },
-            { id: "throw", title: "throw Statement" },
-            { id: "error-object", title: "Error Object" },
+            { id: "control-if-else",  title: "if...else" },
+            { id: "control-switch",   title: "switch" },
+            { id: "try-catch",        title: "try / catch / throw" },
+            { id: "error-object",     title: "Error Objects" },
+            { id: "error-types",      title: "Common Error Types" },
             { id: "practical-errors", title: "Practical Examples" },
         ]
-    }
+    },
+    {
+        id: "loops",
+        title: "Loops and Iteration",
+        component: "Loops",
+        children: [
+            { id: "for-loop",          title: "for" },
+            { id: "while-loop",        title: "while" },
+            { id: "do-while-loop",     title: "do...while" },
+            { id: "continue-statement", title: "continue" },
+            { id: "break-statement",   title: "break" },
+            { id: "for-in-loop",       title: "for...in" },
+            { id: "for-of-loop",       title: "for...of" },
+            { id: "loop-patterns",     title: "Common Patterns" },
+        ]
+    },
 ];

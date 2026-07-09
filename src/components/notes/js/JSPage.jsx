@@ -4,8 +4,8 @@ import Variables from "./sections/Variables";
 import DataTypes from "./sections/DataTypes";
 import StringOps from "./sections/StringOps";
 import Operators from "./sections/Operators";
-import Loops from "./sections/Loops";
 import ErrorHandling from "./sections/ErrorHandling";
+import Loops from "./sections/Loops";
 
 const JSPage = () => {
   return (
@@ -15,8 +15,8 @@ const JSPage = () => {
       <DataTypes />
       <StringOps />
       <Operators />
-      <Loops />
       <ErrorHandling />
+      <Loops />
     </div>
   );
 };

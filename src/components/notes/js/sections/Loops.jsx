@@ -9,18 +9,19 @@ import {
   Hash,
   Layers,
   ArrowRightLeft,
-  Sparkles,
   Zap,
+  StopCircle,
+  SkipForward,
 } from "lucide-react";
 
 const Loops = () => {
-  const compHeaders = ["Loop", "Best For", "Knows Length?", "Syntax Complexity"];
+  const compHeaders = ["Loop", "Best suited for", "Checks condition", "Minimum runs"];
   const compRows = [
-    [<code>for</code>, "When you know the count", "Yes", "Medium"],
-    [<code>while</code>, "Unknown iterations, condition-based", "No", "Simple"],
-    [<code>do...while</code>, "Must run at least once", "No", "Simple"],
-    [<code>for...of</code>, "Arrays, strings, iterables", "No", "Simplest"],
-    [<code>for...in</code>, "Object keys", "No", "Simple"],
+    [<code>for</code>,        "Known iteration count",                "Before each iteration", "0"],
+    [<code>while</code>,      "Unknown count, condition-driven",       "Before each iteration", "0"],
+    [<code>do...while</code>, "Must run at least once",               "After each iteration",  "1"],
+    [<code>for...of</code>,   "Values in arrays, strings, iterables", "N/A (iterates items)",  "0"],
+    [<code>for...in</code>,   "Keys (property names) of an object",   "N/A (iterates keys)",   "0"],
   ];
 
   return (
@@ -28,372 +29,481 @@ const Loops = () => {
       {/* Header banner */}
       <div className="rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 p-6 shadow-lg">
         <h1 className="text-3xl font-extrabold text-white flex items-center gap-3">
-          <Repeat className="w-8 h-8" /> Loops in JavaScript
+          <Repeat className="w-8 h-8" /> Loops and Iteration
         </h1>
         <p className="text-emerald-50 mt-1 text-sm">
-          Repeating actions efficiently — the backbone of programming.
+          for, while, do...while, continue, break, for...in, and for...of.
         </p>
       </div>
 
       {/* Introduction */}
       <div className="rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm">
         <h2 className="text-xl font-bold text-slate-700 dark:text-slate-300 flex items-center gap-2">
-          <RotateCw className="w-5 h-5" /> Why Do We Need Loops?
+          <RotateCw className="w-5 h-5" /> Overview
         </h2>
         <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
-          Loops let you <strong>repeat a block of code</strong> multiple times without writing it over and over.
-          Instead of writing <code>console.log("Hello")</code> 100 times, you write it once inside a loop!
+          Loops offer a quick and easy way to do something repeatedly. There are many different
+          kinds of loops, but they all essentially do the same thing: repeat an action some number
+          of times. The various loop mechanisms offer different ways to determine the start and
+          end points of the loop.
         </p>
         <CodeBlock
           language="javascript"
-          code={`// Without a loop (tedious!)
-console.log("Hello 1");
-console.log("Hello 2");
-console.log("Hello 3");
-// ... imagine doing this 100 times!
+          code={`// Without a loop
+console.log("Step 1");
+console.log("Step 2");
+console.log("Step 3");
 
-// With a loop (clean!)
-for (let i = 1; i <= 100; i++) {
-  console.log("Hello " + i);
+// With a loop
+for (let step = 1; step <= 3; step++) {
+  console.log("Step " + step);
 }`}
         />
       </div>
 
-      {/* for Loop */}
+      {/* for loop */}
       <div id="for-loop" className="rounded-xl border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm">
-        <h3 className="text-lg font-bold text-blue-700 dark:text-blue-400 flex items-center gap-2">
-          <Hash className="w-5 h-5" /> 1. for Loop
-        </h3>
-        <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
-          The most common loop. Use it when you <strong>know how many times</strong> you want to repeat.
+        <h2 className="text-xl font-bold text-blue-700 dark:text-blue-400 flex items-center gap-2">
+          <Hash className="w-5 h-5" /> for Statement
+        </h2>
+        <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+          A <code>for</code> loop repeats until a specified condition evaluates to
+          <code> false</code>. It is most useful when you know exactly how many times you want
+          to repeat an action.
         </p>
 
-        {/* Syntax breakdown */}
         <div className="bg-white dark:bg-slate-700 rounded-lg p-4 border-l-4 border-blue-500 shadow-sm">
-          <h4 className="font-bold text-blue-700 dark:text-blue-400 mb-2">Syntax Breakdown</h4>
+          <h4 className="font-bold text-blue-700 dark:text-blue-400 mb-2">Syntax</h4>
           <CodeBlock
             language="javascript"
-            code={`for (initialization; condition; update) {
-  // code to repeat
+            code={`for ([initialization]; [condition]; [afterthought]) {
+  statement
 }
 
-// initialization → runs ONCE before the loop starts
-// condition      → checked BEFORE each iteration
-// update         → runs AFTER each iteration`}
+// initialization  -- runs once before the loop starts
+// condition       -- evaluated before each iteration; loop stops when false
+// afterthought    -- runs after each iteration`}
           />
         </div>
 
         <CodeBlock
           language="javascript"
-          code={`// Count from 1 to 5
-for (let i = 1; i <= 5; i++) {
+          code={`// Count from 0 to 4
+for (let i = 0; i < 5; i++) {
   console.log(i);
 }
-// Output: 1, 2, 3, 4, 5
+// 0, 1, 2, 3, 4
 
-// Count backwards
+// Count down
 for (let i = 10; i >= 1; i--) {
   console.log(i);
 }
-// Output: 10, 9, 8, ..., 1
+// 10, 9, 8, ..., 1
 
-// Skip by 2s (even numbers)
-for (let i = 2; i <= 10; i += 2) {
+// Step by 2
+for (let i = 0; i <= 10; i += 2) {
   console.log(i);
 }
-// Output: 2, 4, 6, 8, 10
+// 0, 2, 4, 6, 8, 10
 
-// Iterating over an array
-let fruits = ["Apple", "Banana", "Cherry"];
+// Iterate an array by index
+const fruits = ["apple", "banana", "cherry"];
 for (let i = 0; i < fruits.length; i++) {
-  console.log(fruits[i]);
+  console.log(i, fruits[i]);
 }
-// Output: Apple, Banana, Cherry`}
+// 0 "apple", 1 "banana", 2 "cherry"`}
         />
+        <Infobox type="tip" title="All parts of a for loop are optional">
+          You can omit initialization, condition, or afterthought. Omitting all three
+          (<code>for (;;)</code>) creates an infinite loop. Always include a condition
+          or a <code>break</code> statement to terminate the loop.
+        </Infobox>
       </div>
 
-      {/* while Loop */}
+      {/* while loop */}
       <div id="while-loop" className="rounded-xl border-2 border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm">
-        <h3 className="text-lg font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-2">
-          <RotateCw className="w-5 h-5" /> 2. while Loop
-        </h3>
-        <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
-          Use <code>while</code> when you <strong>don't know how many times</strong> to repeat —
-          it keeps going as long as the condition is <code>true</code>.
+        <h2 className="text-xl font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-2">
+          <RotateCw className="w-5 h-5" /> while Statement
+        </h2>
+        <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+          A <code>while</code> statement executes its body as long as a specified condition
+          evaluates to <code>true</code>. The condition is tested before each execution of the body.
+          If the condition is <code>false</code> on the first check, the body never runs.
         </p>
+
+        <div className="bg-white dark:bg-slate-700 rounded-lg p-4 border-l-4 border-emerald-500 shadow-sm">
+          <h4 className="font-bold text-emerald-700 dark:text-emerald-400 mb-2">Syntax</h4>
+          <CodeBlock
+            language="javascript"
+            code={`while (condition) {
+  statement
+}`}
+          />
+        </div>
+
         <CodeBlock
           language="javascript"
-          code={`// Basic while loop
-let count = 1;
-while (count <= 5) {
-  console.log("Count: " + count);
-  count++;  // Don't forget to update! (or infinite loop!)
+          code={`// Count while condition is true
+let n = 0;
+while (n < 3) {
+  n++;
+  console.log("n = " + n);
 }
-// Output: Count: 1, Count: 2, ..., Count: 5
+// n = 1, n = 2, n = 3
 
-// Practical example — doubling until threshold
-let money = 1;
-let years = 0;
-while (money < 1000) {
-  money *= 2;
+// Condition false from the start — loop body never runs
+let x = 10;
+while (x < 5) {
+  console.log("This never prints");
+}
+
+// Practical: compound interest until threshold
+let balance = 100;
+const rate   = 0.1; // 10% interest per year
+let years    = 0;
+
+while (balance < 200) {
+  balance += balance * rate;
   years++;
 }
-console.log(\`Reached ₹\${money} in \${years} years\`);
-// Output: "Reached ₹1024 in 10 years"`}
+console.log("Doubled in", years, "years"); // 8 years`}
         />
-        <Infobox type="warning" title="Beware of Infinite Loops!">
-          Always make sure the condition will eventually become <code>false</code>.
-          Forgetting to update the loop variable causes an <strong>infinite loop</strong> that freezes your program!
+        <Infobox type="warning" title="Infinite loops">
+          If the condition never becomes <code>false</code>, the loop runs forever and freezes the
+          program. Always ensure the loop variable is updated inside the body, or that a
+          <code> break</code> statement can be reached.
         </Infobox>
       </div>
 
-      {/* do...while Loop */}
+      {/* do...while loop */}
       <div id="do-while-loop" className="rounded-xl border-2 border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm">
-        <h3 className="text-lg font-bold text-purple-700 dark:text-purple-400 flex items-center gap-2">
-          <Repeat className="w-5 h-5" /> 3. do...while Loop
-        </h3>
-        <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
-          Similar to <code>while</code>, but it <strong>always runs at least once</strong> because
-          the condition is checked <em>after</em> the code executes.
+        <h2 className="text-xl font-bold text-purple-700 dark:text-purple-400 flex items-center gap-2">
+          <Repeat className="w-5 h-5" /> do...while Statement
+        </h2>
+        <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+          The <code>do...while</code> statement repeats until a specified condition evaluates to
+          <code> false</code>. The condition is evaluated <em>after</em> executing the body, so
+          the body always executes at least once.
         </p>
+
+        <div className="bg-white dark:bg-slate-700 rounded-lg p-4 border-l-4 border-purple-500 shadow-sm">
+          <h4 className="font-bold text-purple-700 dark:text-purple-400 mb-2">Syntax</h4>
+          <CodeBlock
+            language="javascript"
+            code={`do {
+  statement
+} while (condition);`}
+          />
+        </div>
+
         <CodeBlock
           language="javascript"
-          code={`// do...while always runs at least once
-let num = 10;
+          code={`let i = 0;
 do {
-  console.log("Number: " + num);  // Runs even though num > 5!
-  num++;
-} while (num <= 5);
-// Output: "Number: 10" (runs once, then stops)
+  i++;
+  console.log("i = " + i);
+} while (i < 3);
+// i = 1, i = 2, i = 3
 
-// Compare with while — this would NOT run at all!
-let num2 = 10;
-while (num2 <= 5) {
-  console.log("This never prints");
-  num2++;
-}
-
-// Practical use — menu system
-let choice;
+// Demonstrates that the body runs even when the condition is false at entry
+let x = 10;
 do {
-  choice = prompt("Enter 1, 2, or 3 (0 to quit):");
-  console.log("You chose: " + choice);
-} while (choice !== "0");`}
+  console.log("Runs once with x =", x); // prints despite x > 5
+  x++;
+} while (x < 5);
+
+// Typical use: retry or prompt-until-valid pattern
+let attempts = 0;
+let success  = false;
+do {
+  attempts++;
+  // simulate an operation that might fail
+  success = attempts >= 3;
+  console.log("Attempt", attempts, success ? "succeeded" : "failed");
+} while (!success);
+// Attempt 1 failed, Attempt 2 failed, Attempt 3 succeeded`}
         />
       </div>
 
-      {/* for...of Loop */}
-      <div id="for-of-loop" className="rounded-xl border-2 border-cyan-200 dark:border-cyan-800 bg-cyan-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm">
-        <h3 className="text-lg font-bold text-cyan-700 dark:text-cyan-400 flex items-center gap-2">
-          <ArrowDownUp className="w-5 h-5" /> 4. for...of Loop
-        </h3>
-        <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
-          The cleanest way to loop over <strong>arrays, strings, and other iterables</strong>.
-          You get the <em>value</em> directly — no need for index variables.
+      {/* continue */}
+      <div id="continue-statement" className="rounded-xl border-2 border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm">
+        <h2 className="text-xl font-bold text-amber-700 dark:text-amber-400 flex items-center gap-2">
+          <SkipForward className="w-5 h-5" /> continue Statement
+        </h2>
+        <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+          The <code>continue</code> statement terminates execution of the current loop iteration
+          and continues with the next iteration. It does not exit the loop entirely; rather, it
+          skips the remaining statements in the current pass and moves to the update expression
+          (or condition check for <code>while</code>/<code>do...while</code>).
         </p>
         <CodeBlock
           language="javascript"
-          code={`// Looping over an array
-let colors = ["Red", "Green", "Blue"];
-for (let color of colors) {
-  console.log(color);
-}
-// Output: Red, Green, Blue
-
-// Looping over a string (character by character)
-let word = "Hello";
-for (let char of word) {
-  console.log(char);
-}
-// Output: H, e, l, l, o
-
-// With array destructuring
-let students = [
-  ["Rahul", 95],
-  ["Priya", 88],
-  ["Arjun", 92]
-];
-for (let [name, score] of students) {
-  console.log(\`\${name}: \${score}\`);
-}
-// Output: Rahul: 95, Priya: 88, Arjun: 92`}
-        />
-        <Infobox type="tip" title="for...of vs for loop">
-          Use <code>for...of</code> when you just need the values.
-          Use a regular <code>for</code> loop when you need the index too.
-        </Infobox>
-      </div>
-
-      {/* for...in Loop */}
-      <div id="for-in-loop" className="rounded-xl border-2 border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm">
-        <h3 className="text-lg font-bold text-amber-700 dark:text-amber-400 flex items-center gap-2">
-          <Layers className="w-5 h-5" /> 5. for...in Loop
-        </h3>
-        <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
-          Used to loop over the <strong>keys (property names)</strong> of an object.
-        </p>
-        <CodeBlock
-          language="javascript"
-          code={`// Looping over object properties
-let student = {
-  name: "Rahul",
-  age: 15,
-  grade: "10th",
-  school: "DPS"
-};
-
-for (let key in student) {
-  console.log(key + ": " + student[key]);
-}
-// Output:
-// name: Rahul
-// age: 15
-// grade: 10th
-// school: DPS`}
-        />
-        <Infobox type="warning" title="Don't use for...in with Arrays">
-          <code>for...in</code> iterates over <em>keys</em> (indices as strings for arrays).
-          Use <code>for...of</code> or a regular <code>for</code> loop for arrays instead.
-        </Infobox>
-      </div>
-
-      {/* break and continue */}
-      <div id="break-continue" className="rounded-xl border-2 border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm">
-        <h3 className="text-lg font-bold text-rose-700 dark:text-rose-400 flex items-center gap-2">
-          <Zap className="w-5 h-5" /> break & continue
-        </h3>
-        <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
-          Control the flow inside loops with <code>break</code> (exit the loop) and <code>continue</code> (skip to the next iteration).
-        </p>
-
-        <div className="space-y-4">
-          <div className="bg-white dark:bg-slate-700 rounded-lg p-4 border-l-4 border-red-500 shadow-sm">
-            <h4 className="font-bold text-red-700 dark:text-red-400 mb-2">break — Stop the Loop</h4>
-            <CodeBlock
-              language="javascript"
-              code={`// Find the first negative number and stop
-let numbers = [3, 7, -2, 9, 1];
-for (let num of numbers) {
-  if (num < 0) {
-    console.log("Found negative: " + num);
-    break;  // Exit the loop immediately
-  }
-  console.log("Checked: " + num);
-}
-// Output: Checked: 3, Checked: 7, Found negative: -2`}
-            />
-          </div>
-
-          <div className="bg-white dark:bg-slate-700 rounded-lg p-4 border-l-4 border-amber-500 shadow-sm">
-            <h4 className="font-bold text-amber-700 dark:text-amber-400 mb-2">continue — Skip This Iteration</h4>
-            <CodeBlock
-              language="javascript"
-              code={`// Print only odd numbers
+          code={`// Skip even numbers — print only odd numbers 1-10
 for (let i = 1; i <= 10; i++) {
   if (i % 2 === 0) {
-    continue;  // Skip even numbers
+    continue; // skip the rest of this iteration
   }
   console.log(i);
 }
-// Output: 1, 3, 5, 7, 9`}
-            />
-          </div>
-        </div>
+// 1, 3, 5, 7, 9
+
+// continue in a while loop
+let n = 0;
+while (n < 10) {
+  n++;
+  if (n % 3 === 0) continue; // skip multiples of 3
+  console.log(n);
+}
+// 1, 2, 4, 5, 7, 8, 10
+
+// continue with a label (outer loop)
+outer: for (let i = 0; i < 3; i++) {
+  for (let j = 0; j < 3; j++) {
+    if (j === 1) continue outer; // skip to next iteration of outer loop
+    console.log(i, j);
+  }
+}
+// 0 0, 1 0, 2 0`}
+        />
       </div>
 
-      {/* Nested Loops */}
-      <div id="nested-loops" className="rounded-xl border-2 border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm">
-        <h3 className="text-lg font-bold text-indigo-700 dark:text-indigo-400 flex items-center gap-2">
-          <Layers className="w-5 h-5" /> Nested Loops
-        </h3>
-        <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
-          A loop inside another loop. The inner loop runs <strong>completely</strong> for each iteration of the outer loop.
+      {/* break */}
+      <div id="break-statement" className="rounded-xl border-2 border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm">
+        <h2 className="text-xl font-bold text-rose-700 dark:text-rose-400 flex items-center gap-2">
+          <StopCircle className="w-5 h-5" /> break Statement
+        </h2>
+        <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+          The <code>break</code> statement terminates the current loop, <code>switch</code>, or
+          labeled statement and transfers control to the statement following the terminated
+          statement. Used without a label, it exits the innermost enclosing loop or switch.
         </p>
         <CodeBlock
           language="javascript"
-          code={`// Multiplication table (1 to 3)
-for (let i = 1; i <= 3; i++) {
-  for (let j = 1; j <= 3; j++) {
-    console.log(\`\${i} × \${j} = \${i * j}\`);
-  }
-  console.log("---");
-}
-// Output:
-// 1 × 1 = 1, 1 × 2 = 2, 1 × 3 = 3, ---
-// 2 × 1 = 2, 2 × 2 = 4, 2 × 3 = 6, ---
-// 3 × 1 = 3, 3 × 2 = 6, 3 × 3 = 9, ---
+          code={`// Stop the loop as soon as a negative number is found
+const numbers = [3, 7, 2, -5, 9, 1];
+let firstNegative;
 
-// Star pattern
-let pattern = "";
-for (let i = 1; i <= 5; i++) {
-  for (let j = 1; j <= i; j++) {
-    pattern += "⭐";
+for (const num of numbers) {
+  if (num < 0) {
+    firstNegative = num;
+    break; // exit the loop immediately
   }
-  pattern += "\\n";
 }
-console.log(pattern);
-// ⭐
-// ⭐⭐
-// ⭐⭐⭐
-// ⭐⭐⭐⭐
-// ⭐⭐⭐⭐⭐`}
+console.log("First negative:", firstNegative); // -5
+
+// break in a while loop
+let i = 0;
+while (true) { // infinite loop — but break exits it
+  if (i >= 5) break;
+  i++;
+}
+console.log("Stopped at i =", i); // 5
+
+// break with a label — exits the outer loop
+search: for (let row = 0; row < 3; row++) {
+  for (let col = 0; col < 3; col++) {
+    if (row === 1 && col === 1) {
+      console.log("Found at", row, col);
+      break search; // exits both loops
+    }
+  }
+}
+console.log("Loop ended");`}
         />
+        <Infobox type="info" title="Labels">
+          A label is an identifier followed by a colon placed before a statement
+          (<code>outer: for (...)</code>). Labels are only useful with <code>break</code> and
+          <code> continue</code> in nested loops. They do not create a new scope and are rarely
+          needed in practice.
+        </Infobox>
+      </div>
+
+      {/* for...in loop */}
+      <div id="for-in-loop" className="rounded-xl border-2 border-cyan-200 dark:border-cyan-800 bg-cyan-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm">
+        <h2 className="text-xl font-bold text-cyan-700 dark:text-cyan-400 flex items-center gap-2">
+          <Layers className="w-5 h-5" /> for...in Statement
+        </h2>
+        <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+          The <code>for...in</code> statement iterates over all <strong>enumerable string
+          properties</strong> of an object, including inherited enumerable properties. On each
+          iteration the variable holds the property name (key) as a string.
+        </p>
+
+        <div className="bg-white dark:bg-slate-700 rounded-lg p-4 border-l-4 border-cyan-500 shadow-sm">
+          <h4 className="font-bold text-cyan-700 dark:text-cyan-400 mb-2">Syntax</h4>
+          <CodeBlock
+            language="javascript"
+            code={`for (variable in object) {
+  statement
+}`}
+          />
+        </div>
+
+        <CodeBlock
+          language="javascript"
+          code={`const car = {
+  make:  "Toyota",
+  model: "Camry",
+  year:  2023,
+};
+
+for (const key in car) {
+  console.log(key + ": " + car[key]);
+}
+// make: Toyota
+// model: Camry
+// year: 2023
+
+// Checking own properties (excludes inherited)
+function Vehicle(type) {
+  this.type = type;
+}
+Vehicle.prototype.wheels = 4;
+
+const v = new Vehicle("car");
+for (const key in v) {
+  if (Object.hasOwn(v, key)) {
+    console.log("Own:", key); // Own: type
+  } else {
+    console.log("Inherited:", key); // Inherited: wheels
+  }
+}`}
+        />
+        <Infobox type="warning" title="Do not use for...in with arrays">
+          <code>for...in</code> iterates over <em>all</em> enumerable properties, including
+          any non-index properties that may have been added to <code>Array.prototype</code>.
+          For arrays, use a regular <code>for</code> loop, <code>for...of</code>, or array
+          methods such as <code>forEach</code>.
+        </Infobox>
+      </div>
+
+      {/* for...of loop */}
+      <div id="for-of-loop" className="rounded-xl border-2 border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm">
+        <h2 className="text-xl font-bold text-indigo-700 dark:text-indigo-400 flex items-center gap-2">
+          <ArrowDownUp className="w-5 h-5" /> for...of Statement
+        </h2>
+        <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+          The <code>for...of</code> statement creates a loop iterating over <strong>iterable
+          objects</strong>, including <code>Array</code>, <code>String</code>, <code>Map</code>,
+          <code> Set</code>, <code>NodeList</code>, and any other object that implements the
+          iterable protocol. On each iteration the variable holds the current element value,
+          not the key.
+        </p>
+
+        <div className="bg-white dark:bg-slate-700 rounded-lg p-4 border-l-4 border-indigo-500 shadow-sm">
+          <h4 className="font-bold text-indigo-700 dark:text-indigo-400 mb-2">Syntax</h4>
+          <CodeBlock
+            language="javascript"
+            code={`for (variable of iterable) {
+  statement
+}`}
+          />
+        </div>
+
+        <CodeBlock
+          language="javascript"
+          code={`// Array
+const colors = ["red", "green", "blue"];
+for (const color of colors) {
+  console.log(color);
+}
+// red, green, blue
+
+// String (iterates over Unicode characters)
+const word = "hello";
+for (const char of word) {
+  console.log(char);
+}
+// h, e, l, l, o
+
+// Map
+const scores = new Map([["Alice", 95], ["Bob", 88]]);
+for (const [name, score] of scores) {
+  console.log(name + ": " + score);
+}
+// Alice: 95, Bob: 88
+
+// Set (no duplicates)
+const unique = new Set([1, 2, 2, 3, 3]);
+for (const val of unique) {
+  console.log(val);
+}
+// 1, 2, 3
+
+// Array destructuring in loop body
+const coords = [[1, 2], [3, 4], [5, 6]];
+for (const [x, y] of coords) {
+  console.log(\`x=\${x}, y=\${y}\`);
+}`}
+        />
+        <Infobox type="tip" title="for...of vs for...in">
+          Use <code>for...of</code> to get <em>values</em> from arrays and other iterables.
+          Use <code>for...in</code> to get <em>keys</em> from plain objects. If you need both
+          the index and the value from an array, use <code>Array.entries()</code> with
+          <code> for...of</code>: <code>for (const [i, v] of arr.entries())</code>.
+        </Infobox>
       </div>
 
       {/* Comparison Table */}
       <div className="rounded-xl border-2 border-teal-200 dark:border-teal-800 bg-teal-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm">
-        <h3 className="text-lg font-bold text-teal-700 dark:text-teal-400 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-teal-700 dark:text-teal-400 flex items-center gap-2">
           <ArrowRightLeft className="w-5 h-5" /> Loop Comparison
-        </h3>
+        </h2>
         <NoteTable headers={compHeaders} rows={compRows} />
       </div>
 
-      {/* Common Patterns */}
+      {/* Common Loop Patterns */}
       <div id="loop-patterns" className="rounded-xl border-2 border-violet-200 dark:border-violet-800 bg-violet-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm">
-        <h3 className="text-lg font-bold text-violet-700 dark:text-violet-400 flex items-center gap-2">
-          <Sparkles className="w-5 h-5" /> Common Loop Patterns
-        </h3>
+        <h2 className="text-xl font-bold text-violet-700 dark:text-violet-400 flex items-center gap-2">
+          <Zap className="w-5 h-5" /> Common Iteration Patterns
+        </h2>
         <CodeBlock
           language="javascript"
-          code={`// 1. Sum of numbers
-let numbers = [10, 20, 30, 40, 50];
+          code={`// 1. Accumulate a sum
+const values = [10, 20, 30, 40, 50];
 let total = 0;
-for (let num of numbers) {
-  total += num;
+for (const v of values) {
+  total += v;
 }
-console.log("Sum:", total);  // Sum: 150
+console.log("Sum:", total); // 150
 
-// 2. Finding the maximum value
-let scores = [72, 95, 88, 63, 91];
+// 2. Find the maximum value
+const scores = [72, 95, 88, 63, 91];
 let max = scores[0];
-for (let score of scores) {
-  if (score > max) {
-    max = score;
-  }
+for (const s of scores) {
+  if (s > max) max = s;
 }
-console.log("Highest:", max);  // Highest: 95
+console.log("Max:", max); // 95
 
-// 3. Filtering values
-let ages = [12, 25, 8, 30, 16, 42];
-let adults = [];
-for (let age of ages) {
-  if (age >= 18) {
-    adults.push(age);
-  }
+// 3. Filter values into a new array
+const ages = [12, 25, 8, 30, 16, 42];
+const adults = [];
+for (const age of ages) {
+  if (age >= 18) adults.push(age);
 }
-console.log("Adults:", adults);  // Adults: [25, 30, 42]
+console.log("Adults:", adults); // [25, 30, 42]
 
-// 4. Searching for a value
-let names = ["Rahul", "Priya", "Arjun", "Sneha"];
-let searchFor = "Arjun";
+// 4. Search with early exit
+const names = ["Alice", "Bob", "Carol", "David"];
 let found = false;
-for (let name of names) {
-  if (name === searchFor) {
+for (const name of names) {
+  if (name === "Carol") {
     found = true;
     break;
   }
 }
-console.log(found ? "Found!" : "Not found");  // Found!`}
+console.log("Found:", found); // true
+
+// 5. Nested loops — build a multiplication table
+for (let i = 1; i <= 3; i++) {
+  for (let j = 1; j <= 3; j++) {
+    process.stdout.write(i * j + "\t");
+  }
+  console.log();
+}
+// 1  2  3
+// 2  4  6
+// 3  6  9`}
         />
       </div>
     </section>

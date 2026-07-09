@@ -88,12 +88,12 @@ const Tokens = () => {
 
   const compHeaders = ["Operator", "Description", "Example", "Output"];
   const compRows = [
-    [<code>==</code>, "Is it equal to?", <code>print(x == y)</code>, <strong>False</strong>],
-    [<code>!=</code>, "Is it NOT equal to?", <code>print(x != y)</code>, <strong>True</strong>],
-    [<code>&gt;</code>, "Is it greater than?", <code>print(x &gt; y)</code>, <strong>True</strong>],
-    [<code>&lt;</code>, "Is it less than?", <code>print(x &lt; y)</code>, <strong>False</strong>],
-    [<code>&gt;=</code>, "Greater than or equal to?", <code>print(x &gt;= 10)</code>, <strong>True</strong>],
-    [<code>&lt;=</code>, "Less than or equal to?", <code>print(y &lt;= 3)</code>, <strong>False</strong>],
+    [<p>==</p>, "Is it equal to?", <p>print(x == y)</p>, <strong>False</strong>],
+    [<p>!=</p>, "Is it NOT equal to?", <p>print(x != y)</p>, <strong>True</strong>],
+    [<p>&gt;</p>, "Is it greater than?", <p>print(x &gt; y)</p>, <strong>True</strong>],
+    [<p>&lt;</p>, "Is it less than?", <p>print(x &lt; y)</p>, <strong>False</strong>],
+    [<p>&gt;=</p>, "Greater than or equal to?", <p>print(x &gt;= 10)</p>, <strong>True</strong>],
+    [<p>&lt;=</p>, "Less than or equal to?", <p>print(y &lt;= 3)</p>, <strong>False</strong>],
   ];
 
   const logicalHeaders = ["Operator", "Description"];

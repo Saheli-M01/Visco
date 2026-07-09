@@ -10,8 +10,8 @@ import LinkedListPage from "./components/TopicPages/LinkedListPage";
 import SearchPage from "./components/SearchPage";
 import Loading from "./components/Loading";
 import DocsHome from "./components/notes/DocsHome";
-import NotesHome from "./components/notes/NotesHome";
-import JSPage from "./components/notes/js/JSPage";
+import NotesHome from "./components/notes/PythonNotesHome";
+import JSNotesHome from "./components/notes/JSNotesHome";
 import { useEffect, useState } from "react";
 
 function App() {
@@ -38,7 +38,7 @@ function App() {
           <Route path="/linked-list" element={<LinkedListPage />} />
           <Route path="/docs" element={<DocsHome />} />
           <Route path="/docs/python" element={<NotesHome />} />
-          <Route path="/docs/javascript" element={<JSPage />} />
+          <Route path="/docs/javascript" element={<JSNotesHome />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

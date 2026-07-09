@@ -76,14 +76,14 @@ const Tokens = () => {
 
   const assignHeaders = ["Operator", "Description", "Example", "Result"];
   const assignRows = [
-    [<code>=</code>, "Simple Assignment", <code>x = 5</code>, <span><code>x</code> is now <strong>5</strong></span>],
-    [<code>+=</code>, "Add and update", <code>x += 3</code>, <span><code>x</code> becomes <strong>8</strong> (adds 3 to 5)</span>],
-    [<code>-=</code>, "Subtract and update", <code>x -= 2</code>, <span><code>x</code> becomes <strong>6</strong> (subtracts 2 from 8)</span>],
-    [<code>*=</code>, "Multiply and update", <code>x *= 2</code>, <span><code>x</code> becomes <strong>12</strong> (multiplies 6 by 2)</span>],
-    [<code>/=</code>, "Divide and update", <code>x /= 3</code>, <span><code>x</code> becomes <strong>4.0</strong> (divides 12 by 3)</span>],
-    [<code>%=</code>, "Modulus and update", <code>x %= 3</code>, <span><code>x</code> becomes remainder value</span>],
-    [<code>//=</code>, "Floor divide and update", <code>x //= 2</code>, <span><code>x</code> becomes floor division result</span>],
-    [<code>**=</code>, "Exponent and update", <code>x **= 2</code>, <span><code>x</code> becomes squared value</span>],
+    [<p>=</p>, "Simple Assignment", <p>x = 5</p>, <span><code>x</code> is now <strong>5</strong></span>],
+    [<p>+=</p>, "Add and update", <p>x += 3</p>, <span><code>x</code> becomes <strong>8</strong> (adds 3 to 5)</span>],
+    [<p>-=</p>, "Subtract and update", <p>x -= 2</p>, <span><code>x</code> becomes <strong>6</strong> (subtracts 2 from 8)</span>],
+    [<p>*=</p>, "Multiply and update", <p>x *= 2</p>, <span><code>x</code> becomes <strong>12</strong> (multiplies 6 by 2)</span>],
+    [<p>/=</p>, "Divide and update", <p>x /= 3</p>, <span><code>x</code> becomes <strong>4.0</strong> (divides 12 by 3)</span>],
+    [<p>%=</p>, "Modulus and update", <p>x %= 3</p>, <span><code>x</code> becomes remainder value</span>],
+    [<p>//=</p>, "Floor divide and update", <p>x //= 2</p>, <span><code>x</code> becomes floor division result</span>],
+    [<p>**=</p>, "Exponent and update", <p>x **= 2</p>, <span><code>x</code> becomes squared value</span>],
   ];
 
   const compHeaders = ["Operator", "Description", "Example", "Output"];
@@ -128,8 +128,8 @@ const Tokens = () => {
       <div className="rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-5 shadow-sm">
         <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
           Just like English sentences are built out of words, a Python program is
-          built out of <strong>Tokens</strong>. A token is the smallest individual
-          puzzle piece of code that the computer can recognize.
+          built out of <strong>Tokens</strong>. <br />A token is the smallest individual
+          building block of code that the computer can recognize.
         </p>
       </div>
 
@@ -212,17 +212,17 @@ const Tokens = () => {
             <h4 className="text-base font-semibold text-slate-800 dark:text-slate-200">Types of Literals in Python</h4>
             <div className="pl-4 border-l-2 border-amber-200 dark:border-amber-800 space-y-4">
               <div>
-                <h5 className="font-semibold text-slate-750 dark:text-slate-200">Numeric Literals</h5>
+                <h5 className=" text-slate-750 dark:text-slate-200"> <strong>Numeric Literals:</strong> Represents numbers</h5>
                 <ul className="list-disc pl-5 space-y-1 text-sm text-slate-600 dark:text-slate-350">
-                  <li><strong>Integers:</strong> Whole numbers. Example: <code>age = 12</code></li>
-                  <li><strong>Floats:</strong> Decimals. Example: <code>pi = 3.14</code></li>
+                  <li><strong>Integers:</strong> Integer numbers. Example: <code>age = 12 or temp = 29.7 or count  = 0</code></li>
+                  <li><strong>Floats:</strong> Decimal numbers. Example: <code>pi = 3.14</code></li>
                   <li><strong>Complex:</strong> Real + imaginary. Example: <code>num = 3 + 4j</code></li>
                 </ul>
                 <CodeBlock code={`# Numeric Literals\ninteger_num = 42\nfloat_num = 3.14159\ncomplex_num = 5 + 2j`} />
               </div>
 
               <div>
-                <h5 className="font-semibold text-slate-750 dark:text-slate-200">String Literals</h5>
+                <h5 className="text-slate-750 dark:text-slate-200"><strong>String Literals</strong>: Represents text and it is enclosed within quotes.</h5>
                 <ul className="list-disc pl-5 space-y-1 text-sm text-slate-600 dark:text-slate-350">
                   <li><strong>Single-line:</strong> Quote enclosed. Example: <code>name = "Riya"</code></li>
                   <li><strong>Multi-line:</strong> Triple quotes. Example: <code>text = """Hello World"""</code></li>

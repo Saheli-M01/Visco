@@ -308,6 +308,20 @@ export const pythonNotes = [
             },
         ]
     },
+    {
+        id: "error-handling",
+        title: "Errors & Exceptions",
+        component: "ErrorHandling",
+        children: [
+            { id: "error-types", title: "Built-in Exceptions" },
+            { id: "try-except", title: "try...except" },
+            { id: "finally", title: "else & finally" },
+            { id: "raise", title: "raise Statement" },
+            { id: "custom-exceptions", title: "Custom Exceptions" },
+            { id: "exception-object", title: "Exception Object" },
+            { id: "practical-errors", title: "Practical Examples" },
+        ]
+    },
 
 ];
 

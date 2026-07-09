@@ -45,7 +45,7 @@ export const Footer = () => {
 
       {/* Bottom Bar */}
       <div className="border-t border-gray-200 text-sm text-gray-700 text-center py-4 mt-8">
-        © {currentYear} Visco. Made for algorithm learners.
+        © {currentYear} Visco. Made for algorithm learners by <a href="https://sahelimondal.in">Saheli</a>
       </div>
     </footer>
   );

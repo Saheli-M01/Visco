@@ -30,7 +30,7 @@ const IncrementDecrement = () => {
       <Infobox type="warning" title="Crucial Python Rule">
         <span className="inline-flex items-center gap-1.5">
           <ShieldAlert className="w-4 h-4 shrink-0" />
-          Python does not have ++ or -- operators! <br /> Writing x++ or --x will either cause a syntax error or behave unexpectedly.
+          Python does not have ++ or -- operators! Writing x++ or --x will either cause a syntax error or behave unexpectedly.
         </span>
       </Infobox>
 

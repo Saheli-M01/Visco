@@ -23,7 +23,7 @@ const NotesHome = () => {
                     <span className="font-bold text-slate-800 text-base">Python Notes</span>
                 </div>
                 <button
-                    onClick={() => navigate("/")}
+                    onClick={() => navigate("/docs")}
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 text-xs font-semibold text-slate-600 hover:text-slate-900 border border-slate-200 transition"
                 >
                     <ArrowLeft className="h-3.5 w-3.5" />

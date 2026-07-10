@@ -257,9 +257,10 @@ const Tokens = () => {
         {/* Operators */}
         <div className="rounded-xl border-2 border-pink-200 dark:border-pink-800 bg-pink-50 dark:bg-slate-800 p-5 space-y-4 shadow-sm" id="operators">
           <h3 className="text-lg font-bold text-pink-700 dark:text-pink-400 flex items-center gap-2">
-            <Calculator className="w-5 h-5" /> 4. Operators (With Examples)
+            <Calculator className="w-5 h-5" /> 4. Operators 
+           
           </h3>
-
+<p className="text-sm text-slate-600 dark:text-slate-350"> Special type of symbols to perform some operations between two or multiple values or operands</p>
           <div className="space-y-2">
             <h4 className="text-base font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
               <Calculator className="w-4 h-4" /> A. Arithmetic Operators
@@ -362,6 +363,7 @@ const Tokens = () => {
           <h3 className="text-lg font-bold text-teal-700 dark:text-teal-400 flex items-center gap-2">
             <ListTree className="w-5 h-5" /> 5. Delimiters or Separators
           </h3>
+          <p className="text-sm text-slate-600 dark:text-slate-350"> Delimiters is a character or sequence of characters to seperate different pieces in code.</p>
           <ul className="list-disc pl-6 space-y-1.5 text-slate-600 dark:text-slate-350 leading-relaxed">
             <li><code>( )</code> &rarr; Used for prints or math groups: <code>print("Hello")</code></li>
             <li><code>[ ]</code> &rarr; Used for building lists: <code>items = ["apple", "banana"]</code></li>

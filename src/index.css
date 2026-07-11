@@ -394,3 +394,29 @@ section {
   page-break-before: always;
   break-before: page;
 }
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  #notes-content, #notes-content * {
+    visibility: visible;
+  }
+  
+  #notes-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+  }
+
+  /* Prevent page breaks inside code blocks and headers */
+  pre, code, h1, h2, h3, h4, h5, h6 {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}

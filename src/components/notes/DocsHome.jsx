@@ -1,6 +1,7 @@
 import { Code2, FileCode2, ArrowUpRight, Layers, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Navigation } from "../landing/Navigation";
+import FloatingPDFButton from "./FloatingPDFButton";
 
 const docs = [
     {
@@ -150,6 +151,8 @@ export default function DocsHome() {
                     </div>
                 </div>
             </div>
+            
+            <FloatingPDFButton fileName="All_Docs.pdf" />
         </section>
     );
 }

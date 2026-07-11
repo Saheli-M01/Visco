@@ -5,6 +5,7 @@ import { Menu, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { pythonNotes } from "@/data/notes";
 import PythonPage from "./python/PythonPage";
+import FloatingPDFButton from "./FloatingPDFButton";
 
 const NotesHome = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -49,6 +50,8 @@ const NotesHome = () => {
                 />
                 <NotesContent config={config} />
             </div>
+            
+            <FloatingPDFButton fileName="Python_Notes.pdf" targetId="notes-content" />
         </div>
     );
 };

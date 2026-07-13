@@ -4,7 +4,7 @@ import Interpreter from "./sections/Interpreter";
 import Tokens from "./sections/Tokens";
 import Variables from "./sections/Variables";
 import DataTypes from "./sections/DataTypes";
-import TypeInteractions from "./sections/TypeInteractionsAndTypeCasting";
+
 import IncrementDecrement from "./sections/IncrementDecrement";
 import StringConcatenation from "./sections/StringConcatenation";
 import PracticeQuestions1 from "./sections/PracticeQuestions1";
@@ -20,8 +20,6 @@ import Sets from "./sections/Sets";
 import Dictionaries from "./sections/Dictionaries";
 import ErrorHandling from "./sections/ErrorHandling";
 
-
-
 const PythonPage = () => {
   return (
     <div className="space-y-12">
@@ -34,8 +32,6 @@ const PythonPage = () => {
       <Variables />
 
       <DataTypes />
-
-      <TypeInteractions />
 
       <IncrementDecrement />
 

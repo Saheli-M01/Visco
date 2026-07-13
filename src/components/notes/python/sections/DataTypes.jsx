@@ -1,6 +1,14 @@
 import React from "react";
 import NoteTable from "../../shared/NoteTable";
-import { Boxes, Type, Hash, ToggleLeft, ListOrdered, Scale } from "lucide-react";
+import {
+  Boxes,
+  Type,
+  Hash,
+  ToggleLeft,
+  ListOrdered,
+  Scale,
+} from "lucide-react";
+import TypeInteractions from "./TypeInteractionsAndTypeCasting";
 
 const DataTypes = () => {
   const tableHeaders = ["Category", "Type Name", "Simple Examples"];
@@ -43,7 +51,8 @@ const DataTypes = () => {
           <Boxes className="w-8 h-8" /> Data Types
         </h1>
         <p className="text-purple-50 mt-1 text-sm">
-          A data type defines the kind of values a variable can store and the operations that can be performed on it. 
+          A data type defines the kind of values a variable can store and the
+          operations that can be performed on it.
         </p>
       </div>
 
@@ -57,15 +66,19 @@ const DataTypes = () => {
         </h3>
         <ul className="list-disc pl-6 space-y-1.5 text-slate-600 dark:text-slate-350 leading-relaxed">
           <li>
-            <strong>Integers (<code>int</code>):</strong> Include all negative
-            numbers, zero, and positive numbers (e.g., ..., -2, -1, 0, 1, 2, ...).
+            <strong>
+              Integers (<code>int</code>):
+            </strong>{" "}
+            Include all negative numbers, zero, and positive numbers (e.g., ...,
+            -2, -1, 0, 1, 2, ...).
           </li>
           <li>
-            <strong>Whole Numbers:</strong> Start strictly at zero and only go up
-            positively (0, 1, 2, 3, ...). No negatives!
+            <strong>Whole Numbers:</strong> Start strictly at zero and only go
+            up positively (0, 1, 2, 3, ...). No negatives!
           </li>
         </ul>
       </div>
+      <TypeInteractions />
     </section>
   );
 };

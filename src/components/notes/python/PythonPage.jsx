@@ -15,6 +15,7 @@ import TakingInputs from "./sections/TakingInputs";
 import Loops from "./sections/Loops";
 import Functions from "./sections/Functions";
 import Lists from "./sections/Lists";
+import Arrays from "./sections/Arrays";
 import Tuples from "./sections/Tuples";
 import Sets from "./sections/Sets";
 import Dictionaries from "./sections/Dictionaries";
@@ -52,6 +53,8 @@ const PythonPage = () => {
       <Functions />
 
       <Lists />
+
+      <Arrays />
 
       <Tuples />
 

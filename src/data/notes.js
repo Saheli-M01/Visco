@@ -228,6 +228,33 @@ export const pythonNotes = [
         ]
     },
     {
+        id: "arrays",
+        title: "Arrays",
+        component: "Arrays",
+        children: [
+            {
+                id: "array-module",
+                title: "Built-in array Module",
+            },
+            {
+                id: "array-operations",
+                title: "Array Operations",
+            },
+            {
+                id: "numpy-arrays",
+                title: "NumPy Arrays",
+            },
+            {
+                id: "numpy-operations",
+                title: "Vectorized Operations",
+            },
+            {
+                id: "list-vs-array",
+                title: "List vs array vs NumPy",
+            },
+        ]
+    },
+    {
         id: "tuples",
         title: "Tuples",
         component: "Tuples",

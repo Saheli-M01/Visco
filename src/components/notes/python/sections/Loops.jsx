@@ -551,6 +551,71 @@ for i in range(1, 21):
                         ]}
                     />
                 </div>
+
+                {/* enumerate and zip */}
+                <div className="rounded-xl border-2 border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-slate-800 p-5 space-y-4 shadow-sm" id="enumerate-zip">
+                    <h3 className="text-lg font-bold text-sky-700 dark:text-sky-400 flex items-center gap-2">
+                        <Sparkles className="w-5 h-5" /> enumerate() and zip()
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
+                        These two built-in functions pair perfectly with <code>for</code> loops and
+                        make your code much cleaner.
+                    </p>
+
+                    <div>
+                        <h4 className="font-bold text-sky-700 dark:text-sky-400 mb-2">enumerate() — get index and value together</h4>
+                        <p className="text-sm text-slate-600 dark:text-slate-350 mb-2">
+                            Instead of <code>range(len(list))</code>, use <code>enumerate()</code>.
+                            It gives you both the <strong>index</strong> and the <strong>value</strong>
+                            on every iteration.
+                        </p>
+                        <CodeBlock code={`fruits = ["apple", "banana", "cherry"]
+
+# Old clunky way
+for i in range(len(fruits)):
+    print(i, fruits[i])
+
+# Clean way with enumerate()
+for i, fruit in enumerate(fruits):
+    print(i, fruit)
+# 0 apple
+# 1 banana
+# 2 cherry
+
+# Start numbering from 1 instead of 0
+for i, fruit in enumerate(fruits, start=1):
+    print(f"{i}. {fruit}")
+# 1. apple
+# 2. banana
+# 3. cherry`} />
+                    </div>
+
+                    <div>
+                        <h4 className="font-bold text-sky-700 dark:text-sky-400 mb-2">zip() — loop two or more sequences together</h4>
+                        <p className="text-sm text-slate-600 dark:text-slate-350 mb-2">
+                            <code>zip()</code> pairs elements from multiple lists, like a zipper.
+                            It stops when the <strong>shortest</strong> list runs out.
+                        </p>
+                        <CodeBlock code={`names  = ["Rahul", "Priya", "Aman"]
+marks  = [85, 92, 78]
+
+for name, mark in zip(names, marks):
+    print(f"{name}: {mark}")
+# Rahul: 85
+# Priya: 92
+# Aman: 78
+
+# Three lists at once
+grades = ["B", "A+", "B+"]
+for name, mark, grade in zip(names, marks, grades):
+    print(f"{name} — {mark} ({grade})")
+
+# Convert to a list of tuples
+pairs = list(zip(names, marks))
+print(pairs)
+# [('Rahul', 85), ('Priya', 92), ('Aman', 78)]`} />
+                    </div>
+                </div>
             </div>
         </section>
     );

@@ -25,7 +25,7 @@ const topicConfigs = [
     glow: "from-sky-100 via-sky-200 to-transparent", // tuned to be visible on light BG
     iconBg: "bg-gradient-to-br from-sky-500 to-indigo-600",
     borderGradient: "from-white via-blue-200 to-white",
-   
+
     textAccent: "text-blue-600",
     chipGradient: "from-sky-400 via-blue-400 to-indigo-500",
     chipBorderGradient: "from-sky-400 via-blue-300 to-indigo-400",
@@ -42,7 +42,7 @@ const topicConfigs = [
     glow: "from-amber-100 via-amber-200 to-transparent",
     iconBg: "bg-gradient-to-br from-amber-300 to-yellow-600",
     borderGradient: "from-white via-amber-200 to-white",
-   
+
     textAccent: "text-amber-600",
     chipGradient: "from-amber-400 via-yellow-400 to-orange-500",
     chipBorderGradient: "from-amber-400 via-yellow-300 to-orange-400",
@@ -59,7 +59,7 @@ const topicConfigs = [
     glow: "from-orange-200 via-orange-200 to-transparent",
     iconBg: "bg-gradient-to-br from-orange-500 to-pink-600",
     borderGradient: "from-white via-red-200 to-white",
-  
+
     textAccent: "text-orange-600",
     chipGradient: "from-orange-400 via-red-400 to-pink-500",
     chipBorderGradient: "from-orange-400 via-red-300 to-pink-400",
@@ -76,7 +76,7 @@ const topicConfigs = [
     glow: "from-purple-200 via-purple-200 to-transparent",
     iconBg: "bg-gradient-to-br from-purple-500 to-indigo-600",
     borderGradient: "from-white via-violet-200 to-white",
-    
+
     textAccent: "text-purple-600",
     chipGradient: "from-purple-400 via-violet-400 to-indigo-500",
     chipBorderGradient: "from-purple-400 via-violet-300 to-indigo-400",
@@ -249,8 +249,12 @@ export const Topics = () => {
                           <span
                             className={`relative inline-flex items-center gap-2 p-2 rounded-full text-sm font-semibold text-center transition-transform duration-150 overflow-hidden bg-white`}
                           >
-                            <BarChart3 className={`w-3.5 h-3.5 ${topic.chipIconColor}`} />
-                            <span className={`whitespace-nowrap bg-gradient-to-r ${topic.chipGradient} bg-clip-text text-transparent`}>
+                            <BarChart3
+                              className={`w-3.5 h-3.5 ${topic.chipIconColor}`}
+                            />
+                            <span
+                              className={`whitespace-nowrap bg-gradient-to-r ${topic.chipGradient} bg-clip-text text-transparent`}
+                            >
                               {topic.interactiveStats.available}/
                               {topic.interactiveStats.total} algorithms
                               available

@@ -11,6 +11,7 @@ import {
     Sparkles,
     Table2,
     ScanSearch,
+    Copy,
 } from "lucide-react";
 
 const Lists = () => {
@@ -270,10 +271,124 @@ print(flat)  # [1, 2, 3, 4, 5, 6]`} />
                     />
                 </div>
 
+                {/* enumerate and zip */}
+                <div className="rounded-xl border-2 border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm" id="list-enumerate-zip">
+                    <h3 className="text-lg font-bold text-amber-700 dark:text-amber-400 flex items-center gap-2">
+                        <ArrowRightLeft className="w-5 h-5" /> 9. enumerate() and zip()
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
+                        These two built-in functions are used constantly with lists. Learn them early
+                        — they make loops much cleaner.
+                    </p>
+                    <div className="space-y-3">
+                        <h4 className="font-bold text-amber-700 dark:text-amber-400">enumerate() — index + value together</h4>
+                        <p className="text-sm text-slate-600 dark:text-slate-350">
+                            Instead of <code>range(len(list))</code>, use <code>enumerate()</code> to get
+                            both the index and the value in one clean step.
+                        </p>
+                        <CodeBlock code={`fruits = ["apple", "banana", "cherry"]
+
+# Old way (clunky)
+for i in range(len(fruits)):
+    print(i, fruits[i])
+
+# Clean way with enumerate()
+for i, fruit in enumerate(fruits):
+    print(i, fruit)
+# 0 apple
+# 1 banana
+# 2 cherry
+
+# Start counting from 1 instead of 0
+for i, fruit in enumerate(fruits, start=1):
+    print(f"{i}. {fruit}")
+# 1. apple
+# 2. banana
+# 3. cherry`} />
+
+                        <h4 className="font-bold text-amber-700 dark:text-amber-400 pt-2">zip() — loop two lists at the same time</h4>
+                        <p className="text-sm text-slate-600 dark:text-slate-350">
+                            <code>zip()</code> pairs elements from multiple lists together, like a zipper. It stops
+                            when the shortest list runs out.
+                        </p>
+                        <CodeBlock code={`names  = ["Rahul", "Priya", "Aman"]
+marks  = [85, 92, 78]
+grades = ["B", "A+", "B+"]
+
+# Pair two lists
+for name, mark in zip(names, marks):
+    print(f"{name}: {mark}")
+# Rahul: 85
+# Priya: 92
+# Aman: 78
+
+# Pair three lists
+for name, mark, grade in zip(names, marks, grades):
+    print(f"{name} — {mark} ({grade})")
+# Rahul — 85 (B)
+# Priya — 92 (A+)
+# Aman — 78 (B+)
+
+# Create a list of tuples
+pairs = list(zip(names, marks))
+print(pairs)
+# [('Rahul', 85), ('Priya', 92), ('Aman', 78)]`} />
+                    </div>
+                </div>
+
+                {/* Copy vs reference */}
+                <div className="rounded-xl border-2 border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm" id="list-copy">
+                    <h3 className="text-lg font-bold text-rose-700 dark:text-rose-400 flex items-center gap-2">
+                        <Layers className="w-5 h-5" /> 10. Copying Lists — A Common Trap
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
+                        In Python, <code>b = a</code> does <strong>not</strong> create a new list — it
+                        just creates a second name pointing to the <strong>same</strong> list. Any change
+                        to <code>b</code> will also change <code>a</code>.
+                    </p>
+                    <CodeBlock code={`# THE TRAP — both names point to the same list
+a = [1, 2, 3]
+b = a          # b is NOT a copy — it's the same list!
+
+b.append(4)
+print(a)   # [1, 2, 3, 4]  ← a was changed too!
+print(b)   # [1, 2, 3, 4]
+
+# SOLUTION 1: .copy() method — shallow copy
+a = [1, 2, 3]
+b = a.copy()
+b.append(4)
+print(a)   # [1, 2, 3]   ← a is NOT affected
+print(b)   # [1, 2, 3, 4]
+
+# SOLUTION 2: slice [:] — also a shallow copy
+b = a[:]
+b.append(99)
+print(a)   # [1, 2, 3]   ← safe
+print(b)   # [1, 2, 3, 99]
+
+# SOLUTION 3: list() constructor
+b = list(a)`} />
+                    <Infobox type="warning" title="Shallow Copy Warning">
+                        <code>.copy()</code> creates a <strong>shallow copy</strong> — it copies the outer list,
+                        but nested lists inside are still shared. If you have a list of lists and need
+                        fully independent copies, use <code>import copy; b = copy.deepcopy(a)</code>.
+                    </Infobox>
+                    <CodeBlock code={`import copy
+
+nested = [[1, 2], [3, 4]]
+shallow = nested.copy()
+deep    = copy.deepcopy(nested)
+
+nested[0].append(99)
+print(shallow)   # [[1, 2, 99], [3, 4]]  ← inner list was shared!
+print(deep)      # [[1, 2], [3, 4]]       ← fully independent`} />
+                </div>
+
                 {/* Practical example */}
                 <div className="rounded-xl border-2 border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm" id="list-practical">
                     <h3 className="text-lg font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-2">
-                        <Sparkles className="w-5 h-5" /> 9. Practical Example: Student Marks Manager
+                        <Sparkles className="w-5 h-5" /> 11. Practical Example: Student Marks Manager
                     </h3>
                     <CodeBlock code={`# Student marks manager
 marks = [85, 92, 78, 95, 88, 72, 90]
@@ -282,7 +397,7 @@ marks = [85, 92, 78, 95, 88, 72, 90]
 print("Total students:", len(marks))
 print("Highest:", max(marks))
 print("Lowest:", min(marks))
-print("Average:", sum(marks) / len(marks))
+print(f"Average: {sum(marks) / len(marks):.1f}")
 
 # Students scoring above 80
 above_80 = [m for m in marks if m > 80]
@@ -293,13 +408,17 @@ print("Count:", len(above_80))
 sorted_marks = sorted(marks, reverse=True)
 print("Top 3:", sorted_marks[:3])
 
+# Print numbered ranking using enumerate
+print("\\nRanking:")
+for rank, score in enumerate(sorted_marks, start=1):
+    print(f"  {rank}. {score}")
+
 # Add a new student's marks
 marks.append(91)
-print("After adding:", marks)
 
 # Remove lowest score
 marks.remove(min(marks))
-print("After removing lowest:", marks)`} />
+print("After update:", marks)`} />
                 </div>
             </div>
         </section>

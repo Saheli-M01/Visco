@@ -247,6 +247,94 @@ print(f"Needs improvement: {worst} ({report['subjects'][worst]})")
 # Best subject: Computer (95)
 # Needs improvement: English (78)`} />
                 </div>
+
+                {/* Dictionary comprehension */}
+                <div className="rounded-xl border-2 border-teal-200 dark:border-teal-800 bg-teal-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm" id="dict-comprehension">
+                    <h3 className="text-lg font-bold text-teal-700 dark:text-teal-400 flex items-center gap-2">
+                        <Sparkles className="w-5 h-5" /> 8. Dictionary Comprehension
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
+                        Just like list comprehension builds a list in one line, <strong>dictionary
+                        comprehension</strong> builds a dictionary in one line. The syntax is:{" "}
+                        <code>{`{key: value for item in iterable}`}</code>
+                    </p>
+                    <CodeBlock code={`# Squares of 1 to 5
+squares = {x: x**2 for x in range(1, 6)}
+print(squares)
+# {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
+
+# Map names to their lengths
+names = ["Rahul", "Priya", "Aman", "Sneha"]
+name_lengths = {name: len(name) for name in names}
+print(name_lengths)
+# {'Rahul': 5, 'Priya': 5, 'Aman': 4, 'Sneha': 5}
+
+# With condition — only subjects with marks >= 80
+subjects = {"Math": 92, "Science": 75, "English": 88, "Hindi": 65}
+passed = {sub: marks for sub, marks in subjects.items() if marks >= 80}
+print(passed)
+# {'Math': 92, 'English': 88}
+
+# Invert a dictionary (swap keys and values)
+original = {"a": 1, "b": 2, "c": 3}
+inverted = {v: k for k, v in original.items()}
+print(inverted)
+# {1: 'a', 2: 'b', 3: 'c'}`} />
+                </div>
+
+                {/* setdefault and fromkeys */}
+                <div className="rounded-xl border-2 border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm" id="dict-extra-methods">
+                    <h3 className="text-lg font-bold text-indigo-700 dark:text-indigo-400 flex items-center gap-2">
+                        <ListChecks className="w-5 h-5" /> 9. More Useful Methods
+                    </h3>
+
+                    <div className="space-y-4">
+                        <div>
+                            <h4 className="font-bold text-indigo-700 dark:text-indigo-400 mb-2">setdefault() — get or insert</h4>
+                            <p className="text-sm text-slate-600 dark:text-slate-350 mb-2">
+                                Returns the value for a key if it exists. If it <em>doesn't</em> exist,
+                                it inserts the key with a default value and returns that.
+                            </p>
+                            <CodeBlock code={`student = {"name": "Rahul", "marks": 85}
+
+# Key exists — returns existing value, no change
+print(student.setdefault("marks", 0))    # 85
+
+# Key doesn't exist — inserts it with default value
+print(student.setdefault("city", "N/A")) # N/A
+print(student)
+# {'name': 'Rahul', 'marks': 85, 'city': 'N/A'}
+
+# Classic use: building a frequency counter
+words = ["apple", "banana", "apple", "cherry", "banana", "apple"]
+count = {}
+for word in words:
+    count.setdefault(word, 0)
+    count[word] += 1
+print(count)
+# {'apple': 3, 'banana': 2, 'cherry': 1}`} />
+                        </div>
+
+                        <div>
+                            <h4 className="font-bold text-indigo-700 dark:text-indigo-400 mb-2">dict.fromkeys() — create dict from a list of keys</h4>
+                            <p className="text-sm text-slate-600 dark:text-slate-350 mb-2">
+                                A quick way to create a dictionary from a list of keys, all with the
+                                same initial value.
+                            </p>
+                            <CodeBlock code={`# All students start with 0 marks
+subjects = ["Math", "Science", "English"]
+gradebook = dict.fromkeys(subjects, 0)
+print(gradebook)
+# {'Math': 0, 'Science': 0, 'English': 0}
+
+# Default None value
+keys = ["name", "age", "city"]
+template = dict.fromkeys(keys)
+print(template)
+# {'name': None, 'age': None, 'city': None}`} />
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     );

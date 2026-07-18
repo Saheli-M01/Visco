@@ -151,6 +151,73 @@ all_friends = rahul_friends | priya_friends
 print("Total unique friends:", len(all_friends))
 # 6`} />
                 </div>
+
+                {/* Set comprehension */}
+                <div className="rounded-xl border-2 border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm" id="set-comprehension">
+                    <h3 className="text-lg font-bold text-sky-700 dark:text-sky-400 flex items-center gap-2">
+                        <Sparkles className="w-5 h-5" /> 5. Set Comprehension
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
+                        Just like list comprehension, you can build a set in one line using curly braces.
+                        Duplicates are automatically removed.
+                    </p>
+                    <CodeBlock code={`# Squares of 1 to 5
+squares = {x ** 2 for x in range(1, 6)}
+print(squares)  # {1, 4, 9, 16, 25}
+
+# Unique first letters from a list of words
+words = ["apple", "banana", "avocado", "blueberry", "cherry"]
+first_letters = {word[0] for word in words}
+print(first_letters)  # {'a', 'b', 'c'}  (only unique letters)
+
+# Remove duplicates from a list with comprehension
+numbers = [1, 2, 2, 3, 3, 3, 4]
+unique = {n for n in numbers}
+print(unique)  # {1, 2, 3, 4}`} />
+                </div>
+
+                {/* Frozenset */}
+                <div className="rounded-xl border-2 border-violet-200 dark:border-violet-800 bg-violet-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm" id="frozenset">
+                    <h3 className="text-lg font-bold text-violet-700 dark:text-violet-400 flex items-center gap-2">
+                        <ArrowRightLeft className="w-5 h-5" /> 6. frozenset — The Immutable Set
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
+                        A <code>frozenset</code> is exactly like a set, but <strong>immutable</strong> —
+                        you cannot add or remove elements after creating it. Because it's immutable,
+                        a frozenset can be used as a dictionary key or stored inside another set
+                        (regular sets cannot).
+                    </p>
+                    <CodeBlock code={`# Create a frozenset
+fs = frozenset([1, 2, 3, 2, 4])
+print(fs)         # frozenset({1, 2, 3, 4})
+print(type(fs))   # <class 'frozenset'>
+
+# All read operations still work
+print(2 in fs)    # True
+print(len(fs))    # 4
+
+# These will raise errors — you cannot modify a frozenset:
+# fs.add(5)      # AttributeError
+# fs.remove(1)   # AttributeError
+
+# Use as a dictionary key (regular set cannot be a key)
+permissions = {
+    frozenset(["read", "write"]): "Editor",
+    frozenset(["read"]):          "Viewer",
+}
+user_perms = frozenset(["read", "write"])
+print(permissions[user_perms])   # Editor`} />
+                    <NoteTable
+                        headers={["Feature", "set", "frozenset"]}
+                        rows={[
+                            ["Unique elements", "✓", "✓"],
+                            ["Unordered", "✓", "✓"],
+                            ["Mutable (add/remove)", "✓", "✗"],
+                            ["Can be a dict key", "✗", "✓"],
+                            ["Set operations (|, &, -)", "✓", "✓"],
+                        ]}
+                    />
+                </div>
             </div>
         </section>
     );

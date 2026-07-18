@@ -39,7 +39,7 @@ const TypeAnimation = ({ sequence, speed, className, repeat }) => {
           }
         }
       },
-      isDeleting ? 50 : speed || 100
+      isDeleting ? 50 : speed || 100,
     );
 
     return () => clearTimeout(timeout);

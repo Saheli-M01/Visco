@@ -1,5 +1,6 @@
 import React from "react";
 import CodeBlock from "../../shared/CodeBlock";
+import NoteTable from "../../shared/NoteTable";
 import Infobox from "../../shared/Infobox";
 import {
     Lock,
@@ -143,6 +144,50 @@ t1 = (1, 2, 3)
 t2 = (4, 5, 6)
 t3 = t1 + t2
 print(t3)  # (1, 2, 3, 4, 5, 6)`} />
+                </div>
+
+                {/* When to use tuples */}
+                <div className="rounded-xl border-2 border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm" id="tuple-vs-list">
+                    <h3 className="text-lg font-bold text-indigo-700 dark:text-indigo-400 flex items-center gap-2">
+                        <Lock className="w-5 h-5" /> 5. When to Use Tuples vs Lists
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
+                        This is a common beginner question. The rule is simple: if the data
+                        should <strong>never change</strong>, use a tuple. If it will change, use a list.
+                    </p>
+                    <NoteTable
+                        headers={["Situation", "Use"]}
+                        rows={[
+                            ["Days of the week, months of the year", <span><strong>Tuple</strong> — fixed data</span>],
+                            ["A list of students in a class", <span><strong>List</strong> — students join/leave</span>],
+                            ["GPS coordinates (lat, lon)", <span><strong>Tuple</strong> — a location is fixed</span>],
+                            ["Shopping cart items", <span><strong>List</strong> — items are added/removed</span>],
+                            ["RGB color value (255, 128, 0)", <span><strong>Tuple</strong> — color is fixed</span>],
+                            ["Returning multiple values from a function", <span><strong>Tuple</strong> — natural use</span>],
+                        ]}
+                    />
+                    <CodeBlock code={`# Functions naturally return tuples when returning multiple values
+def min_max(numbers):
+    return min(numbers), max(numbers)   # returns a tuple
+
+low, high = min_max([5, 1, 9, 3, 7])
+print(low, high)   # 1 9
+
+# Tuples as dictionary keys (lists can't be keys!)
+locations = {
+    (28.61, 77.20): "New Delhi",
+    (19.07, 72.87): "Mumbai",
+}
+print(locations[(28.61, 77.20)])   # New Delhi
+
+# Fixed constant data
+DAYS = ("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun",
+          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")`} />
+                    <Infobox type="tip" title="Tuples are also faster">
+                        Tuples are slightly faster than lists for iteration and use less memory.
+                        For large fixed datasets, prefer tuples.
+                    </Infobox>
                 </div>
             </div>
         </section>

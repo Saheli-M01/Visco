@@ -69,7 +69,25 @@ export const pythonNotes = [
     {
         id: "string-concatenation",
         title: "String Concatenation",
-        component: "StringConcatenation"
+        component: "StringConcatenation",
+        children: [
+            {
+                id: "string-concat",
+                title: "Joining Strings (+)",
+            },
+            {
+                id: "f-strings",
+                title: "f-Strings (Recommended)",
+            },
+            {
+                id: "print-function",
+                title: "print() In Detail",
+            },
+            {
+                id: "string-methods",
+                title: "String Methods",
+            },
+        ]
     },
     {
         id: "practice-questions-1",
@@ -142,6 +160,10 @@ export const pythonNotes = [
             {
                 id: "for-vs-while",
                 title: "For vs While",
+            },
+            {
+                id: "enumerate-zip",
+                title: "enumerate() & zip()",
             },
         ]
     },
@@ -225,6 +247,14 @@ export const pythonNotes = [
                 id: "list-methods",
                 title: "Common Methods",
             },
+            {
+                id: "list-enumerate-zip",
+                title: "enumerate() & zip()",
+            },
+            {
+                id: "list-copy",
+                title: "Copying Lists",
+            },
         ]
     },
     {
@@ -275,6 +305,10 @@ export const pythonNotes = [
                 id: "tuple-unpacking",
                 title: "Tuple Unpacking",
             },
+            {
+                id: "tuple-vs-list",
+                title: "Tuple vs List",
+            },
         ]
     },
     {
@@ -297,6 +331,14 @@ export const pythonNotes = [
             {
                 id: "set-practical",
                 title: "Practical Example",
+            },
+            {
+                id: "set-comprehension",
+                title: "Set Comprehension",
+            },
+            {
+                id: "frozenset",
+                title: "frozenset",
             },
         ]
     },
@@ -332,6 +374,14 @@ export const pythonNotes = [
             {
                 id: "dict-practical",
                 title: "Practical Example",
+            },
+            {
+                id: "dict-comprehension",
+                title: "Dict Comprehension",
+            },
+            {
+                id: "dict-extra-methods",
+                title: "setdefault & fromkeys",
             },
         ]
     },

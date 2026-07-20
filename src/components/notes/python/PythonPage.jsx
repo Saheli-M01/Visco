@@ -4,7 +4,6 @@ import Interpreter from "./sections/Interpreter";
 import Tokens from "./sections/Tokens";
 import Variables from "./sections/Variables";
 import DataTypes from "./sections/DataTypes";
-
 import IncrementDecrement from "./sections/IncrementDecrement";
 import StringConcatenation from "./sections/StringConcatenation";
 import PracticeQuestions1 from "./sections/PracticeQuestions1";
@@ -21,48 +20,93 @@ import Sets from "./sections/Sets";
 import Dictionaries from "./sections/Dictionaries";
 import ErrorHandling from "./sections/ErrorHandling";
 
+// NOTE: each section is wrapped with a stable id. These ids are what you'll
+// type into the "Start section ID" / "End section ID" fields in the PDF
+// export modal (e.g. start = "tokens", end = "loops").
 const PythonPage = () => {
   return (
-    <div className="space-y-12">
-      <Introduction />
+    <div id="notes-content">
+      <div className="space-y-12">
+        <div id="introduction">
+          <Introduction />
+        </div>
 
-      <Interpreter />
+        <div id="interpreter">
+          <Interpreter />
+        </div>
 
-      <Tokens />
+        <div id="tokens">
+          <Tokens />
+        </div>
 
-      <Variables />
+        <div id="variables">
+          <Variables />
+        </div>
 
-      <DataTypes />
+        <div id="data-types">
+          <DataTypes />
+        </div>
 
-      <IncrementDecrement />
+        <div id="increment-decrement">
+          <IncrementDecrement />
+        </div>
 
-      <StringConcatenation />
+        <div id="string-concatenation">
+          <StringConcatenation />
+        </div>
 
-      <PracticeQuestions1 />
+        <div id="practice-questions-1">
+          <PracticeQuestions1 />
+        </div>
 
-      <Conditionals />
+        <div id="conditionals">
+          <Conditionals />
+        </div>
 
-      <MatchCase />
+        <div id="match-case">
+          <MatchCase />
+        </div>
 
-      <PracticeQuestions2 />
+        <div id="practice-questions-2">
+          <PracticeQuestions2 />
+        </div>
 
-      <TakingInputs />
+        <div id="taking-inputs">
+          <TakingInputs />
+        </div>
 
-      <Loops />
+        <div id="loops">
+          <Loops />
+        </div>
 
-      <Functions />
+        <div id="functions">
+          <Functions />
+        </div>
 
-      <Lists />
+        <div id="lists">
+          <Lists />
+        </div>
 
-      <Arrays />
+        <div id="arrays">
+          <Arrays />
+        </div>
 
-      <Tuples />
+        <div id="tuples">
+          <Tuples />
+        </div>
 
-      <Sets />
+        <div id="sets">
+          <Sets />
+        </div>
 
-      <Dictionaries />
+        <div id="dictionaries">
+          <Dictionaries />
+        </div>
 
-      <ErrorHandling />
+        <div id="error-handling">
+          <ErrorHandling />
+        </div>
+      </div>
     </div>
   );
 };

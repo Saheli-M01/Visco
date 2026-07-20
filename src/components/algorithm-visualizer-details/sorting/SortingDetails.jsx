@@ -40,8 +40,6 @@ const complexityComponents = {
   "Heap Sort": HeapSortComplexity,
 };
 
-
-
 const SortingDetails = ({ algorithm, topic }) => {
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
@@ -146,7 +144,7 @@ const SortingDetails = ({ algorithm, topic }) => {
               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                 <span
                   className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium ${getDifficultyColor(
-                    algorithm.difficulty
+                    algorithm.difficulty,
                   )}`}
                 >
                   {algorithm.difficulty}
@@ -194,14 +192,23 @@ const SortingDetails = ({ algorithm, topic }) => {
                       >
                         {lang.toUpperCase()}
                       </button>
-                    )
+                    ),
                   )}
                 </div>
               </div>
 
               <div className="relative flex flex-col flex-1 overflow-hidden">
                 <div className="flex flex-1 bg-gray-900 rounded-lg overflow-auto">
-                  <pre className="text-gray-100 text-[0.9rem] overflow-auto custom-scrollbar flex-1 w-full whitespace-pre-wrap font-mono px-3 py-2">
+                  <pre
+                    className="text-gray-100 text-[0.9rem] overflow-auto custom-scrollbar flex-1 w-full whitespace-pre-wrap font-mono px-3 py-2"
+                    style={{
+                      // Disable ligatures so operators like <= and >= render as
+                      // literal characters instead of being merged into ≤ / ≥ glyphs
+                      fontVariantLigatures: "none",
+                      WebkitFontVariantLigatures: "none",
+                      fontFeatureSettings: '"liga" 0, "calt" 0',
+                    }}
+                  >
                     <code>
                       {loadingCode && !loadedCodes[algorithm.name]
                         ? "Loading implementation..."
@@ -300,7 +307,6 @@ const SortingDetails = ({ algorithm, topic }) => {
                         <h5 className="text-xs sm:text-sm font-bold text-blue-700">
                           Pass {pass.passNumber}:
                         </h5>
-                       
                       </div>
 
                       {/* Individual swap steps */}
@@ -334,8 +340,8 @@ const SortingDetails = ({ algorithm, topic }) => {
                                     isSorted
                                       ? "bg-green-400 text-white"
                                       : isSwapped
-                                      ? "bg-orange-400 text-white"
-                                      : "bg-gray-300 text-gray-900"
+                                        ? "bg-orange-400 text-white"
+                                        : "bg-gray-300 text-gray-900"
                                   }`}
                                 >
                                   {num}
@@ -370,7 +376,7 @@ const SortingDetails = ({ algorithm, topic }) => {
                           >
                             {num}
                           </div>
-                        )
+                        ),
                       )}
                     </div>
                   </motion.div>

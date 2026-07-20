@@ -1,4 +1,5 @@
-export const description = "Quick Sort is a divide-and-conquer algorithm that selects a pivot, partitions the array around the pivot, and recursively sorts the partitions.";
+export const description =
+  "Quick Sort is a divide-and-conquer algorithm that selects a pivot, partitions the array around the pivot, and recursively sorts the partitions.";
 export const howItWorks = [
   "Choose a pivot element from the array",
   "Partition the remaining elements into left (< pivot) and right (> pivot)",
@@ -36,14 +37,17 @@ export const generateExampleSteps = () => {
         [workArray[i], workArray[j]] = [workArray[j], workArray[i]];
       }
     }
-    
+
     // Place pivot in correct position
     i++;
     [workArray[i], workArray[right]] = [workArray[right], workArray[i]];
     const pivotIndex = i;
 
     passNumber++;
-    const partitionIndices = Array.from({ length: right - left + 1 }, (_, idx) => left + idx);
+    const partitionIndices = Array.from(
+      { length: right - left + 1 },
+      (_, idx) => left + idx,
+    );
     passes.push({
       passNumber,
       steps: [
@@ -69,111 +73,393 @@ export const generateExampleSteps = () => {
 
 const codes = {
   javascript: `// Quick Sort - JavaScript (runnable)
-function quickSort(arr) {
-  if (arr.length <= 1) return arr;
-  const pivot = arr[arr.length - 1];
-  const left = [], right = [];
-  for (let i = 0; i < arr.length - 1; i++) {
-    if (arr[i] < pivot) left.push(arr[i]);
-    else right.push(arr[i]);
+class Solution {
+  // Function to partition the array
+  partition(arr, low, high) {
+    // Choosing a random index between low and high
+    const randomIndex = low + Math.floor(Math.random() * (high - low + 1));
+    // Swap the random element with the first element
+    [arr[low], arr[randomIndex]] = [arr[randomIndex], arr[low]];
+    // Now choosing arr[low] as the pivot after the swap
+    const pivot = arr[low];
+    // Starting index for left subarray
+    let i = low;
+    // Starting index for right subarray
+    let j = high;
+    while (i < j) {
+      // Move i to the right until we find an element greater than the pivot
+      while (arr[i] <= pivot && i <= high - 1) {
+        i++;
+      }
+      // Move j to the left until we find an element smaller than the pivot
+      while (arr[j] > pivot && j >= low + 1) {
+        j--;
+      }
+      // Swap elements at i and j if i is still less than j
+      if (i < j) {
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+    }
+
+    // Pivot placed in correct position
+    [arr[low], arr[j]] = [arr[j], arr[low]];
+    return j;
   }
-  return [...quickSort(left), pivot, ...quickSort(right)];
+
+  // Helper function to perform the recursive quick sort
+  quickSortHelper(arr, low, high) {
+    // Base case: if the array has one or no elements, it's already sorted
+    if (low < high) {
+      // Get the partition index
+      const pIndex = this.partition(arr, low, high);
+      // Sort the left subarray
+      this.quickSortHelper(arr, low, pIndex - 1);
+      // Sort the right subarray
+      this.quickSortHelper(arr, pIndex + 1, high);
+    }
+  }
+
+  // Function to perform quick sort on given array
+  quickSort(nums) {
+    // Get the size of array
+    const n = nums.length;
+
+    // Perform quick sort
+    this.quickSortHelper(nums, 0, n - 1);
+
+    // Return sorted array
+    return nums;
+  }
 }
+
 // Example usage
 const arr = [10, 7, 8, 9, 1, 5];
-console.log('Original:', arr);
-console.log('Sorted:  ', quickSort(arr));
+console.log('Before Sorting Array:');
+console.log(arr.join(' '));
+
+const sol = new Solution();
+const sortedArr = sol.quickSort([...arr]);
+
+console.log('After Sorting Array:');
+console.log(sortedArr.join(' '));
 `,
   python: `# Quick Sort - Python (runnable)
-def quick_sort(arr):
-    if len(arr) <= 1:
-        return arr[:]
-    pivot = arr[-1]
-    left = [x for x in arr[:-1] if x < pivot]
-    right = [x for x in arr[:-1] if x >= pivot]
-    return quick_sort(left) + [pivot] + quick_sort(right)
+import random
+
+
+class Solution:
+    # Function to partition the array
+    def partition(self, arr, low, high):
+        # Choosing a random index between low and high
+        random_index = random.randint(low, high)
+        # Swap the random element with the first element
+        arr[low], arr[random_index] = arr[random_index], arr[low]
+        # Now choosing arr[low] as the pivot after the swap
+        pivot = arr[low]
+        # Starting index for left subarray
+        i = low
+        # Starting index for right subarray
+        j = high
+        while i < j:
+            # Move i to the right until we find an element greater than the pivot
+            while arr[i] <= pivot and i <= high - 1:
+                i += 1
+            # Move j to the left until we find an element smaller than the pivot
+            while arr[j] > pivot and j >= low + 1:
+                j -= 1
+            # Swap elements at i and j if i is still less than j
+            if i < j:
+                arr[i], arr[j] = arr[j], arr[i]
+
+        # Pivot placed in correct position
+        arr[low], arr[j] = arr[j], arr[low]
+        return j
+
+    # Helper function to perform the recursive quick sort
+    def quick_sort_helper(self, arr, low, high):
+        # Base case: if the array has one or no elements, it's already sorted
+        if low < high:
+            # Get the partition index
+            p_index = self.partition(arr, low, high)
+            # Sort the left subarray
+            self.quick_sort_helper(arr, low, p_index - 1)
+            # Sort the right subarray
+            self.quick_sort_helper(arr, p_index + 1, high)
+
+    # Function to perform quick sort on given array
+    def quick_sort(self, nums):
+        # Get the size of array
+        n = len(nums)
+
+        # Perform quick sort
+        self.quick_sort_helper(nums, 0, n - 1)
+
+        # Return sorted array
+        return nums
+
 
 if __name__ == '__main__':
     arr = [10, 7, 8, 9, 1, 5]
-    print('Original:', arr)
-    print('Sorted:  ', quick_sort(arr))
+    print('Before Sorting Array:')
+    print(' '.join(map(str, arr)))
+
+    sol = Solution()
+    sorted_arr = sol.quick_sort(arr.copy())
+
+    print('After Sorting Array:')
+    print(' '.join(map(str, sorted_arr)))
 `,
-  java: `// Quick Sort - Java (runnable example)
+  java: `// Quick Sort - Java (runnable)
 import java.util.Arrays;
+import java.util.Random;
+
+class Solution {
+    private final Random random = new Random();
+
+    // Function to partition the array
+    int partition(int[] arr, int low, int high) {
+        // Choosing a random index between low and high
+        int randomIndex = low + random.nextInt(high - low + 1);
+        // Swap the random element with the first element
+        int temp = arr[low];
+        arr[low] = arr[randomIndex];
+        arr[randomIndex] = temp;
+        // Now choosing arr[low] as the pivot after the swap
+        int pivot = arr[low];
+        // Starting index for left subarray
+        int i = low;
+        // Starting index for right subarray
+        int j = high;
+        while (i < j) {
+            // Move i to the right until we find an element greater than the pivot
+            while (arr[i] <= pivot && i <= high - 1) {
+                i++;
+            }
+            // Move j to the left until we find an element smaller than the pivot
+            while (arr[j] > pivot && j >= low + 1) {
+                j--;
+            }
+            // Swap elements at i and j if i is still less than j
+            if (i < j) {
+                int t = arr[i];
+                arr[i] = arr[j];
+                arr[j] = t;
+            }
+        }
+
+        // Pivot placed in correct position
+        int t2 = arr[low];
+        arr[low] = arr[j];
+        arr[j] = t2;
+        return j;
+    }
+
+    // Helper function to perform the recursive quick sort
+    void quickSortHelper(int[] arr, int low, int high) {
+        // Base case: if the array has one or no elements, it's already sorted
+        if (low < high) {
+            // Get the partition index
+            int pIndex = partition(arr, low, high);
+            // Sort the left subarray
+            quickSortHelper(arr, low, pIndex - 1);
+            // Sort the right subarray
+            quickSortHelper(arr, pIndex + 1, high);
+        }
+    }
+
+    // Function to perform quick sort on given array
+    int[] quickSort(int[] nums) {
+        // Get the size of array
+        int n = nums.length;
+
+        // Perform quick sort
+        quickSortHelper(nums, 0, n - 1);
+
+        // Return sorted array
+        return nums;
+    }
+}
 
 public class QuickSortExample {
-    public static int[] quickSort(int[] arr) {
-        if (arr.length <= 1) return Arrays.copyOf(arr, arr.length);
-        int pivot = arr[arr.length - 1];
-        int[] left = Arrays.stream(arr, 0, arr.length - 1).filter(x -> x < pivot).toArray();
-        int[] right = Arrays.stream(arr, 0, arr.length - 1).filter(x -> x >= pivot).toArray();
-        int[] sortedLeft = quickSort(left);
-        int[] sortedRight = quickSort(right);
-        int[] res = new int[sortedLeft.length + 1 + sortedRight.length];
-        System.arraycopy(sortedLeft, 0, res, 0, sortedLeft.length);
-        res[sortedLeft.length] = pivot;
-        System.arraycopy(sortedRight, 0, res, sortedLeft.length + 1, sortedRight.length);
-        return res;
-    }
-
     public static void main(String[] args) {
         int[] arr = {10, 7, 8, 9, 1, 5};
-        System.out.println("Original: " + Arrays.toString(arr));
-        System.out.println("Sorted:   " + Arrays.toString(quickSort(arr)));
+        System.out.println("Before Sorting Array:");
+        System.out.println(Arrays.toString(arr));
+
+        Solution sol = new Solution();
+        int[] sortedArr = sol.quickSort(arr.clone());
+
+        System.out.println("After Sorting Array:");
+        System.out.println(Arrays.toString(sortedArr));
     }
 }
 `,
-  'c#': `// Quick Sort - C# (runnable)
+  "c#": `// Quick Sort - C# (runnable)
 using System;
-using System.Linq;
+
+class Solution {
+    private static readonly Random rand = new Random();
+
+    // Function to partition the array
+    public int Partition(int[] arr, int low, int high) {
+        // Choosing a random index between low and high
+        int randomIndex = low + rand.Next(high - low + 1);
+        // Swap the random element with the first element
+        int temp = arr[low];
+        arr[low] = arr[randomIndex];
+        arr[randomIndex] = temp;
+        // Now choosing arr[low] as the pivot after the swap
+        int pivot = arr[low];
+        // Starting index for left subarray
+        int i = low;
+        // Starting index for right subarray
+        int j = high;
+        while (i < j) {
+            // Move i to the right until we find an element greater than the pivot
+            while (arr[i] <= pivot && i <= high - 1) {
+                i++;
+            }
+            // Move j to the left until we find an element smaller than the pivot
+            while (arr[j] > pivot && j >= low + 1) {
+                j--;
+            }
+            // Swap elements at i and j if i is still less than j
+            if (i < j) {
+                int t = arr[i];
+                arr[i] = arr[j];
+                arr[j] = t;
+            }
+        }
+
+        // Pivot placed in correct position
+        int t2 = arr[low];
+        arr[low] = arr[j];
+        arr[j] = t2;
+        return j;
+    }
+
+    // Helper function to perform the recursive quick sort
+    public void QuickSortHelper(int[] arr, int low, int high) {
+        // Base case: if the array has one or no elements, it's already sorted
+        if (low < high) {
+            // Get the partition index
+            int pIndex = Partition(arr, low, high);
+            // Sort the left subarray
+            QuickSortHelper(arr, low, pIndex - 1);
+            // Sort the right subarray
+            QuickSortHelper(arr, pIndex + 1, high);
+        }
+    }
+
+    // Function to perform quick sort on given array
+    public int[] QuickSort(int[] nums) {
+        // Get the size of array
+        int n = nums.Length;
+
+        // Perform quick sort
+        QuickSortHelper(nums, 0, n - 1);
+
+        // Return sorted array
+        return nums;
+    }
+}
 
 class QuickSortExample {
-  static int[] QuickSort(int[] arr) {
-    if (arr.Length <= 1) return arr.ToArray();
-    int pivot = arr[arr.Length - 1];
-    var left = arr.Take(arr.Length - 1).Where(x => x < pivot).ToArray();
-    var right = arr.Take(arr.Length - 1).Where(x => x >= pivot).ToArray();
-    return QuickSort(left).Concat(new[]{pivot}).Concat(QuickSort(right)).ToArray();
-  }
+    static void Main() {
+        int[] arr = {10, 7, 8, 9, 1, 5};
+        Console.WriteLine("Before Sorting Array:");
+        Console.WriteLine(string.Join(" ", arr));
 
-  static void Main() {
-    int[] arr = {10, 7, 8, 9, 1, 5};
-    Console.WriteLine("Original: " + string.Join(" ", arr));
-    var sorted = QuickSort(arr);
-    Console.WriteLine("Sorted:   " + string.Join(" ", sorted));
-  }
+        Solution sol = new Solution();
+        int[] sortedArr = sol.QuickSort((int[])arr.Clone());
+
+        Console.WriteLine("After Sorting Array:");
+        Console.WriteLine(string.Join(" ", sortedArr));
+    }
+}
 `,
-  cpp: `// Quick Sort - C++ (runnable)
-#include <bits/stdc++.h>
+  cpp: `#include <bits/stdc++.h>
 using namespace std;
-
-vector<int> quickSort(const vector<int>& arr) {
-  if (arr.size() <= 1) return arr;
-  int pivot = arr.back();
-  vector<int> left, right;
-  for (size_t i = 0; i + 1 < arr.size(); ++i) {
-    if (arr[i] < pivot) left.push_back(arr[i]); else right.push_back(arr[i]);
-  }
-  auto l = quickSort(left);
-  auto r = quickSort(right);
-  vector<int> res;
-  res.reserve(l.size() + 1 + r.size());
-  res.insert(res.end(), l.begin(), l.end());
-  res.push_back(pivot);
-  res.insert(res.end(), r.begin(), r.end());
-  return res;
-}
-
+class Solution {
+public:
+    // Function to partition the array
+    int partition(vector<int>& arr, int low, int high) {
+        // Choosing a random index between low and high
+        int randomIndex = low + rand() % (high - low + 1);
+        // Swap the random element with the first element
+        swap(arr[low], arr[randomIndex]);
+        // Now choosing arr[low] as the pivot after the swap
+        int pivot = arr[low];
+        // Starting index for left subarray
+        int i = low;
+        // Starting index for right subarray
+        int j = high;
+        while (i < j) {
+            /*  Move i to the right until we find an
+                element greater than the pivot  */
+            while (arr[i] <= pivot && i <= high - 1) {
+                i++;
+            }
+            /*  Move j to the left until we find an
+                element smaller than the pivot  */
+            while (arr[j] > pivot && j >= low + 1) {
+                j--;
+            }
+            /*  Swap elements at i and j if i is still
+                less than j  */
+            if (i < j) swap(arr[i], arr[j]);
+        }
+        
+        // Pivot placed in correct position
+        swap(arr[low], arr[j]);
+        return j;
+    }
+    // Helper Function to perform the recursive quick sort
+    void quickSortHelper(vector<int>& arr, int low, int high) {
+        /*  Base case: If the array has one or no
+            elements, it's already sorted  */
+        if (low < high) {
+            // Get the partition index
+            int pIndex = partition(arr, low, high);
+            // Sort the left subarray
+            quickSortHelper(arr, low, pIndex - 1);
+            // Sort the right subarray
+            quickSortHelper(arr, pIndex + 1, high);
+        }
+    }
+    
+    // Function to perform quick sort on given array
+    vector<int> quickSort(vector<int>& nums) {
+        // Get the size of array
+        int n = nums.size();
+        
+        // Perfrom quick sort
+        quickSortHelper(nums, 0, n-1);
+        
+        // Return sorted array
+        return nums;
+    }
+};
 int main() {
-  vector<int> arr = {10, 7, 8, 9, 1, 5};
-  cout << "Original: "; for (int v: arr) cout << v << ' ';
-  cout << "\n";
-  auto sorted = quickSort(arr);
-  cout << "Sorted:   "; for (int v: sorted) cout << v << ' ';
-  cout << "\n";
-  return 0;
+    vector<int> arr = {4, 6, 2, 5, 7, 9, 1, 3};
+    int n = arr.size();
+    cout << "Before Sorting Array: " << endl;
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+    // Create an instance of Solution class
+    Solution solution;
+    // Function call to sort the array using quick sort
+    vector<int> sortedArr = solution.quickSort(arr);
+    cout << "After Sorting Array: " << endl;
+    for (int i = 0; i < n; i++) {
+        cout << sortedArr[i] << " ";
+    }
+    cout << endl;
+    return 0;
 }
-`
+`,
 };
 
 export default codes;

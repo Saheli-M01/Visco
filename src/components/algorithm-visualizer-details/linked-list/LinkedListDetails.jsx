@@ -21,21 +21,13 @@ import SLLDeletionComplexity from "../../algorithms/linked-list/singlyLinkedList
 // Dynamic code loaders (lazy import to keep bundle small)
 const codeLoaders = {
   "Singly Linked List - Creation": () =>
-    import(
-      "../../algorithms/linked-list/singlyLinkedList/sllCreation/sllCreationCodes"
-    ),
+    import("../../algorithms/linked-list/singlyLinkedList/sllCreation/sllCreationCodes"),
   "Singly Linked List - Traversal": () =>
-    import(
-      "../../algorithms/linked-list/singlyLinkedList/sllTraversal/sllTraversalCodes"
-    ),
+    import("../../algorithms/linked-list/singlyLinkedList/sllTraversal/sllTraversalCodes"),
   "Singly Linked List - Insertion": () =>
-    import(
-      "../../algorithms/linked-list/singlyLinkedList/sllInsertion/sllInsertionCodes"
-    ),
+    import("../../algorithms/linked-list/singlyLinkedList/sllInsertion/sllInsertionCodes"),
   "Singly Linked List - Deletion": () =>
-    import(
-      "../../algorithms/linked-list/singlyLinkedList/sllDeletion/sllDeletionCodes"
-    ),
+    import("../../algorithms/linked-list/singlyLinkedList/sllDeletion/sllDeletionCodes"),
 };
 
 // Map algorithm names to their complexity components when available
@@ -150,7 +142,7 @@ const LinkedListDetails = ({ algorithm, topic }) => {
               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                 <span
                   className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium ${getDifficultyColor(
-                    algorithm.difficulty
+                    algorithm.difficulty,
                   )}`}
                 >
                   {algorithm.difficulty}
@@ -198,14 +190,23 @@ const LinkedListDetails = ({ algorithm, topic }) => {
                       >
                         {lang.toUpperCase()}
                       </button>
-                    )
+                    ),
                   )}
                 </div>
               </div>
 
               <div className="relative flex flex-col flex-1 overflow-hidden">
                 <div className="flex flex-1 bg-gray-900 rounded-lg overflow-auto">
-                  <pre className="text-gray-100 text-[0.9rem] overflow-auto custom-scrollbar flex-1 w-full whitespace-pre-wrap font-mono px-3 py-2">
+                  <pre
+                    className="text-gray-100 text-[0.9rem] overflow-auto custom-scrollbar flex-1 w-full whitespace-pre-wrap font-mono px-3 py-2"
+                    style={{
+                      // Disable ligatures so operators like <= and >= render as
+                      // literal characters instead of being merged into ≤ / ≥ glyphs
+                      fontVariantLigatures: "none",
+                      WebkitFontVariantLigatures: "none",
+                      fontFeatureSettings: '"liga" 0, "calt" 0',
+                    }}
+                  >
                     <code>
                       {loadingCode && !loadedCodes[algorithm.name]
                         ? "Loading implementation..."
@@ -390,8 +391,8 @@ const LinkedListDetails = ({ algorithm, topic }) => {
                                     isSorted
                                       ? "bg-green-400 text-white"
                                       : isSwapped
-                                      ? "bg-orange-400 text-white"
-                                      : "bg-gray-300 text-gray-900"
+                                        ? "bg-orange-400 text-white"
+                                        : "bg-gray-300 text-gray-900"
                                   }`}
                                 >
                                   {num}

@@ -59,31 +59,38 @@ const CodePreview = ({
       </div>
       <div className="flex flex-1 bg-gray-900 rounded-lg overflow-hidden">
         <pre
-        ref={codeContainerRef}
-        className="text-green-400 px-3 py-2 text-[0.9rem] overflow-auto custom-scrollbar flex-1 w-full"
-      >
-        <code>
-          {getCodeLines(selectedLanguage, selectedAlgorithm?.name).map(
-            (line, index) => (
-              <div
-                key={index}
-                ref={currentCodeLine === index ? highlightedLineRef : null}
-                className={`${
-                  currentCodeLine === index
-                    ? "bg-indigo-300/70 text-yellow-100 border-l-4 border-indigo-600 pl-2"
-                    : ""
-                } ${
-                  currentCodeLine !== -1 && currentCodeLine !== index
-                    ? "text-gray-500"
-                    : "text-gray-100"
-                }`}
-              >
-                {line}
-              </div>
-            )
-          )}
-        </code>
-      </pre>
+          ref={codeContainerRef}
+          className="text-green-400 px-3 py-2 text-[0.9rem] overflow-auto custom-scrollbar flex-1 w-full font-mono"
+          style={{
+            // Disable ligatures so operators like <= and >= render as
+            // literal characters instead of being merged into ≤ / ≥ glyphs
+            fontVariantLigatures: "none",
+            WebkitFontVariantLigatures: "none",
+            fontFeatureSettings: '"liga" 0, "calt" 0',
+          }}
+        >
+          <code>
+            {getCodeLines(selectedLanguage, selectedAlgorithm?.name).map(
+              (line, index) => (
+                <div
+                  key={index}
+                  ref={currentCodeLine === index ? highlightedLineRef : null}
+                  className={`${
+                    currentCodeLine === index
+                      ? "bg-indigo-300/70 text-yellow-100 border-l-4 border-indigo-600 pl-2"
+                      : ""
+                  } ${
+                    currentCodeLine !== -1 && currentCodeLine !== index
+                      ? "text-gray-500"
+                      : "text-gray-100"
+                  }`}
+                >
+                  {line}
+                </div>
+              ),
+            )}
+          </code>
+        </pre>
       </div>
     </div>
   );

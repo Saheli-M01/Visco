@@ -5,7 +5,7 @@ const NotesContent = ({ config }) => {
 
   return (
     <main id="notes-scroll-container" className="flex-1 overflow-y-auto">
-      <div className="mx-auto max-w-4xl px-5 py-8 ">
+      <div className="mx-auto max-w-7xl px-5 py-8 ">
         <div className="mb-10 flex items-center justify-end">
           {/* Print area target */}
           <div

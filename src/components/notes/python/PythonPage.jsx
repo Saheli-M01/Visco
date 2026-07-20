@@ -4,7 +4,6 @@ import Interpreter from "./sections/Interpreter";
 import Tokens from "./sections/Tokens";
 import Variables from "./sections/Variables";
 import DataTypes from "./sections/DataTypes";
-import TypeInteractions from "./sections/TypeInteractionsAndTypeCasting";
 import IncrementDecrement from "./sections/IncrementDecrement";
 import StringConcatenation from "./sections/StringConcatenation";
 import PracticeQuestions1 from "./sections/PracticeQuestions1";
@@ -15,6 +14,7 @@ import TakingInputs from "./sections/TakingInputs";
 import Loops from "./sections/Loops";
 import Functions from "./sections/Functions";
 import Lists from "./sections/Lists";
+import Arrays from "./sections/Arrays";
 import Tuples from "./sections/Tuples";
 import Sets from "./sections/Sets";
 import Dictionaries from "./sections/Dictionaries";
@@ -45,10 +45,6 @@ const PythonPage = () => {
 
         <div id="data-types">
           <DataTypes />
-        </div>
-
-        <div id="type-interactions">
-          <TypeInteractions />
         </div>
 
         <div id="increment-decrement">
@@ -89,6 +85,10 @@ const PythonPage = () => {
 
         <div id="lists">
           <Lists />
+        </div>
+
+        <div id="arrays">
+          <Arrays />
         </div>
 
         <div id="tuples">

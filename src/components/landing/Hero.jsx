@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import React, { useState, useEffect } from "react";
 import * as DotLottieModule from "@lottiefiles/dotlottie-react";
 import { Zap, Target, Brain, ArrowRight } from "lucide-react";

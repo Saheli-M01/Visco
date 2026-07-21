@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 // Kadane's Algorithm Implementation
 
 export const kadane = {

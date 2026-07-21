@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 // Shared helper utilities for algorithm visualizers
 export const safeValue = (v) => (v != null ? v : "-");
 

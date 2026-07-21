@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import { useState } from "react";
 
 const NotesContent = ({ config }) => {

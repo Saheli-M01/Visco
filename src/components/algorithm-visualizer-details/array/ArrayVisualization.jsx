@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import React from "react";
 import CodePreview from "../algorithm-visualizer-components/CodePreview";
 import StepHistory from "../algorithm-visualizer-components/StepHistory";

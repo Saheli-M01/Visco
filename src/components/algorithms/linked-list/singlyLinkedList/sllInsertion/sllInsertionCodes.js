@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 export const description =
   "Singly linked list insertion: add a new node at a specified position (head, tail, middle, kth position) or before a specific value.";
 

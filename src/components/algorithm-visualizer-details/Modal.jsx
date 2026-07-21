@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import React from 'react';
 
 const ConfirmModal = ({ isOpen, title, message, onCancel, onConfirm, confirmLabel = 'Continue', cancelLabel = 'Cancel' }) => {

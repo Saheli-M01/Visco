@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import React from "react";
 import BinarySearchVisualizer from "../../algorithms/array/BinarySearch/BinarySearchVisualizer";
 import DutchFlagVisualizer from "../../algorithms/array/Dutch/dutchFlagVisualizer";

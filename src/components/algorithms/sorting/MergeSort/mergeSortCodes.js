@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 export const description =
   "Merge Sort is a divide-and-conquer algorithm that divides the array into halves, sorts each half, and then merges the sorted halves.";
 export const howItWorks = [

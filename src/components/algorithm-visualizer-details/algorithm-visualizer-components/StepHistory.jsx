@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import React, { useEffect } from "react";
 
 const StepHistory = ({

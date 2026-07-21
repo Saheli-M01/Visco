@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import * as React from "react"
 
 import { cn } from "@/lib/utils"

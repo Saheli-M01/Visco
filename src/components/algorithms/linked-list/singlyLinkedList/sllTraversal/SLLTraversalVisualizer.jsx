@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import React from "react";
 import { motion } from "framer-motion";
 import VariableCard from "@/components/algorithm-visualizer-details/algorithm-visualizer-components/VariableCard";

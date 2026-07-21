@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import { bubbleSort } from "../components/algorithms/sorting/BubbleSort/bubbleSort.js";
 import { selectionSort } from "../components/algorithms/sorting/SelectionSort/selectionSort.js";
 import { insertionSort } from "../components/algorithms/sorting/InsertionSort/insertionSort.js";

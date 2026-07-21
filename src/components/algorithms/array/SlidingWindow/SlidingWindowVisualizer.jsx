@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import React from "react";
 import VariableCard from "../../../algorithm-visualizer-details/algorithm-visualizer-components/VariableCard";
 import { findPersistedValue } from "../../../algorithm-visualizer-details/algorithm-visualizer-components/stepHelpers";

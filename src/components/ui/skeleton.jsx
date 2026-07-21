@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import { cn } from "@/lib/utils"
 
 function Skeleton({

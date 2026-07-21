@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 export const description =
   "Singly linked list traversal: visit each node in the list sequentially from head to tail.";
 

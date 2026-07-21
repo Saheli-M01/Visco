@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 export const description = 
   "The Container With Most Water problem uses a two-pointer approach to find the maximum area that can be formed between vertical lines. The area is determined by the distance between pointers and the minimum height of the two lines.";
 

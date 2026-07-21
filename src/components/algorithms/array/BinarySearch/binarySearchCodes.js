@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 export const description = "Binary Search finds an element's index in a sorted array by repeatedly dividing the search range in half.";
 export const howItWorks = [
   "Maintain left (low) and right (high) bounds",

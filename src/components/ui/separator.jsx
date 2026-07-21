@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import * as React from "react"
 import * as SeparatorPrimitive from "@radix-ui/react-separator"
 

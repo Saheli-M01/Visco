@@ -1,0 +1,44 @@
+Visco Source Available License v1.0
+
+Copyright (c) 2026 Saheli Mondal. All rights reserved.
+
+1. Scope
+
+This license governs the source code, documentation, and other materials in
+the official Visco repository (the "Software").
+
+2. Permitted use
+
+You may view and study the Software for learning and evaluation. You may fork
+the official Visco repository for development, learning, and preparing or
+submitting contributions to the official Visco repository. Contributors may
+modify the Software only as part of a contribution workflow, including work
+prepared for a pull request to the official Visco repository.
+
+3. Restrictions
+
+Without prior written permission from Saheli Mondal, you may not:
+
+  a. redistribute, publish, sublicense, or otherwise make available the
+     Software or any modified version, in whole or in part;
+  b. use the Software for any commercial purpose;
+  c. create, offer, operate, or distribute a competing or derivative product
+     based on the Software, under any name; or
+  d. remove, obscure, or alter any copyright, license, or attribution notice.
+
+Forks are permitted solely for the purposes described in Section 2. A fork
+must not be presented, published, or redistributed as a separate project.
+
+4. Ownership
+
+All rights, title, and interest in and to the Software remain with Saheli
+Mondal. No rights are granted except those expressly stated in this license.
+
+5. No warranty
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OF OR OTHER DEALINGS IN THE SOFTWARE.

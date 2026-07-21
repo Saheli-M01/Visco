@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 export const description =
   "Singly linked list creation: build a simple one-directional list supporting append operations.";
 

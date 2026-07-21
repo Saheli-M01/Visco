@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import React from "react";
 
 import SLLCreationVisualizer from "../../algorithms/linked-list/singlyLinkedList/sllCreation/SLLCreationVisualizer";

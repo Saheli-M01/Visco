@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 // Merge Sort Algorithm Implementation (instrumented for visualization)
 export const mergeSort = {
   name: "Merge Sort",

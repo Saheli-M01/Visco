@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 // Landing page components exports
 export { Navigation } from './Navigation';
 export { default as Hero } from './Hero';

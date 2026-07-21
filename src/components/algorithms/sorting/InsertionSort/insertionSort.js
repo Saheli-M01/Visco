@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 // Insertion Sort Algorithm Implementation
 export const insertionSort = {
   name: "Insertion Sort",

@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./components/TopicPages/Index";

@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import React from "react";
 import { parseIndexFromDesc, findPersistedValue, safeValue } from "../../../algorithm-visualizer-details/algorithm-visualizer-components/stepHelpers";
 import VariableCard from "../../../algorithm-visualizer-details/algorithm-visualizer-components/VariableCard";

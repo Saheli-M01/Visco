@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 // Quick Sort Algorithm Implementation (Lomuto partition) with visualization steps
 export const quickSort = {
   name: "Quick Sort",

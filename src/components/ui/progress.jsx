@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import * as React from "react"
 import * as ProgressPrimitive from "@radix-ui/react-progress"
 

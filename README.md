@@ -173,6 +173,13 @@ Contributions are welcome.
 4. Run linting and test the visualizer locally.
 5. Open a pull request.
 
+## License
 
+Visco uses the custom [Visco Source Available License v1.0](LICENSE), rather
+than an open-source license. Learning from the source code and contributing to
+the official repository are encouraged. However, copying, redistributing,
+commercial use, or creating competing or derivative projects from this code is
+not permitted without prior written permission. See [NOTICE](NOTICE) for
+official repository information.
 
 Built to make DSA learning more visual, practical, and intuitive.

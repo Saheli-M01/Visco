@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 export const description = "Next Permutation rearranges numbers into the lexicographically next greater permutation. If no such permutation exists, it rearranges to the lowest possible order (sorted in ascending order).";
 
 export const howItWorks = [

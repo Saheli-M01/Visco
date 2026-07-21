@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import React from "react";
 import { Info, AlertTriangle, CheckCircle, HelpCircle } from "lucide-react";
 

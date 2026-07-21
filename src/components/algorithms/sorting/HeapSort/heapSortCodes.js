@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 export const description = "Heap Sort builds a heap from the input, then repeatedly extracts the maximum element to produce a sorted array.";
 export const howItWorks = [
   "Build a max-heap from the input array",

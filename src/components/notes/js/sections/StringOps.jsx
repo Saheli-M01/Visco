@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import React from "react";
 import CodeBlock from "../../shared/CodeBlock";
 import Infobox from "../../shared/Infobox";

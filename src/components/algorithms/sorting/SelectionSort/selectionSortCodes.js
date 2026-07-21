@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 export const description = "Selection Sort divides the array into a sorted and unsorted region. It repeatedly selects the minimum from the unsorted portion and swaps it into the sorted portion.";
 export const howItWorks = [
   "Find the minimum element in the unsorted portion",

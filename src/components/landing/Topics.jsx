@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import { motion } from "framer-motion";
 import {
   ArrowUpDown,

@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import { useMemo } from 'react';
 import { categories } from '../data/categories.js';
 

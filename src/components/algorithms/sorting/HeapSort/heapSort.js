@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 // Heap Sort Algorithm Implementation (visualized)
 export const heapSort = {
   name: "Heap Sort",

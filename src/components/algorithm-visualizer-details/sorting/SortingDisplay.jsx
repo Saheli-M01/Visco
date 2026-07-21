@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import React from "react";
 import BubbleVisualizer from "../../algorithms/sorting/BubbleSort/BubbleVisualizer";
 import InsertionVisualizer from "../../algorithms/sorting/InsertionSort/InsertionVisualizer";

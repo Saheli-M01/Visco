@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 // Bubble Sort Algorithm Implementation
 export const bubbleSort = {
   name: "Bubble Sort",

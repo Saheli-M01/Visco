@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import { Navigation, Hero, About, Topics, Footer } from "@/components/landing";
 
 const Index = () => {

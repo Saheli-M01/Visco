@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 export const description = "Kadane's Algorithm finds the contiguous subarray with the largest sum in linear time.";
 
 export const howItWorks = [

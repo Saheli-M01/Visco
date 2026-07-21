@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import {

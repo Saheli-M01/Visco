@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 // Sliding Window Algorithm Implementation (Container With Most Water)
 
 export const slidingWindow = {

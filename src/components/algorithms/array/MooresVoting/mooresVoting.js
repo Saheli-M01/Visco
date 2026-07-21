@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 // Moore's Voting Algorithm Implementation
 // Find all elements appearing more than n/3 times
 

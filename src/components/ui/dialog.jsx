@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import * as React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react"

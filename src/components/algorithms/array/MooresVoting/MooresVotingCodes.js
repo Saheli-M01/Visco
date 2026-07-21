@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 export const description = "Moore's Voting Algorithm is used to find all elements that appear more than ⌊n/3⌋ times in an array. The algorithm works in two phases: the first phase identifies potential candidates, and the second phase verifies them.";
 
 export const howItWorks = [

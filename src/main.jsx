@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 
 import { createRoot } from 'react-dom/client';
 import App from './App.jsx';

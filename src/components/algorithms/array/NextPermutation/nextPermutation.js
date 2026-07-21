@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 // Next Permutation Algorithm Implementation
 
 export const nextPermutation = {

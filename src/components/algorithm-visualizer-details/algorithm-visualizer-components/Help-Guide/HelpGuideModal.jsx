@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import React, { useState } from "react";
 import { X, ChevronLeft, ChevronRight, Play, Code, History, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";

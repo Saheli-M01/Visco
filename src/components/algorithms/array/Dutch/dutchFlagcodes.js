@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 export const description =
 	"Assume the array is partitioned by indices: [0..low-1] are 0s, [low..mid-1] are 1s, [mid..high] is the unsorted segment, and [high+1..n-1] are 2s. The algorithm sorts the unsorted segment in a single pass using constant extra space (Dutch National Flag).";
 

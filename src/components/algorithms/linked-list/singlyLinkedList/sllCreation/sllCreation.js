@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 // Singly Linked List Implementation
 
 export const sllCreation = {

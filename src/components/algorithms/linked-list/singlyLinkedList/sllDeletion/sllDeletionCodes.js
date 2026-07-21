@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 export const description =
 	"Singly linked list deletion: remove a node at a specified position (head, tail, kth position) or the node before a specific value.";
 

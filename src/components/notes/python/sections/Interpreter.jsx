@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import React from "react";
 import NoteTable from "../../shared/NoteTable";
 import { GitCompare, Zap, Radio, BookOpen } from "lucide-react";

@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import { Code2, FileCode2, ArrowUpRight, Layers, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Navigation } from "../landing/Navigation";

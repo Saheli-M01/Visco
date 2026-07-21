@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 // Selection Sort Algorithm Implementation
 export const selectionSort = {
   name: "Selection Sort",

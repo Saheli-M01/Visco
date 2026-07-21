@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 // Dutch Flag Algorithm Implementation
 
 export const dutchFlag = {

@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 export const categories = {
   sorting: {
     id: "sorting",

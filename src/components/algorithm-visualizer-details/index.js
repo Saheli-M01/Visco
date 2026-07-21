@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 // Algorithm-related components exports
 export { default as AlgorithmAPIDemo } from './AlgorithmAPIDemo';
 export { default as ArrayDetails } from './array/ArrayDetails.jsx';

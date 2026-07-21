@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import React, { useState, useEffect, useRef } from "react";
 import { Download, Loader2, X, FileDown } from "lucide-react";
 import { jsPDF } from "jspdf";

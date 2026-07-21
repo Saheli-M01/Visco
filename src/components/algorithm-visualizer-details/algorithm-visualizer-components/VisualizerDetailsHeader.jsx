@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import React from "react";
 import { X, RefreshCw, Eye, Info, HelpCircle } from "lucide-react";
 import Select from "../../ui/select";

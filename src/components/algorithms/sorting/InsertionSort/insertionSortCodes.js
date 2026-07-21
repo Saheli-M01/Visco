@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 export const description = "Insertion Sort builds the final sorted array one item at a time. It is efficient for small data sets and mostly-sorted arrays.";
 export const howItWorks = [
   "Start from the second element and compare it with elements before it",

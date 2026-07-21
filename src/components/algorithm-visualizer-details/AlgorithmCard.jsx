@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 import React from "react";
 import { motion } from "framer-motion";
 import { Clock, ChevronRight } from "lucide-react";

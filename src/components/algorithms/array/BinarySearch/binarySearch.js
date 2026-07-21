@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Saheli Mondal.
+
 // Binary Search Algorithm Implementation (visualized)
 
 

@@ -14,6 +14,7 @@ import Loading from "./components/Loading";
 import DocsHome from "./components/notes/DocsHome";
 import NotesHome from "./components/notes/PythonNotesHome";
 import JSNotesHome from "./components/notes/JSNotesHome";
+import AlgorithmVisualizerPage from "./components/AlgorithmVisualizerPage";
 import { useEffect, useState } from "react";
 
 function App() {
@@ -38,6 +39,14 @@ function App() {
           <Route path="/graph" element={<GraphPage />} />
           <Route path="/tree" element={<TreePage />} />
           <Route path="/linked-list" element={<LinkedListPage />} />
+          <Route
+            path="/:category/:algorithm"
+            element={<AlgorithmVisualizerPage />}
+          />
+          <Route
+            path="/:category/:algorithm/:view"
+            element={<AlgorithmVisualizerPage />}
+          />
           <Route path="/docs" element={<DocsHome />} />
           <Route path="/docs/python" element={<NotesHome />} />
           <Route path="/docs/javascript" element={<JSNotesHome />} />

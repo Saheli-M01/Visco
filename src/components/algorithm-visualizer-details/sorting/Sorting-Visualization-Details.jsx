@@ -7,7 +7,6 @@ import SortingDetails from "./SortingDetails";
 import SortingVisualization from "./SortingVisualization";
 import { categories } from "../../../data/categories";
 import { getAlgorithm, parseArray } from "../../../utils/algorithmFactory";
-import VisualizerHeader from "../algorithm-visualizer-components/VisualizerDetailsHeader";
 import ConfirmModal from "../Modal";
 import DraggableHelpButton from "../algorithm-visualizer-components/Help-Guide/DraggableHelpButton";
 
@@ -112,8 +111,16 @@ const theme = createTheme({
   },
 });
 
-const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
-  const [activeTab, setActiveTab] = useState(0);
+const FullScreenModalSorting = ({
+  isOpen,
+  onClose,
+  onAlgorithmChange,
+  onViewChange,
+  initialTab = 0,
+  algorithm,
+  topic,
+}) => {
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(algorithm);
 
   // Visualization state
@@ -155,6 +162,10 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
       handlePause();
     }
   }, [showLanguageChangeConfirm]);
+
+  useEffect(() => {
+    setActiveTab(initialTab);
+  }, [initialTab]);
 
   // Get all sorting algorithms from categories
   const sortingAlgorithms = categories.sorting?.algorithms || [];
@@ -436,11 +447,15 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
 
   const requestAlgorithmChange = (event) => {
     const algorithmName = event?.target ? event.target.value : event;
+    const newAlgorithm = sortingAlgorithms.find(
+      (algo) => algo.name === algorithmName
+    );
+    if (onAlgorithmChange && newAlgorithm) {
+      onAlgorithmChange(newAlgorithm);
+      return;
+    }
     // If no visualization is active, switch immediately
     if (!isVisualizationActive) {
-      const newAlgorithm = sortingAlgorithms.find(
-        (algo) => algo.name === algorithmName
-      );
       setSelectedAlgorithm(newAlgorithm);
       return;
     }
@@ -755,20 +770,6 @@ const FullScreenModalSorting = ({ isOpen, onClose, algorithm, topic }) => {
         <div className="fixed inset-0 z-50">
           {/* Full-screen modal content */}
           <div className="relative h-full w-full backdrop-blur-md bg-gray-100 flex flex-col border">
-            {/* Header */}
-            <VisualizerHeader
-              sortingAlgorithms={sortingAlgorithms}
-              selectedAlgorithm={selectedAlgorithm}
-              handleAlgorithmChange={requestAlgorithmChange}
-              activeTab={activeTab}
-              handleTabChange={handleTabChange}
-              handleRefresh={handleRefresh}
-              onClose={() => {
-                // clear visualization state before delegating close to parent
-                handleRefresh();
-                if (onClose) onClose();
-              }}
-            />
             {/* Tab Content */}
             <div className="flex-1 overflow-hidden">
               {/* Visualization Tab */}

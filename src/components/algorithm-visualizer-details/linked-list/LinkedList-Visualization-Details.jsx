@@ -7,14 +7,21 @@ import LinkedListDetails from "./LinkedListDetails";
 import LinkedListVisualization from "./LinkedListVisualization";
 import { categories } from "../../../data/categories";
 import { getAlgorithm } from "../../../utils/algorithmFactory";
-import VisualizerHeader from "../algorithm-visualizer-components/VisualizerDetailsHeader";
 import ConfirmModal from "../Modal";
 import DraggableHelpButton from "../algorithm-visualizer-components/Help-Guide/DraggableHelpButton";
 
 const theme = createTheme({});
 
-const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
-  const [activeTab, setActiveTab] = useState(0);
+const FullScreenModalLinkedList = ({
+  isOpen,
+  onClose,
+  onAlgorithmChange,
+  onViewChange,
+  initialTab = 0,
+  algorithm,
+  topic,
+}) => {
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(algorithm);
 
   const [selectedLanguage, setSelectedLanguage] = useState("javascript");
@@ -49,6 +56,10 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
       handlePause();
     }
   }, [showLanguageChangeConfirm]);
+
+  useEffect(() => {
+    setActiveTab(initialTab);
+  }, [initialTab]);
 
   const linkedListAlgorithms = categories.linkedList?.algorithms || [];
 
@@ -288,10 +299,14 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
 
   const requestAlgorithmChange = (event) => {
     const algorithmName = event?.target ? event.target.value : event;
+    const newAlgorithm = linkedListAlgorithms.find(
+      (algo) => algo.name === algorithmName
+    );
+    if (onAlgorithmChange && newAlgorithm) {
+      onAlgorithmChange(newAlgorithm);
+      return;
+    }
     if (!isVisualizationActive) {
-      const newAlgorithm = linkedListAlgorithms.find(
-        (algo) => algo.name === algorithmName
-      );
       setSelectedAlgorithm(newAlgorithm);
       return;
     }
@@ -588,18 +603,6 @@ const FullScreenModalLinkedList = ({ isOpen, onClose, algorithm, topic }) => {
       <AnimatePresence>
         <div className="fixed inset-0 z-50">
           <div className="relative h-full w-full backdrop-blur-sm bg-gray-100 flex flex-col border">
-            <VisualizerHeader
-              sortingAlgorithms={linkedListAlgorithms}
-              selectedAlgorithm={selectedAlgorithm}
-              handleAlgorithmChange={requestAlgorithmChange}
-              activeTab={activeTab}
-              handleTabChange={handleTabChange}
-              handleRefresh={handleRefresh}
-              onClose={() => {
-                handleRefresh();
-                if (onClose) onClose();
-              }}
-            />
 
             <div className="flex-1 overflow-hidden">
               {activeTab === 0 && (

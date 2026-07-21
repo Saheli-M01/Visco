@@ -4,6 +4,7 @@
 export { default as AlgorithmAPIDemo } from './AlgorithmAPIDemo';
 export { default as ArrayDetails } from './array/ArrayDetails.jsx';
 export { default as SortingDetails } from './sorting/SortingDetails.jsx';
+export { default as LinkedListDetails } from './linked-list/LinkedListDetails.jsx';
 export { default as ArrayVisualization } from './array/ArrayVisualization.jsx';
 export { default as SortingVisualization } from './sorting/SortingVisualization.jsx';
 export { default as FullScreenModalSorting } from './sorting/Sorting-Visualization-Details.jsx';

@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Menu, X, Search } from "lucide-react";
 import Select from "../ui/select";
 import { categories } from "@/data/categories";
+import { getAlgorithmPath } from "@/utils/algorithmRoutes";
 
 export const Navigation = () => {
   const [open, setOpen] = useState(false);
@@ -65,21 +66,8 @@ export const Navigation = () => {
 
   const openFoundAlgorithm = (found) => {
     if (!found) return;
-    const path = `/${found.catId}`;
-    if (location.pathname !== path) {
-      navigate(path);
-      setTimeout(() => {
-        dispatchSearch(found.alg.name);
-        window.dispatchEvent(
-          new CustomEvent("openAlgorithm", { detail: { name: found.alg.name } })
-        );
-      }, 200);
-    } else {
-      dispatchSearch(found.alg.name);
-      window.dispatchEvent(
-        new CustomEvent("openAlgorithm", { detail: { name: found.alg.name } })
-      );
-    }
+    const path = getAlgorithmPath(found.catId, found.alg.name);
+    if (path) navigate(`${path}/details`);
     clearSuggestions();
     setSearchQuery(found.alg.name);
   };

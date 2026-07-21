@@ -1,6 +1,7 @@
 // Copyright (c) 2026 Saheli Mondal.
 
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Navigation } from "@/components/landing";
 import {
@@ -11,20 +12,19 @@ import {
   Lightbulb,
   BarChart3,
 } from "lucide-react";
-import {
-  FullScreenModalSorting,
-  FullScreenModalArray,
-  FullScreenModalLinkedList,
-} from "@/components/algorithm-visualizer-details";
 import AlgorithmCard from "@/components/algorithm-visualizer-details/AlgorithmCard";
+import {
+  getAlgorithmPath,
+  getRecentlyViewedAlgorithms,
+} from "@/utils/algorithmRoutes";
 
 const CategoryLayout = ({ category, complexityData, sections }) => {
-  const [selectedAlgorithm, setSelectedAlgorithm] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSection, setActiveSection] = useState("algorithms");
   const [collapsed, setCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [recentAlgorithms, setRecentAlgorithms] = useState([]);
 
   // Check if mobile on mount and resize
   useEffect(() => {
@@ -39,6 +39,7 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
   // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
+    setRecentAlgorithms(getRecentlyViewedAlgorithms());
   }, []);
 
   useEffect(() => {
@@ -128,14 +129,9 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
     }
   };
 
-  const handleAlgorithmClick = (algorithm) => {
-    setSelectedAlgorithm({ algorithm, topic: category });
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedAlgorithm(null);
+  const handleAlgorithmClick = (algorithm, view = "details") => {
+    const path = getAlgorithmPath(category.id, algorithm.name);
+    if (path) navigate(`${path}/${view}`);
   };
 
   const filteredAlgorithms = category.algorithms.filter((algorithm) => {
@@ -362,6 +358,33 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
             style={{ paddingTop: isMobile ? "140px" : "32px" }}
           >
             <div className="max-w-6xl mx-auto">
+              {recentAlgorithms.length > 0 && (
+                <section className="mb-8">
+                  <div className="backdrop-blur-md bg-white/80 border border-white/20 rounded-3xl px-4 sm:px-8 py-5 shadow-xl">
+                    <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">
+                      Continue learning
+                    </h2>
+                    <div className="flex flex-wrap gap-2">
+                      {recentAlgorithms.map((item) => {
+                        const path = getAlgorithmPath(
+                          item.categoryId,
+                          item.algorithmName,
+                        );
+                        if (!path) return null;
+                        return (
+                          <button
+                            key={`${item.categoryId}-${item.algorithmName}`}
+                            onClick={() => navigate(`${path}/details`)}
+                            className="rounded-full border border-sky-200 bg-sky-50 px-3 py-2 text-sm font-medium text-sky-900 transition hover:bg-sky-100"
+                          >
+                            {item.algorithmName}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </section>
+              )}
               {/* Available Algorithms */}
               <div id="algorithms" className="scroll-mt-5 md:scroll-mt-24 ">
                 <motion.div
@@ -401,7 +424,10 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
                                 key={algorithm.name}
                                 algorithm={algorithm}
                                 index={index}
-                                onClick={handleAlgorithmClick}
+                                onDetails={(item) => handleAlgorithmClick(item)}
+                                onVisualize={(item) =>
+                                  handleAlgorithmClick(item, "visualize")
+                                }
                               />
                             ))}
                           </div>
@@ -417,7 +443,10 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
                             key={algorithm.name}
                             algorithm={algorithm}
                             index={index}
-                            onClick={handleAlgorithmClick}
+                            onDetails={(item) => handleAlgorithmClick(item)}
+                            onVisualize={(item) =>
+                              handleAlgorithmClick(item, "visualize")
+                            }
                           />
                         ))}
                       </div>
@@ -496,29 +525,6 @@ const CategoryLayout = ({ category, complexityData, sections }) => {
         </main>
       </div>
 
-      {/* Algorithm Full-Screen Modal */}
-      {category.id === "array" ? (
-        <FullScreenModalArray
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          algorithm={selectedAlgorithm?.algorithm}
-          topic={selectedAlgorithm?.topic}
-        />
-      ) : category.id === "linkedList" ? (
-        <FullScreenModalLinkedList
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          algorithm={selectedAlgorithm?.algorithm}
-          topic={selectedAlgorithm?.topic}
-        />
-      ) : (
-        <FullScreenModalSorting
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          algorithm={selectedAlgorithm?.algorithm}
-          topic={selectedAlgorithm?.topic}
-        />
-      )}
     </div>
   );
 };

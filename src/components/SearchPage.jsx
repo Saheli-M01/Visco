@@ -8,8 +8,8 @@ import { ChevronLeft, BarChart3 } from "lucide-react";
 import { Navigation } from "@/components/landing";
 import { useLocation } from "react-router-dom";
 import AlgorithmCard from "@/components/algorithm-visualizer-details/AlgorithmCard";
-import { FullScreenModalSorting } from "@/components/algorithm-visualizer-details";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { getAlgorithmPath } from "@/utils/algorithmRoutes";
 
 const flattenAlgorithms = () => {
   const list = [];
@@ -29,13 +29,9 @@ const SearchPage = () => {
   }, [location.search]);
 
   const [query, setQuery] = useState(queryFromUrl);
-  const [selectedAlgorithm, setSelectedAlgorithm] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleAlgorithmClick = (algorithm) => {
-    const topic = categories[algorithm.catId] || null;
-    setSelectedAlgorithm({ algorithm, topic });
-    setIsModalOpen(true);
+  const handleAlgorithmClick = (algorithm, view = "details") => {
+    const path = getAlgorithmPath(algorithm.catId, algorithm.name);
+    if (path) navigate(`${path}/${view}`);
   };
   useEffect(() => setQuery(queryFromUrl), [queryFromUrl]);
 
@@ -99,8 +95,8 @@ const SearchPage = () => {
                 key={`${alg.catId}-${alg.name}`}
                 algorithm={alg}
                 index={idx}
-                isInteractive={true}
-                onClick={handleAlgorithmClick}
+                onDetails={(item) => handleAlgorithmClick(item)}
+                onVisualize={(item) => handleAlgorithmClick(item, "visualize")}
               />
             ))
           ) : query ? (
@@ -130,15 +126,6 @@ const SearchPage = () => {
           )}
         </div>
       </div>
-      <FullScreenModalSorting
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setSelectedAlgorithm(null);
-        }}
-        algorithm={selectedAlgorithm?.algorithm}
-        topic={selectedAlgorithm?.topic}
-      />
     </div>
   );
 };

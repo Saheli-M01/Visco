@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Clock, ChevronRight } from "lucide-react";
+import { Clock, Info, Play } from "lucide-react";
 
 const getDifficultyColor = (difficulty) => {
   switch (difficulty) {
@@ -30,7 +30,7 @@ const getCardBackground = (difficulty) => {
   }
 };
 
-const AlgorithmCard = ({ algorithm, index = 0, onClick }) => {
+const AlgorithmCard = ({ algorithm, index = 0, onDetails, onVisualize }) => {
   const interactive = [
     "Bubble Sort",
     "Selection Sort",
@@ -57,17 +57,36 @@ const AlgorithmCard = ({ algorithm, index = 0, onClick }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.05 * index }}
-      onClick={() => isInteractive && onClick && onClick(algorithm)}
-      className={`relative backdrop-blur-sm ${getCardBackground(algorithm.difficulty)} rounded-xl px-4 sm:px-6 py-4 sm:py-6 shadow-md border transition-all group ${isInteractive ? "hover:shadow-lg hover:scale-[1.01] cursor-pointer" : "opacity-60 cursor-default"
+      className={`relative backdrop-blur-sm ${getCardBackground(algorithm.difficulty)} rounded-xl px-4 sm:px-6 py-4 sm:py-6 shadow-md border transition-all ${isInteractive ? "hover:shadow-lg hover:scale-[1.01]" : "opacity-60"
         }`}
     >
-      <div className="flex items-center justify-between mb-3">
-        <h3 className={`text-base sm:text-lg font-semibold text-gray-900 transition-colors ${isInteractive ? "group-hover:text-gray-700" : "text-gray-600"}`}>
+      <div className="flex items-center gap-2 mb-3">
+        <h3 className={`text-base sm:text-lg font-semibold ${isInteractive ? "text-gray-900" : "text-gray-600"}`}>
           {algorithm.name}
         </h3>
-        {isInteractive ? (
-          <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-gray-900 transition-colors" />
-        ) : (
+        {isInteractive && (
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => onDetails?.(algorithm)}
+              className="inline-flex items-center justify-center rounded-md border border-slate-300 bg-white/80 p-1.5 text-slate-700 transition hover:border-sky-400 hover:bg-sky-50 hover:text-sky-700"
+              aria-label={`View ${algorithm.name} details`}
+              title="Details"
+            >
+              <Info className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => onVisualize?.(algorithm)}
+              className="inline-flex items-center justify-center rounded-md bg-slate-900 p-1.5 text-white transition hover:bg-slate-700"
+              aria-label={`Visualize ${algorithm.name}`}
+              title="Visualize"
+            >
+              <Play className="h-4 w-4" fill="currentColor" />
+            </button>
+          </div>
+        )}
+        {!isInteractive && (
           <span className="text-xs font-medium text-red-400">Coming Soon</span>
         )}
       </div>
@@ -86,6 +105,7 @@ const AlgorithmCard = ({ algorithm, index = 0, onClick }) => {
       <p className="text-gray-700 text-sm font-medium leading-relaxed">
         {algorithm.shortDescription || `Learn about ${algorithm.name} algorithm and its implementation.`}
       </p>
+
 
       {/* Work in Progress chip for the specific Singly Linked List - Creation card */}
       {algorithm.name === "" && (

@@ -1,199 +1,182 @@
-# Visco — Algorithm Visualizer
+# Visco - Algorithm Visualizer
 
-Lightweight algorithm visualizer built with Vite + React, Tailwind and Radix/MUI components. This repo contains interactive visualizations for common sorting algorithms and a reusable UI shell for adding new algorithm visualizers.
+Visco is an interactive learning platform for understanding Data Structures and Algorithms through step-by-step visualizations.
 
-This README explains how to run the project locally, the shape of the algorithm step data used by the visualizer, where to add or change algorithms, and a few troubleshooting notes.
+Instead of only reading code, users can watch an algorithm execute, inspect each operation, follow highlighted code, and understand the time complexity behind it.
 
-## Quick start
+## Features
 
-Requirements
+- Interactive algorithm visualizations
+- Step-by-step execution controls
+- Code highlighting for every algorithm step
+- Custom input support
+- Algorithm explanations and complexity analysis
+- Learning notes for JavaScript and Python
+- Clean, responsive interface
 
-- Node.js 18+ (or compatible)
-- npm (or yarn)
+## Topics Covered
 
-Install dependencies (PowerShell / Windows):
+### Sorting
 
-```powershell
+- Bubble Sort
+- Selection Sort
+- Insertion Sort
+- Merge Sort
+- Quick Sort
+- Heap Sort
+
+### Arrays
+
+- Binary Search
+- Next Permutation
+- Dutch National Flag Algorithm
+- Kadane’s Algorithm
+- Sliding Window / Two Pointers
+- Boyer–Moore Voting Algorithm
+
+### Graphs
+
+- Breadth-First Search
+- Depth-First Search
+- Dijkstra’s Algorithm
+- Kruskal’s Algorithm
+- Prim’s Algorithm
+- Topological Sort
+
+### Trees
+
+- Binary Search Tree
+- AVL Tree
+- Tree Traversals
+- Red-Black Tree
+- Trie
+- Segment Tree
+
+### Linked Lists
+
+- Singly Linked List
+- Doubly Linked List
+- Circular Linked List
+- Doubly Circular Linked List
+
+Each linked-list category includes common operations such as creation, traversal, insertion, and deletion.
+
+## Tech Stack
+
+- React
+- Vite
+- JavaScript
+- Tailwind CSS
+- Radix UI
+- Material UI
+- Framer Motion
+- React Router
+
+## Getting Started
+
+### Prerequisites
+
+Make sure you have the following installed:
+
+- Node.js 18 or newer
+- npm
+
+### Installation
+
+```bash
+git clone <your-repository-url>
+cd visco-algo-lab
 npm install
 ```
 
-Run the dev server:
+### Run locally
 
-```powershell
+```bash
 npm run dev
 ```
 
-Build production assets:
+The application will be available at the local URL shown in your terminal.
 
-```powershell
+### Production build
+
+```bash
 npm run build
 ```
 
-Preview the production build:
+### Preview production build
 
-```powershell
+```bash
 npm run preview
 ```
 
-Lint the codebase:
+### Lint the project
 
-```powershell
+```bash
 npm run lint
 ```
 
-## Project structure (important paths)
+## Project Structure
 
-- `src/` — application source
-  - `components/` — UI components and feature groups
-    - `algorithm-visualizer-details/` — modal, visualization UI, step history, etc.
-      - `algorithm-visualizer-components/` — smaller UI pieces: `ArrayDisplay.jsx`, `StepHistory.jsx`, etc.
-  - `components/algorithms/` — algorithm implementations and step generators
-    - `sorting/Visualizer/` — sorting algorithm generators (bubble, selection, insertion, etc.)
-    - `algorithmFactory.js` — helper to lookup algorithm implementations
-  - `main.tsx` — app entrypoint
+```text
+src/
+├── components/
+│   ├── algorithms/                    # Algorithm logic and visualizers
+│   ├── algorithm-visualizer-details/  # Controls, code preview, step history
+│   ├── landing/                       # Landing page sections
+│   ├── notes/                         # JavaScript and Python learning notes
+│   └── TopicPages/                    # Category-wise topic pages
+├── data/                              # Algorithms, categories, and notes data
+├── hooks/                             # Custom React hooks
+├── utils/                             # Shared utilities
+├── App.jsx
+└── main.jsx
 
-Top-level configs: `vite.config.ts`, `tailwind.config.*`, `package.json`.
-
-## How the visualizer works — algorithm step contract
-
-Visualizer components rely on each algorithm exposing a `generateSteps(arr, language, ...opts)` function that returns an ordered array of step objects. The UI renders the `array`, highlights indices in `comparing`, shows `temp` for languages that need it, and displays `phase` and `description` in the step history.
-
-Recommended step object fields (used across the UI):
-
-- `array` — current array snapshot (Array<number|string>)
-- `comparing` — indices currently being compared (Array<number>)
-- `swapped` — indices swapped at this step (Array<number>)
-- `description` — short human-friendly explanation for the step
-- `codeLine` — integer index used to highlight the code preview
-- `phase` — semantic name for the step (e.g. `comparison`, `min_update`, `swap`, `swap_step`, `merge-complete`)
-- `temp` — optional object for languages with a temporary variable ({ value, index })
-- `mid` — optional object used by merge sort ({ value, leftIndex, rightIndex })
-- `min` — optional object used by selection sort ({ value, index })
-
-Example step (selection sort initial min):
-
-```json
-{
-  "array": [5,4,3,2,1],
-  "comparing": [0],
-  "swapped": [],
-  "description": "Initial min at index 0 (value 5)",
-  "codeLine": 3,
-  "phase": "min_update"
-}
+public/
+└── assets/                            # Logos, images, and user-guide media
 ```
 
-Notes:
-- The UI tolerates missing fields and tries to persist `temp` or `min` across subsequent steps when not present explicitly.
-- Standardizing on explicit fields (`min`, `temp`, `mid`) in generators makes UI rendering simpler and less brittle.
+## How It Works
 
-## Adding or editing algorithms
+Every supported algorithm is converted into a series of steps. Each step stores the current state of the visualization, such as:
 
-1. Add a new file under `src/components/algorithms/<category>/Visualizer/` (follow the pattern in `bubbleSort.js`, `selectionSort.js`).
-2. Export an object with `name`, `generateSteps(arr, language, ...)`, `getCode(language)`, and `getCodeLines(language)` (existing generators are a good template).
-3. Register the algorithm in `src/components/algorithms/algorithmFactory.js` mapping (friendly names and normalized fallbacks are used).
+- Current array or data-structure state
+- Indices being compared
+- Swapped elements
+- Current code line
+- Description of the operation
+- Important temporary variables
 
-Keep generators pure and deterministic: given the same input and language they should produce the same steps array.
+This makes it easier to connect the algorithm’s code with what is happening visually.
 
-## UI notes and conventions
+## Adding a New Algorithm
 
-- The `ArrayDisplay` component highlights indices in `comparing` and `swapped` and shows `temp`, `mid`, and `min` as separate variable slots. For selection sort we emit `min_update` steps so the Min variable appears clearly for users.
-- The code preview highlights `codeLine` for the currently active step.
-- The step history (component: `StepHistory.jsx`) uses `phase` and `description` to render badges and text.
+To add a new algorithm:
 
-## Troubleshooting
-
-- If `npm run build` complains about duplicate keys or TypeScript config problems, check that `tsconfig.*` files align with the project type (this repo is JS-first with `allowJs: true` by default).
-- If a variable (e.g. `minIndex`) doesn't appear in the UI, ensure the generator emits a `min_update` phase or a `min` field.
+1. Create its implementation and visualization files inside `src/components/algorithms/`.
+2. Generate the algorithm steps required by the visualizer.
+3. Add its code snippets and complexity details.
+4. Register the algorithm in the relevant category/data file.
+5. Test the visualization with multiple inputs.
 
 ## Contributing
 
-- Open a branch for your work: `git checkout -b feat/your-feature`.
-- Keep changes small and focused; add or update unit tests where appropriate.
-- Run the dev server and manually verify visualizations before opening a PR.
+Contributions are welcome.
+
+1. Fork the repository.
+2. Create a feature branch.
+
+   ```bash
+   git checkout -b feat/your-feature-name
+   ```
+
+3. Make your changes.
+4. Run linting and test the visualizer locally.
+5. Open a pull request.
 
 ## License
 
-MIT — feel free to reuse and contribute.
+This project is licensed under the MIT License.
 
 ---
 
-If you'd like, I can also:
-
-- Add a CONTRIBUTING.md with PR/checklist guidance.
-- Add a generator template file and a unit test harness to validate the `generateSteps` contract automatically.
-
-Questions or specific format preferences for the README? I can adapt it. 
-# Welcome to your Lovable project
-
-## Project info
-
-**URL**: https://lovable.dev/projects/d73a947a-69a9-4f10-a5a3-43fc3455de87
-
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/d73a947a-69a9-4f10-a5a3-43fc3455de87) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/d73a947a-69a9-4f10-a5a3-43fc3455de87) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Built to make DSA learning more visual, practical, and intuitive.

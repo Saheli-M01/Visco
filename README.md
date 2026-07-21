@@ -1,4 +1,4 @@
-# Visco - Algorithm Visualizer
+# Visco — Algorithm Visualizer
 
 Visco is an interactive learning platform for understanding Data Structures and Algorithms through step-by-step visualizations.
 
@@ -173,10 +173,6 @@ Contributions are welcome.
 4. Run linting and test the visualizer locally.
 5. Open a pull request.
 
-## License
 
-This project is licensed under the MIT License.
-
----
 
 Built to make DSA learning more visual, practical, and intuitive.

@@ -13,7 +13,12 @@ import {
     MousePointer2,
     Repeat,
     Layers,
-    ListChecks
+    ListChecks,
+    Star,
+    Flag,
+    Lightbulb,
+    AlertTriangle,
+    Hexagon
 } from "lucide-react";
 
 const Turtle = () => {
@@ -141,30 +146,46 @@ t.forward(100)  # Draws a line again`} />
                         <Circle className="w-5 h-5" /> 4. Drawing Shapes
                     </h3>
                     <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
-                        The turtle can draw perfect circles and dots automatically.
-                        To draw polygons (like squares and triangles), you combine forward movements with turns.
+                        The turtle can draw perfect circles and dots automatically. For other shapes like squares and rectangles, it's best to create reusable <strong>functions</strong>.
                     </p>
                     <CodeBlock code={`import turtle
 t = turtle.Turtle()
 
-# Draw a circle with a radius of 50
-t.circle(50)
+# 1. Circle, Arc, and Dot
+t.circle(50)         # Draw a circle with radius 50
+t.circle(100, 180)   # Draw a semicircle (180 degrees)
+t.dot(20)            # Draw a solid dot of diameter 20
 
 t.penup()
-t.forward(100)
+t.goto(-100, -100)
 t.pendown()
 
-# Draw a dot with a diameter of 20
-t.dot(20)
+# 2. Square using a function
+def draw_square(size):
+    for _ in range(4):
+        t.forward(size)
+        t.right(90)
 
-# Draw a square manually
-t.forward(100)
-t.right(90)
-t.forward(100)
-t.right(90)
-t.forward(100)
-t.right(90)
-t.forward(100)`} />
+draw_square(60)
+
+# 3. Rectangle using a function
+def draw_rectangle(length, width):
+    for i in range(4):
+        if i % 2 == 0:
+            t.forward(length)
+        else:
+            t.forward(width)
+        t.right(90)
+
+draw_rectangle(150, 80)
+
+# 4. Triangle using a function
+def draw_triangle(size):
+    for _ in range(3):
+        t.forward(size)
+        t.left(120)
+
+draw_triangle(100)`} />
                 </div>
 
                 {/* 5. Colors and Filling */}
@@ -228,6 +249,136 @@ for i in range(5):
 t.end_fill()
 
 turtle.done()  # Same as screen.exitonclick()`} />
+                </div>
+
+                {/* 7. Advanced Polygons */}
+                <div className="rounded-xl border-2 border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm" id="turtle-advanced">
+                    <h3 className="text-lg font-bold text-indigo-700 dark:text-indigo-400 flex items-center gap-2">
+                        <Hexagon className="w-5 h-5" /> 7. Advanced Polygons & Patterns
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
+                        By doing a little math, you can write a function to draw <em>any</em> regular polygon or complex star. Here's how to calculate the angles dynamically and draw a cool spiral!
+                    </p>
+                    <CodeBlock code={`import turtle
+t = turtle.Turtle()
+t.speed(0) # Fastest speed
+
+# Draw any regular polygon
+def draw_polygon(sides, size):
+    angle = 360 / sides
+    for _ in range(sides):
+        t.forward(size)
+        t.right(angle)
+
+draw_polygon(5, 80) # Pentagon
+draw_polygon(8, 50) # Octagon
+
+t.penup()
+t.goto(100, 100)
+t.pendown()
+
+# Advanced: Colorful Spiral
+colors = ["red", "purple", "blue", "green", "orange", "yellow"]
+for x in range(100):
+    t.pencolor(colors[x % 6])
+    t.width(x / 100 + 1)
+    t.forward(x)
+    t.left(59)
+
+turtle.done()`} />
+                </div>
+
+                {/* 8. Practical Example: USA Flag */}
+                <div className="rounded-xl border-2 border-cyan-200 dark:border-cyan-800 bg-cyan-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm" id="turtle-flag">
+                    <h3 className="text-lg font-bold text-cyan-700 dark:text-cyan-400 flex items-center gap-2">
+                        <Flag className="w-5 h-5" /> 8. Practical Example: USA Flag
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
+                        Let's put our skills to work by drawing a simplified version of the American flag! This combines loops, functions, colors, and precise movements.
+                    </p>
+                    <CodeBlock code={`import turtle
+
+screen = turtle.Screen()
+screen.setup(width=600, height=400)
+t = turtle.Turtle()
+t.speed(0)
+
+def draw_rectangle(width, height, color):
+    t.fillcolor(color)
+    t.begin_fill()
+    for _ in range(2):
+        t.forward(width)
+        t.right(90)
+        t.forward(height)
+        t.right(90)
+    t.end_fill()
+
+def draw_star(size, color):
+    t.fillcolor(color)
+    t.pencolor(color)
+    t.begin_fill()
+    for _ in range(5):
+        t.forward(size)
+        t.right(144)
+    t.end_fill()
+
+# Draw red and white stripes
+stripe_height = 400 / 13
+t.penup()
+t.goto(-300, 200)
+for i in range(13):
+    t.pendown()
+    color = "red" if i % 2 == 0 else "white"
+    draw_rectangle(600, stripe_height, color)
+    t.penup()
+    t.goto(-300, 200 - (i + 1) * stripe_height)
+
+# Draw blue canton (rectangle)
+t.goto(-300, 200)
+t.pendown()
+draw_rectangle(240, stripe_height * 7, "darkblue")
+
+# Draw stars (simplified 4x5 grid)
+t.penup()
+for row in range(4):
+    for col in range(5):
+        t.goto(-280 + col * 45, 175 - row * 35)
+        t.pendown()
+        draw_star(15, "white")
+        t.penup()
+
+t.hideturtle()
+turtle.done()`} />
+                </div>
+
+                {/* 9. Tips & Troubleshooting */}
+                <div className="rounded-xl border-2 border-red-200 dark:border-red-800 bg-red-50 dark:bg-slate-800 p-5 space-y-4 shadow-sm" id="turtle-tips">
+                    <h3 className="text-lg font-bold text-red-700 dark:text-red-400 flex items-center gap-2">
+                        <Lightbulb className="w-5 h-5" /> 9. Tips & Troubleshooting
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="bg-white dark:bg-slate-900 p-4 rounded-lg shadow-sm border border-slate-100 dark:border-slate-700">
+                            <h4 className="font-bold text-emerald-600 dark:text-emerald-400 mb-2 flex items-center gap-2">
+                                <ListChecks className="w-4 h-4" /> Best Practices
+                            </h4>
+                            <ul className="list-disc list-inside text-sm text-slate-600 dark:text-slate-350 space-y-1">
+                                <li><strong>Use functions:</strong> Organize your code into reusable functions for each shape.</li>
+                                <li><strong>Control the pen:</strong> Use <code>penup()</code> and <code>pendown()</code> to move without drawing.</li>
+                                <li><strong>Positioning:</strong> Use <code>goto(x, y)</code> to teleport to specific coordinates.</li>
+                                <li><strong>Hide turtle:</strong> Use <code>hideturtle()</code> when finished for a cleaner look.</li>
+                            </ul>
+                        </div>
+                        <div className="bg-white dark:bg-slate-900 p-4 rounded-lg shadow-sm border border-slate-100 dark:border-slate-700">
+                            <h4 className="font-bold text-rose-600 dark:text-rose-400 mb-2 flex items-center gap-2">
+                                <AlertTriangle className="w-4 h-4" /> Common Issues
+                            </h4>
+                            <ul className="list-disc list-inside text-sm text-slate-600 dark:text-slate-350 space-y-1">
+                                <li><strong>Screen closes instantly:</strong> Add <code>turtle.done()</code> or <code>screen.exitonclick()</code> at the end.</li>
+                                <li><strong>Too slow or fast:</strong> Adjust speed with <code>t.speed()</code> (1-10, or 0 for fastest).</li>
+                                <li><strong>Drawing off-screen:</strong> Use <code>screen.setup(width, height)</code> to set an appropriate window size.</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Summary table */}

@@ -160,11 +160,16 @@ const Index = () => {
                 <i>E</i>
                 <i>V</i>
               </div>
-              <span>Built for developers who care about precision and taste.</span>
+              <span>
+                Built for developers who care about precision and taste.
+              </span>
             </div>
           </div>
 
-          <div className="product-stage" aria-label="Algorithm visualization preview">
+          <div
+            className="product-stage"
+            aria-label="Algorithm visualization preview"
+          >
             <div className="stage-glow" />
             <div className="editor-window">
               <div className="editor-toolbar">
@@ -193,17 +198,19 @@ const Index = () => {
                 <pre>
                   <code>
                     <em>function</em> <strong>quickSort</strong>(array) {"{"}
-                    <br />  <em>if</em> (array.length &lt;= <b>1</b>) <em>return</em> array;
+                    <br /> <em>if</em> (array.length &lt;= <b>1</b>){" "}
+                    <em>return</em> array;
                     <br />
-                    <br />  <em>const</em> pivot = array[<b>0</b>];
-                    <br />  <em>const</em> left = array.
+                    <br /> <em>const</em> pivot = array[<b>0</b>];
+                    <br /> <em>const</em> left = array.
                     <strong>filter</strong>(x =&gt; x &lt; pivot);
-                    <br />  <em>const</em> right = array.
+                    <br /> <em>const</em> right = array.
                     <strong>filter</strong>(x =&gt; x &gt; pivot);
                     <br />
-                    <br />  <em>return</em> [...quickSort(left), pivot,
-                    <br />    ...quickSort(right)];
-                    <br />{"}"}
+                    <br /> <em>return</em> [...quickSort(left), pivot,
+                    <br /> ...quickSort(right)];
+                    <br />
+                    {"}"}
                   </code>
                 </pre>
               </div>
@@ -282,21 +289,23 @@ const Index = () => {
           </div>
 
           <div className="algorithm-grid">
-            {algorithms.map(({ icon: Icon, label, title, copy, to, tint, stat }) => (
-              <Link to={to} className={`algorithm-card ${tint}`} key={label}>
-                <div className="card-icon">
-                  <Icon size={20} />
-                </div>
-                <span className="card-label">{label}</span>
-                <h3>{title}</h3>
-                <p>{copy}</p>
-                <div className="card-meta">{stat}</div>
-                <span className="card-link">
-                  Open workspace <ChevronRight size={16} />
-                </span>
-                <div className="card-decoration" />
-              </Link>
-            ))}
+            {algorithms.map(
+              ({ icon: Icon, label, title, copy, to, tint, stat }) => (
+                <Link to={to} className={`algorithm-card ${tint}`} key={label}>
+                  <div className="card-icon">
+                    <Icon size={20} />
+                  </div>
+                  <span className="card-label">{label}</span>
+                  <h3>{title}</h3>
+                  <p>{copy}</p>
+                  <div className="card-meta">{stat}</div>
+                  <span className="card-link">
+                    Open workspace <ChevronRight size={16} />
+                  </span>
+                  <div className="card-decoration" />
+                </Link>
+              ),
+            )}
           </div>
         </section>
 

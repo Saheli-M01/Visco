@@ -1,276 +1,289 @@
-// Copyright (c) 2026 Saheli Mondal.
+// components/Hero.tsx
 
-import React, { useState, useEffect } from "react";
-import * as DotLottieModule from "@lottiefiles/dotlottie-react";
-import { Zap, Target, Brain, ArrowRight } from "lucide-react";
+import { ArrowRight, Code2, Play } from "lucide-react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useRef } from "react";
 
-// Resolve whichever export shape the package provides (default or named)
-const DotLottieComponent =
-  DotLottieModule?.DotLottieReact ||
-  DotLottieModule?.default ||
-  DotLottieModule?.DotLottiePlayer ||
-  null;
+const Hero = () => {
+  const stageRef = useRef(null);
 
-const TypeAnimation = ({ sequence, speed, className, repeat }) => {
-  const [currentText, setCurrentText] = useState("");
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
-  // Reserve width based on the longest text to avoid layout collapse/glitch
-  const longestText = sequence
-    .filter((item, index) => index % 2 === 0)
-    .reduce((max, item) => (item.length > max.length ? item : max), "");
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
 
-  useEffect(() => {
-    const texts = sequence.filter((item, index) => index % 2 === 0);
-    const delays = sequence.filter((item, index) => index % 2 === 1);
-
-    const timeout = setTimeout(
-      () => {
-        const currentWord = texts[currentIndex];
-
-        if (!isDeleting) {
-          setCurrentText(currentWord.substring(0, currentText.length + 1));
-          if (currentText === currentWord) {
-            setTimeout(() => setIsDeleting(true), delays[currentIndex] || 1000);
-          }
-        } else {
-          setCurrentText(currentWord.substring(0, currentText.length - 1));
-          if (currentText === "") {
-            setIsDeleting(false);
-            setCurrentIndex((prevIndex) => (prevIndex + 1) % texts.length);
-          }
-        }
-      },
-      isDeleting ? 50 : speed || 100,
-    );
-
-    return () => clearTimeout(timeout);
-  }, [currentText, currentIndex, isDeleting, sequence, speed]);
-
-  return (
-    <span
-      className={className}
-      style={{ display: "inline-block", minWidth: `${longestText.length}ch` }}
-    >
-      {currentText}
-    </span>
+  const springConfig = { stiffness: 120, damping: 20, mass: 0.4 };
+  const rotateX = useSpring(
+    useTransform(mouseY, [-0.5, 0.5], [8, -8]),
+    springConfig,
   );
-};
+  const rotateY = useSpring(
+    useTransform(mouseX, [-0.5, 0.5], [-10, 10]),
+    springConfig,
+  );
+  const translateX = useSpring(
+    useTransform(mouseX, [-0.5, 0.5], [-14, 14]),
+    springConfig,
+  );
+  const translateY = useSpring(
+    useTransform(mouseY, [-0.5, 0.5], [-10, 10]),
+    springConfig,
+  );
 
-export default function Hero() {
-  const [hoveredCard, setHoveredCard] = useState(null);
-  const [particlePosition, setParticlePosition] = useState({ x: 0, y: 0 });
+  const glowX = useSpring(
+    useTransform(mouseX, [-0.5, 0.5], [-30, 30]),
+    springConfig,
+  );
+  const glowY = useSpring(
+    useTransform(mouseY, [-0.5, 0.5], [-20, 20]),
+    springConfig,
+  );
 
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setParticlePosition({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  const handleMouseMove = (e) => {
+    if (!stageRef.current) return;
+    const rect = stageRef.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    mouseX.set(x);
+    mouseY.set(y);
+  };
 
-  const scrollToTopics = () => {
-    const topicsSection = document.getElementById("topics");
-    if (topicsSection) {
-      topicsSection.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
   };
 
   return (
-    <section className="relative min-h-[calc(100vh-5rem)] lg:min-h-[75vh] xl:min-h-[70vh] flex items-center justify-center overflow-hidden px-4 py-8 bg-gradient-to-br from-indigo-50 via-white to-rose-50">
-      {/* Interactive cursor follower */}
-      <div
-        className="hidden md:block pointer-events-none fixed w-96 h-96 rounded-full bg-gradient-radial from-purple-300/20 to-transparent blur-3xl transition-all duration-300 ease-out"
-        style={{
-          left: particlePosition.x - 192,
-          top: particlePosition.y - 192,
-        }}
-      />
+    <>
+      <section
+        id="home"
+        aria-label="Visco hero"
+        className="relative min-h-screen w-full bg-[#070707] flex flex-col items-center pt-40 pb-20 px-6 overflow-hidden before:content-[''] before:absolute before:inset-y-0 before:-inset-x-[20vw] before:bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] before:bg-[length:62px_62px] before:[mask-image:linear-gradient(to_bottom,rgba(0,0,0,0.35),transparent_82%)] before:pointer-events-none"
+      >
+        {/* ambient orbs */}
+        <div className="absolute rounded-full blur-[80px] opacity-20 pointer-events-none w-[320px] h-[320px] left-[10%] top-[16%] bg-[#60a5fa] animate-float" />
+        <div className="absolute rounded-full blur-[80px] opacity-20 pointer-events-none w-[420px] h-[420px] right-[8%] top-[10%] bg-[#94a3b8] animate-float-slow" />
 
-      {/* Subtle animated DSA backdrop (visible on md and up) */}
-      <div className="hidden md:block pointer-events-none absolute inset-0 z-0 opacity-70">
-        <svg
-          className="w-full h-full"
-          viewBox="0 0 1200 700"
-          preserveAspectRatio="xMidYMid slice"
+        {/* ---- Row 1: text content ---- */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="relative z-[2] w-full max-w-[720px] text-center"
         >
-          <defs>
-            <linearGradient id="g1" x1="0" x2="1">
-              <stop offset="0%" stopColor="#a78bfa" stopOpacity="0.08" />
-              <stop offset="100%" stopColor="#fb7185" stopOpacity="0.04" />
-            </linearGradient>
-            <filter id="blur" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="12" />
-            </filter>
-          </defs>
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#121214] text-[#afb0b8] text-xs font-mono uppercase tracking-[0.06em] px-2.5 py-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#67e8f9] shadow-[0_0_14px_rgba(103,232,249,0.8)]" />
+            Interactive algorithm platform
+          </div>
 
-          {/* Soft gradient blob */}
-          <g filter="url(#blur)">
-            <ellipse cx="220" cy="140" rx="260" ry="120" fill="url(#g1)" />
-            <ellipse cx="980" cy="520" rx="320" ry="140" fill="url(#g1)" />
-          </g>
-        </svg>
-      </div>
+          <h1 className="mt-6 mb-5 text-hero leading-[0.94] tracking-[-0.06em] font-bold font-sans">
+            Understand algorithms.
+            <br />
+            <span className="bg-[linear-gradient(120deg,#ffffff_22%,#9ca3af_92%)] bg-clip-text text-transparent">
+              Instantly.
+            </span>
+          </h1>
 
-      {/* Main Content */}
-      <div className="relative w-full max-w-7xl mx-auto z-10 h-full flex items-center py-8">
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center w-full">
-          {/* Left Content */}
-          <div className="text-center md:text-left space-y-6">
-            <div>
-              <h1
-                className="font-black mb-3 leading-tight flex items-center gap-3 flex-wrap"
-                style={{ fontSize: "clamp(2rem, 6vw, 3.5rem)" }}
-              >
-                <span className="text-gray-700 font-medium">Welcome to </span>
-                <img
-                  src="/assets/brand.png"
-                  alt="Visco logo"
-                  className="h-[2.5rem]"
-                />
-              </h1>
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-6">
-                <span
-                  className="text-gray-700 leading-relaxed font-medium"
-                  style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)" }}
-                >
-                  Understanding when complexity transforms into{" "}
-                </span>
-                <span
-                  className="font-mono font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 px-2.5 py-1 rounded-lg border border-emerald-300/50 shadow-sm"
-                  style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)" }}
-                >
-                  O(1)
-                </span>
-                <span
-                  className="text-gray-700 leading-relaxed font-medium"
-                  style={{ fontSize: "clamp(1rem, 2.5vw, 1.25rem)" }}
-                >
-                  - even if it starts as
-                </span>
-                <span
-                  className="font-mono font-bold"
-                  style={{ fontSize: "clamp(1.5rem, 3.5vw, 2.5rem)" }}
-                >
-                  <TypeAnimation
-                    sequence={[
-                      "O(n²)",
-                      1500,
-                      "O(n³)",
-                      1500,
-                      "O(n log n)",
-                      1500,
-                      "O(2ⁿ)",
-                      1500,
-                    ]}
-                    speed={150}
-                    className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600"
-                    repeat={true}
-                  />
-                </span>
-              </div>
-            </div>
+          <p className="max-w-[510px] mx-auto text-lg leading-[1.6] text-[#a0a0a5]">
+            A premium visual workspace where developers and CS students learn by
+            watching algorithms execute, step by step.
+          </p>
 
-            {/* Interactive Feature Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {[
-                {
-                  id: 1,
-                  Icon: Zap,
-                  title: "Lightning Fast",
-                  desc: "Visualize in real-time",
-                  gradient: "from-amber-400 to-orange-500",
-                  bg: "from-amber-50 to-orange-50",
-                },
-                {
-                  id: 2,
-                  Icon: Target,
-                  title: "Interactive",
-                  desc: "Step through code",
-                  gradient: "from-blue-400 to-indigo-500",
-                  bg: "from-blue-50 to-indigo-50",
-                },
-                {
-                  id: 3,
-                  Icon: Brain,
-                  title: "Deep Insights",
-                  desc: "Understand complexity",
-                  gradient: "from-purple-400 to-pink-500",
-                  bg: "from-purple-50 to-pink-50",
-                },
-              ].map((card) => (
-                <div
-                  key={card.id}
-                  onMouseEnter={() => setHoveredCard(card.id)}
-                  onMouseLeave={() => setHoveredCard(null)}
-                  className={`group relative bg-gradient-to-br ${card.bg} border border-gray-200/50 rounded-xl p-4 transition-all duration-300 cursor-pointer hover:shadow-xl hover:-translate-y-1`}
+          <div className="flex justify-center gap-3 mt-8">
+            <a
+              href="#algorithms"
+              className="inline-flex items-center gap-1.5 rounded-xl px-4 py-3 text-sm font-semibold text-[#111217] bg-[linear-gradient(140deg,#f8fafc_0%,#d1d5db_100%)] shadow-[0_8px_30px_rgba(0,0,0,0.3)] transition-transform hover:-translate-y-0.5"
+            >
+              Explore algorithms <ArrowRight size={16} />
+            </a>
+            <a
+              href="#docs"
+              className="inline-flex items-center gap-1.5 rounded-xl px-4 py-3 text-sm font-semibold text-[#dfdfe3] border border-white/10 bg-[#111214] hover:border-white/20 hover:bg-[#17181c] transition-colors"
+            >
+              <Code2 size={16} /> Open docs
+            </a>
+          </div>
+
+          <div className="mt-10 flex items-center justify-center gap-2.5 text-[#94949b] text-sm">
+            <div className="flex">
+              {["D", "E", "V"].map((l, i) => (
+                <i
+                  key={l}
+                  style={{ marginLeft: i === 0 ? 0 : -6 }}
+                  className="w-5.5 h-5.5 rounded-full grid place-items-center not-italic text-[0.56rem] font-bold border-2 border-[#0b0b0d] text-[#0a0b0c] bg-[linear-gradient(145deg,#dbeafe,#a5b4fc)]"
                 >
-                  <div className="relative z-10">
-                    <div
-                      className={`inline-flex p-2 rounded-lg bg-gradient-to-br ${card.gradient} mb-2 transform group-hover:scale-110 transition-transform duration-300`}
-                    >
-                      <card.Icon className="w-4 h-4 text-white" />
-                    </div>
-                    <h3 className="font-bold text-gray-900 text-md mb-1">
-                      {card.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm leading-relaxed">
-                      {card.desc}
-                    </p>
-                  </div>
-                </div>
+                  {l}
+                </i>
               ))}
             </div>
-
-            {/* CTA Button */}
-            <div className="flex justify-center md:justify-start pt-2">
-              <button
-                onClick={scrollToTopics}
-                className="group inline-flex items-center gap-2 px-7 py-3 bg-gray-900 text-white font-semibold text-sm rounded-xl hover:bg-gray-800 transition-all duration-300 hover:gap-3 shadow-lg hover:shadow-xl"
-              >
-                Explore Algorithms
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-              </button>
-            </div>
+            <span>
+              Built for developers who care about precision and taste.
+            </span>
           </div>
+        </motion.div>
 
-          {/* Right Animation */}
-          <div className="hidden md:flex items-center justify-center h-full">
-            {/* dotLottie animation - bottom-right decorative element (conditional render) */}
+        {/* ---- Row 2: interactive product stage, own row, mouse-follow ---- */}
+        <motion.div
+          ref={stageRef}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          style={{ perspective: 1900 }}
+          className="relative z-[2] w-full max-w-[720px] mt-16"
+        >
+          {/* glow that drifts with cursor */}
+          <motion.div
+            style={{ x: glowX, y: glowY }}
+            className="absolute inset-[10%_10%_-10%_10%] bg-[radial-gradient(circle,rgba(129,140,248,0.55)_0%,transparent_70%)] blur-[80px] opacity-40 pointer-events-none"
+          />
 
-            {DotLottieComponent && (
-              <div className="w-full h-full max-h-[70vh] relative flex items-center justify-center">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-3xl blur-3xl animate-pulse" />
-                <DotLottieComponent
-                  src="https://lottie.host/1e76068a-6cf8-4767-93c9-684e23024dd1/MqZBXlYsmx.lottie"
-                  loop
-                  autoplay
-                  className="relative z-10 w-full h-full object-contain drop-shadow-2xl"
-                />
-                {DotLottieComponent && (
-                  <div className="absolute right-[-5%] top-[-15%] w-64 h-64 pointer-events-none opacity-30">
-                    <DotLottieComponent
-                      src="https://lottie.host/707cbaee-0e0c-4da9-8b7a-b72f9071523f/ecWszJnQTn.lottie"
-                      loop
-                      autoplay
-                    />
-                  </div>
-                )}
-                {/* Bottom-left decorative animation */}
-                {DotLottieComponent && (
-                  <div className="absolute left-0 bottom-[-5%] w-48 h-48 pointer-events-none opacity-30">
-                    <DotLottieComponent
-                      src="https://lottie.host/3ae7b92c-6104-46e2-b3ba-2a14f532dd0b/LvAiz4JqUc.lottie"
-                      loop
-                      autoplay
-                    />
-                  </div>
-                )}
+          <motion.div
+            style={{
+              rotateX,
+              rotateY,
+              x: translateX,
+              y: translateY,
+              transformStyle: "preserve-3d",
+            }}
+            className="relative"
+          >
+            <div className="border border-white/10 rounded-[20px] overflow-hidden bg-[linear-gradient(145deg,#101113,#0b0b0d)] shadow-lg2">
+              <div className="h-[46px] border-b border-white/10 bg-[#141519] flex items-center gap-3 px-3.5 font-mono text-[0.66rem] text-[#8d8e94]">
+                <div className="flex gap-1.5">
+                  <i className="w-1.5 h-1.5 rounded-full bg-[#474851]" />
+                  <i className="w-1.5 h-1.5 rounded-full bg-[#474851]" />
+                  <i className="w-1.5 h-1.5 rounded-full bg-[#474851]" />
+                </div>
+                <div className="ml-5 inline-flex items-center gap-1.5 border border-white/10 bg-[#1d1e23] text-[#cacad0] h-[30px] rounded-t-lg px-2.5">
+                  <Code2 size={13} /> quick-sort.js{" "}
+                  <span className="text-[#74747a] ml-2">x</span>
+                </div>
+                <div className="ml-auto uppercase border border-white/10 rounded-md px-1.5 py-0.5">
+                  live
+                </div>
               </div>
-            )}
-          </div>
+
+              <div className="h-[240px] flex bg-[linear-gradient(120deg,#101113,#0c0d10)] py-4.5">
+                <aside className="w-11 text-right pr-3.5 font-mono text-[0.66rem] leading-[1.84] text-[#565862] select-none">
+                  1<br />2<br />3<br />4<br />5<br />6<br />7<br />8<br />9
+                </aside>
+                <pre className="m-0 whitespace-pre font-mono text-[0.7rem] leading-[1.84] text-[#bcc0ca]">
+                  <code>
+                    <em className="text-[#c4b5fd] not-italic">function</em>{" "}
+                    <strong className="text-[#93c5fd] font-semibold">
+                      quickSort
+                    </strong>
+                    (array) {"{"}
+                    <br /> <em className="text-[#c4b5fd] not-italic">
+                      if
+                    </em>{" "}
+                    (array.length &lt;={" "}
+                    <b className="text-[#f9a8d4] font-semibold">1</b>){" "}
+                    <em className="text-[#c4b5fd] not-italic">return</em> array;
+                    <br />
+                    <br /> <em className="text-[#c4b5fd] not-italic">
+                      const
+                    </em>{" "}
+                    pivot = array[
+                    <b className="text-[#f9a8d4] font-semibold">0</b>];
+                    <br /> <em className="text-[#c4b5fd] not-italic">
+                      const
+                    </em>{" "}
+                    left = array.
+                    <strong className="text-[#93c5fd] font-semibold">
+                      filter
+                    </strong>
+                    (x =&gt; x &lt; pivot);
+                    <br /> <em className="text-[#c4b5fd] not-italic">
+                      const
+                    </em>{" "}
+                    right = array.
+                    <strong className="text-[#93c5fd] font-semibold">
+                      filter
+                    </strong>
+                    (x =&gt; x &gt; pivot);
+                    <br />
+                    <br /> <em className="text-[#c4b5fd] not-italic">
+                      return
+                    </em>{" "}
+                    [...quickSort(left), pivot,
+                    <br /> ...quickSort(right)];
+                    <br />
+                    {"}"}
+                  </code>
+                </pre>
+              </div>
+
+              <div className="h-[30px] border-t border-white/10 px-3.5 flex items-center justify-between text-[#808189] font-mono text-[0.6rem]">
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#67e8f9] shadow-[0_0_14px_rgba(103,232,249,0.8)] animate-pulse-dot" />
+                  Live visualization
+                </span>
+                <span>JavaScript</span>
+              </div>
+            </div>
+
+            <div
+              style={{ transform: "translateZ(40px)" }}
+              className="w-[78%] -mt-6 ml-auto rounded-2xl border border-white/10 bg-[rgba(21,22,26,0.9)] backdrop-blur-md p-4.5 shadow-[0_24px_50px_rgba(0,0,0,0.44)]"
+            >
+              <div className="flex justify-between gap-2">
+                <div>
+                  <span className="text-[#7a7b86] text-[0.6rem] font-mono uppercase tracking-[0.06em]">
+                    STEP 04 / 12
+                  </span>
+                  <h3 className="mt-1.5 text-base font-semibold tracking-[-0.02em] text-white">
+                    Partition around <b className="text-[#c4b5fd]">42</b>
+                  </h3>
+                </div>
+                <button
+                  aria-label="Play visualization"
+                  className="w-[30px] h-[30px] border border-white/10 rounded-[10px] bg-[#181920] text-[#c8cbd7] grid place-items-center"
+                >
+                  <Play size={13} fill="currentColor" />
+                </button>
+              </div>
+
+              <div className="h-[90px] my-4.5 grid grid-cols-8 items-end gap-1.5">
+                {[42, 62, 30, 78, 53, 94, 68, 38].map((h, i) => (
+                  <motion.i
+                    key={i}
+                    initial={{ height: 0 }}
+                    animate={{ height: `${h}%` }}
+                    transition={{
+                      delay: 0.4 + i * 0.06,
+                      duration: 0.5,
+                      ease: "easeOut",
+                    }}
+                    className={`rounded-lg border ${
+                      i === 3
+                        ? "border-[#818cf8] bg-[linear-gradient(180deg,#818cf8_0%,#4f46e5_100%)] shadow-[0_0_18px_rgba(129,140,248,0.4)]"
+                        : "border-[#3a3b44] bg-[linear-gradient(180deg,#3f444e_0%,#242730_100%)]"
+                    }`}
+                  />
+                ))}
+              </div>
+
+              <div className="flex justify-between gap-2 font-mono text-[0.64rem] text-[#7e818c]">
+                <span>
+                  Comparisons <b className="text-[#d8dbe5]">06</b>
+                </span>
+                <span>
+                  Swaps <b className="text-[#d8dbe5]">02</b>
+                </span>
+                <span>O(n log n)</span>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        <div className="absolute left-1/2 bottom-6 -translate-x-1/2 text-[#7f8188] text-xs inline-flex items-center gap-2.5 tracking-[0.03em]">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#9ca3af] animate-pulse-dot" />
+          Scroll to explore
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
-}
+};
+
+export default Hero;

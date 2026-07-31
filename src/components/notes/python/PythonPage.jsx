@@ -21,7 +21,7 @@ import Tuples from "./sections/Tuples";
 import Sets from "./sections/Sets";
 import Dictionaries from "./sections/Dictionaries";
 import ErrorHandling from "./sections/ErrorHandling";
-
+import Turtle from "./sections/Turtle";
 // NOTE: each section is wrapped with a stable id. These ids are what you'll
 // type into the "Start section ID" / "End section ID" fields in the PDF
 // export modal (e.g. start = "tokens", end = "loops").
@@ -107,6 +107,10 @@ const PythonPage = () => {
 
         <div id="error-handling">
           <ErrorHandling />
+        </div>
+
+        <div id="turtle">
+          <Turtle />
         </div>
       </div>
     </div>

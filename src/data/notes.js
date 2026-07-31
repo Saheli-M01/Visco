@@ -401,7 +401,19 @@ export const pythonNotes = [
             { id: "practical-errors", title: "Practical Examples" },
         ]
     },
-
+    {
+        id: "turtle",
+        title: "Turtle Graphics",
+        component: "Turtle",
+        children: [
+            { id: "turtle-setup", title: "Setup & Screen" },
+            { id: "turtle-movement", title: "Moving & Turning" },
+            { id: "turtle-pen", title: "Pen Control" },
+            { id: "turtle-shapes", title: "Drawing Shapes" },
+            { id: "turtle-colors", title: "Colors & Filling" },
+            { id: "turtle-loops", title: "Drawing with Loops" },
+        ]
+    },
 ];
 
 export const jsNotes = [

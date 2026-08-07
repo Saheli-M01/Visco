@@ -18,7 +18,10 @@ import {
     Flag,
     Lightbulb,
     AlertTriangle,
-    Hexagon
+    Hexagon,
+    Crosshair,
+    Keyboard,
+    Trophy,
 } from "lucide-react";
 
 const Turtle = () => {
@@ -34,6 +37,13 @@ const Turtle = () => {
         [<code>begin_fill()</code>, "Start filling a shape", <code>t.begin_fill()</code>],
         [<code>end_fill()</code>, "End filling a shape", <code>t.end_fill()</code>],
         [<code>circle(r)</code>, "Draw a circle of radius 'r'", <code>t.circle(50)</code>],
+        [<code>goto(x, y)</code>, "Teleport turtle to coordinates", <code>t.goto(-150, 100)</code>],
+        [<code>pos()</code>, "Get current (x, y) position", <code>t.pos()[0]</code>],
+        [<code>write("text")</code>, "Write text on screen", <code>t.write("I won!", font=("Arial",20))</code>],
+        [<code>onkey(fn, "Key")</code>, "Bind a function to a key press", <code>window.onkey(move1, "Right")</code>],
+        [<code>listen()</code>, "Start listening for key events", <code>window.listen()</code>],
+        [<code>update()</code>, "Refresh the screen in game loop", <code>window.update()</code>],
+        [<code>done()</code>, "Keep window open at end", <code>turtle.done()</code>],
     ];
 
     return (
@@ -351,10 +361,240 @@ t.hideturtle()
 turtle.done()`} />
                 </div>
 
-                {/* 9. Tips & Troubleshooting */}
+                {/* 9. Coordinate System & goto() */}
+                <div className="rounded-xl border-2 border-teal-200 dark:border-teal-800 bg-teal-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm" id="turtle-coordinates">
+                    <h3 className="text-lg font-bold text-teal-700 dark:text-teal-400 flex items-center gap-2">
+                        <Crosshair className="w-5 h-5" /> 9. Coordinate System & goto()
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+                        The turtle screen is divided into <strong>four quadrants</strong> — just like a math graph.
+                        The turtle starts at the center, which is position <strong>(0, 0)</strong>.
+                        Moving right increases X, moving up increases Y.
+                    </p>
+                    <div className="rounded-lg bg-white dark:bg-slate-900 border border-teal-100 dark:border-teal-900 p-4 text-sm font-mono text-slate-700 dark:text-slate-300 space-y-1">
+                        <p className="text-center font-bold text-teal-600 dark:text-teal-400 mb-2">Screen Quadrants</p>
+                        <p className="text-center">(-x, +y) &nbsp;&nbsp;&nbsp; (+x, +y)</p>
+                        <p className="text-center text-slate-400">────────┼────────</p>
+                        <p className="text-center">(-x, -y) &nbsp;&nbsp;&nbsp; (+x, -y)</p>
+                    </div>
+                    <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+                        Use <code>goto(x, y)</code> to teleport the turtle to any exact position on screen.
+                        Always pair it with <code>penup()</code> first if you don't want a line drawn while travelling.
+                    </p>
+                    <CodeBlock code={`import turtle
+
+window = turtle.Screen()
+window.title("Coordinate Demo")
+
+t = turtle.Turtle()
+t.shape("turtle")
+
+# Move to top-right quadrant
+t.penup()
+t.goto(100, 100)     # x=100, y=100
+t.pendown()
+t.forward(50)
+
+# Move to bottom-left quadrant (no line while moving)
+t.penup()
+t.goto(-150, -80)    # x=-150, y=-80
+t.pendown()
+t.circle(30)
+
+# Place TWO turtle players at starting positions
+player1 = turtle.Turtle()
+player1.shape("turtle")
+player1.color("turquoise")
+player1.penup()
+player1.goto(-150, 100)   # top starting lane
+
+player2 = turtle.Turtle()
+player2.shape("turtle")
+player2.color("red")
+player2.penup()
+player2.goto(-150, -60)   # bottom starting lane
+
+turtle.mainloop()`} />
+                    <Infobox type="info" title="getscreen() vs Screen()">
+                        <code>turtle.Screen()</code> and <code>turtle.getscreen()</code> both give you the window object.
+                        Use <code>window.title("name")</code> to set a label and <code>window.bgcolor("color")</code>
+                        to change the background.
+                    </Infobox>
+                </div>
+
+                {/* 10. Key Press Events */}
+                <div className="rounded-xl border-2 border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm" id="turtle-keypress">
+                    <h3 className="text-lg font-bold text-sky-700 dark:text-sky-400 flex items-center gap-2">
+                        <Keyboard className="w-5 h-5" /> 10. Key Press Events — Moving with the Keyboard
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+                        Turtle can respond to keyboard input in real time. This is what makes a game interactive!
+                        There are two steps:
+                    </p>
+                    <ol className="list-decimal list-inside text-slate-600 dark:text-slate-300 space-y-1 pl-2">
+                        <li><strong>Define a function</strong> that moves the turtle.</li>
+                        <li><strong>Bind it to a key</strong> using <code>window.onkey(function, "KeyName")</code> and activate listening with <code>window.listen()</code>.</li>
+                    </ol>
+                    <div className="rounded-lg bg-white dark:bg-slate-900 border border-sky-100 dark:border-sky-900 p-3 text-sm space-y-1">
+                        <p className="font-bold text-sky-600 dark:text-sky-400">Common Key Names</p>
+                        <p className="text-slate-600 dark:text-slate-300"><code>"Right"</code> → right arrow &nbsp;|&nbsp; <code>"Left"</code> → left arrow &nbsp;|&nbsp; <code>"Up"</code> → up arrow &nbsp;|&nbsp; <code>"Down"</code> → down arrow</p>
+                        <p className="text-slate-600 dark:text-slate-300"><code>"space"</code> → spacebar &nbsp;|&nbsp; <code>"Return"</code> → Enter &nbsp;|&nbsp; <code>"a"</code> → A key</p>
+                    </div>
+                    <CodeBlock code={`import turtle
+import time
+
+window = turtle.Screen()
+window.title("Two Player Race")
+
+# --- Player 1 setup (turquoise, top lane) ---
+player1 = turtle.Turtle()
+player1.shape("turtle")
+player1.color("turquoise")
+player1.penup()
+player1.goto(-150, 100)
+
+# --- Player 2 setup (red, bottom lane) ---
+player2 = turtle.Turtle()
+player2.shape("turtle")
+player2.color("red")
+player2.penup()
+player2.goto(-150, -60)
+
+# --- User-defined move functions ---
+def move1():
+    player1.fd(5)   # fd() is short for forward()
+
+def move2():
+    player2.fd(5)
+
+# --- Game loop with key bindings ---
+while True:
+    window.update()
+    window.onkey(move1, "Left")    # Left arrow moves player 1
+    window.listen()
+    window.onkey(move2, "Right")   # Right arrow moves player 2
+    window.listen()
+    time.sleep(10)                 # small delay to control speed`} />
+                    <Infobox type="tip" title="Why window.listen()?">
+                        <code>window.listen()</code> tells the window to start listening for keyboard events.
+                        Without it, <code>onkey()</code> won't work. Always call it after setting up your key bindings.
+                    </Infobox>
+                    <Infobox type="info" title="bk() shorthand">
+                        <code>t.bk(5)</code> is the same as <code>t.backward(5)</code>. Useful for moving a player backwards
+                        when a different key is pressed.
+                    </Infobox>
+                </div>
+
+                {/* 11. Winner Condition */}
+                <div className="rounded-xl border-2 border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-slate-800 p-5 space-y-3 shadow-sm" id="turtle-winner">
+                    <h3 className="text-lg font-bold text-amber-700 dark:text-amber-400 flex items-center gap-2">
+                        <Trophy className="w-5 h-5" /> 11. Declaring a Winner — Conditions in the Game
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+                        A game must have a <strong>win condition</strong> — otherwise it never ends!
+                        Use <code>player.pos()[0]</code> to get the turtle's current X position, and compare it
+                        to a finish line value. When a player crosses the finish line, display a message with
+                        <code>write()</code> and <code>break</code> out of the game loop.
+                    </p>
+                    <div className="rounded-lg bg-white dark:bg-slate-900 border border-amber-100 dark:border-amber-900 p-3 text-sm space-y-1">
+                        <p className="font-bold text-amber-600 dark:text-amber-400">Key functions</p>
+                        <table className="w-full text-xs text-slate-700 dark:text-slate-300 border-collapse">
+                            <thead><tr className="border-b border-amber-200 dark:border-amber-800"><th className="text-left py-1 pr-4">Function</th><th className="text-left py-1">What it does</th></tr></thead>
+                            <tbody>
+                                <tr><td className="py-1 pr-4"><code>t.pos()</code></td><td>Returns <code>(x, y)</code> position of the turtle</td></tr>
+                                <tr><td className="py-1 pr-4"><code>t.pos()[0]</code></td><td>Gets only the X coordinate</td></tr>
+                                <tr><td className="py-1 pr-4"><code>t.write("text", font=("Arial", 20))</code></td><td>Writes text on screen at turtle's position</td></tr>
+                                <tr><td className="py-1 pr-4"><code>turtle.done()</code></td><td>Keeps window open after game ends</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <CodeBlock code={`import turtle
+import time
+
+window = turtle.Screen()
+window.title("Turtle Race Game")
+
+finishLineX = 150   # X coordinate of the finish line
+
+# Draw the finish line
+pen = turtle.Turtle()
+pen.penup()
+pen.goto(finishLineX, -140)
+pen.pendown()
+pen.color("black")
+pen.begin_fill()
+for fin in range(2):
+    pen.forward(20)
+    pen.left(90)
+    pen.forward(300)
+    pen.left(90)
+pen.end_fill()
+pen.penup()
+
+# Draw starting circles
+pen.goto(-150, 60)
+pen.pendown()
+pen.circle(40)
+pen.penup()
+
+pen.goto(-150, -100)
+pen.pendown()
+pen.circle(40)
+pen.penup()
+pen.hideturtle()
+
+# Players
+player1 = turtle.Turtle()
+player1.shape("turtle")
+player1.color("turquoise")
+player1.penup()
+player1.goto(-150, 100)
+
+player2 = turtle.Turtle()
+player2.shape("turtle")
+player2.color("red")
+player2.penup()
+player2.goto(-150, -68)
+
+def move1():
+    player1.fd(5)
+
+def move2():
+    player2.fd(5)
+
+# Game loop with win condition
+while True:
+    window.update()
+    window.onkey(move2, "Left")
+    window.listen()
+
+    # Check if player 2 wins
+    if player2.pos()[0] >= finishLineX:
+        player2.write("I won the race!!", font=("Arial", 20))
+        break
+
+    window.onkey(move1, "Right")
+    window.listen()
+
+    # Check if player 1 wins
+    if player1.pos()[0] >= finishLineX:
+        player1.write("I won the race!!", font=("Arial", 20))
+        break
+
+    time.sleep(10)
+
+turtle.done()`} />
+                    <Infobox type="tip" title="Three player game?">
+                        To extend to three players, add a third turtle (<code>player3</code>), define a
+                        <code>move3()</code> function, bind it to another key (e.g. <code>"Up"</code>),
+                        and add a third <code>if player3.pos()[0] &gt;= finishLineX:</code> check inside the loop.
+                    </Infobox>
+                </div>
+
+                {/* 10. Tips & Troubleshooting */}
                 <div className="rounded-xl border-2 border-red-200 dark:border-red-800 bg-red-50 dark:bg-slate-800 p-5 space-y-4 shadow-sm" id="turtle-tips">
                     <h3 className="text-lg font-bold text-red-700 dark:text-red-400 flex items-center gap-2">
-                        <Lightbulb className="w-5 h-5" /> 9. Tips & Troubleshooting
+                        <Lightbulb className="w-5 h-5" /> 12. Tips & Troubleshooting
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="bg-white dark:bg-slate-900 p-4 rounded-lg shadow-sm border border-slate-100 dark:border-slate-700">

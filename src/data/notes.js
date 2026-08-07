@@ -412,6 +412,11 @@ export const pythonNotes = [
             { id: "turtle-shapes", title: "Drawing Shapes" },
             { id: "turtle-colors", title: "Colors & Filling" },
             { id: "turtle-loops", title: "Drawing with Loops" },
+            { id: "turtle-advanced", title: "Advanced Polygons" },
+            { id: "turtle-flag", title: "Practical: Flag" },
+            { id: "turtle-coordinates", title: "Coordinate System & goto()" },
+            { id: "turtle-keypress", title: "Key Press Events" },
+            { id: "turtle-winner", title: "Declaring a Winner" },
         ]
     },
 ];
